@@ -103,6 +103,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							class="tcm-input"
 							type="number"
 							name="tank_density"
+							readonly?={ tank.IsFWTTank }
 							value={ format.FloatOrEmpty(tank.Density) }
 							placeholder="global"
 							step="any"

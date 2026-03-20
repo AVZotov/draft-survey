@@ -237,72 +237,82 @@ func ModalForm(tank types.Tank, tp components.TanksPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" placeholder=\"calculated\" readonly tabindex=\"-1\"></div><div class=\"tcm-field\"><label class=\"tcm-label\">Density <span class=\"tcm-label-unit\">t/m³</span></label> <input class=\"tcm-input\" type=\"number\" name=\"tank_density\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" placeholder=\"calculated\" readonly tabindex=\"-1\"></div><div class=\"tcm-field\"><label class=\"tcm-label\">Density <span class=\"tcm-label-unit\">t/m³</span></label> <input class=\"tcm-input\" type=\"number\" name=\"tank_density\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if tank.IsFWTTank {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, " readonly")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(tank.Density))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 106, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 107, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\" placeholder=\"global\" step=\"any\"></div></div></div><!-- Calibration table type --><div class=\"tcm-section\"><div class=\"tcm-section-title\">Calibration Table</div><div class=\"tcm-type-tabs\"><button type=\"button\" class=\"tcm-type-tab active\" onclick=\"setType(0)\">Standard (Vol by Trim)</button> <button type=\"button\" class=\"tcm-type-tab\" onclick=\"setType(1)\">Sounding Correction</button> <button type=\"button\" class=\"tcm-type-tab\" onclick=\"setType(2)\">Volume Correction</button></div><input type=\"hidden\" name=\"tank_calib_table_type\" id=\"calib-type-val\" value=\"Standard (Volume by Trim)\"></div><!-- Trim bounds --><div class=\"tcm-section\"><div class=\"tcm-section-title\">Trim Boundaries</div><div class=\"tcm-field-row tcm-field-row--2\"><div class=\"tcm-field\"><label class=\"tcm-label\">TTL — Lower trim <span class=\"tcm-label-unit\">m</span></label> <input class=\"tcm-input\" type=\"number\" name=\"calib_ttl\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" placeholder=\"global\" step=\"any\"></div></div></div><!-- Calibration table type --><div class=\"tcm-section\"><div class=\"tcm-section-title\">Calibration Table</div><div class=\"tcm-type-tabs\"><button type=\"button\" class=\"tcm-type-tab active\" onclick=\"setType(0)\">Standard (Vol by Trim)</button> <button type=\"button\" class=\"tcm-type-tab\" onclick=\"setType(1)\">Sounding Correction</button> <button type=\"button\" class=\"tcm-type-tab\" onclick=\"setType(2)\">Volume Correction</button></div><input type=\"hidden\" name=\"tank_calib_table_type\" id=\"calib-type-val\" value=\"Standard (Volume by Trim)\"></div><!-- Trim bounds --><div class=\"tcm-section\"><div class=\"tcm-section-title\">Trim Boundaries</div><div class=\"tcm-field-row tcm-field-row--2\"><div class=\"tcm-field\"><label class=\"tcm-label\">TTL — Lower trim <span class=\"tcm-label-unit\">m</span></label> <input class=\"tcm-input\" type=\"number\" name=\"calib_ttl\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(tank.Correction.TableTrimLow))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 133, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 134, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\" placeholder=\"e.g. -1.000\" step=\"any\"></div><div class=\"tcm-field\"><label class=\"tcm-label\">TTU — Upper trim <span class=\"tcm-label-unit\">m</span></label> <input class=\"tcm-input\" type=\"number\" name=\"calib_ttu\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\" placeholder=\"e.g. -1.000\" step=\"any\"></div><div class=\"tcm-field\"><label class=\"tcm-label\">TTU — Upper trim <span class=\"tcm-label-unit\">m</span></label> <input class=\"tcm-input\" type=\"number\" name=\"calib_ttu\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var18 string
 		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(tank.Correction.TableTrimUpper))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 144, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 145, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" placeholder=\"e.g. +3.000\" step=\"any\"></div></div></div><!-- ── TRIM ROWS — всегда видимы, метка зависит от типа --><div class=\"tcm-section\" id=\"section-trim\"><div class=\"tcm-section-title\" id=\"trim-rows-title\">Trim Rows</div><div class=\"tcm-calib-block\"><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div><!-- ── VOLUME ROWS — Type 2 & 3 только --><div class=\"tcm-section tcm-collapsible\" id=\"section-volume\"><div class=\"tcm-section-title\" id=\"volume-rows-title\">Volume Table (trim = 0)</div><div class=\"tcm-calib-block\"><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div><!-- ── LIST ROWS toggle + секция --><div class=\"tcm-section\"><div class=\"tcm-toggle-row\"><label class=\"tcm-toggle\"><input type=\"checkbox\" id=\"list-toggle\" onchange=\"toggleList(this)\"> <span class=\"tcm-toggle-slider\"></span></label> <span class=\"tcm-toggle-label\">Has list correction table</span></div><div class=\"tcm-collapsible\" id=\"section-list\"><div class=\"tcm-calib-block\"><div class=\"tcm-calib-block-title\">List Rows</div><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div></div><!-- Result --><div class=\"tcm-result\"><span class=\"tcm-result-label\">Calculated Volume</span> <span><span class=\"tcm-result-val\" id=\"calc-vol\">—</span> <span class=\"tcm-result-unit\">m³</span></span></div></div><!-- ── Footer ─────────────────────────────────────────── --><div class=\"tcm-footer\"><span class=\"tcm-footer-hint\">Trim and List applied from draft readings</span><div class=\"tcm-footer-btns\"><button class=\"tcm-btn tcm-btn--cancel\" type=\"button\" x-on:click=\"\n\t\t\t\t\tif (!dirty) {$el.closest('dialog').close(); return }\n\t\t\t\t\tif (confirm('Unsaved changes. Close anyway?')) {$el.closest('dialog').close() }\n\t\t\t\t\t\" value=\"cancel\">Cancel</button> <button class=\"tcm-btn tcm-btn--confirm\" value=\"ok\" hx-put=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" placeholder=\"e.g. +3.000\" step=\"any\"></div></div></div><!-- ── TRIM ROWS — всегда видимы, метка зависит от типа --><div class=\"tcm-section\" id=\"section-trim\"><div class=\"tcm-section-title\" id=\"trim-rows-title\">Trim Rows</div><div class=\"tcm-calib-block\"><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"calib_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div><!-- ── VOLUME ROWS — Type 2 & 3 только --><div class=\"tcm-section tcm-collapsible\" id=\"section-volume\"><div class=\"tcm-section-title\" id=\"volume-rows-title\">Volume Table (trim = 0)</div><div class=\"tcm-calib-block\"><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"vol_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div><!-- ── LIST ROWS toggle + секция --><div class=\"tcm-section\"><div class=\"tcm-toggle-row\"><label class=\"tcm-toggle\"><input type=\"checkbox\" id=\"list-toggle\" onchange=\"toggleList(this)\"> <span class=\"tcm-toggle-slider\"></span></label> <span class=\"tcm-toggle-label\">Has list correction table</span></div><div class=\"tcm-collapsible\" id=\"section-list\"><div class=\"tcm-calib-block\"><div class=\"tcm-calib-block-title\">List Rows</div><table class=\"tcm-calib-table\"><thead><tr><th style=\"text-align:left;\">Row</th><th style=\"text-align:left;\">Sounding, m</th><th>Vol @ TTL, m³</th><th>Vol @ TTU, m³</th></tr></thead> <tbody><tr><td><span class=\"tcm-row-label\">TSL</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr><tr><td><span class=\"tcm-row-label\">TSU</span></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_sounding\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_low\" placeholder=\"0.000\" step=\"any\"></td><td><input class=\"tcm-ti\" type=\"number\" name=\"list_row_vol_trim_upper\" placeholder=\"0.000\" step=\"any\"></td></tr></tbody></table></div></div></div><!-- Result --><div class=\"tcm-result\"><span class=\"tcm-result-label\">Calculated Volume</span> <span><span class=\"tcm-result-val\" id=\"calc-vol\">—</span> <span class=\"tcm-result-unit\">m³</span></span></div></div><!-- ── Footer ─────────────────────────────────────────── --><div class=\"tcm-footer\"><span class=\"tcm-footer-hint\">Trim and List applied from draft readings</span><div class=\"tcm-footer-btns\"><button class=\"tcm-btn tcm-btn--cancel\" type=\"button\" x-on:click=\"\n\t\t\t\t\tif (!dirty) {$el.closest('dialog').close(); return }\n\t\t\t\t\tif (confirm('Unsaved changes. Close anyway?')) {$el.closest('dialog').close() }\n\t\t\t\t\t\" value=\"cancel\">Cancel</button> <button class=\"tcm-btn tcm-btn--confirm\" value=\"ok\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 379, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 380, Col: 103}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\" hx-target=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\" hx-target=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var20 string
 		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#bw-row-%s", tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 380, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/corrections/modal-form.templ`, Line: 381, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" hx-swap=\"morph:outerHTML\" hx-include=\"closest form\" hx-on::after-request=\"document.getElementById('app-modal').close();\"><svg viewBox=\"0 0 24 24\"><path d=\"M20 6L9 17l-5-5\"></path></svg> Apply</button></div></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\" hx-swap=\"morph:outerHTML\" hx-include=\"closest form\" hx-on::after-request=\"document.getElementById('app-modal').close();\"><svg viewBox=\"0 0 24 24\"><path d=\"M20 6L9 17l-5-5\"></path></svg> Apply</button></div></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
