@@ -18,6 +18,10 @@ func (t Tank) CalcWeight() float64 {
 	if t.IsFWTTank {
 		return *t.Volume
 	}
+
+	if t.Density == nil {
+		return 0.000
+	}
 	return *t.Volume * *t.Density
 }
 
