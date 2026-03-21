@@ -1116,7 +1116,7 @@ dialog.app-modal {
   padding: 0;
   width: 100%;
   max-width: 580px;
-  max-height: 90vh;
+  max-height: 100vh;
   box-shadow: 0 24px 64px rgba(0, 0, 0, .20), 0 4px 16px rgba(0, 0, 0, .08);
   outline: none;
   display: flex;
@@ -1124,13 +1124,13 @@ dialog.app-modal {
 }
 
 dialog.app-modal[open] {
-  animation: tcm-in .18s ease;
+  animation: tcm-in .25s ease;
 }
 
 @keyframes tcm-in {
   from {
     opacity: 0;
-    transform: translateY(-10px) scale(.97);
+    transform: translateY(-10px) scale(.90);
   }
 
   to {
@@ -1141,5 +1141,5 @@ dialog.app-modal[open] {
 
 dialog.app-modal::backdrop {
   background: rgba(15, 23, 32, 0.5);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(7px);
 }

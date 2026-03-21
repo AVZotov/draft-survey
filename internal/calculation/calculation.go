@@ -216,17 +216,6 @@ func CalcCurrentDWT(displCorrToDensity float64, lightship float64) float64 {
 	return round3(displCorrToDensity - lightship)
 }
 
-func CalcVolume(volumeCorrectionData types.VolumeCalibrationData, sounding, trim, list float64) float64 {
-	switch volumeCorrectionData.TableType {
-	case constants.VolumeCalibrationType2:
-		return calcVolumeType2(sounding, trim, list, volumeCorrectionData, volumeCorrectionData.VolumeRows)
-	case constants.VolumeCalibrationType3:
-		return calcVolumeType3(sounding, trim, list, volumeCorrectionData, volumeCorrectionData.VolumeRows)
-	default:
-		return calcVolumeType1(sounding, trim, list, volumeCorrectionData)
-	}
-}
-
 /*
 CalcVolumeByRows performs bilinear interpolation of tank volume.
 Used as a base for all calibration table types (trim or list correction).

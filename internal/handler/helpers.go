@@ -264,12 +264,12 @@ func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.Tank) {
 		return
 	}
 
-	tName, err := parseString(c, constants.WtankName)
+	tName, err := parseString(c, constants.TankName)
 	if err == nil {
 		tank.Name = tName
 	}
 
-	tType, err := parseString(c, constants.WtankType)
+	tType, err := parseString(c, constants.TankType)
 	if err == nil {
 		tank.Type = tType
 	}

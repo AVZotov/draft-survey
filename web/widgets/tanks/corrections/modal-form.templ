@@ -50,7 +50,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 					<div class="tcm-field">
 						<label class="tcm-label">Type</label>
 						<div class="tcm-select-wrap">
-							<select class="tcm-select" name={ constants.WtankType }>
+							<select class="tcm-select" name={ constants.TankType }>
 								for _, bwtType := range dictionaries.BallastWaterTankTypes {
 									if bwtType == tank.Type {
 										<option value={ bwtType } selected>{ bwtType }</option>

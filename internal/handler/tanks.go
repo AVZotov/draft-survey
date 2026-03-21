@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
@@ -122,6 +123,9 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 	//TODO: Implement loading logic with corrections struct parsing
 	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
+	if c.Get("HX-Request") != "true" {
+		return c.Redirect(fmt.Sprintf("/survey/%s/tanks/%d", p.surveyID, p.draftIndex))
+	}
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, corrections.ModalForm(tank, tanksProps))
 }
