@@ -67,7 +67,6 @@ func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calcula
 		ExtraJS:         []string{"/static/js/results.js"},
 		User:            user,
 		Survey:          survey,
-		Results:         results,
 	}
 }
 

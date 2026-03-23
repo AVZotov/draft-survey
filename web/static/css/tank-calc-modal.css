@@ -1,11 +1,11 @@
-/* ── Header ─────────────────────────────────────────────── */
+/* HEADER */
 .tcm-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--fin-border);
-  flex-shrink: 0;
+  flex: 0;
   background: var(--fin-light);
 }
 
@@ -36,14 +36,13 @@
 }
 
 .tcm-title {
-  font-size: 13px;
   font-weight: 600;
   color: var(--fin-accent);
 }
 
 .tcm-tank-id {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   color: var(--text-dim);
   margin-top: 1px;
 }
@@ -61,7 +60,7 @@
 }
 
 .tcm-ctx-label {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -69,81 +68,25 @@
 }
 
 .tcm-ctx-val {
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-primary);
 }
 
-/* ── Scrollable body ────────────────────────────────────── */
+/*============================ BODY ============================*/
 .tcm-body {
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
-  padding: var(--space-md) var(--space-lg);
-  display: flex !important;
+  display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  flex: 1;
+  padding: var(--space-md) var(--space-lg);
   gap: var(--space-md);
 }
 
-/* ── Section ────────────────────────────────────────────── */
-.tcm-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.tcm-section-title {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.tcm-section-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-/* ── Field grid ─────────────────────────────────────────── */
-.tcm-field-row {
-  display: grid;
-  gap: var(--space-sm);
-}
-
-.tcm-field-row--2 {
-  grid-template-columns: 1fr 1fr;
-}
-
-.tcm-field-row--3 {
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.tcm-field {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.tcm-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
 .tcm-label-unit {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 10px;
   color: var(--text-dim);
   font-weight: 400;
@@ -151,117 +94,7 @@
   letter-spacing: 0;
 }
 
-/* ── Inputs ─────────────────────────────────────────────── */
-.tcm-input {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-primary);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 6px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color .15s, box-shadow .15s;
-}
-
-.tcm-input::-webkit-inner-spin-button,
-.tcm-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.tcm-input:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px rgba(232, 99, 10, .1);
-}
-
-.tcm-input::placeholder {
-  color: var(--text-placeholder);
-}
-
-.tcm-input--readonly {
-  background: var(--bg);
-  color: var(--text-secondary);
-  cursor: default;
-  font-weight: 500;
-}
-
-/* ── Select ─────────────────────────────────────────────── */
-.tcm-select-wrap {
-  position: relative;
-}
-
-.tcm-select {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 6px 28px 6px var(--space-sm);
-  outline: none;
-  appearance: none;
-  cursor: pointer;
-  width: 100%;
-  transition: border-color .15s;
-}
-
-.tcm-select:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px rgba(232, 99, 10, .1);
-}
-
-.tcm-select-arrow {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 13px;
-  height: 13px;
-  stroke: var(--text-dim);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  pointer-events: none;
-}
-
-/* ── Type tabs ──────────────────────────────────────────── */
-.tcm-type-tabs {
-  display: flex;
-  gap: 2px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 2px;
-}
-
-.tcm-type-tab {
-  flex: 1;
-  padding: 5px var(--space-sm);
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background .12s, color .12s;
-  white-space: nowrap;
-  text-align: center;
-}
-
-.tcm-type-tab.active {
-  background: var(--surface);
-  color: var(--ini-accent);
-  box-shadow: var(--shadow-sm);
-  font-weight: 600;
-}
-
-/* ── Calibration rows table ─────────────────────────────── */
+/* ---BODY TABLE------------*/
 .tcm-calib-block {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -269,7 +102,7 @@
 }
 
 .tcm-calib-block-title {
-  font-size: 10px;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -282,11 +115,11 @@
 .tcm-calib-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 .tcm-calib-table thead th {
-  font-size: 10px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -303,10 +136,10 @@
   width: 80px;
 }
 
-.tcm-calib-table thead th:nth-child(2) {
-  text-align: left;
-  width: 90px;
-}
+/*.tcm-calib-table thead th:nth-child(2) {*/
+/*  text-align: left;*/
+/*  width: 90px;*/
+/*}*/
 
 .tcm-calib-table tbody tr td {
   padding: 4px var(--space-sm);
@@ -319,42 +152,36 @@
   border-top: none;
 }
 
-/* Метка строки TSL/TSU */
 .tcm-row-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   color: var(--text-dim);
   white-space: nowrap;
 }
 
-/* Компактный инпут в таблице */
-.tcm-ti {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-primary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 4px var(--space-xs);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color .15s;
+/* ── Section ────────────────────────────────────────────── */
+.tcm-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
 }
 
-.tcm-ti::-webkit-inner-spin-button,
-.tcm-ti::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+.tcm-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
-.tcm-ti:focus {
-  border-color: var(--border-focus);
-}
-
-.tcm-ti::placeholder {
-  color: var(--text-placeholder);
+.tcm-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 /* ── List correction toggle ─────────────────────────────── */
@@ -402,7 +229,7 @@
 }
 
 .tcm-toggle input:checked+.tcm-toggle-slider {
-  background: var(--ini-accent);
+  background: var(--fin-accent);
 }
 
 .tcm-toggle input:checked+.tcm-toggle-slider::before {
@@ -410,115 +237,26 @@
 }
 
 .tcm-toggle-label {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: var(--text-secondary);
-  cursor: pointer;
+  text-transform: uppercase;
   user-select: none;
 }
 
-/* Секция скрыта/видна */
-.tcm-collapsible {
-  display: none;
-}
-
-.tcm-collapsible.visible {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-/* ── Result strip ───────────────────────────────────────── */
-.tcm-result {
-  background: var(--fin-light);
-  border: 1px solid var(--fin-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm) var(--space-md);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.tcm-result-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--fin-accent);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-}
-
-.tcm-result-val {
-  font-family: var(--font-mono);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--fin-accent);
-}
-
-.tcm-result-unit {
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-left: 4px;
-}
-
-/* ── Footer ─────────────────────────────────────────────── */
+/*--- FOOTER ---*/
 .tcm-footer {
+  height: 10vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-sm) var(--space-lg) var(--space-md);
   border-top: 1px solid var(--border);
-  flex-shrink: 0;
+  flex: 0;
   background: var(--bg);
 }
 
 .tcm-footer-hint {
   font-size: 11px;
   color: var(--text-dim);
-}
-
-.tcm-footer-btns {
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.tcm-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px var(--space-md);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: background .12s;
-}
-
-.tcm-btn--cancel {
-  background: var(--surface);
-  color: var(--text-secondary);
-}
-
-.tcm-btn--cancel:hover {
-  background: var(--bg);
-}
-
-.tcm-btn--confirm {
-  background: var(--fin-accent);
-  color: #fff;
-  border-color: var(--fin-accent);
-}
-
-.tcm-btn--confirm:hover {
-  background: #166534;
-}
-
-.tcm-btn svg {
-  width: 13px;
-  height: 13px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
 }

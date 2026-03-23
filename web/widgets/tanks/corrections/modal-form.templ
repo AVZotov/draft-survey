@@ -4,52 +4,54 @@ import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/data/dictionaries"
 	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
 templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
-	<form
+	<div
+		class="app-modal"
 		id="app-modal-content"
 		x-on:change="dirty = true"
 	>
 		<!-- ── Header ─────────────────────────────────────────── -->
-		<div class="tcm-header">
-			<div class="tcm-header-left">
-				<div class="tcm-icon">
-					<svg viewBox="0 0 24 24">
-						<rect x="4" y="2" width="16" height="20" rx="2"></rect>
-						<line x1="8" y1="8" x2="16" y2="8"></line>
-						<line x1="8" y1="12" x2="16" y2="12"></line>
-						<line x1="8" y1="16" x2="12" y2="16"></line>
-					</svg>
+		<header>
+			<div class="tcm-header">
+				<div class="tcm-header-left">
+					<div class="tcm-icon">
+						<svg viewBox="0 0 24 24">
+							<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+							<line x1="8" y1="8" x2="16" y2="8"></line>
+							<line x1="8" y1="12" x2="16" y2="12"></line>
+							<line x1="8" y1="16" x2="12" y2="16"></line>
+						</svg>
+					</div>
+					<div>
+						<div class="tcm-title">Volume Calculation</div>
+						<div class="tcm-tank-id">FPT 1 Center</div>
+					</div>
 				</div>
-				<div>
-					<div class="tcm-title">Volume Calculation</div>
-					<div class="tcm-tank-id">{ tank.Type } { tank.Type }</div>
+				<div class="tcm-context">
+					<div class="tcm-ctx-item">
+						<span class="tcm-ctx-label">Trim</span>
+						<span class="tcm-ctx-val">1.800 m Aft</span>
+					</div>
+					<div class="tcm-ctx-item">
+						<span class="tcm-ctx-label">List</span>
+						<span class="tcm-ctx-val">0.201° Stb</span>
+					</div>
 				</div>
 			</div>
-			<div class="tcm-context">
-				<div class="tcm-ctx-item">
-					<span class="tcm-ctx-label">Trim</span>
-					<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.Trim) }m { tp.TrimDir }</span>
-				</div>
-				<div class="tcm-ctx-item">
-					<span class="tcm-ctx-label">List</span>
-					<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.List) }° { tp.ListDir }</span>
-				</div>
-			</div>
-		</div>
+		</header>
 		<!-- ── Body ───────────────────────────────────────────── -->
-		<div class="tcm-body">
+		<main class="tcm-body" x-data="{list_corr: false, corr_type: 'standard'}">
 			<!-- Tank info -->
 			<div class="tcm-section">
 				<div class="tcm-section-title">Tank</div>
-				<div class="tcm-field-row tcm-field-row--2">
-					<div class="tcm-field">
-						<label class="tcm-label">Type</label>
-						<div class="tcm-select-wrap">
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label class="label">Type</label>
+						<div class="select-wrap">
 							<select class="tcm-select" name={ constants.TankType }>
 								for _, bwtType := range dictionaries.BallastWaterTankTypes {
 									if bwtType == tank.Type {
@@ -59,99 +61,70 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 									}
 								}
 							</select>
-							<svg class="tcm-select-arrow" viewBox="0 0 24 24">
+							<svg class="select-arrow" viewBox="0 0 24 24">
 								<path d="M6 9l6 6 6-6"></path>
 							</svg>
 						</div>
 					</div>
-					<div class="tcm-field">
-						<label class="tcm-label">NAME</label>
-						<input class="tcm-input" type="text" name="tank_name" placeholder="e.g. 1S, Centre…" value={ tank.Name }/>
+					<div class="field-wrap-col">
+						<label>Name</label>
+						<input type="text" name="tank_name" placeholder="e.g. 1S, Centre…"/>
 					</div>
 				</div>
 			</div>
 			<!-- Measurements -->
 			<div class="tcm-section">
 				<div class="tcm-section-title">Measurements</div>
-				<div class="tcm-field-row tcm-field-row--3">
-					<div class="tcm-field">
-						<label class="tcm-label">Sounding <span class="tcm-label-unit">m</span></label>
-						<input
-							class="tcm-input"
-							type="number"
-							name="tank_sounding"
-							value={ format.FloatOrEmpty(tank.Sounding) }
-							placeholder="0.000"
-							step="any"
-						/>
+				<div class="field-col-3">
+					<div class="field-wrap-col">
+						<label>Sounding <span class="tcm-label-unit">m</span></label>
+						<input type="number" placeholder="0.000" step="any"/>
 					</div>
-					<div class="tcm-field">
-						<label class="tcm-label">Volume <span class="tcm-label-unit">m³</span></label>
-						<input
-							class="tcm-input tcm-input--readonly"
-							type="number"
-							name="tank_volume"
-							value={ format.FloatOrEmpty(tank.Volume) }
-							placeholder="calculated"
-							readonly
-							tabindex="-1"
-						/>
+					<div class="field-wrap-col">
+						<label>Volume <span class="tcm-label-unit">m³</span></label>
+						<input type="number" readonly name="tank_volume" placeholder="calculated" tabindex="-1"/>
 					</div>
-					<div class="tcm-field">
-						<label class="tcm-label">Density <span class="tcm-label-unit">t/m³</span></label>
-						<input
-							class="tcm-input"
-							type="number"
-							name="tank_density"
-							readonly?={ tank.IsFWTTank }
-							value={ format.FloatOrEmpty(tank.Density) }
-							placeholder="global"
-							step="any"
-						/>
+					<div class="field-wrap-col">
+						<label>Density <span class="tcm-label-unit">t/m³</span></label>
+						<input type="number" name="tank_density" placeholder="0.000" step="any"/>
 					</div>
 				</div>
 			</div>
 			<!-- Calibration table type -->
 			<div class="tcm-section">
-				<div class="tcm-section-title">Calibration Table</div>
-				<div class="tcm-type-tabs">
-					<button type="button" class="tcm-type-tab active" onclick="setType(0)">Standard (Vol by Trim)</button>
-					<button type="button" class="tcm-type-tab" onclick="setType(1)">Sounding Correction</button>
-					<button type="button" class="tcm-type-tab" onclick="setType(2)">Volume Correction</button>
+				<div class="tcm-section-title">Calibration Tables Type</div>
+				<div class="field-col-3">
+					<label>
+						<input x-model="corr_type" type="radio" checked name="calib_type" value="standard"/>
+						Standard (Volume by Trim)
+					</label>
+					<label>
+						<input x-model="corr_type" type="radio" name="calib_type" value="sounding"/>
+						Sounding Correction
+					</label>
+					<label>
+						<input x-model="corr_type" type="radio" name="calib_type" value="volume"/>
+						Volume Correction
+					</label>
 				</div>
-				<input type="hidden" name="tank_calib_table_type" id="calib-type-val" value="Standard (Volume by Trim)"/>
 			</div>
 			<!-- Trim bounds -->
 			<div class="tcm-section">
 				<div class="tcm-section-title">Trim Boundaries</div>
-				<div class="tcm-field-row tcm-field-row--2">
-					<div class="tcm-field">
-						<label class="tcm-label">TTL — Lower trim <span class="tcm-label-unit">m</span></label>
-						<input
-							class="tcm-input"
-							type="number"
-							name="calib_ttl"
-							value={ format.FloatOrEmpty(tank.Correction.TableTrimLow) }
-							placeholder="e.g. -1.000"
-							step="any"
-						/>
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label>TTL — Lower trim <span class="tcm-label-unit">m</span></label>
+						<input placeholder="e.g. -1.000" step="any" type="number"/>
 					</div>
-					<div class="tcm-field">
-						<label class="tcm-label">TTU — Upper trim <span class="tcm-label-unit">m</span></label>
-						<input
-							class="tcm-input"
-							type="number"
-							name="calib_ttu"
-							value={ format.FloatOrEmpty(tank.Correction.TableTrimUpper) }
-							placeholder="e.g. +3.000"
-							step="any"
-						/>
+					<div class="field-wrap-col">
+						<label>TTU — Upper trim <span class="tcm-label-unit">m</span></label>
+						<input placeholder="e.g. +3.000" step="any" type="number"/>
 					</div>
 				</div>
 			</div>
 			<!-- ── TRIM ROWS — всегда видимы, метка зависит от типа -->
-			<div class="tcm-section" id="section-trim">
-				<div class="tcm-section-title" id="trim-rows-title">Trim Rows</div>
+			<div class="tcm-section">
+				<div class="tcm-section-title">Trim Rows</div>
 				<div class="tcm-calib-block">
 					<table class="tcm-calib-table">
 						<thead>
@@ -166,61 +139,60 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_sounding"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_vol_trim_low"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_vol_trim_upper"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_sounding"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_vol_trim_low"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="calib_row_vol_trim_upper"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── SOUNDING ROWS — Type 2 & 3 только -->
+			<div class="tcm-section" x-show="corr_type === 'sounding'">
+				<div class="tcm-section-title">Sounding Table (trim = 0)</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th>Vol @ TTL, m³</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 						</tbody>
@@ -228,8 +200,65 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				</div>
 			</div>
 			<!-- ── VOLUME ROWS — Type 2 & 3 только -->
-			<div class="tcm-section tcm-collapsible" id="section-volume">
-				<div class="tcm-section-title" id="volume-rows-title">Volume Table (trim = 0)</div>
+			<div class="tcm-section" x-show="corr_type === 'volume'">
+				<div class="tcm-section-title">Volume Table (trim = 0)</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th>Vol @ TTL, m³</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── Toggle for list corrections if any -->
+			<div class="tcm-toggle-row">
+				<label class="tcm-toggle">
+					<input type="checkbox" x-on:change="list_corr = !list_corr"/>
+					<span class="tcm-toggle-slider"></span>
+				</label>
+				<span class="tcm-toggle-label">Has list correction table</span>
+			</div>
+			<!-- List bounds -->
+			<div class="tcm-section" x-show="list_corr">
+				<div class="tcm-section-title">Trim Boundaries</div>
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label>TTL — Lower trim <span class="tcm-label-unit">m</span></label>
+						<input placeholder="e.g. -1.000" step="any" type="number"/>
+					</div>
+					<div class="field-wrap-col">
+						<label>TTU — Upper trim <span class="tcm-label-unit">m</span></label>
+						<input placeholder="e.g. +3.000" step="any" type="number"/>
+					</div>
+				</div>
+			</div>
+			<!-- ── LIST ROWS -->
+			<div class="tcm-section" x-show="list_corr">
+				<div class="tcm-section-title">Trim Rows</div>
 				<div class="tcm-calib-block">
 					<table class="tcm-calib-table">
 						<thead>
@@ -243,152 +272,66 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 						<tbody>
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
-								<td><input class="tcm-ti" type="number" name="vol_row_sounding" placeholder="0.000" step="any"/></td>
 								<td>
-									<input class="tcm-ti" type="number" name="vol_row_vol_trim_low" placeholder="0.000" step="any"/>
+									<input placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="vol_row_vol_trim_upper"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input placeholder="0.000" step="any" type="number"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
-								<td><input class="tcm-ti" type="number" name="vol_row_sounding" placeholder="0.000" step="any"/></td>
 								<td>
-									<input class="tcm-ti" type="number" name="vol_row_vol_trim_low" placeholder="0.000" step="any"/>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input
-										class="tcm-ti"
-										type="number"
-										name="vol_row_vol_trim_upper"
-										placeholder="0.000"
-										step="any"
-									/>
+									<input type="number" placeholder="0.000" step="any"/>
+								</td>
+								<td>
+									<input type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<!-- ── LIST ROWS toggle + секция -->
-			<div class="tcm-section">
-				<div class="tcm-toggle-row">
-					<label class="tcm-toggle">
-						<input type="checkbox" id="list-toggle" onchange="toggleList(this)"/>
-						<span class="tcm-toggle-slider"></span>
-					</label>
-					<span class="tcm-toggle-label">Has list correction table</span>
-				</div>
-				<div class="tcm-collapsible" id="section-list">
-					<div class="tcm-calib-block">
-						<div class="tcm-calib-block-title">List Rows</div>
-						<table class="tcm-calib-table">
-							<thead>
-								<tr>
-									<th style="text-align:left;">Row</th>
-									<th style="text-align:left;">Sounding, m</th>
-									<th>Vol @ TTL, m³</th>
-									<th>Vol @ TTU, m³</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td><span class="tcm-row-label">TSL</span></td>
-									<td>
-										<input class="tcm-ti" type="number" name="list_row_sounding" placeholder="0.000" step="any"/>
-									</td>
-									<td>
-										<input
-											class="tcm-ti"
-											type="number"
-											name="list_row_vol_trim_low"
-											placeholder="0.000"
-											step="any"
-										/>
-									</td>
-									<td>
-										<input
-											class="tcm-ti"
-											type="number"
-											name="list_row_vol_trim_upper"
-											placeholder="0.000"
-											step="any"
-										/>
-									</td>
-								</tr>
-								<tr>
-									<td><span class="tcm-row-label">TSU</span></td>
-									<td>
-										<input class="tcm-ti" type="number" name="list_row_sounding" placeholder="0.000" step="any"/>
-									</td>
-									<td>
-										<input
-											class="tcm-ti"
-											type="number"
-											name="list_row_vol_trim_low"
-											placeholder="0.000"
-											step="any"
-										/>
-									</td>
-									<td>
-										<input
-											class="tcm-ti"
-											type="number"
-											name="list_row_vol_trim_upper"
-											placeholder="0.000"
-											step="any"
-										/>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-			<!-- Result -->
-			<div class="tcm-result">
-				<span class="tcm-result-label">Calculated Volume</span>
-				<span>
-					<span class="tcm-result-val" id="calc-vol">—</span>
-					<span class="tcm-result-unit">m³</span>
-				</span>
-			</div>
-		</div>
+		</main>
 		<!-- ── Footer ─────────────────────────────────────────── -->
-		<div class="tcm-footer">
-			<span class="tcm-footer-hint">Trim and List applied from draft readings</span>
-			<div class="tcm-footer-btns">
-				<button
-					class="tcm-btn tcm-btn--cancel"
-					type="button"
-					x-on:click="
+		<footer>
+			<div class="tcm-footer">
+				<span class="tcm-footer-hint">Trim and List applied from draft readings</span>
+				<div class="btn-wrapper">
+					<button
+						class="btn btn-ghost"
+						type="button"
+						x-on:click="
 					if (!dirty) {$el.closest('dialog').close(); return }
 					if (confirm('Unsaved changes. Close anyway?')) {$el.closest('dialog').close() }
 					"
-					value="cancel"
-				>Cancel</button>
-				<button
-					class="tcm-btn tcm-btn--confirm"
-					value="ok"
-					hx-put={ fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID) }
-					hx-target={ fmt.Sprintf("#bw-row-%s", tank.ID) }
-					hx-swap="morph:outerHTML"
-					hx-include="closest form"
-					hx-on::after-request="document.getElementById('app-modal').close();"
-				>
-					<svg viewBox="0 0 24 24">
-						<path d="M20 6L9 17l-5-5"></path>
-					</svg>
-					Apply
-				</button>
+						value="cancel"
+					>
+						Cancel
+					</button>
+					<button
+						class="btn btn-primary"
+						value="ok"
+						type="button"
+						hx-put={ fmt.Sprintf("api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID) }
+						hx-target={ fmt.Sprintf("#bw-row-%s", tank.ID) }
+						hx-swap="morph:outerHTML"
+						hx-include="closest form"
+						hx-on::after-request="document.getElementById('app-modal').close();"
+					>
+						<svg viewBox="0 0 24 24">
+							<path d="M20 6L9 17l-5-5"></path>
+						</svg>
+						Apply
+					</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</footer>
+	</div>
 }

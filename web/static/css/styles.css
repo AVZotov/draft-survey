@@ -58,7 +58,7 @@
   --success-light: #F0FDF4;
   --success-border: #BBF7D0;
 
-  --info: #2563EB;
+  --info-accent: #2563EB;
   --info-light: #EFF6FF;
   --info-border: #BFDBFE;
 
@@ -74,6 +74,9 @@
   /* Typography */
   --font-sans: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
 
   /* Border radius */
   --radius-sm: 4px;
@@ -92,22 +95,12 @@
   --space-lg: 24px;
   --space-xl: 40px;
   --space-2xl: 56px;
-
-  /* Modal Lebels */
-  --info-accent: #2563EB;
-  --info-light: #EFF6FF;
-  --info-border: #BFDBFE;
-  --warning-accent: #D97706;
-  --warning-light: #FFFBEB;
-  --warning-border: #FDE68A;
-  --danger-accent: #DC2626;
-  --danger-light: #FEF2F2;
-  --danger-border: #FECACA;
 }
 
 /* ════════════════════════════════════════════════════════════════
    2. RESET
 ════════════════════════════════════════════════════════════════ */
+
 *,
 *::before,
 *::after {
@@ -122,8 +115,8 @@ body {
 }
 
 body {
-  font-family: var(--font-sans);
-  font-size: 14px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--font-size-md);
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
@@ -131,10 +124,164 @@ body {
   flex-direction: column;
 }
 
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+dialog {
+  height: 90vh;
+  margin: auto;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: 0;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .20), 0 4px 16px rgba(0, 0, 0, .08);
+  outline: none;
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 32, 0.5);
+  backdrop-filter: blur(1px);
+}
+
+.app-modal {
+  font-family: var(--font-sans), sans-serif;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-modal[open] {
+  animation: tcm-in .28s ease;
+}
+
+@keyframes tcm-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+label:has(input[type="radio"]) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+}
+
+label .required {
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+label .optional {
+  color: var(--text-placeholder);
+  font-weight: 400;
+  margin-left: 4px;
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Inputs */
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  font-family: var(--font-sans), sans-serif;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) var(--space-md);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  font-family: var(--font-mono), monospace;
+  text-align: right;
+}
+
+input[readonly] {
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: default;
+  font-weight: 500;
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+input[type="radio"]:checked {
+  border-color: var(--fin-border);
+  background: var(--fin-accent);
+  transition: border-color .25s, background .25s;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-placeholder);
+  font-weight: 300;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+}
+
+/* Убираем стрелки у number */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+
 /* ════════════════════════════════════════════════════════════════
    3. APP HEADER
    With and without user profile
 ════════════════════════════════════════════════════════════════ */
+
 .app-header {
   background: var(--header-bg);
   padding: 0 var(--space-xl);
@@ -161,6 +308,7 @@ body {
 }
 
 /* Logo mark */
+
 .app-logo-mark {
   width: 30px;
   height: 30px;
@@ -183,6 +331,7 @@ body {
 }
 
 /* Logo text — name + tagline */
+
 .app-logo-text {
   display: flex;
   flex-direction: column;
@@ -190,14 +339,14 @@ body {
 }
 
 .app-logo-name {
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--header-text);
   letter-spacing: 0.01em;
 }
 
 .app-logo-tagline {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.06em;
@@ -205,14 +354,16 @@ body {
 }
 
 /* Version label */
+
 .app-header-version {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-xs);
   color: rgba(255, 255, 255, 0.25);
   letter-spacing: 0.04em;
 }
 
 /* Header divider */
+
 .header-divider {
   width: 1px;
   height: 20px;
@@ -220,6 +371,7 @@ body {
 }
 
 /* User area in header */
+
 .header-user {
   display: flex;
   align-items: center;
@@ -234,7 +386,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.02em;
@@ -248,52 +400,20 @@ body {
 }
 
 .header-user-name {
-  font-size: 13px;
   font-weight: 500;
   color: var(--header-text);
 }
 
 .header-user-role {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.03em;
-}
-
-/* Survey pill — show active survey in header*/
-.survey-pill {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 4px var(--space-sm);
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-}
-
-.pill-vessel {
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.pill-port {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.op-badge {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(37, 99, 235, 0.3);
-  color: #93C5FD;
 }
 
 /* ════════════════════════════════════════════════════════════════
    4. APP FOOTER
 ════════════════════════════════════════════════════════════════ */
+
 .app-footer {
   background: var(--footer-bg);
   border-top: 1px solid var(--footer-border);
@@ -305,8 +425,8 @@ body {
 }
 
 .app-footer-left {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), sans-serif;
+  font-size: var(--font-size-sm);
   color: var(--footer-text);
 }
 
@@ -317,7 +437,7 @@ body {
 }
 
 .app-footer-link {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--footer-text);
   text-decoration: none;
   transition: color 0.15s;
@@ -330,12 +450,13 @@ body {
 /* ════════════════════════════════════════════════════════════════
    5. BUTTONS
 ════════════════════════════════════════════════════════════════ */
+
 .btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-sans);
-  font-size: 13px;
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   padding: 9px var(--space-lg);
   border-radius: var(--radius-md);
@@ -351,14 +472,19 @@ body {
 }
 
 .btn svg {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   stroke: currentColor;
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   flex-shrink: 0;
+}
+
+.btn-wrapper{
+    display: flex;
+    gap: var(--space-sm);
 }
 
 .btn-primary {
@@ -391,9 +517,8 @@ body {
   background: #B91C1C;
 }
 
-/* PDF export button */
 .btn-pdf {
-  background: var(--info);
+  background: var(--info-accent);
   color: #fff;
 }
 
@@ -406,6 +531,7 @@ body {
    White card with fields
    used in: profile, new-survey, settings
 ════════════════════════════════════════════════════════════════ */
+
 .form-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -462,11 +588,12 @@ body {
 }
 
 /* Card section */
+
 .form-section {
   padding: var(--space-lg) var(--space-xl);
 }
 
-.form-section+.form-section {
+.form-section + .form-section {
   border-top: 1px solid var(--border);
 }
 
@@ -480,6 +607,7 @@ body {
 }
 
 /* Low bar in settings form */
+
 .form-footer {
   padding: var(--space-md) var(--space-xl);
   background: var(--bg);
@@ -499,6 +627,7 @@ body {
    7. FORM FIELDS
    Used in: profile, new-survey, settings
 ════════════════════════════════════════════════════════════════ */
+
 .field {
   margin-bottom: var(--space-md);
 }
@@ -507,111 +636,50 @@ body {
   margin-bottom: 0;
 }
 
-.field-row {
+.field-wrap-col{
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.field-col-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
 }
 
-.field-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-}
-
-.field-row-3 {
+.field-col-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-md);
 }
 
-.field-row-4 {
+.field-col-4 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: var(--space-md);
 }
 
-/* Labels */
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-xs);
-  letter-spacing: 0.02em;
+.field-row-2 {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--space-md);
 }
 
-label .required {
-  color: var(--accent);
-  margin-left: 2px;
+.field-row-3 {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: var(--space-md);
 }
 
-label .optional {
-  color: var(--text-placeholder);
-  font-weight: 400;
-  margin-left: 4px;
-  font-size: 11px;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-/* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--text-primary);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 9px var(--space-md);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input[type="number"] {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  text-align: right;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-placeholder);
-  font-weight: 300;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
-}
-
-/* Убираем стрелки у number */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 72px;
-  line-height: 1.5;
+.field-row-4 {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: var(--space-md);
 }
 
 /* Select custom arrow */
+
 .select-wrap {
   position: relative;
 }
@@ -630,18 +698,34 @@ textarea {
   pointer-events: none;
 }
 
+.select-arrow {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+  stroke: var(--text-dim);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
 /* Field hint */
+
 .field-hint {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-placeholder);
   margin-top: var(--space-xs);
   line-height: 1.4;
 }
 
 /* Inline calc value (read-only) */
+
 .calc-value {
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   color: var(--text-dim);
   padding: 9px var(--space-md);
   border: 1px solid var(--border);
@@ -651,6 +735,7 @@ textarea {
 }
 
 /* Field with auto-calculated hint inside */
+
 .field-with-calc {
   position: relative;
 }
@@ -660,7 +745,7 @@ textarea {
   right: var(--space-md);
   top: 50%;
   transform: translateY(-50%);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   color: var(--text-dim);
   pointer-events: none;
@@ -672,6 +757,7 @@ textarea {
 }
 
 /* Inline warning under field */
+
 .field-warning {
   display: flex;
   gap: var(--space-sm);
@@ -693,7 +779,7 @@ textarea {
 }
 
 .field-warning-text {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: #92400E;
   line-height: 1.5;
 }
@@ -702,6 +788,7 @@ textarea {
    8. SIGNATURE UPLOAD
    used in: profile, settings
 ════════════════════════════════════════════════════════════════ */
+
 .signature-upload {
   border: 1.5px dashed var(--border);
   border-radius: var(--radius-md);
@@ -734,12 +821,11 @@ textarea {
 }
 
 .signature-upload-text {
-  font-size: 13px;
   color: var(--text-secondary);
 }
 
 .signature-upload-hint {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-placeholder);
   margin-top: var(--space-xs);
 }
@@ -748,6 +834,7 @@ textarea {
    9. STICKY ACTION BAR (low bar with buttons)
    drafts, tanks, new-survey, results
 ════════════════════════════════════════════════════════════════ */
+
 .action-bar {
   position: sticky;
   bottom: 0;
@@ -763,7 +850,7 @@ textarea {
 }
 
 .action-bar-info {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   display: flex;
   align-items: center;
@@ -785,6 +872,7 @@ textarea {
 }
 
 /* option for pages with vessel info on left side */
+
 .ab-info {
   display: flex;
   flex-direction: column;
@@ -792,12 +880,11 @@ textarea {
 }
 
 .ab-vessel {
-  font-size: 13px;
   font-weight: 600;
 }
 
 .ab-meta {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
@@ -806,63 +893,8 @@ textarea {
   gap: var(--space-sm);
 }
 
-/* ════════════════════════════════════════════════════════════════
-   10. SIDEBAR NAV
-   Used in: new-survey, settings
-════════════════════════════════════════════════════════════════ */
-.sidebar-nav-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-placeholder);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--space-sm);
-  padding-left: var(--space-sm);
-}
-
-.sidebar-nav-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sidebar-nav-item a {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 7px var(--space-sm);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--text-secondary);
-  transition: background 0.15s, color 0.15s;
-}
-
-.sidebar-nav-item a:hover {
-  background: var(--surface);
-  color: var(--text-primary);
-}
-
-.sidebar-nav-item.is-active a {
-  background: var(--accent-light);
-  color: var(--accent);
-  font-weight: 500;
-}
-
-.sidebar-nav-item a svg {
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  flex-shrink: 0;
-}
-
 /* Progress dots (new-survey nav) */
+
 .nav-step-dot {
   width: 6px;
   height: 6px;
@@ -884,11 +916,12 @@ textarea {
    11. BACK LINK + PAGE TITLE
    drafts, tanks, results, new-survey, settings
 ════════════════════════════════════════════════════════════════ */
+
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   text-decoration: none;
   margin-bottom: var(--space-sm);
@@ -916,21 +949,21 @@ textarea {
 }
 
 .page-subtitle {
-  font-size: 13px;
   color: var(--text-secondary);
   margin-top: var(--space-xs);
   margin-bottom: var(--space-xl);
 }
 
 .page-meta {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin-top: 2px;
 }
 
 /* Section label — uppercase label above the group */
+
 .section-label {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -943,6 +976,7 @@ textarea {
    Blue info line (не error-banner)
    Used in: profile
 ════════════════════════════════════════════════════════════════ */
+
 .info-banner {
   display: flex;
   gap: var(--space-sm);
@@ -956,7 +990,7 @@ textarea {
 .info-banner svg {
   width: 14px;
   height: 14px;
-  stroke: var(--info);
+  stroke: var(--info-accent);
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
@@ -965,7 +999,7 @@ textarea {
 }
 
 .info-banner-text {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   color: #1D4ED8;
   line-height: 1.5;
 }
@@ -974,6 +1008,7 @@ textarea {
    13. CONFIRMATION MODAL
    Используется: dashboard (delete survey), survey-list
 ════════════════════════════════════════════════════════════════ */
+
 .modal-overlay {
   display: none;
   position: fixed;
@@ -1050,6 +1085,7 @@ textarea {
    14. BADGES — status survey
    used in: survey-list, results
 ════════════════════════════════════════════════════════════════ */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -1082,7 +1118,7 @@ textarea {
 
 .badge--progress {
   background: var(--info-light);
-  color: var(--info);
+  color: var(--info-accent);
   border: 1px solid var(--info-border);
 }
 
@@ -1102,44 +1138,4 @@ textarea {
   background: var(--fin-light);
   color: var(--fin-accent);
   border: 1px solid var(--fin-border);
-}
-
-/* ── Backdrop ───────────────────────────────────────────── */
-
-/* Modal dialog and alerts styles */
-
-dialog.app-modal {
-  font-family: var(--font-sans);
-  background: var(--surface);
-  border: none;
-  border-radius: var(--radius-xl);
-  padding: 0;
-  width: 100%;
-  max-width: 580px;
-  max-height: 100vh;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, .20), 0 4px 16px rgba(0, 0, 0, .08);
-  outline: none;
-  display: flex;
-  flex-direction: column;
-}
-
-dialog.app-modal[open] {
-  animation: tcm-in .25s ease;
-}
-
-@keyframes tcm-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(.90);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-dialog.app-modal::backdrop {
-  background: rgba(15, 23, 32, 0.5);
-  backdrop-filter: blur(7px);
 }
