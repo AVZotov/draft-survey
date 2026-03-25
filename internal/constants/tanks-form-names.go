@@ -14,6 +14,8 @@ const (
 	TankVolume = "tank_volume" // m³
 	// TankWeight - calculated value
 	TankWeight = "tank_weight" //MT
+	// HasListCorrection - bool to show if tank calibration data contains List corrections
+	HasListCorrection = "has_list_correction"
 )
 
 // Fixed names used in names and ID generation for parsing calibration data passed
@@ -26,6 +28,10 @@ const (
 	TTL = "table_trim_low"
 	// TTU - table trim up from vessel's data
 	TTU = "table_trim_up"
+	// TLL - table list lower from vessel's data
+	TLL = "table_trim_low"
+	// TLU - table list up from vessel's data
+	TLU = "table_trim_up"
 	// TrimTableTSLS - lower sounding from vessel's trim table TTL column
 	TrimTableTSLS = "trim_table_table_sounding_low_sounding"
 	// TrimTableTSLVL - lower volume from vessel's trim table TTL column
@@ -59,35 +65,23 @@ const (
 // Reuse: TTL, TTU, TrimTableTSLS TrimTableTSLVL TrimTableTSLVU TrimTableTSUS TrimTableTSUVL TrimTableTSUVU
 // Reuse: ListTableTSLS ListTableTSLVL ListTableTSLVU ListTableTSUS ListTableTSUVL ListTableTSUVU (if list correction exists)
 // Table 2 — volume at corrected sounding (1D, no trim columns)
-const (
-	// VolumeCalibrationType2 - type of calibration data with 1D volume at corrected soundings
-	VolumeCalibrationType2 = "sounding_correction"
-	// SoundCorrVolTableTSLS - lower sounding from vessel's volume table (trim=0)
-	SoundCorrVolTableTSLS = "sound_corr_vol_table_sounding_low_sounding"
-	// SoundCorrVolTableTSLV - volume at lower sounding from vessel's volume table
-	SoundCorrVolTableTSLV = "sound_corr_vol_table_sounding_low_volume"
-	// SoundCorrVolTableTSUS - upper sounding from vessel's volume table (trim=0)
-	SoundCorrVolTableTSUS = "sound_corr_vol_table_sounding_up_sounding"
-	// SoundCorrVolTableTSUV - volume at upper sounding from vessel's volume table
-	SoundCorrVolTableTSUV = "sound_corr_vol_table_sounding_up_volume"
-)
-
-// Fixed names used in names and ID generation for parsing calibration data passed
-// from modal window
 // ===== TYPE 3: Volume Correction =====
 // Table 1 — volume correction by trim (same structure as Type 1 trim table)
 // Reuse: TTL, TTU, TrimTableTSLS TrimTableTSLVL TrimTableTSLVU TrimTableTSUS TrimTableTSUVL TrimTableTSUVU
 // Reuse: ListTableTSLS ListTableTSLVL ListTableTSLVU ListTableTSUS ListTableTSUVL ListTableTSUVU (if list correction exists)
 // Table 2 — base volume at zero trim (1D, no trim columns)
+// Both uses same field constants as table is identical
 const (
+	// VolumeCalibrationType2 - type of calibration data with 1D volume at corrected soundings
+	VolumeCalibrationType2 = "sounding_correction"
 	// VolumeCalibrationType3 - type of calibration data based on volume at zero trim (1D, no trim columns)
 	VolumeCalibrationType3 = "volume_correction"
-	// VolCorrBaseTableTSLS - lower sounding from vessel's base volume table (trim=0)
-	VolCorrBaseTableTSLS = "vol_corr_base_table_sounding_low_sounding"
-	// VolCorrBaseTableTSLV - base volume at lower sounding (trim=0)
-	VolCorrBaseTableTSLV = "vol_corr_base_table_sounding_low_volume"
-	// VolCorrBaseTableTSUS - upper sounding from vessel's base volume table (trim=0)
-	VolCorrBaseTableTSUS = "vol_corr_base_table_sounding_up_sounding"
-	// VolCorrBaseTableTSUV - base volume at upper sounding (trim=0)
-	VolCorrBaseTableTSUV = "vol_corr_base_table_sounding_up_volume"
+	// CorrTableSL - lower sounding from vessel's correction table
+	CorrTableSL = "corr_table_sounding_low"
+	// CorrTableVL - lower volume from vessel's correction table
+	CorrTableVL = "corr_table_volume_low"
+	// CorrTableSU - upper sounding from vessel's correction table
+	CorrTableSU = "corr_table_sounding_up"
+	// CorrTableVU - upper volume from vessel's correction table
+	CorrTableVU = "corr_table_volume_up"
 )

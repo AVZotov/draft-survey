@@ -15,6 +15,11 @@
      banner.css       — error banner (added in layout)
 ================================================================ */
 
+/* Prevent hidden components to be flickered during DOM loading */
+[x-cloak] {
+  display: none !important;
+}
+
 /* ════════════════════════════════════════════════════════════════
    1. DESIGN TOKENS
 ════════════════════════════════════════════════════════════════ */
@@ -160,6 +165,7 @@ dialog::backdrop {
     opacity: 0;
     transform: translateY(-10px) scale(.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -482,9 +488,9 @@ textarea {
   flex-shrink: 0;
 }
 
-.btn-wrapper{
-    display: flex;
-    gap: var(--space-sm);
+.btn-wrapper {
+  display: flex;
+  gap: var(--space-sm);
 }
 
 .btn-primary {
@@ -593,7 +599,7 @@ textarea {
   padding: var(--space-lg) var(--space-xl);
 }
 
-.form-section + .form-section {
+.form-section+.form-section {
   border-top: 1px solid var(--border);
 }
 
@@ -636,7 +642,7 @@ textarea {
   margin-bottom: 0;
 }
 
-.field-wrap-col{
+.field-wrap-col {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);

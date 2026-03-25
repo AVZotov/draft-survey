@@ -18,7 +18,7 @@ func getVolumeCalibrationType1Tank() types.Tank {
 			TableTrimLow:      ptr(2.000),
 			TableTrimUpper:    ptr(3.000),
 			HasListCorrection: false,
-			VolumeByTrimRow: []types.CalibrationRow{
+			TrimRows: []types.CalibrationRow{
 				{Sounding: ptr(1.950), VolumeLow: ptr(808.780), VolumeUp: ptr(782.280)},
 				{Sounding: ptr(2.000), VolumeLow: ptr(824.850), VolumeUp: ptr(800.410)},
 			},
@@ -34,11 +34,11 @@ func getVolumeCalibrationType2Tank() types.Tank {
 			TableTrimLow:      ptr(2.500),
 			TableTrimUpper:    ptr(3.000),
 			HasListCorrection: false,
-			VolumeByTrimRow: []types.CalibrationRow{
+			TrimRows: []types.CalibrationRow{
 				{Sounding: ptr(2.400), VolumeLow: ptr(-205), VolumeUp: ptr(-246)},
 				{Sounding: ptr(2.500), VolumeLow: ptr(-207), VolumeUp: ptr(-248)},
 			},
-			VolumeRows: []types.SoundingVolume{
+			CorrectionRows: []types.CorrectionRows{
 				{TableSounding: ptr(2.220), TableVolume: ptr(565.540)},
 				{TableSounding: ptr(2.230), TableVolume: ptr(556.370)},
 			},
@@ -54,11 +54,11 @@ func getVolumeCalibrationType3Tank() types.Tank {
 			TableTrimLow:      ptr(2.000),
 			TableTrimUpper:    ptr(3.000),
 			HasListCorrection: false,
-			VolumeByTrimRow: []types.CalibrationRow{
+			TrimRows: []types.CalibrationRow{
 				{Sounding: ptr(1.900), VolumeLow: ptr(-56.000), VolumeUp: ptr(-89.200)},
 				{Sounding: ptr(2.000), VolumeLow: ptr(-58.630), VolumeUp: ptr(-97.150)},
 			},
-			VolumeRows: []types.SoundingVolume{
+			CorrectionRows: []types.CorrectionRows{
 				{TableSounding: ptr(1.900), TableVolume: ptr(892.060)},
 				{TableSounding: ptr(2.000), TableVolume: ptr(899.250)},
 			},

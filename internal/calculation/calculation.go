@@ -230,9 +230,9 @@ Parameters:
 
 If trimOrList == 0, interpolation is performed by sounding only (1D).
 */
-func calcVolumeBy1DRows(sounding float64, rows []types.SoundingVolume) float64 {
+func calcVolumeBy1DRows(sounding float64, rows []types.CorrectionRows) float64 {
 	// Sort rows by sounding
-	var lower, upper types.SoundingVolume
+	var lower, upper types.CorrectionRows
 	if markVal(rows[0].TableSounding) < markVal(rows[1].TableSounding) {
 		lower = rows[0]
 		upper = rows[1]
@@ -290,7 +290,7 @@ func calcVolumeType1(sounding, trim, list float64, data types.VolumeCalibrationD
 	tll := markVal(data.TableListLow)
 	tlu := markVal(data.TableListUpper)
 
-	volume := calcVolumeByRows(sounding, trim, data.VolumeByTrimRow, ttl, ttu)
+	volume := calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu)
 
 	if len(data.ListRows) > 0 {
 		volume += calcVolumeByRows(sounding, list, data.ListRows, tll, tlu)
@@ -328,18 +328,18 @@ func calcVolumeType2(sounding, trim, list float64, data types.VolumeCalibrationD
 	tlu := markVal(data.TableListUpper)
 
 	// Step 1: sounding correction by trim
-	soundingCorr := calcVolumeByRows(sounding, trim, data.VolumeByTrimRow, ttl, ttu)
+	soundingCorr := math.Round(calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu))
 
 	// Step 2: list correction to sounding
 	if len(data.ListRows) > 0 {
-		soundingCorr += calcVolumeByRows(sounding, list, data.ListRows, tll, tlu)
+		soundingCorr += math.Round(calcVolumeByRows(sounding, list, data.ListRows, tll, tlu))
 	}
 
 	// Step 3: corrected sounding
 	correctedSounding := sounding + (soundingCorr / 1000)
 
 	// Step 4: volume at corrected sounding (1D)
-	return calcVolumeBy1DRows(correctedSounding, data.VolumeRows)
+	return calcVolumeBy1DRows(correctedSounding, data.CorrectionRows)
 }
 
 /*
@@ -370,10 +370,10 @@ func calcVolumeType3(sounding, trim, list float64, data types.VolumeCalibrationD
 	tlu := markVal(data.TableListUpper)
 
 	// Step 1: base volume at zero trim (1D)
-	baseVolume := calcVolumeBy1DRows(sounding, data.VolumeRows)
+	baseVolume := calcVolumeBy1DRows(sounding, data.CorrectionRows)
 
 	// Step 2: volume correction by trim
-	trimCorr := calcVolumeByRows(sounding, trim, data.VolumeByTrimRow, ttl, ttu)
+	trimCorr := calcVolumeByRows(sounding, trim, data.TrimRows, ttl, ttu)
 
 	// Step 3: volume correction by list
 	listCorr := 0.0
