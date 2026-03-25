@@ -18,7 +18,7 @@ templ BwAddRowForm(surveyID string, draftIndex int, isOOB bool) {
 			<div class="add-field">
 				<label class="add-field-label">Type</label>
 				<div class="add-select-wrap">
-					<select class="add-sel" name={ constants.TankName } id="new-tank-type">
+					<select class="add-sel" name={ constants.TankType } id="new-tank-type">
 						for _, bwtType := range dictionaries.BallastWaterTankTypes {
 							<option value={ bwtType }>{ bwtType }</option>
 						}

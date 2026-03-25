@@ -28,7 +28,7 @@ type props struct {
 	user       *types.User
 	tankID     string
 	tankIndex  int
-	tanks      []types.Tank
+	bwTanks    []types.Tank
 	trim       *float64
 	trimDir    string
 	list       *float64
@@ -57,7 +57,7 @@ func (h *Handler) newBwTank(c *fiber.Ctx) error {
 	bwt := types.Tank{
 		ID: tankID,
 	}
-	h.parseBwTank(c, &bwt)
+	h.parseTank(c, &bwt)
 
 	p.survey.Drafts[p.draftIndex].BallastWaterTanks =
 		append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, bwt)
@@ -77,9 +77,9 @@ func (h *Handler) deleteBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	p.tanks = slices.Delete(p.tanks, p.tankIndex, p.tankIndex+1)
+	p.bwTanks = slices.Delete(p.bwTanks, p.tankIndex, p.tankIndex+1)
 
-	p.survey.Drafts[p.draftIndex].BallastWaterTanks = p.tanks
+	p.survey.Drafts[p.draftIndex].BallastWaterTanks = p.bwTanks
 	if err := h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
@@ -96,8 +96,8 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	tank := p.tanks[p.tankIndex]
-	h.parseBwTank(c, &tank)
+	tank := p.bwTanks[p.tankIndex]
+	h.parseTank(c, &tank)
 
 	p.survey.Drafts[p.draftIndex].BallastWaterTanks[p.tankIndex] = tank
 
@@ -119,8 +119,7 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 		return err
 	}
 
-	tank := p.tanks[p.tankIndex]
-	//TODO: Implement loading logic with corrections struct parsing
+	tank := p.bwTanks[p.tankIndex]
 	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	if c.Get("HX-Request") != "true" {
@@ -180,8 +179,8 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		}, nil
 	}
 
-	tanks := survey.Drafts[draftIndex].BallastWaterTanks
-	tankIndex := slices.IndexFunc(tanks, func(tank types.Tank) bool {
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	tankIndex := slices.IndexFunc(bwTanks, func(tank types.Tank) bool {
 		return tank.ID == tankID
 	})
 	if tankIndex == -1 {
@@ -195,7 +194,7 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		user:       user,
 		tankID:     tankID,
 		tankIndex:  tankIndex,
-		tanks:      tanks,
+		bwTanks:    bwTanks,
 		trim:       trueTrim,
 		trimDir:    trimDir,
 		list:       listDegrees,

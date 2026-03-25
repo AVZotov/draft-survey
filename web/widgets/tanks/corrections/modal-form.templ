@@ -11,9 +11,9 @@ import (
 
 templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 	{{
-		list_corr := "false"
+		list_corr := false
 		if tank.Correction.HasListCorrection {
-			list_corr = "true"
+			list_corr = true
 		}
 		corrType := constants.VolumeCalibrationType1
 		if tank.Correction.TableType != "" {
@@ -59,7 +59,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 			class="tcm-body"
 			id="modal-form-body"
 			x-data={ fmt.Sprintf(`{
-    		    list_corr: %s,
+    		    list_corr: %t,
     		    corr_type: '%s'
 			}`, list_corr, corrType) }
 		>
@@ -96,15 +96,15 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-3">
 					<div class="field-wrap-col">
 						<label>Sounding <span class="tcm-label-unit">m</span></label>
-						<input type="number" name={ constants.TankSounding } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
+						<input type="number" name={ format.TankNameID(constants.TankSounding, tank) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>Volume <span class="tcm-label-unit">m³</span></label>
-						<input type="number" name={ constants.TankVolume } value={ format.FloatOrEmpty(tank.Volume) } readonly placeholder="calculated" tabindex="-1"/>
+						<input type="number" name={ format.TankNameID(constants.TankVolume, tank) } value={ format.FloatOrEmpty(tank.Volume) } readonly placeholder="calculated" tabindex="-1"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>Density <span class="tcm-label-unit">t/m³</span></label>
-						<input type="number" name={ constants.TankDensity } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+						<input type="number" name={ format.TankNameID(constants.TankDensity, tank) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
 					</div>
 				</div>
 			</div>
@@ -183,7 +183,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				</div>
 			</div>
 			<!-- ── CORRECTION ROWS — Type 2 & 3 only! -->
-			<div class="tcm-section" x-cloak x-show={ fmt.Sprintf("corr_type === '%s' || corr_type === '%s'", constants.VolumeCalibrationType2, constants.VolumeCalibrationType3) }>
+			<div class="tcm-section" x-show={ fmt.Sprintf("corr_type === '%s' || corr_type === '%s'", constants.VolumeCalibrationType2, constants.VolumeCalibrationType3) }>
 				<div class="tcm-section-title">Capacity Table</div>
 				<div class="tcm-calib-block">
 					<table class="tcm-calib-table">
@@ -303,7 +303,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 						value="ok"
 						type="button"
 						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID) }
-						hx-target={ fmt.Sprintf("#bw-row-%s", tank.ID) }
+						hx-target={ fmt.Sprintf("#tank-row-%s", tank.ID) }
 						hx-swap="morph:outerHTML"
 						hx-include="#modal-form-body"
 						hx-on::after-request="document.getElementById('app-modal').close();"

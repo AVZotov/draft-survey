@@ -30,7 +30,7 @@ type VolumeCalibrationData struct {
 	HasListCorrection bool                 `json:"calib_has_list_correction"`
 	TrimRows          []CalibrationRow     `json:"trim_rows"`
 	ListRows          []CalibrationRow     `json:"list_rows"`
-	CorrectionRows    []CorrectionRows     `json:"volume_rows"` // Table 2 for Type2 and Type3
+	CorrectionRows    []CorrectionRows     `json:"corr_rows"` // Table 2 for Type2 and Type3
 }
 
 func (v VolumeCalibrationData) SafeTrimRows() [2]CalibrationRow {
@@ -47,20 +47,20 @@ func (v VolumeCalibrationData) SafeTrimRows() [2]CalibrationRow {
 func (v VolumeCalibrationData) SafeListRows() [2]CalibrationRow {
 	var rows [2]CalibrationRow
 	if len(v.ListRows) > 0 {
-		rows[0] = v.TrimRows[0]
+		rows[0] = v.ListRows[0]
 	}
 	if len(v.ListRows) > 1 {
-		rows[1] = v.TrimRows[1]
+		rows[1] = v.ListRows[1]
 	}
 	return rows
 }
 
 func (v VolumeCalibrationData) SafeCorrectionRows() [2]CorrectionRows {
 	var rows [2]CorrectionRows
-	if len(v.ListRows) > 0 {
+	if len(v.CorrectionRows) > 0 {
 		rows[0] = v.CorrectionRows[0]
 	}
-	if len(v.ListRows) > 1 {
+	if len(v.CorrectionRows) > 1 {
 		rows[1] = v.CorrectionRows[1]
 	}
 	return rows

@@ -29,9 +29,9 @@ const (
 	// TTU - table trim up from vessel's data
 	TTU = "table_trim_up"
 	// TLL - table list lower from vessel's data
-	TLL = "table_trim_low"
+	TLL = "table_list_low"
 	// TLU - table list up from vessel's data
-	TLU = "table_trim_up"
+	TLU = "table_list_up"
 	// TrimTableTSLS - lower sounding from vessel's trim table TTL column
 	TrimTableTSLS = "trim_table_table_sounding_low_sounding"
 	// TrimTableTSLVL - lower volume from vessel's trim table TTL column

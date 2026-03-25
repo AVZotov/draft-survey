@@ -259,7 +259,7 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.Tank) {
+func (h *Handler) parseTank(c *fiber.Ctx, tank *types.Tank) {
 	if tank == nil {
 		return
 	}
@@ -284,8 +284,148 @@ func (h *Handler) parseBwTank(c *fiber.Ctx, tank *types.Tank) {
 		tank.Volume = volume
 	}
 
-	density, err := parseFloat(c, fmt.Sprintf("%s-%s", constants.TankDensity, tank.ID))
+	if !tank.IsFWTTank {
+		density, err := parseFloat(c, fmt.Sprintf("%s-%s", constants.TankDensity, tank.ID))
+		if err == nil {
+			tank.Density = density
+		}
+	}
+
+	//Corrections Parsing
+
+	tableType, err := parseString(c, "calib_type")
+	if err != nil {
+		return
+	}
+	tank.Correction.TableType = types.CalibrationTableType(tableType)
+
+	hasListCorrection, _ := parseString(c, constants.HasListCorrection)
+	tank.Correction.HasListCorrection = hasListCorrection != ""
+
+	switch tank.Correction.TableType {
+	case types.CalibrationTypeVolumeByTrim:
+		parseTrimRows(c, tank)
+		if tank.Correction.HasListCorrection {
+			parseListRows(c, tank)
+		}
+		return
+	case types.CalibrationTypeSoundingCorrection, types.CalibrationTypeVolumeCorrection:
+		parseTrimRows(c, tank)
+		parseCorrectionRows(c, tank)
+		if tank.Correction.HasListCorrection {
+			parseListRows(c, tank)
+		}
+	}
+}
+
+func parseTrimRows(c *fiber.Ctx, tank *types.Tank) {
+	if tank == nil {
+		return
+	}
+
+	ttl, err := parseFloat(c, constants.TTL)
 	if err == nil {
-		tank.Density = density
+		tank.Correction.TableTrimLow = ttl
+	}
+	ttu, err := parseFloat(c, constants.TTU)
+	if err == nil {
+		tank.Correction.TableTrimUpper = ttu
+	}
+
+	if len(tank.Correction.TrimRows) == 0 {
+		tank.Correction.TrimRows = make([]types.CalibrationRow, 2)
+	}
+	LowSounding, err := parseFloat(c, constants.TrimTableTSLS)
+	if err == nil {
+		tank.Correction.TrimRows[0].Sounding = LowSounding
+	}
+	TSLVolumeLow, err := parseFloat(c, constants.TrimTableTSLVL)
+	if err == nil {
+		tank.Correction.TrimRows[0].VolumeLow = TSLVolumeLow
+	}
+	TSLVolumeUp, err := parseFloat(c, constants.TrimTableTSLVU)
+	if err == nil {
+		tank.Correction.TrimRows[0].VolumeUp = TSLVolumeUp
+	}
+	UpSounding, err := parseFloat(c, constants.TrimTableTSUS)
+	if err == nil {
+		tank.Correction.TrimRows[1].Sounding = UpSounding
+	}
+	TSUVolumeLow, err := parseFloat(c, constants.TrimTableTSUVL)
+	if err == nil {
+		tank.Correction.TrimRows[1].VolumeLow = TSUVolumeLow
+	}
+	TSUVolumeUp, err := parseFloat(c, constants.TrimTableTSUVU)
+	if err == nil {
+		tank.Correction.TrimRows[1].VolumeUp = TSUVolumeUp
+	}
+}
+
+func parseListRows(c *fiber.Ctx, tank *types.Tank) {
+	if tank == nil {
+		return
+	}
+
+	tll, err := parseFloat(c, constants.TLL)
+	if err == nil {
+		tank.Correction.TableListLow = tll
+	}
+	tlu, err := parseFloat(c, constants.TLU)
+	if err == nil {
+		tank.Correction.TableListUpper = tlu
+	}
+
+	if len(tank.Correction.ListRows) == 0 {
+		tank.Correction.ListRows = make([]types.CalibrationRow, 2)
+	}
+	LowSounding, err := parseFloat(c, constants.ListTableTSLS)
+	if err == nil {
+		tank.Correction.ListRows[0].Sounding = LowSounding
+	}
+	TSLVolumeLow, err := parseFloat(c, constants.ListTableTSLVL)
+	if err == nil {
+		tank.Correction.ListRows[0].VolumeLow = TSLVolumeLow
+	}
+	TSLVolumeUp, err := parseFloat(c, constants.ListTableTSLVU)
+	if err == nil {
+		tank.Correction.ListRows[0].VolumeUp = TSLVolumeUp
+	}
+	UpSounding, err := parseFloat(c, constants.ListTableTSUS)
+	if err == nil {
+		tank.Correction.ListRows[1].Sounding = UpSounding
+	}
+	TSUVolumeLow, err := parseFloat(c, constants.ListTableTSUVL)
+	if err == nil {
+		tank.Correction.ListRows[1].VolumeLow = TSUVolumeLow
+	}
+	TSUVolumeUp, err := parseFloat(c, constants.ListTableTSUVU)
+	if err == nil {
+		tank.Correction.ListRows[1].VolumeUp = TSUVolumeUp
+	}
+}
+
+func parseCorrectionRows(c *fiber.Ctx, tank *types.Tank) {
+	if tank == nil {
+		return
+	}
+
+	if len(tank.Correction.CorrectionRows) == 0 {
+		tank.Correction.CorrectionRows = make([]types.CorrectionRows, 2)
+	}
+	soundingLow, err := parseFloat(c, constants.CorrTableSL)
+	if err == nil {
+		tank.Correction.CorrectionRows[0].TableSounding = soundingLow
+	}
+	volumeLow, err := parseFloat(c, constants.CorrTableVL)
+	if err == nil {
+		tank.Correction.CorrectionRows[0].TableVolume = volumeLow
+	}
+	soundingUp, err := parseFloat(c, constants.CorrTableSU)
+	if err == nil {
+		tank.Correction.CorrectionRows[1].TableSounding = soundingUp
+	}
+	volumeUp, err := parseFloat(c, constants.CorrTableVU)
+	if err == nil {
+		tank.Correction.CorrectionRows[1].TableVolume = volumeUp
 	}
 }
