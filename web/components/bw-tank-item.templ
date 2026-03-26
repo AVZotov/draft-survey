@@ -57,7 +57,7 @@ templ TankItem(surveyID string, draftIndex int, tank types.Tank) {
 		<td class="td-div"></td>
 		<td class="td-act">
 			<button
-				hx-confirm="This operation can't be undone"
+				hx-confirm={ fmt.Sprintf("Warning: This operation will permanently remove tank: %s %s and cannot be reversed.", tank.Type, tank.Name) }
 				hx-delete={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", surveyID, draftIndex, tank.ID) }
 				hx-target="closest tr"
 				hx-swap="delete swap:500ms"
