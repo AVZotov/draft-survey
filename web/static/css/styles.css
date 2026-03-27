@@ -51,15 +51,15 @@
   --footer-border: rgba(255, 255, 255, 0.08);
 
   /* Semantic colours */
-  --danger: #DC2626;
+  --danger-accent: #DC2626;
   --danger-light: #FEF2F2;
   --danger-border: #FECACA;
 
-  --warning: #D97706;
+  --warning-accent: #D97706;
   --warning-light: #FFFBEB;
   --warning-border: #FDE68A;
 
-  --success: #15803D;
+  --success-accent: #15803D;
   --success-light: #F0FDF4;
   --success-border: #BBF7D0;
 
@@ -72,13 +72,26 @@
   --ini-light: #EFF6FF;
   --ini-border: #BFDBFE;
 
+  --mid-accent: #B45309;
+  --mid-light:  #FFFBEB;
+  --mid-border: #FDE68A;
+
   --fin-accent: #15803D;
   --fin-light: #F0FDF4;
   --fin-border: #BBF7D0;
 
+  /* Tanks tokens */
+  --bw-accent: #2563EB;
+  --bw-light: #EFF6FF;
+  --bw-border: #BFDBFE;
+
+  --fw-accent: #0891B2;
+  --fw-light: #ECFEFF;
+  --fw-border: #A5F3FC;
+
   /* Typography */
-  --font-sans: 'IBM Plex Sans', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-sans: 'IBM Plex Sans';
+  --font-mono: 'IBM Plex Mono';
   --font-size-xs: 10px;
   --font-size-sm: 12px;
   --font-size-md: 14px;

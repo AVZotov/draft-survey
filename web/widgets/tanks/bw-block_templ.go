@@ -31,7 +31,7 @@ func BwBlock(tp components.TanksPageProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ttbl-wrap\"><div id=\"density-warning\"></div><table class=\"ttbl\" id=\"bw-tbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ini\" colspan=\"4\">Initial</th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num ts-ini\">Sound, m</th><th class=\"th-num ts-ini\">Vol, m³</th><th class=\"th-num ts-ini\">Density</th><th class=\"th-num ts-ini\">MT</th></tr></thead> <tbody id=\"bw-tanks-items\" class=\"t-row\" data-id=\"r1\" data-type=\"bw\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ttbl-wrap\"><div id=\"density-warning\"></div><table class=\"ttbl\" id=\"bw-tbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ini\" colspan=\"4\">Initial</th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num ts-ini\">Sound, m</th><th class=\"th-num ts-ini\">Vol, m³</th><th class=\"th-num ts-ini\">Density</th><th class=\"th-num ts-ini\">MT</th></tr></thead> <tbody id=\"bw-tanks-items\" class=\"t-row\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -40,35 +41,45 @@ func (h *Handler) tanks(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
+	results := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
 	tanksLayoutProps := web.TanksLayoutProps(p.user)
 	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
-	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksProps))
+	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksProps, results))
 }
 
-func (h *Handler) newBwTank(c *fiber.Ctx) error {
+func (h *Handler) newTank(c *fiber.Ctx) error {
 	tankID := uuid.New().String()
 	p, err := getProps(h, c)
 	if err != nil {
 		return err
 	}
 
-	bwt := types.Tank{
+	wt := types.Tank{
 		ID: tankID,
 	}
-	h.parseTank(c, &bwt)
+	h.parseTank(c, &wt)
 
-	p.survey.Drafts[p.draftIndex].BallastWaterTanks =
-		append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, bwt)
+	wtType := c.Get(constants.HXTank)
+
+	switch wtType {
+	case constants.BWTank:
+		p.survey.Drafts[p.draftIndex].BallastWaterTanks =
+			append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, wt)
+	case constants.FWTank:
+		p.survey.Drafts[p.draftIndex].FreshWaterTanks =
+			append(p.survey.Drafts[p.draftIndex].FreshWaterTanks, wt)
+	default:
+		return errors.New("undefined tank type")
+	}
 
 	if err = h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, bwt),
-		tanks.BwAddRowForm(p.survey.ID, p.draftIndex, true)))
+		components.TankItem(p.survey.ID, p.draftIndex, wt),
+		tanks.AddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
 func (h *Handler) deleteBwTank(c *fiber.Ctx) error {

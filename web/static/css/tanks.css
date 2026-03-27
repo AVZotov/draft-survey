@@ -55,7 +55,7 @@
 }
 
 .hver {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.25);
 }
@@ -162,7 +162,7 @@
 }
 
 input.den-in {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-primary);
@@ -217,13 +217,13 @@ input.den-in:focus {
 }
 
 .tank-block--bw .tank-block-header {
-  background: var(--bw-light, #EFF6FF);
-  border-bottom-color: var(--bw-border, #BFDBFE);
+  background: var(--bw-light);
+  border-bottom-color: var(--bw-border);
 }
 
 .tank-block--fw .tank-block-header {
-  background: var(--fw-light, #ECFEFF);
-  border-bottom-color: var(--fw-border, #A5F3FC);
+  background: var(--fw-light);
+  border-bottom-color: var(--fw-border);
 }
 
 .blk-label {
@@ -241,19 +241,19 @@ input.den-in:focus {
 }
 
 .tank-block--bw .blk-label {
-  color: var(--bw-accent, #2563EB);
+  color: var(--bw-accent);
 }
 
 .tank-block--bw .blk-dot {
-  background: var(--bw-accent, #2563EB);
+  background: var(--bw-accent);
 }
 
 .tank-block--fw .blk-label {
-  color: var(--fw-accent, #0891B2);
+  color: var(--fw-accent);
 }
 
 .tank-block--fw .blk-dot {
-  background: var(--fw-accent, #0891B2);
+  background: var(--fw-accent);
 }
 
 .blk-totals {
@@ -277,7 +277,7 @@ input.den-in:focus {
 }
 
 .total-chip-val {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
@@ -312,7 +312,7 @@ input.den-in:focus {
   border: 1px solid var(--danger-border, #FECACA);
   border-radius: var(--radius-md);
   font-size: 11px;
-  color: var(--danger-accent, #DC2626);
+  color: var(--danger-accent);
   display: flex;
   align-items: center;
   gap: var(--space-sm);
@@ -429,7 +429,7 @@ tbody.t-row tr td:first-child {
 
 /* Tank name select */
 select.t-sel {
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-primary);
@@ -450,7 +450,7 @@ select.t-sel:focus {
 
 /* Number inputs */
 input.ti {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: var(--text-primary);
   text-align: right;
@@ -481,7 +481,7 @@ input.ti::placeholder {
 
 /* MT result cell */
 .td-mt {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-dim);
@@ -576,7 +576,7 @@ tfoot.ttbl-foot tr td {
 }
 
 .td-tot-mt {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
@@ -629,7 +629,7 @@ tfoot.ttbl-foot tr td {
 }
 
 .add-sel {
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), monospace;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-primary);
@@ -662,7 +662,7 @@ tfoot.ttbl-foot tr td {
 
 /* Name input */
 .add-inp {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: var(--text-primary);
   background: var(--surface);
@@ -695,7 +695,7 @@ tfoot.ttbl-foot tr td {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: var(--ini-accent);
