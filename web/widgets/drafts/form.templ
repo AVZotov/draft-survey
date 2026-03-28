@@ -16,7 +16,9 @@ templ DraftForm(survey *types.Survey) {
 						Back to Survey Data
 					</a>
 					<h1 class="page-title">Draft Readings</h1>
-					<p class="page-meta">{ survey.VesselData.Name } · IMO { survey.VesselData.IMO } · { survey.CargoOperation.Operation } · { survey.CargoOperation.PlaceOfInspection }</p>
+					<p class="page-meta">
+						{ survey.VesselData.Name } · IMO { survey.VesselData.IMO } · { survey.CargoOperation.Operation } · { survey.CargoOperation.PlaceOfInspection }
+					</p>
 				</div>
 				for i, draft := range survey.Drafts {
 					if i > 0 {

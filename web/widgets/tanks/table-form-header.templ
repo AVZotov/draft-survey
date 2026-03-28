@@ -1,28 +1,32 @@
 package tanks
 
-import "github.com/AVZotov/draft-survey/web/components"
-import "github.com/AVZotov/draft-survey/internal/calculation"
-import "github.com/AVZotov/draft-survey/internal/format"
+import "github.com/AVZotov/draft-survey/internal/types"
 
-templ TableFormHeader(tp components.TanksPageProps, results calculation.DraftResult, isOOB bool) {
+templ TableFormHeader(id, title, totalWeight string, draftType types.DraftType, isOOB bool) {
 	<div
-		id="bw-table-header"
+		id={ id }
 		class="tank-block-header"
 		if isOOB {
 			hx-swap-oob="true"
 		}
 	>
 		<div class="blk-label">
-			<span class="blk-dot"></span>Ballast Water Tanks
+			<span class="blk-dot"></span>{ title }
 		</div>
 		<div class="blk-totals">
-			<div class="total-chip tc--ini">
-				<span class="total-chip-lbl">{ string(tp.Survey.Drafts[tp.DraftIndex].Type) }</span>
+			<div
+				class={ templ.Classes(
+        "total-chip",
+        templ.KV("tc--ini", draftType == types.DraftTypeInitial),
+        templ.KV("tc--mid", draftType == types.DraftTypeIntermediate),
+        templ.KV("tc--fin", draftType == types.DraftTypeFinal),
+				) }
+			>
+				<span class="total-chip-lbl">{ draftType }</span>
 				<span
-					id="bw-total-weight"
 					class="total-chip-val"
 				>
-					{ format.WeightFormatted(results.TotalBwTanksWeight) } MT
+					{ totalWeight }
 				</span>
 			</div>
 		</div>

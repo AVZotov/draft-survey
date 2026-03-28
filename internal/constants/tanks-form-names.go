@@ -1,5 +1,13 @@
 package constants
 
+// ID's for dynamic OOB block substitutions at DOM
+const (
+	BwTableHeaderID = "bw-table-header"
+	BwTableFooterID = "bw-table-footer"
+	FwTableHeaderID = "fw-table-header"
+	FwTableFooterID = "fw-table-footer"
+)
+
 // General fixed names for tanks parsing on backend
 const (
 	// TankType - from vessel's passport data

@@ -1,12 +1,22 @@
 package constants
 
-// HX Custom headers
+// HX Custom headers (keys)
 const (
-	HXTank = "X-Tank-Type"
+	HXTankType    = "X-Tank-Type"
+	HXCalcContext = "X-Calc-Context"
+	HXSurveyID    = "X-Survey-ID"
+	HXDraftIndex  = "X-Draft-Index"
+	HXTankID      = "X-Tank-ID"
 )
 
-// Tanks values
+// Tanks values (values)
 const (
 	FWTank = "fwt"
 	BWTank = "bwt"
+)
+
+// Context values (values)
+const (
+	UpdtTanksWeight = "updt_tanks_weight"
+	UpdtTankVolume  = "updt_tank_volume"
 )

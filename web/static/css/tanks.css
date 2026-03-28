@@ -284,11 +284,15 @@ input.den-in:focus {
 }
 
 .tc--ini .total-chip-lbl {
-  color: var(--ini, #2563EB);
+  color: var(--ini-accent);
+}
+
+.tc--mid .total-chip-lbl {
+  color: var(--mid-accent);
 }
 
 .tc--fin .total-chip-lbl {
-  color: var(--fin, #15803D);
+  color: var(--fin-accent);
 }
 
 /* ── Correction banner ──────────────────────────────────────── */
