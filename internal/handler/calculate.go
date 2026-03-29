@@ -14,7 +14,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (h *Handler) calculate(survey *types.Survey, c *fiber.Ctx, components ...templ.Component) error {
+func (h *Handler) calculate(survey *types.Survey, c *fiber.Ctx, main templ.Component, oobComponents ...templ.Component) error {
 	hxCtx := (c.Locals(constants.HXCalcContext)).(string)
 	if hxCtx == "" {
 		return ErrUndefinedHXContext
@@ -22,7 +22,7 @@ func (h *Handler) calculate(survey *types.Survey, c *fiber.Ctx, components ...te
 
 	switch hxCtx {
 	case constants.UpdtTanksWeight:
-		component, err := updtTanksWeight(survey, c, components...)
+		component, err := updtTanksWeight(survey, c, main, oobComponents...)
 		if err != nil {
 			return err
 		}
@@ -33,7 +33,7 @@ func (h *Handler) calculate(survey *types.Survey, c *fiber.Ctx, components ...te
 	}
 }
 
-func updtTanksWeight(survey *types.Survey, c *fiber.Ctx, extra ...templ.Component) (templ.Component, error) {
+func updtTanksWeight(survey *types.Survey, c *fiber.Ctx, main templ.Component, oobComponets ...templ.Component) (templ.Component, error) {
 	draftIndexStr := (c.Locals(constants.HXDraftIndex)).(string)
 	draftIndex, err := strconv.Atoi(draftIndexStr)
 	if err != nil {
@@ -49,18 +49,24 @@ func updtTanksWeight(survey *types.Survey, c *fiber.Ctx, extra ...templ.Componen
 	wtType := c.Get(constants.HXTankType)
 	var components []templ.Component
 
+	if main != nil {
+		components = append(components, main)
+	}
+
 	switch wtType {
 	case constants.BWTank:
-		components = []templ.Component{
+		components = append(components,
 			tanks.TableFormHeader(constants.BwTableHeaderID, bwTitle, bwTWeight, draft.Type, true),
-		}
+		)
+
 	case constants.FWTank:
-		components = []templ.Component{
+		components = append(components,
 			tanks.TableFormHeader(constants.FwTableHeaderID, fwTitle, fwTWeight, draft.Type, true),
-		}
+		)
 	default:
 		return nil, ErrUndefinedTankType
 	}
-	components = append(components, extra...)
+
+	components = append(components, oobComponets...)
 	return templ.Join(components...), nil
 }

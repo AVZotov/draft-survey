@@ -63,7 +63,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, wt, false),
+		components.TankItem(p.survey.ID, p.draftIndex, wt),
 		tanks.AddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
@@ -92,7 +92,7 @@ func (h *Handler) deleteTank(c *fiber.Ctx) error {
 	c.Locals(constants.HXCalcContext, constants.UpdtTanksWeight)
 	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
-	return h.calculate(p.survey, c)
+	return h.calculate(p.survey, c, nil)
 }
 
 func (h *Handler) updateBwTank(c *fiber.Ctx) error {
@@ -113,7 +113,7 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
 	return h.calculate(p.survey, c,
-		components.TankItem(p.survey.ID, p.draftIndex, tank, true))
+		components.TankItem(p.survey.ID, p.draftIndex, tank))
 }
 
 func (h *Handler) tanksCorrections(c *fiber.Ctx) error {

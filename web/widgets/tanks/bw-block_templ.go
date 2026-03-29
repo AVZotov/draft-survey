@@ -36,7 +36,7 @@ func BwBlock(tp components.TanksPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
-			templ_7745c5c3_Err = components.TankItem(tp.Survey.ID, tp.DraftIndex, tank, false).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.TankItem(tp.Survey.ID, tp.DraftIndex, tank).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
