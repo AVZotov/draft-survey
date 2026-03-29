@@ -459,17 +459,17 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 				<div class="df">
 					<label>Table Density</label>
 					if vessel.TableDensity != nil {
-						<input type="number" name={ constants.TableDensity } placeholder="1.025" step="any" value={ fmt.Sprintf("%g", *vessel.TableDensity) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+						<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *vessel.TableDensity) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					} else {
-						<input type="number" name={ constants.TableDensity } placeholder="1.025" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+						<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					}
 				</div>
 				<div class="df">
 					<label>Dockwater Density</label>
 					if props.Draft.Density != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="1.025" step="any" value={ fmt.Sprintf("%g", *props.Draft.Density) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Density) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="1.025" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
+						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
 					}
 				</div>
 			</div>

@@ -63,7 +63,7 @@ func Tanks(props components.LayoutProps, tanksProps components.TanksPageProps, r
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = tanks.TanksActionBar(tanksProps).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tanks.TanksActionBar(tanksProps, results).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

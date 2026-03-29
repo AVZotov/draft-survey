@@ -2,12 +2,17 @@ package tanks
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ TanksActionBar(props components.TanksPageProps) {
+templ TanksActionBar(props components.TanksPageProps, results calculation.DraftResult) {
 	<div class="action-bar">
-		<div class="ab-info"><span class="ab-vessel">OCEAN CHEERS</span><span class="ab-meta">IMO 9233387 · Loading · Vanino, Russia</span></div>
+		<div class="ab-info">
+			<span class="ab-vessel">OCEAN CHEERS</span><span class="ab-meta">IMO 9233387 · Loading · Vanino, Russia</span>
+		</div>
+		@ABTotals(format.WeightFormatted(results.TotalBwTanksWeight), format.WeightFormatted(results.TotalFwTanksWeight), false)
 		<a
 			href={ fmt.Sprintf("/survey/%s/draft", props.Survey.ID) }
 			class="btn btn-primary"
@@ -15,5 +20,24 @@ templ TanksActionBar(props components.TanksPageProps) {
 			Back to DRAFT
 			<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
 		</a>
+	</div>
+}
+
+templ ABTotals(totalBW, totalFW string, isOOB bool) {
+	<div
+		id="ab-totals"
+		class="blk-totals"
+		if isOOB {
+			hx-swap-oob="morph"
+		}
+	>
+		<div class="ab-info-total ab-info--bw">
+			<span class="total-chip-lbl">Total Ballast Water</span>
+			<span class="total-chip-val">{ totalBW } MT</span>
+		</div>
+		<div class="ab-info-total ab-info--fw">
+			<span class="total-chip-lbl">Total Fresh Water</span>
+			<span class="total-chip-val">{ totalFW } MT</span>
+		</div>
 	</div>
 }

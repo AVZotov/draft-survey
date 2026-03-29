@@ -10,7 +10,7 @@ templ Tanks(props components.LayoutProps, tanksProps components.TanksPageProps, 
 	@layouts.Layout(props) {
 		@widgets.HeaderUser(props.User)
 		@tanks.Form(props, tanksProps)
-		@tanks.TanksActionBar(tanksProps)
+		@tanks.TanksActionBar(tanksProps, results)
 		@widgets.Footer()
 	}
 }

@@ -57,11 +57,13 @@ func updtTanksWeight(survey *types.Survey, c *fiber.Ctx, main templ.Component, o
 	case constants.BWTank:
 		components = append(components,
 			tanks.TableFormHeader(constants.BwTableHeaderID, bwTitle, bwTWeight, draft.Type, true),
+			tanks.ABTotals(bwTWeight, fwTWeight, true),
 		)
 
 	case constants.FWTank:
 		components = append(components,
 			tanks.TableFormHeader(constants.FwTableHeaderID, fwTitle, fwTWeight, draft.Type, true),
+			tanks.ABTotals(bwTWeight, fwTWeight, true),
 		)
 	default:
 		return nil, ErrUndefinedTankType

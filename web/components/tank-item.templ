@@ -10,7 +10,7 @@ import (
 templ TankItem(surveyID string, draftIndex int, tank types.Tank) {
 	<tr
 		id={ format.TankNameID("tank-row", tank) }
-		hx-swap="morph:outerHTML"
+		hx-swap="morph"
 		hx-include="this"
 		hx-trigger="change changed target:input delay:500ms"
 		hx-sync="this:replace"

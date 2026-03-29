@@ -73,7 +73,7 @@
   --ini-border: #BFDBFE;
 
   --mid-accent: #B45309;
-  --mid-light:  #FFFBEB;
+  --mid-light: #FFFBEB;
   --mid-border: #FDE68A;
 
   --fin-accent: #15803D;
@@ -286,6 +286,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 

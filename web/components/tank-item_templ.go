@@ -49,7 +49,7 @@ func TankItem(surveyID string, draftIndex int, tank types.Tank) templ.Component 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-swap=\"morph:outerHTML\" hx-include=\"this\" hx-trigger=\"change changed target:input delay:500ms\" hx-sync=\"this:replace\" hx-put=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-swap=\"morph\" hx-include=\"this\" hx-trigger=\"change changed target:input delay:500ms\" hx-sync=\"this:replace\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
