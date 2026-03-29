@@ -52,6 +52,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 		p.survey.Drafts[p.draftIndex].BallastWaterTanks =
 			append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, wt)
 	case constants.FWTank:
+		wt.IsFWTTank = true
 		p.survey.Drafts[p.draftIndex].FreshWaterTanks =
 			append(p.survey.Drafts[p.draftIndex].FreshWaterTanks, wt)
 	default:

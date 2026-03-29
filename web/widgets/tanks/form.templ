@@ -31,16 +31,30 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				</p>
 			</div>
 			<!-- DENSITY BAR -->
-			<div class="density-bar">
+			<div
+				class="density-bar"
+				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank) }
+			>
 				<span class="density-bar-label">BW Density</span>
 				<div class="density-groups">
 					<div class="dg dg--ini">
 						<span class="dg-lbl">{ draft.Type }</span>
-						<input class="den-in" type="number" id="dockwater_density" placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Density) }/>
+						<input class="den-in" id="dockwater-density" name="dockwater-density" value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
 						<span class="den-hint">t/m³</span>
 					</div>
+					<button
+						class="btn btn-primary"
+					>
+						Apply Density
+						<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+							<line x1="8" y1="8" x2="16" y2="8"></line>
+							<line x1="8" y1="12" x2="16" y2="12"></line>
+							<line x1="8" y1="16" x2="12" y2="16"></line>
+						</svg>
+					</button>
 				</div>
-				<span class="density-bar-note">WARING! NOT IMPLEMENTED! Applied to BW tanks with empty density. Override per-tank if needed.</span>
+				<span class="density-bar-note">Applied to BW tanks with empty density. Override per-tank if needed.</span>
 			</div>
 			<!-- ═══ BALLAST WATER ══════════════════════════════════════════ -->
 			<div
