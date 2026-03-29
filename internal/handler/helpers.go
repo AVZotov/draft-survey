@@ -29,6 +29,8 @@ type props struct {
 }
 
 var ErrEmptyField = errors.New("empty field")
+var ErrUndefinedTankType = errors.New("undefined tank type")
+var ErrUndefinedHXContext = errors.New("undefined HX context")
 
 func parseFloat(c *fiber.Ctx, name string) (*float64, error) {
 

@@ -63,7 +63,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, wt),
+		components.TankItem(p.survey.ID, p.draftIndex, wt, false),
 		tanks.AddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
@@ -90,10 +90,9 @@ func (h *Handler) deleteTank(c *fiber.Ctx) error {
 	}
 
 	c.Locals(constants.HXCalcContext, constants.UpdtTanksWeight)
-	c.Locals(constants.HXSurveyID, p.surveyID)
 	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
-	return h.calculate(c)
+	return h.calculate(p.survey, c)
 }
 
 func (h *Handler) updateBwTank(c *fiber.Ctx) error {
@@ -104,19 +103,17 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 
 	tank := p.bwTanks[p.tankIndex]
 	parseTank(c, &tank)
-
 	p.survey.Drafts[p.draftIndex].BallastWaterTanks[p.tankIndex] = tank
 
 	if err := h.surveyRepository.Save(p.survey); err != nil {
 		return err
 	}
 
-	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
+	c.Locals(constants.HXCalcContext, constants.UpdtTanksWeight)
+	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
-	c.Status(http.StatusOK)
-	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, tank),
-		tanks.BwTableHeaderForm(tanksProps, true)))
+	return h.calculate(p.survey, c,
+		components.TankItem(p.survey.ID, p.draftIndex, tank, true))
 }
 
 func (h *Handler) tanksCorrections(c *fiber.Ctx) error {

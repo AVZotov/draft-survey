@@ -7,14 +7,17 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ TankItem(surveyID string, draftIndex int, tank types.Tank) {
+templ TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) {
 	<tr
 		id={ format.TankNameID("tank-row", tank) }
-		hx-target="this"
+		if isOOB {
+			hx-swap-oob="morph:outerHTML"
+		} else {
+			hx-swap="morph:outerHTML"
+		}
 		hx-trigger="change changed target:input delay:500ms"
 		hx-sync="this:replace"
 		hx-include="this"
-		hx-swap="morph:outerHTML"
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", surveyID, draftIndex, tank.ID) }
 	>
 		<td class="td-act">

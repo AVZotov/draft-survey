@@ -7,6 +7,7 @@ const (
 	HXSurveyID    = "X-Survey-ID"
 	HXDraftIndex  = "X-Draft-Index"
 	HXTankID      = "X-Tank-ID"
+	HXTankItem    = "X-Tank-Item"
 )
 
 // Tanks values (values)
