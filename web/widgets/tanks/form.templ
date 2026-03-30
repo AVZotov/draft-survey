@@ -36,7 +36,9 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank) }
 			>
 				<span class="density-bar-label">BW Density</span>
-				<div class="density-groups">
+				<div
+					class="density-groups"
+				>
 					<div class="dg dg--ini">
 						<span class="dg-lbl">{ draft.Type }</span>
 						<input class="den-in" id="dockwater-density" name="dockwater-density" value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
@@ -44,6 +46,10 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 					</div>
 					<button
 						class="btn btn-primary"
+						type="button"
+						hx-include="previous [name='dockwater-density']"
+						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", tp.Survey.ID, tp.DraftIndex) }
+						hx-swap="none"
 					>
 						Apply Density
 						<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

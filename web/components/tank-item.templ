@@ -7,9 +7,22 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ TankItem(surveyID string, draftIndex int, tank types.Tank) {
+templ TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) {
+	if isOOB {
+		<template>
+			@tankItemInner(surveyID, draftIndex, tank, true)
+		</template>
+	} else {
+		@tankItemInner(surveyID, draftIndex, tank, false)
+	}
+}
+
+templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool) {
 	<tr
 		id={ format.TankNameID("tank-row", tank) }
+		if isOOB {
+			hx-swap-oob="morph"
+		}
 		hx-swap="morph"
 		hx-include="this"
 		hx-trigger="change changed target:input delay:500ms"

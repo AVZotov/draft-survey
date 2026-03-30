@@ -64,7 +64,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, wt),
+		components.TankItem(p.survey.ID, p.draftIndex, wt, false),
 		tanks.AddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
@@ -96,7 +96,7 @@ func (h *Handler) deleteTank(c *fiber.Ctx) error {
 	return h.calculate(p.survey, c, nil)
 }
 
-func (h *Handler) updateBwTank(c *fiber.Ctx) error {
+func (h *Handler) updateTank(c *fiber.Ctx) error {
 	p, err := getProps(h, c)
 	if err != nil {
 		return err
@@ -114,7 +114,7 @@ func (h *Handler) updateBwTank(c *fiber.Ctx) error {
 	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
 	return h.calculate(p.survey, c,
-		components.TankItem(p.survey.ID, p.draftIndex, tank))
+		components.TankItem(p.survey.ID, p.draftIndex, tank, false))
 }
 
 func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
@@ -131,4 +131,34 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 	}
 	c.Status(http.StatusOK)
 	return tadaptor.Render(c, corrections.ModalForm(tank, tanksProps))
+}
+
+func (h *Handler) updateTanks(c *fiber.Ctx) error {
+	p, err := getProps(h, c)
+	if err != nil {
+		return err
+	}
+	density, err := parseFloat(c, "dockwater-density")
+	if err != nil {
+		return err
+	}
+
+	var extraComponents []templ.Component
+
+	for i := range p.survey.Drafts[p.draftIndex].BallastWaterTanks {
+		if p.survey.Drafts[p.draftIndex].BallastWaterTanks[i].Density == nil {
+			p.survey.Drafts[p.draftIndex].BallastWaterTanks[i].Density = density
+			extraComponents =
+				append(extraComponents, components.TankItem(p.surveyID, p.draftIndex, p.survey.Drafts[p.draftIndex].BallastWaterTanks[i], true))
+		}
+	}
+
+	if err = h.surveyRepository.Save(p.survey); err != nil {
+		return err
+	}
+
+	c.Locals(constants.HXCalcContext, constants.UpdtTanksWeight)
+	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
+
+	return h.calculate(p.survey, c, nil, extraComponents...)
 }
