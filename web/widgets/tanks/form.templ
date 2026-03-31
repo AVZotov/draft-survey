@@ -48,7 +48,7 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 						class="btn btn-primary"
 						type="button"
 						hx-include="previous [name='dockwater-density']"
-						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", tp.Survey.ID, tp.DraftIndex) }
+						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d", tp.Survey.ID, tp.DraftIndex) }
 						hx-swap="none"
 					>
 						Apply Density
@@ -67,23 +67,9 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				class="tank-block tank-block--bw"
 				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank) }
 			>
+				@TrimListAlert(tp)
 				@TableFormHeader(constants.BwTableHeaderID, bwTitle, bwTWeight, draft.Type, false)
-				if tp.Trim != nil && tp.List != nil {
-					<div class="corr-banner">
-						<svg viewBox="0 0 24 24">
-							<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path>
-						</svg>
-						Volumes must be corrected for Trim ({ format.FloatOrEmpty(tp.Trim) } m { tp.TrimDir }) and List ({ format.FloatOrEmpty(tp.List) }° { tp.ListDir }). Please use Vessel's tables for corrections
-					</div>
-				} else {
-					<div class="corr-banner_warn">
-						<svg viewBox="0 0 24 24">
-							<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path>
-						</svg>
-						Draft Marks must be entered for proper Volume calculations!
-					</div>
-				}
-				@BwBlock(tp)
+				@Block(tp, true)
 				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false)
 			</div>
 			<!-- ═══ FRESH WATER ════════════════════════════════════════════ -->
@@ -92,36 +78,8 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.FWTank) }
 			>
 				@TableFormHeader(constants.FwTableHeaderID, fwTitle, fwTWeight, draft.Type, false)
-				<div class="ttbl-wrap">
-					<table class="ttbl" id="fw-tbl">
-						<thead>
-							<tr class="tr-grp">
-								<th class="th-ph" rowspan="2"></th>
-								<th class="th-div" rowspan="2"></th>
-								<th class="th-ini" colspan="4">Initial</th>
-								<th class="th-div" rowspan="2"></th>
-								<th class="th-fin" colspan="4">Final</th>
-								<th class="th-ph" rowspan="2"></th>
-							</tr>
-							<tr class="tr-sub">
-								<th class="th-num ts-ini">Sound, m</th>
-								<th class="th-num ts-ini">Vol, m³</th>
-								<th class="th-num ts-ini">Density</th>
-								<th class="th-num ts-ini">MT</th>
-								<th class="th-num ts-fin">Sound, m</th>
-								<th class="th-num ts-fin">Vol, m³</th>
-								<th class="th-num ts-fin">Density</th>
-								<th class="th-num ts-fin">MT</th>
-							</tr>
-						</thead>
-						<tfoot class="ttbl-foot">
-							<tr><td class="td-tot-lbl">Total</td><td class="td-div"></td><td colspan="3"></td><td class="td-tot-mt" id="fw-ini-foot">— MT</td><td class="td-div"></td><td colspan="3"></td><td class="td-tot-mt" id="fw-fin-foot">— MT</td><td></td></tr>
-						</tfoot>
-					</table>
-				</div>
-				<div class="add-row">
-					<button class="add-btn" onclick="addTank('fw')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>Add FW tank</button>
-				</div>
+				@Block(tp, false)
+				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false)
 			</div>
 		</div>
 	</main>

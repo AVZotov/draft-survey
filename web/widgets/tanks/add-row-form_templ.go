@@ -94,33 +94,33 @@ func AddRowForm(surveyID string, draftIndex int, isOOB bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</select> <svg class=\"add-sel-arrow\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"></path></svg></div></div><div class=\"add-row-sep\"></div><div class=\"add-field add-field--name\"><label class=\"add-field-label\">Name</label> <input id=\"new-bw-tank-name\" class=\"add-inp\" type=\"text\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</select> <svg class=\"add-sel-arrow\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"></path></svg></div></div><div class=\"add-row-sep\"></div><div class=\"add-field add-field--name\"><label class=\"add-field-label\">Name</label> <input class=\"add-inp\" type=\"text\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(constants.TankName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/add-row-form.templ`, Line: 36, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/add-row-form.templ`, Line: 35, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" placeholder=\"e.g. 1S, 2P, Centre…\" autocomplete=\"off\" oninput=\"document.getElementById('add-bw-row-btn').disabled = this.value.trim() === ''\"></div></div><button class=\"add-btn\" id=\"add-bw-row-btn\" type=\"button\" disabled hx-post=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" placeholder=\"e.g. 1S, 2P, Centre…\" autocomplete=\"off\"></div></div><button class=\"add-btn\" id=\"add-bw-row-btn\" type=\"button\" hx-post=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", surveyID, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/add-row-form.templ`, Line: 48, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/add-row-form.templ`, Line: 45, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" hx-target=\"#bw-tanks-items\" hx-include=\"closest .add-row\" hx-swap=\"beforeend\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg> Add BW tank</button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" hx-include=\"closest .add-row\" hx-swap=\"beforeend\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg> Add BW tank</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

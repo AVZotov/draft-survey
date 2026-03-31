@@ -30,13 +30,11 @@ templ AddRowForm(surveyID string, draftIndex int, isOOB bool) {
 			<div class="add-field add-field--name">
 				<label class="add-field-label">Name</label>
 				<input
-					id="new-bw-tank-name"
 					class="add-inp"
 					type="text"
 					name={ constants.TankName }
 					placeholder="e.g. 1S, 2P, Centre…"
 					autocomplete="off"
-					oninput="document.getElementById('add-bw-row-btn').disabled = this.value.trim() === ''"
 				/>
 			</div>
 		</div>
@@ -44,9 +42,7 @@ templ AddRowForm(surveyID string, draftIndex int, isOOB bool) {
 			class="add-btn"
 			id="add-bw-row-btn"
 			type="button"
-			disabled
 			hx-post={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank", surveyID, draftIndex) }
-			hx-target="#bw-tanks-items"
 			hx-include="closest .add-row"
 			hx-swap="beforeend"
 		>

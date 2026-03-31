@@ -238,7 +238,7 @@ func tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool)
 			return templ_7745c5c3_Err
 		}
 		if tank.IsFWTTank {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<input class=\"ti\" type=\"number\" readonly value=\"1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<input class=\"ti\" type=\"number\" readonly value=\"1.000\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

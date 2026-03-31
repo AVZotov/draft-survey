@@ -22,8 +22,8 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	api.Post("/survey/:id/draft/add-intermediate", h.addIntermediateDraft)
 	api.Post("/survey/:id/draft/add-final", h.addFinalDraft)
 	api.Post("/survey/:id/draft/save", h.saveDraft)
+	api.Put("/survey/:id/tanks/:draftIndex", h.updateTanks)
 	api.Post("/survey/:id/tanks/:draftIndex/bw-tank", h.newTank)
-	api.Put("/survey/:id/tanks/:draftIndex/bw-tank", h.updateTanks)
 	api.Delete("/survey/:id/tanks/:draftIndex/bw-tank/:tankID", h.deleteTank)
 	api.Put("/survey/:id/tanks/:draftIndex/bw-tank/:tankID", h.updateTank)
 }

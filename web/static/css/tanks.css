@@ -298,45 +298,50 @@ input.den-in:focus {
 .corr-banner {
   margin: var(--space-sm) var(--space-lg);
   padding: var(--space-sm) var(--space-md);
-  background: var(--accent-light, #FEF3EB);
-  border: 1px solid #FED7AA;
   border-radius: var(--radius-md);
   font-size: 11px;
-  color: #92400E;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-}
-
-.corr-banner_warn {
-  margin: var(--space-sm) var(--space-lg);
-  padding: var(--space-sm) var(--space-md);
-  background: var(--danger-light, #FEF2F2);
-  border: 1px solid var(--danger-border, #FECACA);
-  border-radius: var(--radius-md);
-  font-size: 11px;
-  color: var(--danger-accent);
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+  border: 1px solid;
 }
 
 .corr-banner svg {
   width: 13px;
   height: 13px;
-  stroke: var(--accent);
   fill: none;
   stroke-width: 2;
   flex-shrink: 0;
 }
 
-.corr-banner_warn svg {
-  width: 13px;
-  height: 13px;
-  stroke: var(--accent);
-  fill: none;
-  stroke-width: 2;
-  flex-shrink: 0;
+.corr-banner--info {
+  background: var(--info-light);
+  border-color: var(--info-border);
+  color: var(--info-accent);
+}
+
+.corr-banner--info svg {
+  stroke: var(--info-accent);
+}
+
+.corr-banner--warn {
+  background: var(--warning-light);
+  border-color: var(--warning-border);
+  color: var(--warning-accent);
+}
+
+.corr-banner--warn svg {
+  stroke: var(--warning-accent);
+}
+
+.corr-banner--danger {
+  background: var(--danger-light);
+  border-color: var(--danger-border);
+  color: var(--danger-accent);
+}
+
+.corr-banner--danger svg {
+  stroke: var(--danger-accent);
 }
 
 /* ── Tank table ─────────────────────────────────────────────── */

@@ -58,7 +58,7 @@ templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool
 		</td>
 		<td>
 			if tank.IsFWTTank {
-				<input class="ti" type="number" readonly value="1"/>
+				<input class="ti" type="number" readonly value="1.000"/>
 			} else {
 				<input id={ format.TankNameID(constants.TankDensity, tank) } class="ti" type="number" name={ format.TankNameID(constants.TankDensity, tank) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
 			}

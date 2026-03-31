@@ -1,0 +1,45 @@
+package tanks
+
+import "github.com/AVZotov/draft-survey/web/components"
+
+templ Block(tp components.TanksPageProps, isBWBlock bool) {
+	<div class="ttbl-wrap">
+		<div id="density-warning"></div>
+		<table class="ttbl">
+			<thead>
+				<tr class="tr-grp">
+					<th class="th-ph" rowspan="2"></th>
+					<th class="th-ph" rowspan="2"></th>
+					<th class="th-div" rowspan="2"></th>
+					<th colspan="4"></th>
+					<th class="th-div" rowspan="2"></th>
+					<th class="th-ph" rowspan="2"></th>
+				</tr>
+				<tr class="tr-sub">
+					<th class="th-num">Sound, m</th>
+					<th class="th-num">Vol, m³</th>
+					<th class="th-num">Density</th>
+					<th class="th-num">MT</th>
+				</tr>
+			</thead>
+			<tbody
+				if isBWBlock {
+					id="bw-tanks-items"
+				} else {
+					id="fw-tanks-items"
+				}
+				class="t-row"
+			>
+				if isBWBlock {
+					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
+						@components.TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
+					}
+				} else {
+					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks {
+						@components.TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+}

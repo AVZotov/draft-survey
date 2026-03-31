@@ -49,9 +49,11 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 
 	switch wtType {
 	case constants.BWTank:
+		c.Set("HX-Retarget", "#bw-tanks-items")
 		p.survey.Drafts[p.draftIndex].BallastWaterTanks =
 			append(p.survey.Drafts[p.draftIndex].BallastWaterTanks, wt)
 	case constants.FWTank:
+		c.Set("HX-Retarget", "#fw-tanks-items")
 		wt.IsFWTTank = true
 		p.survey.Drafts[p.draftIndex].FreshWaterTanks =
 			append(p.survey.Drafts[p.draftIndex].FreshWaterTanks, wt)
@@ -80,8 +82,8 @@ func (h *Handler) deleteTank(c *fiber.Ctx) error {
 		p.bwTanks = slices.Delete(p.bwTanks, p.tankIndex, p.tankIndex+1)
 		p.survey.Drafts[p.draftIndex].BallastWaterTanks = p.bwTanks
 	case constants.FWTank:
-		p.bwTanks = slices.Delete(p.bwTanks, p.tankIndex, p.tankIndex+1)
-		p.survey.Drafts[p.draftIndex].BallastWaterTanks = p.bwTanks
+		p.fwTanks = slices.Delete(p.fwTanks, p.tankIndex, p.tankIndex+1)
+		p.survey.Drafts[p.draftIndex].FreshWaterTanks = p.fwTanks
 	default:
 		return errors.New("undefined tank type")
 	}
@@ -102,9 +104,21 @@ func (h *Handler) updateTank(c *fiber.Ctx) error {
 		return err
 	}
 
-	tank := p.bwTanks[p.tankIndex]
-	parseTank(c, &tank)
-	p.survey.Drafts[p.draftIndex].BallastWaterTanks[p.tankIndex] = tank
+	wtType := c.Get(constants.HXTankType)
+
+	var tank types.Tank
+	switch wtType {
+	case constants.BWTank:
+		tank = p.bwTanks[p.tankIndex]
+		parseTank(c, &tank)
+		p.survey.Drafts[p.draftIndex].BallastWaterTanks[p.tankIndex] = tank
+	case constants.FWTank:
+		tank = p.fwTanks[p.tankIndex]
+		parseTank(c, &tank)
+		p.survey.Drafts[p.draftIndex].FreshWaterTanks[p.tankIndex] = tank
+	default:
+		return errors.New("undefined tank type")
+	}
 
 	if err := h.surveyRepository.Save(p.survey); err != nil {
 		return err
@@ -123,7 +137,18 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 		return err
 	}
 
-	tank := p.bwTanks[p.tankIndex]
+	wtType := c.Get(constants.HXTankType)
+
+	var tank types.Tank
+	switch wtType {
+	case constants.BWTank:
+		tank = p.bwTanks[p.tankIndex]
+	case constants.FWTank:
+		tank = p.fwTanks[p.tankIndex]
+	default:
+		return errors.New("undefined tank type")
+	}
+
 	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	if c.Get("HX-Request") != "true" {
