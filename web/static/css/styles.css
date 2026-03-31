@@ -1,9 +1,8 @@
 /* ================================================================
    DRAFT SURVEY — styles.css
    Global design tokens + shared components
-   
 
-   Page styles — in separate styles:
+   Page styles — in separate files:
      profile.css      — /profile
      dashboard.css    — /dashboard
      settings.css     — /settings
@@ -13,16 +12,30 @@
      results.css      — /survey/:id/results
      survey-list.css  — /surveys
      banner.css       — error banner (added in layout)
+
+   Sections:
+     1.  TOKENS
+     2.  RESET & BASE ELEMENTS
+     3.  APP HEADER
+     4.  APP FOOTER
+     5.  BUTTONS
+     6.  FORM CARD
+     7.  FORM FIELDS
+     8.  SIGNATURE UPLOAD
+     9.  ACTION BAR
+     10. BACK LINK & PAGE TITLES
+     11. INFO BANNER
+     12. BADGES
+     --  DEAD CODE — pending removal
 ================================================================ */
 
-/* Prevent hidden components to be flickered during DOM loading */
+/* Prevent hidden components from flickering during DOM loading */
 [x-cloak] {
   display: none !important;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   1. DESIGN TOKENS
-════════════════════════════════════════════════════════════════ */
+/* #region 1. TOKENS ════════════════════════════════════════════ */
+
 :root {
   /* Surface */
   --bg: #F4F5F7;
@@ -89,6 +102,15 @@
   --fw-light: #ECFEFF;
   --fw-border: #A5F3FC;
 
+  /* Badge tokens */
+  --load-accent: #0891B2;
+  --load-light: #ECFEFF;
+  --load-border: #A5F3FC;
+
+  --disch-accent: #7C3AED;
+  --disch-light: #F5F3FF;
+  --disch-border: #DDD6FE;
+
   /* Typography */
   --font-sans: 'IBM Plex Sans';
   --font-mono: 'IBM Plex Mono';
@@ -115,9 +137,9 @@
   --space-2xl: 56px;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   2. RESET
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 2. RESET & BASE ELEMENTS ════════════════════════════ */
 
 *,
 *::before,
@@ -170,15 +192,14 @@ dialog::backdrop {
 }
 
 .app-modal[open] {
-  animation: tcm-in .28s ease;
+  animation: modal-in .28s ease;
 }
 
-@keyframes tcm-in {
+@keyframes modal-in {
   from {
     opacity: 0;
     transform: translateY(-10px) scale(.97);
   }
-
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -214,8 +235,6 @@ label .optional {
   text-transform: none;
   letter-spacing: 0;
 }
-
-/* Inputs */
 
 input[type="text"],
 input[type="email"],
@@ -278,8 +297,7 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
 }
 
-/* Убираем стрелки у number */
-
+/* Remove number spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -296,11 +314,9 @@ textarea {
   line-height: 1.5;
 }
 
+/* #endregion */
 
-/* ════════════════════════════════════════════════════════════════
-   3. APP HEADER
-   With and without user profile
-════════════════════════════════════════════════════════════════ */
+/* #region 3. APP HEADER ════════════════════════════════════════ */
 
 .app-header {
   background: var(--header-bg);
@@ -327,8 +343,6 @@ textarea {
   gap: var(--space-lg);
 }
 
-/* Logo mark */
-
 .app-logo-mark {
   width: 30px;
   height: 30px;
@@ -349,8 +363,6 @@ textarea {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* Logo text — name + tagline */
 
 .app-logo-text {
   display: flex;
@@ -373,8 +385,6 @@ textarea {
   text-transform: uppercase;
 }
 
-/* Version label */
-
 .app-header-version {
   font-family: var(--font-mono), monospace;
   font-size: var(--font-size-xs);
@@ -382,15 +392,11 @@ textarea {
   letter-spacing: 0.04em;
 }
 
-/* Header divider */
-
 .header-divider {
   width: 1px;
   height: 20px;
   background: rgba(255, 255, 255, 0.15);
 }
-
-/* User area in header */
 
 .header-user {
   display: flex;
@@ -430,9 +436,9 @@ textarea {
   letter-spacing: 0.03em;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   4. APP FOOTER
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 4. APP FOOTER ════════════════════════════════════════ */
 
 .app-footer {
   background: var(--footer-bg);
@@ -467,9 +473,9 @@ textarea {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* ════════════════════════════════════════════════════════════════
-   5. BUTTONS
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 5. BUTTONS ═══════════════════════════════════════════ */
 
 .btn {
   display: inline-flex;
@@ -507,6 +513,8 @@ textarea {
   gap: var(--space-sm);
 }
 
+/* Action buttons */
+
 .btn-primary {
   background: var(--accent);
   color: #fff;
@@ -527,8 +535,10 @@ textarea {
   color: var(--text-primary);
 }
 
+/* Semantic buttons */
+
 .btn-danger {
-  background: var(--danger);
+  background: var(--danger-accent);
   color: #fff;
   border: 1px solid transparent;
 }
@@ -546,11 +556,9 @@ textarea {
   background: #1D4ED8;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   6. FORM CARD
-   White card with fields
-   used in: profile, new-survey, settings
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 6. FORM CARD ═════════════════════════════════════════ */
 
 .form-card {
   background: var(--surface);
@@ -607,13 +615,11 @@ textarea {
   margin-left: auto;
 }
 
-/* Card section */
-
 .form-section {
   padding: var(--space-lg) var(--space-xl);
 }
 
-.form-section+.form-section {
+.form-section + .form-section {
   border-top: 1px solid var(--border);
 }
 
@@ -625,8 +631,6 @@ textarea {
   letter-spacing: 0.08em;
   margin-bottom: var(--space-lg);
 }
-
-/* Low bar in settings form */
 
 .form-footer {
   padding: var(--space-md) var(--space-xl);
@@ -643,10 +647,9 @@ textarea {
   color: var(--text-secondary);
 }
 
-/* ════════════════════════════════════════════════════════════════
-   7. FORM FIELDS
-   Used in: profile, new-survey, settings
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 7. FORM FIELDS ═══════════════════════════════════════ */
 
 .field {
   margin-bottom: var(--space-md);
@@ -698,8 +701,6 @@ textarea {
   gap: var(--space-md);
 }
 
-/* Select custom arrow */
-
 .select-wrap {
   position: relative;
 }
@@ -732,16 +733,12 @@ textarea {
   pointer-events: none;
 }
 
-/* Field hint */
-
 .field-hint {
   font-size: var(--font-size-sm);
   color: var(--text-placeholder);
   margin-top: var(--space-xs);
   line-height: 1.4;
 }
-
-/* Inline calc value (read-only) */
 
 .calc-value {
   font-family: var(--font-mono), monospace;
@@ -753,30 +750,6 @@ textarea {
   background: var(--bg);
   min-height: 38px;
 }
-
-/* Field with auto-calculated hint inside */
-
-.field-with-calc {
-  position: relative;
-}
-
-.field-calc-hint {
-  position: absolute;
-  right: var(--space-md);
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  color: var(--text-dim);
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.field-with-calc input {
-  padding-right: 90px;
-}
-
-/* Inline warning under field */
 
 .field-warning {
   display: flex;
@@ -791,7 +764,7 @@ textarea {
 .field-warning svg {
   width: 14px;
   height: 14px;
-  stroke: var(--warning);
+  stroke: var(--warning-accent);
   fill: none;
   stroke-width: 2;
   flex-shrink: 0;
@@ -804,10 +777,9 @@ textarea {
   line-height: 1.5;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   8. SIGNATURE UPLOAD
-   used in: profile, settings
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 8. SIGNATURE UPLOAD ══════════════════════════════════ */
 
 .signature-upload {
   border: 1.5px dashed var(--border);
@@ -850,10 +822,9 @@ textarea {
   margin-top: var(--space-xs);
 }
 
-/* ════════════════════════════════════════════════════════════════
-   9. STICKY ACTION BAR (low bar with buttons)
-   drafts, tanks, new-survey, results
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 9. ACTION BAR ════════════════════════════════════════ */
 
 .action-bar {
   position: sticky;
@@ -891,7 +862,7 @@ textarea {
   gap: var(--space-sm);
 }
 
-/* option for pages with vessel info on left side */
+/* Vessel info variant (drafts, tanks) */
 
 .ab-info {
   display: flex;
@@ -913,29 +884,9 @@ textarea {
   gap: var(--space-sm);
 }
 
-/* Progress dots (new-survey nav) */
+/* #endregion */
 
-.nav-step-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.sidebar-nav-item.is-filled .nav-step-dot {
-  background: var(--success);
-}
-
-.sidebar-nav-item.is-active .nav-step-dot {
-  background: var(--accent);
-}
-
-/* ════════════════════════════════════════════════════════════════
-   11. BACK LINK + PAGE TITLE
-   drafts, tanks, results, new-survey, settings
-════════════════════════════════════════════════════════════════ */
+/* #region 10. BACK LINK & PAGE TITLES ══════════════════════════ */
 
 .back-link {
   display: inline-flex;
@@ -980,8 +931,6 @@ textarea {
   margin-top: 2px;
 }
 
-/* Section label — uppercase label above the group */
-
 .section-label {
   font-size: var(--font-size-sm);
   font-weight: 600;
@@ -991,11 +940,9 @@ textarea {
   margin-bottom: var(--space-md);
 }
 
-/* ════════════════════════════════════════════════════════════════
-   12. INFO BANNER
-   Blue info line (не error-banner)
-   Used in: profile
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
+
+/* #region 11. INFO BANNER ══════════════════════════════════════ */
 
 .info-banner {
   display: flex;
@@ -1020,91 +967,13 @@ textarea {
 
 .info-banner-text {
   font-size: var(--font-size-sm);
-  color: #1D4ED8;
+  color: var(--info-accent);
   line-height: 1.5;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   13. CONFIRMATION MODAL
-   Используется: dashboard (delete survey), survey-list
-════════════════════════════════════════════════════════════════ */
+/* #endregion */
 
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-overlay.is-open {
-  display: flex;
-}
-
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  padding: var(--space-xl);
-  width: 100%;
-  max-width: 400px;
-  margin: var(--space-md);
-}
-
-.modal-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--danger-light);
-  border: 1px solid var(--danger-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--space-lg);
-}
-
-.modal-icon svg {
-  width: 20px;
-  height: 20px;
-  stroke: var(--danger);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.modal-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-sm);
-}
-
-.modal-body {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-xl);
-}
-
-.modal-body strong {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.modal-actions {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: flex-end;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   14. BADGES — status survey
-   used in: survey-list, results
-════════════════════════════════════════════════════════════════ */
+/* #region 12. BADGES ═══════════════════════════════════════════ */
 
 .badge {
   display: inline-flex;
@@ -1118,21 +987,25 @@ textarea {
   white-space: nowrap;
 }
 
+/* Operation type */
+
 .badge--load {
-  background: #ECFEFF;
-  color: #0891B2;
-  border: 1px solid #A5F3FC;
+  background: var(--load-light);
+  color: var(--load-accent);
+  border: 1px solid var(--load-border);
 }
 
 .badge--disch {
-  background: #F5F3FF;
-  color: #7C3AED;
-  border: 1px solid #DDD6FE;
+  background: var(--disch-light);
+  color: var(--disch-accent);
+  border: 1px solid var(--disch-border);
 }
+
+/* Survey status */
 
 .badge--complete {
   background: var(--success-light);
-  color: var(--success);
+  color: var(--success-accent);
   border: 1px solid var(--success-border);
 }
 
@@ -1144,9 +1017,11 @@ textarea {
 
 .badge--draft {
   background: #F9FAFB;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
 }
+
+/* Survey phase */
 
 .badge--ini {
   background: var(--ini-light);
@@ -1159,3 +1034,104 @@ textarea {
   color: var(--fin-accent);
   border: 1px solid var(--fin-border);
 }
+
+/* #endregion */
+
+/* #region DEAD CODE — pending removal ══════════════════════════
+   Review before deleting. Confirm nothing references these.
+════════════════════════════════════════════════════════════════ */
+
+/*
+  — nav-step-dot / sidebar-nav-item.is-filled
+    is-filled state is never set in any templ.
+    is-active variant kept below (used by new-survey sidebar).
+
+  .nav-step-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .sidebar-nav-item.is-filled .nav-step-dot {
+    background: var(--success-accent);
+  }
+
+  — Old div-based modal (replaced by native <dialog> + .app-modal)
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.is-open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    padding: var(--space-xl);
+    width: 100%;
+    max-width: 400px;
+    margin: var(--space-md);
+  }
+
+  .modal-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--danger-light);
+    border: 1px solid var(--danger-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .modal-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--danger-accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .modal-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-xl);
+  }
+
+  .modal-body strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+  }
+*/
+
+/* #endregion */
