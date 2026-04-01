@@ -6,12 +6,6 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__settings {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: var(--space-2xl) var(--space-md);
-}
 
 .settings-layout {
   width: 100%;

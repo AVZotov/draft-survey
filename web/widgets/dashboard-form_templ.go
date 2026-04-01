@@ -35,7 +35,7 @@ func DashboardForm(user *types.User) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-main__dashboard\"><div class=\"dashboard\"><!-- Welcome --><div class=\"dashboard-welcome\"><h1 class=\"dashboard-greeting\">Good morning, <span>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-main\"><div class=\"page-wrap\"><!-- Welcome --><div class=\"dashboard-welcome\"><h1 class=\"dashboard-greeting\">Good morning, <span>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

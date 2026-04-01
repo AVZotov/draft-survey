@@ -32,7 +32,7 @@ func NewSurveyForm(survey *types.Survey) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main__new-survey\"><form id=\"survey-form\" method=\"post\" hx-post=\"/api/v1/survey\"><input type=\"hidden\" name=\"survey_id\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><form id=\"survey-form\" method=\"post\" hx-post=\"/api/v1/survey\"><input type=\"hidden\" name=\"survey_id\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

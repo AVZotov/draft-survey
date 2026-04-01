@@ -6,13 +6,6 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__new-survey {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    padding: var(--space-xl) var(--space-md);
-}
-
 .survey-layout {
     width: 100%;
     max-width: 900px;

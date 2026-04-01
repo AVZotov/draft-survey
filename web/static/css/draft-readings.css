@@ -1,27 +1,21 @@
 /* ================================================================
-   drafts.css — page /survey/:id/drafts (drafts input form)
-   depends on: styles.css (tokens, reset, header with survey-pill,
-                footer, back-link, page-title, action-bar, buttons)
+   draft-readings.css — page /survey/:id/drafts
+   depends on: styles.css (tokens, reset, label, input, btn,
+               back-link, page-title, page-meta, action-bar)
+
+   Sections:
+     1. DRAFT BLOCK
+     2. SEA BAR
+     3. READINGS AREA
+     4. PP + KEEL BAR
+     5. CALC PANEL
+     6. HYDROSTATIC SECTION
+     7. DEDUCTIBLES SECTION
+     8. DIVIDER
 ================================================================ */
 
-/* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__drafts {
-  flex: 1;
-  padding: var(--space-lg) var(--space-md);
-  display: flex;
-  justify-content: center;
-}
+/* #region 1. DRAFT BLOCK ═══════════════════════════════════════ */
 
-.drafts-wrap {
-  width: 100%;
-  max-width: 980px;
-}
-
-.page-top__drafts {
-  margin-bottom: var(--space-lg);
-}
-
-/* ─── Draft block (Initial / Final) ──────────────────────────── */
 .draft-block {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -40,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
   border-bottom: 1px solid var(--border);
 }
 
@@ -52,6 +46,11 @@
 .draft-block--fin .block-header {
   background: var(--fin-light);
   border-bottom-color: var(--fin-border);
+}
+
+.draft-block--mid .block-header {
+  background: var(--mid-light);
+  border-bottom-color: var(--mid-border);
 }
 
 .block-label {
@@ -66,6 +65,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .draft-block--ini .block-label {
@@ -84,13 +84,18 @@
   background: var(--fin-accent);
 }
 
-.block-ts {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-secondary);
+.draft-block--mid .block-label {
+  color: var(--mid-accent);
 }
 
-/* ─── Sea condition bar ───────────────────────────────────────── */
+.draft-block--mid .block-dot {
+  background: var(--mid-accent);
+}
+
+/* #endregion */
+
+/* #region 2. SEA BAR ═══════════════════════════════════════════ */
+
 .sea-bar {
   display: flex;
   align-items: center;
@@ -101,116 +106,25 @@
   justify-content: space-between;
 }
 
-.sea-bar-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  white-space: nowrap;
-}
-
-.sea-group {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-}
-
-.sea-group-label {
-  font-size: 10px;
-  color: var(--text-dim);
-  white-space: nowrap;
-}
-
-.sea-select-wrap {
-  position: relative;
-}
-
-.sea-select-wrap::after {
-  content: '';
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid var(--text-secondary);
-  pointer-events: none;
-}
-
-select.sea-sel {
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 500;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 5px 28px 5px var(--space-sm);
-  outline: none;
-  appearance: none;
-  cursor: pointer;
-  color: var(--text-primary);
-  transition: border-color 0.15s;
-}
-
-select.sea-sel:focus {
-  border-color: var(--border-focus);
-}
-
-/* ─── Sea condition badge (inline indicator) ──────────────────── */
-.sea-condition-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--space-sm);
-  align-items: end;
-}
-
-.sea-badge {
-  padding: 9px var(--space-md);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  white-space: nowrap;
-  min-width: 110px;
-  text-align: center;
-}
-
-/* ─── Sea condition new block ─────────────────────────────────── */
-.sea-toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-  padding: var(--space-sm) var(--space-lg);
-}
-
 .sea-toggle-group {
   display: flex;
+  align-items: center;
   gap: var(--space-md);
 }
 
-/* Toggle switch + label */
+/* Toggle label — overrides global label for inline toggle use */
 .sea-toggle-label {
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
   user-select: none;
   letter-spacing: 0.06em;
   margin-bottom: 0;
-}
-
-.sea-toggle-label input[type="checkbox"] {
-  display: none;
+  text-transform: uppercase;
 }
 
 .sea-toggle-pill {
@@ -235,20 +149,18 @@ select.sea-sel:focus {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.sea-toggle-label input:checked+.sea-toggle-pill {
+.sea-toggle-label input[type="radio"]:checked+.sea-toggle-pill {
   background: var(--accent);
 }
 
-.sea-toggle-label input:checked+.sea-toggle-pill .sea-toggle-dot {
+.sea-toggle-label input[type="radio"]:checked+.sea-toggle-pill .sea-toggle-dot {
   transform: translateX(12px);
 }
 
-/* Selects row */
 .sea-selects {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--space-sm);
+  display: flex;
   align-items: center;
+  gap: var(--space-sm);
   transition: opacity 0.2s;
 }
 
@@ -257,99 +169,56 @@ select.sea-sel:focus {
   pointer-events: none;
 }
 
-/* Sea badge colours */
-.sea-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px var(--space-md);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 11px;
+.sea-select-wrap {
+  position: relative;
+}
+
+.sea-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  pointer-events: none;
+}
+
+select.sea-sel {
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--font-size-sm);
   font-weight: 500;
+  background: var(--surface);
   border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text-secondary);
-  white-space: nowrap;
-  min-width: 110px;
+  border-radius: var(--radius-md);
+  padding: 5px 28px 5px var(--space-sm);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: border-color 0.15s;
 }
 
-.sea-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-  flex-shrink: 0;
+select.sea-sel:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
 }
 
-.sea-badge.calm {
-  color: #6B7280;
-  border-color: #D1D5DB;
-}
+/* #endregion */
 
-.sea-badge.calm .sea-badge-dot {
-  background: #6B7280;
-}
+/* #region 3. READINGS AREA ═════════════════════════════════════ */
 
-.sea-badge.smooth {
-  color: #2563EB;
-  border-color: #BFDBFE;
-  background: #EFF6FF;
-}
-
-.sea-badge.smooth .sea-badge-dot {
-  background: #2563EB;
-}
-
-.sea-badge.slight {
-  color: #15803D;
-  border-color: #BBF7D0;
-  background: #F0FDF4;
-}
-
-.sea-badge.slight .sea-badge-dot {
-  background: #15803D;
-}
-
-.sea-badge.moderate {
-  color: #D97706;
-  border-color: #FDE68A;
-  background: #FFFBEB;
-}
-
-.sea-badge.moderate .sea-badge-dot {
-  background: #D97706;
-}
-
-.sea-badge.rough {
-  color: #DC2626;
-  border-color: #FECACA;
-  background: #FEF2F2;
-}
-
-.sea-badge.rough .sea-badge-dot {
-  background: #DC2626;
-}
-
-.sea-badge.ice-active {
-  color: #0369A1;
-  border-color: #BAE6FD;
-  background: #F0F9FF;
-}
-
-.sea-badge.ice-active .sea-badge-dot {
-  background: #0369A1;
-}
-
-/* ─── Readings area (Port | Vessel | Starboard) ───────────────── */
 .readings-area {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr 260px 1fr;
 }
 
 .col-port,
 .col-stbd {
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
 }
 
 .col-port {
@@ -365,12 +234,11 @@ select.sea-sel:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-width: 260px;
+  justify-content: space-between;
 }
 
 .side-label {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -385,6 +253,7 @@ select.sea-sel:focus {
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .port-dot {
@@ -401,55 +270,25 @@ select.sea-sel:focus {
   grid-template-columns: 44px 1fr 34px;
   gap: var(--space-xs);
   align-items: center;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.dr-row:last-child {
+  margin-bottom: 0;
 }
 
 .dr-lbl {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   white-space: nowrap;
 }
 
-input.di {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 7px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-input.di::-webkit-inner-spin-button,
-input.di::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-input.di:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
-}
-
-input.di.over-summer {
-  color: var(--danger);
-  border-color: var(--danger);
-}
-
-input.di::placeholder {
-  color: var(--text-dim);
-  font-weight: 300;
-}
-
+/* di-badge: compact select for reading method / LCF direction */
+/* Kept as page-specific — extract to styles.css if reused elsewhere */
 .di-badge {
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   padding: 2px 4px;
   border: 1px solid var(--border);
@@ -460,17 +299,23 @@ input.di::placeholder {
   letter-spacing: 0.04em;
   text-align: center;
   height: 100%;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
 }
 
-/* ─── SVG vessel diagram ──────────────────────────────────────── */
+.di-badge:focus {
+  border-color: var(--border-focus);
+}
 
+/* SVG vessel diagram */
 .vessel-svg {
   width: 100%;
   max-width: 260px;
 }
 
 .hull-val {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 11px;
   font-weight: 600;
   fill: var(--text-primary);
@@ -481,8 +326,8 @@ input.di::placeholder {
   margin-top: var(--space-xs);
   padding: 4px var(--space-md);
   border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-align: center;
   display: none;
@@ -507,22 +352,31 @@ input.di::placeholder {
 }
 
 .vs-line {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: var(--text-dim);
 }
 
 .vs-line.warn {
-  color: var(--danger);
+  color: var(--danger-accent);
   font-weight: 600;
 }
 
 .vs-line.lop {
-  color: var(--danger);
+  color: var(--danger-accent);
   font-weight: 700;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
 }
 
-/* ─── PP + Keel row ───────────────────────────────────────────── */
+/* Dynamic state classes applied by JS */
+input.di.over-summer {
+  color: var(--danger-accent);
+  border-color: var(--danger-accent);
+}
+
+/* #endregion */
+
+/* #region 4. PP + KEEL BAR ═════════════════════════════════════ */
+
 .pp-keel-bar {
   border-top: 1px solid var(--border);
   background: var(--bg);
@@ -539,7 +393,7 @@ input.di::placeholder {
 }
 
 .pp-group-title {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -561,39 +415,14 @@ input.di::placeholder {
 }
 
 .pp-unit {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: var(--text-dim);
   white-space: nowrap;
 }
 
-input.ppi {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-secondary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 5px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color 0.15s;
-}
-
-input.ppi::-webkit-inner-spin-button,
-input.ppi::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-input.ppi:focus {
-  border-color: var(--border-focus);
-}
-
 select.dir-sel {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   background: var(--surface);
   border: 1px solid var(--border);
@@ -606,7 +435,14 @@ select.dir-sel {
   text-align: center;
 }
 
-/* ─── Calculated panel ────────────────────────────────────────── */
+select.dir-sel:focus {
+  border-color: var(--border-focus);
+}
+
+/* #endregion */
+
+/* #region 5. CALC PANEL ════════════════════════════════════════ */
+
 .calc-panel {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -627,7 +463,7 @@ select.dir-sel {
 }
 
 .cp-lbl {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -635,7 +471,7 @@ select.dir-sel {
 }
 
 .cp-val {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-dim);
@@ -646,9 +482,10 @@ select.dir-sel {
 }
 
 .cp-val.w {
-  color: var(--danger);
+  color: var(--danger-accent);
 }
 
+/* MMC cell — highlighted */
 .cp-cell--mmc {
   background: var(--surface);
   border-left: 2px solid var(--accent);
@@ -663,18 +500,21 @@ select.dir-sel {
 }
 
 .cp-formula {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: var(--text-dim);
 }
 
-/* ─── Hydrostatic section ─────────────────────────────────────── */
+/* #endregion */
+
+/* #region 6. HYDROSTATIC SECTION ═══════════════════════════════ */
+
 .hydro-section {
   border-top: 1px solid var(--border);
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
 }
 
 .sec-title {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -686,8 +526,8 @@ select.dir-sel {
 }
 
 .sec-title-mmc {
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-primary);
   text-transform: none;
@@ -695,10 +535,10 @@ select.dir-sel {
 }
 
 .sec-title-method {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-xs);
   color: var(--text-dim);
-  margin-left: 4px;
+  margin-left: var(--space-xs);
 }
 
 .hydro-table {
@@ -707,7 +547,7 @@ select.dir-sel {
 }
 
 .hydro-table th {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -722,49 +562,24 @@ select.dir-sel {
 }
 
 .hydro-table td {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-md);
   text-align: right;
-  padding: 6px var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
   border-bottom: 1px solid var(--bg);
 }
 
 .hydro-table td:first-child {
   text-align: left;
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), sans-serif;
 }
 
 .hydro-table tr.mmc-row td {
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   background: var(--bg);
-}
-
-.hydro-table td input {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-primary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 4px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color 0.15s;
-}
-
-.hydro-table td input::-webkit-inner-spin-button,
-.hydro-table td input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.hydro-table td input:focus {
-  border-color: var(--border-focus);
 }
 
 .lcf-field {
@@ -789,7 +604,7 @@ select.dir-sel {
 }
 
 .mtc-hdr {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -813,53 +628,23 @@ select.dir-sel {
   border-right: none;
 }
 
-.mtc-cell label {
-  font-size: 10px;
-  color: var(--text-secondary);
-  display: block;
-  margin-bottom: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.mtc-cell input {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-primary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 4px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-}
-
-.mtc-cell input::-webkit-inner-spin-button,
-.mtc-cell input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.mtc-cell input:focus {
-  border-color: var(--border-focus);
-}
-
 .mtc-delta {
   padding: 5px var(--space-md);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text-primary);
   border-top: 1px solid var(--border);
   background: var(--bg);
 }
 
-/* ─── Deductibles section ─────────────────────────────────────── */
+/* #endregion */
+
+/* #region 7. DEDUCTIBLES SECTION ═══════════════════════════════ */
+
 .deduct-section {
   border-top: 1px solid var(--border);
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
 }
 
 .density-row {
@@ -875,79 +660,34 @@ select.dir-sel {
   gap: var(--space-md);
 }
 
-.df label {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  display: block;
-  margin-bottom: var(--space-xs);
+/* df: field wrapper — uses global label + input[type=number] */
+.df {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
-.df input {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text-primary);
-  text-align: right;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 7px var(--space-sm);
-  outline: none;
-  width: 100%;
-  appearance: none;
-  -moz-appearance: textfield;
-  transition: border-color 0.15s;
-}
-
-.df input::-webkit-inner-spin-button,
-.df input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.df input:focus {
-  border-color: var(--border-focus);
-}
-
-/* Link to tanks page */
-.tanks-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 500;
+/* Tanks page link — uses global btn btn-ghost with ini colour override */
+.btn-ghost--ini {
   color: var(--ini-accent);
   background: var(--ini-light);
-  border: 1px solid var(--ini-border);
-  border-radius: var(--radius-md);
-  padding: 7px var(--space-md);
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s;
+  border-color: var(--ini-border);
 }
 
-.tanks-btn:hover {
+.btn-ghost--ini:hover {
   background: #DBEAFE;
+  color: var(--ini-accent);
 }
 
-.tanks-btn svg {
-  width: 13px;
-  height: 13px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
+/* #endregion */
 
-/* ─── Divider between Initial / Final blocks ──────────────────── */
+/* #region 8. DIVIDER ═══════════════════════════════════════════ */
+
 .draft-divider {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  margin: 4px 0 var(--space-lg);
+  margin: var(--space-xs) 0 var(--space-lg);
 }
 
 .dd-line {
@@ -957,7 +697,7 @@ select.dir-sel {
 }
 
 .dd-label {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   white-space: nowrap;
   padding: 4px var(--space-md);
@@ -965,3 +705,5 @@ select.dir-sel {
   border: 1px solid var(--border);
   border-radius: 20px;
 }
+
+/* #endregion */

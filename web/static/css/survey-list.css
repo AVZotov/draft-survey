@@ -4,17 +4,6 @@
                 footer, buttons, badges, modal)
 ================================================================ */
 
-/* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__survey-list {
-  flex: 1;
-  padding: var(--space-lg) var(--space-xl);
-}
-
-.page-content__survey-list {
-  max-width: 1080px;
-  margin: 0 auto;
-}
-
 /* ─── Page top (title + new button) ──────────────────────────── */
 .page-top__survey-list {
   display: flex;

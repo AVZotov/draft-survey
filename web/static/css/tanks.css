@@ -93,23 +93,6 @@
   text-transform: uppercase;
 }
 
-/* ── Page layout ────────────────────────────────────────────── */
-.page-main__tanks {
-  flex: 1;
-  padding: var(--space-lg) var(--space-md);
-  display: flex;
-  justify-content: center;
-}
-
-.tanks-wrap {
-  width: 100%;
-  max-width: 1020px;
-}
-
-.page-top {
-  margin-bottom: var(--space-lg);
-}
-
 /* ── Density bar ────────────────────────────────────────────── */
 .density-bar {
   background: var(--surface);

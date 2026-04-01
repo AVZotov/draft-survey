@@ -4,20 +4,6 @@
                 footer, buttons, modal, section-label)
 ================================================================ */
 
-/* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__dashboard {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-2xl) var(--space-md);
-}
-
-.dashboard {
-  width: 100%;
-  max-width: 720px;
-}
-
 /* ─── Welcome block ───────────────────────────────────────────── */
 .dashboard-welcome {
   margin-bottom: var(--space-2xl);

@@ -5,14 +5,6 @@
 ================================================================ */
 
 /* ─── Page layout ─────────────────────────────────────────────── */
-.page-main__profile {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: var(--space-2xl) var(--space-md);
-}
-
 .setup-card {
   width: 100%;
   max-width: 560px;

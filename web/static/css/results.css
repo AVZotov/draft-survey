@@ -199,16 +199,6 @@
   border-color: var(--accent);
 }
 
-/* ── Page main wrapper ──────────────────────────────────────── */
-.page-main__results {
-  flex: 1;
-  padding: var(--space-sm) var(--space-lg);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  gap: 8px;
-}
-
 /* ── Global alerts ──────────────────────────────────────────── */
 .global-alerts {
   display: flex;

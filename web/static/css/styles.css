@@ -23,7 +23,7 @@
      7.  FORM FIELDS
      8.  SIGNATURE UPLOAD
      9.  ACTION BAR
-     10. BACK LINK & PAGE TITLES
+     10. BACK LINK, PAGE TITLES & LAYOUT
      11. INFO BANNER
      12. BADGES
      --  DEAD CODE — pending removal
@@ -200,6 +200,7 @@ dialog::backdrop {
     opacity: 0;
     transform: translateY(-10px) scale(.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -619,7 +620,7 @@ textarea {
   padding: var(--space-lg) var(--space-xl);
 }
 
-.form-section + .form-section {
+.form-section+.form-section {
   border-top: 1px solid var(--border);
 }
 
@@ -886,7 +887,7 @@ textarea {
 
 /* #endregion */
 
-/* #region 10. BACK LINK & PAGE TITLES ══════════════════════════ */
+/* #region 10. BACK LINK, PAGE TITLES & LAYOUT ══════════════════════════ */
 
 .back-link {
   display: inline-flex;
@@ -938,6 +939,25 @@ textarea {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: var(--space-md);
+}
+
+.page-main {
+  flex: 1;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  justify-content: center;
+}
+
+.page-wrap {
+  width: clamp(720px, 92%, 1040px);
+}
+
+.page-wrap--wide {
+  max-width: 1400px;
+}
+
+.page-top {
+  margin-bottom: var(--space-lg);
 }
 
 /* #endregion */
