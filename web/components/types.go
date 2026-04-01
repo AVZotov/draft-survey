@@ -14,6 +14,10 @@ type TanksPageProps struct {
 	ListDir    string
 }
 
+type DraftPageProps struct {
+	Survey types.Survey
+}
+
 type LayoutProps struct {
 	Title           string
 	MetaDescription string
@@ -26,12 +30,6 @@ type LayoutProps struct {
 
 type Version struct {
 	Version string
-}
-
-type DraftBlockProps struct {
-	Draft  types.Draft
-	Index  int
-	Prefix string
 }
 
 type BannerType string

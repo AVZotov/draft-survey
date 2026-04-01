@@ -8,38 +8,36 @@ import (
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
+	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/gofiber/fiber/v2"
 )
 
-func (h *Handler) draftReadings(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return err
-	}
-	user, err := h.userRepository.Get()
+func (h *Handler) draft(c *fiber.Ctx) error {
+	p, err := getDraftProps(h, c)
 	if err != nil {
 		return err
 	}
 
-	survey.Status = types.SurveyStatusInProgress
+	p.survey.Status = types.SurveyStatusInProgress
 
-	drafts := []types.Draft{
-		{
-			Type:   types.DraftTypeInitial,
-			Status: types.DraftStatusPending,
-		},
-	}
-
-	if survey.Drafts == nil {
-		survey.Drafts = drafts
-		if err = h.surveyRepository.Save(survey); err != nil {
-			return err
+	if len(p.survey.Drafts) == 0 {
+		drafts := []types.Draft{
+			{
+				Type:   types.DraftTypeInitial,
+				Status: types.DraftStatusPending,
+			},
 		}
+		p.survey.Drafts = drafts
 	}
 
-	props := web.DraftReadingsProps(user, survey)
-	return tadaptor.Render(c, web.DraftReadings(props))
+	if err = h.surveyRepository.Save(p.survey); err != nil {
+		return err
+	}
+
+	layoutProps := web.DraftLayoutProps(p.user)
+	pageProps := web.DraftsPageProps(*p.survey)
+
+	return tadaptor.Render(c, pages.DraftReadings(layoutProps, pageProps))
 }
 
 func (h *Handler) startDraft(c *fiber.Ctx) error {

@@ -9,7 +9,7 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	app.Get("/profile", h.profile)
 	app.Get("/survey/new", h.newSurvey)
 	app.Get("/survey/:id", h.getSurvey)
-	app.Get("/survey/:id/draft", h.draftReadings)
+	app.Get("/survey/:id/draft", h.draft)
 	app.Get("/survey/:id/results", h.surveyResults)
 	app.Get("/survey/:id/tanks/:draftIndex", h.tanks)
 	app.Get("/survey/:id/tanks/:draftIndex/bw-tank/:tankID/corrections", h.tanksCorrections)

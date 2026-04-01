@@ -1,15 +1,15 @@
-package web
+package pages
 
 import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/widgets/drafts"
 import "github.com/AVZotov/draft-survey/web/components"
 
-templ DraftReadings(props components.LayoutProps) {
-	@layouts.Layout(props) {
-		@widgets.HeaderUser(props.User)
-		@drafts.DraftForm(props.Survey)
-		@drafts.DraftActionBar(props.Survey)
+templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
+		@drafts.DraftForm(dp)
+		@drafts.DraftActionBar(lp.Survey)
 		@widgets.Footer()
 	}
 }

@@ -671,7 +671,8 @@ select.dir-sel:focus {
 .btn-ghost--ini {
   color: var(--ini-accent);
   background: var(--ini-light);
-  border-color: var(--ini-border);
+  border: 1px solid var(--ini-border);
+  margin-top: var(--space-md);
 }
 
 .btn-ghost--ini:hover {

@@ -26,6 +26,22 @@ func TanksPageProps(survey types.Survey, draftIndex int, trim, list *float64, tr
 	}
 }
 
+func DraftLayoutProps(user *types.User) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Drafts Reading",
+		MetaDescription: "Get vessel's draft marks",
+		ExtraCSS:        []string{"/static/css/draft-readings.css"},
+		ExtraJS:         []string{"/static/js/draft-readings.js"},
+		User:            user,
+	}
+}
+
+func DraftsPageProps(survey types.Survey) components.DraftPageProps {
+	return components.DraftPageProps{
+		Survey: survey,
+	}
+}
+
 func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Dashboard",
@@ -42,17 +58,6 @@ func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutPro
 		MetaDescription: "Calculate vessel cargo",
 		ExtraCSS:        []string{"/static/css/new-survey.css"},
 		ExtraJS:         []string{"/static/js/new-survey.js"},
-		User:            user,
-		Survey:          survey,
-	}
-}
-
-func DraftReadingsProps(user *types.User, survey *types.Survey) components.LayoutProps {
-	return components.LayoutProps{
-		Title:           "Drafts Reading",
-		MetaDescription: "Get vessel's draft marks",
-		ExtraCSS:        []string{"/static/css/draft-readings.css"},
-		ExtraJS:         []string{"/static/js/draft-readings.js"},
 		User:            user,
 		Survey:          survey,
 	}

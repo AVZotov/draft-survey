@@ -6,7 +6,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strconv"
 )
@@ -19,21 +18,22 @@ script toggleSeaGroupDraft(seaType string, prefix string) {
 	toggleSeaGroup(seaType, prefix)
 }
 
-templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, surveyID string) {
+templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
+	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div
 		class={ templ.Classes(
         "draft-block",
-        templ.KV("draft-block--ini", props.Draft.Type == types.DraftTypeInitial),
-        templ.KV("draft-block--fin", props.Draft.Type == types.DraftTypeFinal),
-        templ.KV("draft-block--mid", props.Draft.Type == types.DraftTypeIntermediate),
-        templ.KV("draft-block--pending", props.Draft.Status == types.DraftStatusPending),
+        templ.KV("draft-block--ini", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeInitial),
+        templ.KV("draft-block--fin", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeFinal),
+        templ.KV("draft-block--mid", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate),
+        templ.KV("draft-block--pending", dp.Survey.Drafts[draftIndex].Status == types.DraftStatusPending),
     ) }
 	>
 		<!-- TODO: add CSS for draft-block mid selector in draft-readings.css -->
 		<div class="block-header">
 			<div class="block-label">
 				<span class="block-dot"></span>
-				{ draftTitle(props) }
+				{ draftTitle(dp.Survey.Drafts[draftIndex], draftIndex) }
 			</div>
 		</div>
 		<!-- ══════════════ DRAFT BLOCK══════════════════════════════ -->
@@ -44,26 +44,24 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 				<label class="sea-toggle-label">
 					<input
 						type="radio"
-						name={ fmt.Sprintf("%s-d%d", constants.SeaType, props.Index) }
-						id={ props.Prefix + "-wave-enabled" }
+						name={ fmt.Sprintf("%s-%d", constants.SeaType, draftIndex) }
+						id={ fmt.Sprintf("%d-wave-enabled", draftIndex) }
 						value="wave"
-						checked?={ props.Draft.SeaCondition.Type != "ice" }
-						disabled?={ props.Draft.Status == types.DraftStatusPending }
-						onchange={ toggleSeaGroupDraft("wave", props.Prefix) }
+						checked?={ dp.Survey.Drafts[draftIndex].SeaCondition.Type != "ice" }
 					/>
 					<span class="sea-toggle-pill">
 						<span class="sea-toggle-dot"></span>
 					</span>
 					Wave
 				</label>
-				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", props.Draft.SeaCondition.Type == types.SeaConditionTypeIce)) } id={ props.Prefix + "-wave-group" }>
+				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", draft.SeaCondition.Type == types.SeaConditionTypeIce)) }>
 					<div class="sea-select-wrap">
-						<select class="sea-sel" id={ props.Prefix + "-sea-condition" } name={ fmt.Sprintf("%s-d%d", constants.SeaConditionWave, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-							<option value="&lt; 0.1m" selected?={ props.Draft.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
-							<option value="0.1-0.5m" selected?={ props.Draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1-0.5m</option>
-							<option value="0.5-1.25m" selected?={ props.Draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5-1.25m</option>
-							<option value="1.25-2.5m" selected?={ props.Draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25-2.5m</option>
-							<option value="2.5-4.0m" selected?={ props.Draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5-4.0m</option>
+						<select class="sea-sel" name={ fmt.Sprintf("%s-%d", constants.SeaConditionWave, draftIndex) }>
+							<option value="&lt; 0.1m" selected?={ draft.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
+							<option value="0.1-0.5m" selected?={ draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1-0.5m</option>
+							<option value="0.5-1.25m" selected?={ draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5-1.25m</option>
+							<option value="1.25-2.5m" selected?={ draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25-2.5m</option>
+							<option value="2.5-4.0m" selected?={ draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5-4.0m</option>
 						</select>
 					</div>
 				</div>
@@ -73,34 +71,29 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 				<label class="sea-toggle-label">
 					<input
 						type="radio"
-						name={ fmt.Sprintf("%s_%s", props.Prefix, constants.SeaType) }
-						id={ props.Prefix + "-ice-enabled" }
+						name={ fmt.Sprintf("%s-%d", constants.SeaType, draftIndex) }
 						value="ice"
-						checked?={ props.Draft.SeaCondition.Type == "ice" }
-						disabled?={ props.Draft.Status == types.DraftStatusPending }
-						onchange={ toggleSeaGroupDraft("ice", props.Prefix) }
+						checked?={ draft.SeaCondition.Type == "ice" }
 					/>
 					<span class="sea-toggle-pill">
 						<span class="sea-toggle-dot"></span>
 					</span>
 					Ice
 				</label>
-				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", props.Draft.SeaCondition.Type != types.SeaConditionTypeIce)) } id={ props.Prefix + "-ice-group" }>
+				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", draft.SeaCondition.Type != types.SeaConditionTypeIce)) }>
 					<div class="sea-select-wrap">
 						<select
 							class="sea-sel"
-							id={ props.Prefix + "-ice-condition" }
-							name={ fmt.Sprintf("%s-d%d", constants.SeaConditionIce, props.Index) }
-							disabled?={ props.Draft.SeaCondition.Type != types.SeaConditionTypeIce || props.Draft.Status == types.DraftStatusPending }
+							name={ fmt.Sprintf("%s-%d", constants.SeaConditionIce, draftIndex) }
 						>
-							<option value="&lt;0.05m around" selected?={ props.Draft.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
-							<option value="0.05-0.1m around" selected?={ props.Draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05-0.1m around</option>
-							<option value="0.1-0.15m around" selected?={ props.Draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1-0.15m around</option>
-							<option value="0.15-0.2m around" selected?={ props.Draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15-0.2m around</option>
-							<option value="0.2-0.3m around" selected?={ props.Draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2-0.3m around</option>
-							<option value="0.3-0.4m around" selected?={ props.Draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3-0.4m around</option>
-							<option value="0.4-0.6m around" selected?={ props.Draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4-0.6m around</option>
-							<option value="&gt;0.6m around" selected?={ props.Draft.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
+							<option value="&lt;0.05m around" selected?={ draft.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
+							<option value="0.05-0.1m around" selected?={ draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05-0.1m around</option>
+							<option value="0.1-0.15m around" selected?={ draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1-0.15m around</option>
+							<option value="0.15-0.2m around" selected?={ draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15-0.2m around</option>
+							<option value="0.2-0.3m around" selected?={ draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2-0.3m around</option>
+							<option value="0.3-0.4m around" selected?={ draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3-0.4m around</option>
+							<option value="0.4-0.6m around" selected?={ draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4-0.6m around</option>
+							<option value="&gt;0.6m around" selected?={ draft.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
 						</select>
 					</div>
 				</div>
@@ -112,41 +105,29 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 				<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd P</span>
-					if props.Draft.Marks.FwdPort.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdPort, props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.FwdPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdPort, props.Index) } type="number" id={ props.Prefix + "-fp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.FwdPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid P</span>
-					if props.Draft.Marks.MidPort.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidPort, props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.MidPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidPort, props.Index) } type="number" id={ props.Prefix + "-mp" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.MidPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
-				<div class="dr-row" style="margin-bottom:0">
+				<div class="dr-row">
 					<span class="dr-lbl">Aft P</span>
-					if props.Draft.Marks.AftPort.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftPort, props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.AftPort.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftPort, props.Index) } type="number" id={ props.Prefix + "-ap" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.AftPortMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
 			</div>
@@ -168,12 +149,12 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 					<text x="240" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD PP</text>
 					<text x="134" y="170" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">LBP 182 m</text>
 					<!-- corrected wKeel inside hull -->
-					<text id={ props.Prefix + "-sv-aft" } x="26" y="96" class="hull-val">—</text>
-					<text id={ props.Prefix + "-sv-mid" } x="134" y="96" class="hull-val">—</text>
-					<text id={ props.Prefix + "-sv-fwd" } x="240" y="96" class="hull-val">—</text>
+					<text id={ strconv.Itoa(draftIndex) + "-sv-aft" } x="26" y="96" class="hull-val">—</text>
+					<text id={ strconv.Itoa(draftIndex) + "-sv-mid" } x="134" y="96" class="hull-val">—</text>
+					<text id={ strconv.Itoa(draftIndex) + "-sv-fwd" } x="240" y="96" class="hull-val">—</text>
 					<!-- trim line -->
 					<polyline
-						id={ props.Prefix + "-trl" }
+						id={ strconv.Itoa(draftIndex) + "-trl" }
 						points="26,115 134,115 240,115"
 						fill="none"
 						stroke="#2563EB"
@@ -181,51 +162,39 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 						stroke-linecap="round"
 					></polyline>
 				</svg>
-				<div class="defl-warn" id={ props.Prefix + "-defl" }></div>
+				<div class="defl-warn" id={ strconv.Itoa(draftIndex) + "-defl" }></div>
 				<div class="vessel-status">
-					<div class="vs-line" id={ props.Prefix + "-lst" }>Upright</div>
-					<div class="vs-line" id={ props.Prefix + "-trm" } style="margin-top:1px"></div>
+					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-lst" }>Upright</div>
+					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-trm" } style="margin-top:1px"></div>
 				</div>
 			</div>
 			<div class="col-stbd">
 				<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Fwd S</span>
-					if props.Draft.Marks.FwdStarboard.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdStbd, props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.FwdStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.FwdStbd, props.Index) } type="number" id={ props.Prefix + "-fs" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.FwdStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
 				<div class="dr-row">
 					<span class="dr-lbl">Mid S</span>
-					if props.Draft.Marks.MidStarboard.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidStbd, props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.MidStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.MidStbd, props.Index) } type="number" id={ props.Prefix + "-ms" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.MidStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
-				<div class="dr-row" style="margin-bottom:0">
+				<div class="dr-row">
 					<span class="dr-lbl">Aft S</span>
-					if props.Draft.Marks.AftStarboard.Value != nil {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftStbd, props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Marks.AftStarboard.Value) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="di" name={ fmt.Sprintf("%s-d%d", constants.AftStbd, props.Index) } type="number" id={ props.Prefix + "-as" } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.AftStbdMarkRead, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-						<option value="" selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ props.Draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex) }>
+						<option value="" selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
+						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 				</div>
 			</div>
@@ -235,192 +204,137 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 			<div class="pp-group">
 				<div class="pp-group-title">Fwd — distances &amp; keel</div>
 				<div class="pp-fields">
-					if props.Draft.DistancePPFwd != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DFwd, props.Index) } type="number" id={ props.Prefix + "-dfwd" } placeholder="dFwd, m" step="any" value={ fmt.Sprintf("%g", *props.Draft.DistancePPFwd) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DFwd, props.Index) } type="number" id={ props.Prefix + "-dfwd" } placeholder="dFwd, m" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="dir-sel" name={ fmt.Sprintf("%s-d%d", constants.DFwdDir, props.Index) } id={ props.Prefix + "-dfwd-dir" } disabled?={ props.Draft.Status == types.DraftStatusPending } onchange={ calcDraft(props.Prefix) }><option selected?={ props.Draft.PPFwdDirection == "A" }>A</option><option selected?={ props.Draft.PPFwdDirection == "F" }>F</option></select>
+					<input name={ fmt.Sprintf("%s-%d", constants.DFwd, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPFwd) } type="number" placeholder="dFwd, m" step="any"/>
+					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DFwdDir, draftIndex) }>
+						<option selected?={ draft.PPFwdDirection == "A" }>A</option>
+						<option selected?={ draft.PPFwdDirection == "F" }>F</option>
+					</select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					if props.Draft.KeelFwd != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelFwd, props.Index) } type="number" id={ props.Prefix + "-fk" } placeholder="Fk, mm" step="any" value={ fmt.Sprintf("%g", *props.Draft.KeelFwd) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelFwd, props.Index) } type="number" id={ props.Prefix + "-fk" } placeholder="Fk, mm" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
+					<input name={ fmt.Sprintf("%s-%d", constants.KeelFwd, draftIndex) } value={ format.FloatOrEmpty(draft.KeelFwd) } type="number" placeholder="Fk, mm" step="any"/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
 			<div class="pp-group">
 				<div class="pp-group-title">Mid — distances &amp; keel</div>
 				<div class="pp-fields">
-					if props.Draft.DistancePPMid != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DMid, props.Index) } type="number" id={ props.Prefix + "-dmid" } placeholder="dMid, m" step="any" value={ fmt.Sprintf("%g", *props.Draft.DistancePPMid) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DMid, props.Index) } type="number" id={ props.Prefix + "-dmid" } placeholder="dMid, m" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="dir-sel" name={ fmt.Sprintf("%s-d%d", constants.DMidDir, props.Index) } id={ props.Prefix + "-dmid-dir" } disabled?={ props.Draft.Status == types.DraftStatusPending } onchange={ calcDraft(props.Prefix) }><option selected?={ props.Draft.PPMidDirection == "A" }>A</option><option selected?={ props.Draft.PPMidDirection == "F" }>F</option></select>
+					<input name={ fmt.Sprintf("%s-%d", constants.DMid, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPMid) } type="number" placeholder="dMid, m" step="any"/>
+					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DMidDir, draftIndex) }>
+						<option selected?={ draft.PPMidDirection == "A" }>A</option>
+						<option selected?={ draft.PPMidDirection == "F" }>F</option>
+					</select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					if props.Draft.KeelMid != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelMid, props.Index) } type="number" id={ props.Prefix + "-mk" } placeholder="Mk, mm" step="any" value={ fmt.Sprintf("%g", *props.Draft.KeelMid) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelMid, props.Index) } type="number" id={ props.Prefix + "-mk" } placeholder="Mk, mm" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
+					<input name={ fmt.Sprintf("%s-%d", constants.KeelMid, draftIndex) } value={ format.FloatOrEmpty(draft.KeelMid) } type="number" placeholder="Mk, mm" step="any"/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
 			<div class="pp-group">
 				<div class="pp-group-title">Aft — distances &amp; keel</div>
 				<div class="pp-fields">
-					if props.Draft.DistancePPAft != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DAft, props.Index) } type="number" id={ props.Prefix + "-daft" } placeholder="dAft, m" step="any" value={ fmt.Sprintf("%g", *props.Draft.DistancePPAft) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.DAft, props.Index) } type="number" id={ props.Prefix + "-daft" } placeholder="dAft, m" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
-					<select class="dir-sel" name={ fmt.Sprintf("%s-d%d", constants.DAftDir, props.Index) } id={ props.Prefix + "-daft-dir" } disabled?={ props.Draft.Status == types.DraftStatusPending } onchange={ calcDraft(props.Prefix) }>
-						<option selected?={ props.Draft.PPAftDirection == "A" }>A</option>
-						<option selected?={ props.Draft.PPAftDirection == "F" }>F</option>
+					<input name={ fmt.Sprintf("%s-%d", constants.DAft, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPAft) } type="number" placeholder="dAft, m" step="any"/>
+					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DAftDir, draftIndex) }>
+						<option selected?={ draft.PPAftDirection == "A" }>A</option>
+						<option selected?={ draft.PPAftDirection == "F" }>F</option>
 					</select>
 					<span class="pp-unit">A/F</span>
 				</div>
 				<div class="keel-fields">
-					if props.Draft.KeelAft != nil {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelAft, props.Index) } type="number" id={ props.Prefix + "-ak" } placeholder="Ak, mm" step="any" value={ fmt.Sprintf("%g", *props.Draft.KeelAft) } disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					} else {
-						<input class="ppi" name={ fmt.Sprintf("%s-d%d", constants.KeelAft, props.Index) } type="number" id={ props.Prefix + "-ak" } placeholder="Ak, mm" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending } oninput={ calcDraft(props.Prefix) }/>
-					}
+					<input name={ fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex) } value={ format.FloatOrEmpty(draft.KeelAft) } type="number" placeholder="Ak, mm" step="any"/>
 					<span class="pp-unit">mm keel</span>
 				</div>
 			</div>
 		</div>
 		<!-- Calculated panel -->
 		<div class="calc-panel">
-			<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val" id={ props.Prefix + "-c-mfa" }>—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val" id={ props.Prefix + "-c-mm" }>—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val" id={ props.Prefix + "-c-otr" }>—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val" id={ props.Prefix + "-c-ttr" }>—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val" id={ props.Prefix + "-c-lst" }>—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val">—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val">—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val">—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val">—</span></div>
+			<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val">—</span></div>
 			<div class="cp-cell cp-cell--mmc">
 				<span class="cp-lbl">MMC</span>
-				<span class="cp-val" id={ props.Prefix + "-c-mmc" }>—</span>
-				<span class="cp-formula">(6M/8) Full LBP</span>
+				<span class="cp-val">—</span>
+				<span class="cp-formula">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) }</span>
 			</div>
 		</div>
 		<!-- Hydrostatic data -->
 		<div class="hydro-section">
 			<div class="sec-title">
 				<span>Hydrostatic Data</span>
-				<span><span class="sec-title-mmc" id={ props.Prefix + "-hmmc" }>MMC — m</span><span class="sec-title-method">{ format.MMCShortFormula(vessel.VesselType) } { format.LBPCorrection(vessel.CorrectionMethod) }</span></span>
+				<span>
+					<span class="sec-title-mmc">MMC — m</span>
+					<span class="sec-title-method">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) } { format.LBPCorrection(dp.Survey.VesselData.CorrectionMethod) }</span>
+				</span>
 			</div>
 			<table class="hydro-table">
 				<thead><tr><th></th><th>Draft, m</th><th>Displ. (Extreme), MT</th><th>TPC, MT/cm</th><th>LCF / LCA, m</th></tr></thead>
 				<tbody>
-					if len(props.Draft.HydrostaticRows) > 0 {
+					if len(draft.HydrostaticRows) > 0 {
 						<tr>
 							<td>Upper</td>
 							<td>
-								if props.Draft.HydrostaticRows[0].Draft != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDraft, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[0].Draft) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Draft) }/>
 							</td>
 							<td>
-								if props.Draft.HydrostaticRows[0].Displacement != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDisp, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[0].Displacement) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDisp, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Displacement) }/>
 							</td>
 							<td>
-								if props.Draft.HydrostaticRows[0].TPC != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UTpc, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[0].TPC) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.UTpc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].TPC) }/>
 							</td>
 							<td class="lcf-field">
-								if props.Draft.HydrostaticRows[0].LCF != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.ULcfLca, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[0].LCF) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.ULcfLca, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
-								<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.ULcfDir, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-									<option value="" selected?={ props.Draft.HydrostaticRows[0].LCFDirection == types.LCFDirection("") }>—</option>
-									<option value={ types.LCFDirectionForward } selected?={ props.Draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-									<option value={ types.LCFDirectionAft } selected?={ props.Draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-									<option value={ types.LCFDirectionFromAP } selected?={ props.Draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].LCF) }/>
+								<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex) }>
+									<option value="" selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirection("") }>—</option>
+									<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
+									<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
+									<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
 								</select>
 							</td>
 						</tr>
-						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ props.Prefix + "-ht-d" }>—</td><td id={ props.Prefix + "-ht-dp" }>—</td><td id={ props.Prefix + "-ht-t" }>—</td><td id={ props.Prefix + "-ht-l" }>—</td></tr>
+						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</td></tr>
 						<tr>
 							<td>Lower</td>
 							<td>
-								if props.Draft.HydrostaticRows[1].Draft != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDraft, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[1].Draft) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Draft) }/>
 							</td>
 							<td>
-								if props.Draft.HydrostaticRows[1].Displacement != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDisp, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[1].Displacement) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDisp, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Displacement) }/>
 							</td>
 							<td>
-								if props.Draft.HydrostaticRows[1].TPC != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LTpc, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[1].TPC) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LTpc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].TPC) }/>
 							</td>
 							<td class="lcf-field">
-								if props.Draft.HydrostaticRows[1].LCF != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LLcfLca, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.HydrostaticRows[1].LCF) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LLcfLca, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
-								<select class="di-badge" name={ fmt.Sprintf("%s-d%d", constants.LLcfDir, props.Index) } disabled?={ props.Draft.Status == types.DraftStatusPending }>
-									<option value="" selected?={ props.Draft.HydrostaticRows[1].LCFDirection == types.LCFDirection("") }>—</option>
-									<option value={ types.LCFDirectionForward } selected?={ props.Draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-									<option value={ types.LCFDirectionAft } selected?={ props.Draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-									<option value={ types.LCFDirectionFromAP } selected?={ props.Draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].LCF) }/>
+								<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.LLcfDir, draftIndex) }>
+									<option value="" selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirection("") }>—</option>
+									<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
+									<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
+									<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
 								</select>
 							</td>
 						</tr>
 					} else {
-						<tr><td>Upper</td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.UDisp, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.UTpc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.ULcfLca, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td></tr>
-						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ props.Prefix + "-ht-d" }>—</td><td id={ props.Prefix + "-ht-dp" }>—</td><td id={ props.Prefix + "-ht-t" }>—</td><td id={ props.Prefix + "-ht-l" }>—</td></tr>
-						<tr><td>Lower</td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.LDisp, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.LTpc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td><td><input type="number" name={ fmt.Sprintf("%s-d%d", constants.LLcfLca, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></td></tr>
+						<tr><td>Upper</td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any"/></td></tr>
+						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</td></tr>
+						<tr><td>Lower</td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any"/></td></tr>
 					}
 				</tbody>
 			</table>
 			<div class="mtc-grid">
-				if len(props.Draft.MTCRows) > 0 {
+				if len(draft.MTCRows) > 0 {
 					<div class="mtc-card">
 						<div class="mtc-hdr">MTC +0.5 m</div>
 						<div class="mtc-body">
 							<div class="mtc-cell">
 								<label>Draft, m</label>
-								if props.Draft.MTCRows[0].Draft != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtcDraft, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.MTCRows[0].Draft) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtcDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
 							</div>
 							<div class="mtc-cell">
 								<label>MTC, MT/m</label>
-								if props.Draft.MTCRows[0].MTC != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtc, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.MTCRows[0].MTC) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].MTC) }/>
 							</div>
 						</div>
 					</div>
@@ -429,26 +343,18 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 						<div class="mtc-body">
 							<div class="mtc-cell">
 								<label>Draft, m</label>
-								if props.Draft.MTCRows[1].Draft != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtcDraft, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.MTCRows[1].Draft) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtcDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
 							</div>
 							<div class="mtc-cell">
 								<label>MTC, MT/m</label>
-								if props.Draft.MTCRows[1].MTC != nil {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtc, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.MTCRows[1].MTC) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								} else {
-									<input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-								}
+								<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
 							</div>
 						</div>
 						<div class="mtc-delta">ΔMTC: —</div>
 					</div>
 				} else {
-					<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtcDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-d%d", constants.PMtc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div></div></div>
-					<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtcDraft, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-d%d", constants.NMtc, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
+					<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any"/></div></div></div>
+					<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
 				}
 			</div>
 		</div>
@@ -458,88 +364,44 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 			<div class="density-row">
 				<div class="df">
 					<label>Table Density</label>
-					if vessel.TableDensity != nil {
-						<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *vessel.TableDensity) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" value={ format.FloatOrEmpty(dp.Survey.VesselData.TableDensity) }/>
 				</div>
 				<div class="df">
 					<label>Dockwater Density</label>
-					if props.Draft.Density != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Density) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.DockwaterDensity, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Density) }/>
 				</div>
 			</div>
 			<div class="deduct-grid">
 				<div class="df">
 					<label>HFO, MT</label>
-					if props.Draft.Deductibles.HFO != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.HFO, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Deductibles.HFO) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.HFO, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.HFO) }/>
 				</div>
 				<div class="df">
 					<label>MDO, MT</label>
-					if props.Draft.Deductibles.MDO != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.MDO, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Deductibles.MDO) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.MDO, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.MDO) }/>
 				</div>
 				<div class="df">
 					<label>Lube Oil, MT</label>
-					if props.Draft.Deductibles.LubOil != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LubOil, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Deductibles.LubOil) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.LubOil, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.LubOil) }/>
 				</div>
-				<div class="df"><label>Fresh Water, MT</label><input type="number" name={ fmt.Sprintf("fw-d%d", props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div>
-				<div class="df"><label>Ballast Water, MT</label><input type="number" name={ fmt.Sprintf("bw-d%d", props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/></div>
+				<div class="df"><label>Fresh Water, MT</label><input type="number" name={ fmt.Sprintf("fw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
+				<div class="df"><label>Ballast Water, MT</label><input type="number" name={ fmt.Sprintf("bw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
 				<div class="df">
 					<label>Bilge Water, MT</label>
-					if props.Draft.Deductibles.BilgeWater != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.BilgeWater, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Deductibles.BilgeWater) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.BilgeWater, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) }/>
 				</div>
-				if props.Draft.Type == types.DraftTypeInitial {
-					<div class="df">
-						<label>Constant Declared, MT</label>
-						if props.Draft.ConstantDeclared != nil {
-							<input type="number" name={ constants.ConstDeclared } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.ConstantDeclared) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-						} else {
-							<input type="number" name={ constants.ConstDeclared } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-						}
-					</div>
-				} else {
-					<div class="df">
-						<label>Cargo Declared, MT</label>
-						if props.Draft.CargoDeclared != nil {
-							<input type="number" name={ fmt.Sprintf("%s-d%d", constants.CargoDeclared, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.CargoDeclared) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-						} else {
-							<input type="number" name={ fmt.Sprintf("%s-d%d", constants.CargoDeclared, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-						}
-					</div>
-				}
+				<div class="df">
+					<label>Cargo Declared, MT</label>
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.CargoDeclared, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.CargoDeclared) }/>
+				</div>
 				<div class="df">
 					<label>Others, MT</label>
-					if props.Draft.Deductibles.Others != nil {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.Others, props.Index) } placeholder="0.000" step="any" value={ fmt.Sprintf("%g", *props.Draft.Deductibles.Others) } disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					} else {
-						<input type="number" name={ fmt.Sprintf("%s-d%d", constants.Others, props.Index) } placeholder="0.000" step="any" disabled?={ props.Draft.Status == types.DraftStatusPending }/>
-					}
+					<input type="number" name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.Others) }/>
 				</div>
 			</div>
-			//	hx-post={ fmt.Sprintf("api/v1/survey/%s/draft/save?redirect=api/v1/survey/%s/tanks/%d", surveyID, surveyID, props.Index) }
 			<button
-				class="tanks-btn"
-				hx-post={ "/api/v1/survey/" + surveyID + "/draft/save?redirect=/survey/" + surveyID + "/tanks/" + strconv.Itoa(props.Index) }
+				class="btn btn-ghost--ini"
+				hx-post={ "/api/v1/survey/" + dp.Survey.ID + "/draft/save?redirect=/survey/" + dp.Survey.ID + "/tanks/" + strconv.Itoa(draftIndex) }
 				hx-include="#draft-form"
 			>
 				<svg viewBox="0 0 24 24">
@@ -552,13 +414,13 @@ templ DraftBlock(props components.DraftBlockProps, vessel vessel.VesselData, sur
 	</div>
 }
 
-func draftTitle(props components.DraftBlockProps) string {
-	switch props.Draft.Type {
+func draftTitle(draft types.Draft, draftIndex int) string {
+	switch draft.Type {
 	case types.DraftTypeInitial:
 		return "Initial Draft"
 	case types.DraftTypeFinal:
 		return "Final Draft"
 	default:
-		return fmt.Sprintf("Draft %d", props.Index)
+		return fmt.Sprintf("Intermediate Draft %d", draftIndex)
 	}
 }

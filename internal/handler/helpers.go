@@ -28,6 +28,12 @@ type props struct {
 	listDir    string
 }
 
+type draftProps struct {
+	user     *types.User
+	survey   *types.Survey
+	surveyID string
+}
+
 var ErrEmptyField = errors.New("empty field")
 var ErrUndefinedTankType = errors.New("undefined tank type")
 var ErrUndefinedHXContext = errors.New("undefined HX context")
@@ -539,5 +545,24 @@ func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		trimDir:    trimDir,
 		list:       listDegrees,
 		listDir:    listDir,
+	}, nil
+}
+
+func getDraftProps(h *Handler, c *fiber.Ctx) (*draftProps, error) {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	return &draftProps{
+		user:     user,
+		survey:   survey,
+		surveyID: id,
 	}, nil
 }
