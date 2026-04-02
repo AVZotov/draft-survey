@@ -24,6 +24,13 @@ func FloatOrEmpty(v *float64) string {
 	return fmt.Sprintf("%g", *v)
 }
 
+func IntOrEmpty(v *int) string {
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprintf("%d", *v)
+}
+
 func IntToStr(i int) string {
 	if i == 0 {
 		return "-"

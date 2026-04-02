@@ -61,6 +61,7 @@ const (
 
 	// Sea condition
 	SeaType          = "sea_type"
+	SeaCondition     = "sea_condition"
 	SeaConditionWave = "sea_wave"
 	SeaConditionIce  = "sea_ice"
 )

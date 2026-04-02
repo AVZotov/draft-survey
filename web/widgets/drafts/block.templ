@@ -10,14 +10,6 @@ import (
 	"strconv"
 )
 
-script calcDraft(prefix string) {
-	calc(prefix)
-}
-
-script toggleSeaGroupDraft(seaType string, prefix string) {
-	toggleSeaGroup(seaType, prefix)
-}
-
 templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div
@@ -38,67 +30,10 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 		</div>
 		<!-- ══════════════ DRAFT BLOCK══════════════════════════════ -->
 		<!-- Sea Condition bar -->
-		<div class="sea-bar">
-			<!-- Wave toggle -->
-			<div class="sea-toggle-group">
-				<label class="sea-toggle-label">
-					<input
-						type="radio"
-						name={ fmt.Sprintf("%s-%d", constants.SeaType, draftIndex) }
-						id={ fmt.Sprintf("%d-wave-enabled", draftIndex) }
-						value="wave"
-						checked?={ dp.Survey.Drafts[draftIndex].SeaCondition.Type != "ice" }
-					/>
-					<span class="sea-toggle-pill">
-						<span class="sea-toggle-dot"></span>
-					</span>
-					Wave
-				</label>
-				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", draft.SeaCondition.Type == types.SeaConditionTypeIce)) }>
-					<div class="sea-select-wrap">
-						<select class="sea-sel" name={ fmt.Sprintf("%s-%d", constants.SeaConditionWave, draftIndex) }>
-							<option value="&lt; 0.1m" selected?={ draft.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
-							<option value="0.1-0.5m" selected?={ draft.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1-0.5m</option>
-							<option value="0.5-1.25m" selected?={ draft.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5-1.25m</option>
-							<option value="1.25-2.5m" selected?={ draft.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25-2.5m</option>
-							<option value="2.5-4.0m" selected?={ draft.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5-4.0m</option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<!-- Ice toggle -->
-			<div class="sea-toggle-group">
-				<label class="sea-toggle-label">
-					<input
-						type="radio"
-						name={ fmt.Sprintf("%s-%d", constants.SeaType, draftIndex) }
-						value="ice"
-						checked?={ draft.SeaCondition.Type == "ice" }
-					/>
-					<span class="sea-toggle-pill">
-						<span class="sea-toggle-dot"></span>
-					</span>
-					Ice
-				</label>
-				<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", draft.SeaCondition.Type != types.SeaConditionTypeIce)) }>
-					<div class="sea-select-wrap">
-						<select
-							class="sea-sel"
-							name={ fmt.Sprintf("%s-%d", constants.SeaConditionIce, draftIndex) }
-						>
-							<option value="&lt;0.05m around" selected?={ draft.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
-							<option value="0.05-0.1m around" selected?={ draft.SeaCondition.Ice == "0.05-0.1m around" }>0.05-0.1m around</option>
-							<option value="0.1-0.15m around" selected?={ draft.SeaCondition.Ice == "0.1-0.15m around" }>0.1-0.15m around</option>
-							<option value="0.15-0.2m around" selected?={ draft.SeaCondition.Ice == "0.15-0.2m around" }>0.15-0.2m around</option>
-							<option value="0.2-0.3m around" selected?={ draft.SeaCondition.Ice == "0.2-0.3m around" }>0.2-0.3m around</option>
-							<option value="0.3-0.4m around" selected?={ draft.SeaCondition.Ice == "0.3-0.4m around" }>0.3-0.4m around</option>
-							<option value="0.4-0.6m around" selected?={ draft.SeaCondition.Ice == "0.4-0.6m around" }>0.4-0.6m around</option>
-							<option value="&gt;0.6m around" selected?={ draft.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
-						</select>
-					</div>
-				</div>
-			</div>
-		</div>
+		@components.SeaCondition(components.SeaConditionProps{
+			SeaCondition: dp.Survey.Drafts[draftIndex].SeaCondition,
+			DraftIndex:   &draftIndex,
+		})
 		<!-- Port | Vessel | Stbd -->
 		<div class="readings-area">
 			<div class="col-port">

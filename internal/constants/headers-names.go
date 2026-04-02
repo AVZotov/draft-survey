@@ -3,6 +3,7 @@ package constants
 // HX Custom headers (keys)
 const (
 	HXTankType    = "X-Tank-Type"
+	HXSeaType     = "X-Sea-Type"
 	HXCalcContext = "X-Calc-Context"
 	HXSurveyID    = "X-Survey-ID"
 	HXDraftIndex  = "X-Draft-Index"

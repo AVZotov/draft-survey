@@ -106,69 +106,6 @@
   justify-content: space-between;
 }
 
-.sea-toggle-group {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-/* Toggle label — overrides global label for inline toggle use */
-.sea-toggle-label {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  user-select: none;
-  letter-spacing: 0.06em;
-  margin-bottom: 0;
-  text-transform: uppercase;
-}
-
-.sea-toggle-pill {
-  width: 28px;
-  height: 16px;
-  border-radius: 20px;
-  background: var(--border);
-  position: relative;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-
-.sea-toggle-dot {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.sea-toggle-label input[type="radio"]:checked+.sea-toggle-pill {
-  background: var(--accent);
-}
-
-.sea-toggle-label input[type="radio"]:checked+.sea-toggle-pill .sea-toggle-dot {
-  transform: translateX(12px);
-}
-
-.sea-selects {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  transition: opacity 0.2s;
-}
-
-.sea-selects--disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
 .sea-select-wrap {
   position: relative;
 }
@@ -205,6 +142,34 @@ select.sea-sel {
 select.sea-sel:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgba(232, 99, 10, 0.12);
+}
+
+.sea-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sea-option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.sea-option input[type="radio"]:checked {
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 /* #endregion */

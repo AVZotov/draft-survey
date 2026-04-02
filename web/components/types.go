@@ -5,6 +5,15 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+type LayoutProps struct {
+	Title           string
+	MetaDescription string
+	User            *types.User
+	Survey          *types.Survey
+	Results         *[]calculation.DraftResult
+	ExtraCSS        []string
+	ExtraJS         []string
+}
 type TanksPageProps struct {
 	Survey     types.Survey
 	DraftIndex int
@@ -18,14 +27,9 @@ type DraftPageProps struct {
 	Survey types.Survey
 }
 
-type LayoutProps struct {
-	Title           string
-	MetaDescription string
-	User            *types.User
-	Survey          *types.Survey
-	Results         *[]calculation.DraftResult
-	ExtraCSS        []string
-	ExtraJS         []string
+type SeaConditionProps struct {
+	SeaCondition types.SeaCondition
+	DraftIndex   *int
 }
 
 type Version struct {
