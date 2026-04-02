@@ -9,7 +9,7 @@ templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
 		@drafts.DraftForm(dp)
-		@drafts.DraftActionBar(lp.Survey)
+		@drafts.DraftActionBar(&dp.Survey)
 		@widgets.Footer()
 	}
 }

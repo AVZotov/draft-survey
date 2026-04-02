@@ -136,11 +136,6 @@
   width: 80px;
 }
 
-/*.tcm-calib-table thead th:nth-child(2) {*/
-/*  text-align: left;*/
-/*  width: 90px;*/
-/*}*/
-
 .tcm-calib-table tbody tr td {
   padding: 4px var(--space-sm);
   background: var(--surface);

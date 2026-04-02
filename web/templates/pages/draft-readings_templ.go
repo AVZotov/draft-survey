@@ -62,7 +62,7 @@ func DraftReadings(lp components.LayoutProps, dp components.DraftPageProps) temp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = drafts.DraftActionBar(lp.Survey).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = drafts.DraftActionBar(&dp.Survey).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
