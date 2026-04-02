@@ -21,7 +21,6 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
         templ.KV("draft-block--pending", dp.Survey.Drafts[draftIndex].Status == types.DraftStatusPending),
     ) }
 	>
-		<!-- TODO: add CSS for draft-block mid selector in draft-readings.css -->
 		<div class="block-header">
 			<div class="block-label">
 				<span class="block-dot"></span>
@@ -100,7 +99,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 				<div class="defl-warn" id={ strconv.Itoa(draftIndex) + "-defl" }></div>
 				<div class="vessel-status">
 					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-lst" }>Upright</div>
-					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-trm" } style="margin-top:1px"></div>
+					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-trm" }></div>
 				</div>
 			</div>
 			<div class="col-stbd">

@@ -321,6 +321,10 @@ select.sea-sel:focus {
   color: var(--text-dim);
 }
 
+.vs-line+.vs-line {
+  margin-top: 1px;
+}
+
 .vs-line.warn {
   color: var(--danger-accent);
   font-weight: 600;
