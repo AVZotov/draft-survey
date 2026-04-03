@@ -81,7 +81,7 @@ func TestVolumeCalibrationType1(t *testing.T) {
 }
 
 func TestVolumeCalibrationType2(t *testing.T) {
-	const volume = 566.287
+	const volume = 557.287
 	const trim = 2.800
 
 	tank := getVolumeCalibrationType2Tank()

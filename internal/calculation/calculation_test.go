@@ -11,15 +11,16 @@ func fp(v float64) *float64 { return &v }
 
 func getFreshWaterTank() types.Tank {
 	return types.Tank{
-		Name:     "test",
-		Sounding: fp(3.5),
-		Volume:   fp(3.5),
+		Name:      "test",
+		Sounding:  fp(3.5),
+		Volume:    fp(3.5),
+		IsFWTTank: true,
 	}
 }
 
 func getInitFreshWaterTanks() []types.Tank {
 	return []types.Tank{
-		{Name: "FW P", Sounding: fp(364.000), Volume: fp(364.000)},
+		{Name: "FW P", Sounding: fp(364.000), Volume: fp(364.000), IsFWTTank: true},
 	}
 }
 
