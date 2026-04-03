@@ -34,7 +34,7 @@ func DraftForm(dp components.DraftPageProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><form id=\"draft-form\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Survey Data</a><h1 class=\"page-title\">Draft Readings</h1><p class=\"page-meta\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><form id=\"draft-form\"><div class=\"page-wrap page-wrap--drafts\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Survey Data</a><h1 class=\"page-title\">Draft Readings</h1><p class=\"page-meta\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -86,27 +86,17 @@ func DraftForm(dp components.DraftPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div><div class=\"drafts-grid\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for i, _ := range dp.Survey.Drafts {
-			if i > 0 {
-				templ_7745c5c3_Err = divider(i, len(dp.Survey.Drafts)).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			templ_7745c5c3_Err = DraftBlock(dp, i).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></form></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div></form></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -114,6 +104,7 @@ func DraftForm(dp components.DraftPageProps) templ.Component {
 	})
 }
 
+// Deprecated and will be removed
 func divider(index, totalDrafts int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -135,7 +126,7 @@ func divider(index, totalDrafts int) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"draft-divider\"><div class=\"dd-line\"></div><span class=\"dd-label\">↓ ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"draft-divider\"><div class=\"dd-line\"></div><span class=\"dd-label\">↓ ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -148,7 +139,7 @@ func divider(index, totalDrafts int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</span><div class=\"dd-line\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</span><div class=\"dd-line\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -156,6 +147,7 @@ func divider(index, totalDrafts int) templ.Component {
 	})
 }
 
+// Deprecated and will be removed
 func draftPrefix(i, total int) string {
 	if i == 0 {
 		return "i"
@@ -166,6 +158,7 @@ func draftPrefix(i, total int) string {
 	return fmt.Sprintf("m%d", i)
 }
 
+// Deprecated and will be removed
 func draftDividerLabel(i, total int) string {
 	if i == total-1 {
 		return "Final Draft"

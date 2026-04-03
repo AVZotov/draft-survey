@@ -1,128 +1,57 @@
-function toggleSeaGroup(group, prefix) {
-    const other = group === 'wave' ? 'ice' : 'wave';
+// ================================================================
+// draft-readings.js
+// Only vessel indicator — all calculations are server-side
+// ================================================================
 
-    // Checkbox sync
-    document.getElementById(prefix + '-' + group + '-enabled').checked = true;
-    document.getElementById(prefix + '-' + other + '-enabled').checked = false;
+const CX = 80, CY = 118, LINE_R = 42;
+const LIST_SCALE = 4;
+const TRIM_SCALE = 35;
+const MAX_VISUAL_DEG = 45;
+const MIN_DOT_Y = 30;
+const MAX_DOT_Y = 210;
+const BREADTH = 32.26;
 
-    // switch on selected
-    document.getElementById(prefix + '-' + group + '-group').classList.remove('sea-selects--disabled');
-    document.getElementById(group === 'wave' ? prefix + '-sea-condition' : prefix + '-ice-condition').disabled = false;
-
-    // switch on other
-    document.getElementById(prefix + '-' + other + '-group').classList.add('sea-selects--disabled');
-    document.getElementById(other === 'wave' ? prefix + '-sea-condition' : prefix + '-ice-condition').disabled = true;
+function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
 }
 
-const SUMMER = 12.022, BREADTH = 32.26;
-
-const SEA_MAP = {
-    calm: { label: 'Calm', cls: 'calm' },
-    smooth: { label: 'Smooth', cls: 'smooth' },
-    slight: { label: 'Slight', cls: 'slight' },
-    moderate: { label: 'Moderate', cls: 'moderate' },
-    rough: { label: 'Rough', cls: 'rough' },
-};
-
-// function updateSeaBadge(p, pos) {
-//     const sel = document.getElementById(p + '-sea-' + pos);
-//     const badge = document.getElementById(p + '-sea-' + pos + '-badge');
-//     if (!sel || !badge) return;
-//     const v = sel.value;
-//     const info = SEA_MAP[v] || SEA_MAP.calm;
-//     badge.className = 'sea-badge ' + info.cls;
-//     badge.innerHTML = '<span class="sea-badge-dot"></span>' + info.label;
-// }
-
-function g(id) { const v = parseFloat(document.getElementById(id)?.value); return isNaN(v) ? null : v; }
+function g(id) {
+    const v = parseFloat(document.getElementById(id)?.value);
+    return isNaN(v) ? null : v;
+}
 
 function calc(p) {
     const fp = g(p + '-fp'), mp = g(p + '-mp'), ap = g(p + '-ap');
     const fs = g(p + '-fs'), ms = g(p + '-ms'), as_ = g(p + '-as');
 
-    // Summer draft check
-    [p + '-fp', p + '-mp', p + '-ap', p + '-fs', p + '-ms', p + '-as'].forEach(id => {
-        const el = document.getElementById(id); if (!el) return;
-        el.classList.toggle('over-summer', !isNaN(parseFloat(el.value)) && parseFloat(el.value) > SUMMER);
-    });
-
+    // Trim — visual only, Aft mean minus Fwd mean
     const mF = fp !== null && fs !== null ? (fp + fs) / 2 : null;
-    const mM = mp !== null && ms !== null ? (mp + ms) / 2 : null;
     const mA = ap !== null && as_ !== null ? (ap + as_) / 2 : null;
+    const oTrim = mF !== null && mA !== null ? mA - mF : null;
 
-    const mmc = mF !== null && mM !== null && mA !== null ? (mF + 6 * mM + mA) / 8 : null;
-    const mfa = mF !== null && mA !== null ? (mF + mA) / 2 : null;
-    const oTrim = mA !== null && mF !== null ? mA - mF : null;
-
-    // List
-    let listDeg = null, lstTxt = 'Upright', lstCls = '';
+    // List — visual only, angle from breadth
+    let listDeg = null, listSign = 1;
     if (mp !== null && ms !== null) {
         listDeg = Math.atan(Math.abs(mp - ms) / BREADTH) * 180 / Math.PI;
-        if (Math.abs(mp - ms) < 0.001) { lstTxt = 'Upright'; lstCls = ''; }
-        else if (listDeg <= 0.5) { lstTxt = listDeg.toFixed(3) + '° ' + (mp > ms ? 'Port' : 'Stbd') + '. List corr. to be applied.'; lstCls = 'warn'; }
-        else { lstTxt = listDeg.toFixed(3) + '° ' + (mp > ms ? 'Port' : 'Stbd') + '. LOP to be issued.'; lstCls = 'lop'; }
+        listSign = mp < ms ? 1 : -1;
     }
 
-    // Deflection + draft checks
-    let deflTxt = '', deflCls = '';
-    if (mF !== null && mM !== null && mA !== null) {
-        const dc = (mM - (mF + mA) / 2) * 100;
-        if (Math.abs(dc) > 0.5) { deflTxt = (dc > 0 ? 'Hogging ' : 'Sagging ') + Math.abs(dc).toFixed(1) + ' cm'; deflCls = Math.abs(dc) > 30 ? 'show critical' : 'show'; }
-    }
-    const k = 0.05; let cP = false, cS = false;
-    if (fp !== null && mp !== null && ap !== null) cP = Math.abs(((fp + ap) / 2) - mp) > ((fp + mp + ap) / 3 * k);
-    if (fs !== null && ms !== null && as_ !== null) cS = Math.abs(((fs + as_) / 2) - ms) > ((fs + ms + as_) / 3 * k);
-    if (cP && cS) deflTxt = 'CHECK DRAFTS!  ' + deflTxt;
-    else if (cP) deflTxt = 'CHECK PORT DRAFTS!  ' + deflTxt;
-    else if (cS) deflTxt = 'CHECK STBD DRAFTS!  ' + deflTxt;
-    if ((cP || cS) && !deflCls) deflCls = 'show critical';
+    // Update vessel indicator only
+    updateVessel(p, listDeg !== null ? listDeg * listSign : 0, oTrim);
+}
 
-    // SVG
-    document.getElementById(p + '-sv-fwd').textContent = mF !== null ? mF.toFixed(3) : '—';
-    document.getElementById(p + '-sv-mid').textContent = mM !== null ? mM.toFixed(3) : '—';
-    document.getElementById(p + '-sv-aft').textContent = mA !== null ? mA.toFixed(3) : '—';
+function updateVessel(p, listDeg, trim) {
+    const listLine = document.getElementById(p + '-list-line');
+    const trimDot = document.getElementById(p + '-trim-dot');
+    if (!listLine || !trimDot) return;
 
-    if (mF !== null && mM !== null && mA !== null) {
-        const cy = 115, sc = 10, avg = (mF + mA) / 2;
-        const yA = cy + (mA - avg) * sc, yM = cy + (mM - avg) * sc, yF = cy + (mF - avg) * sc;
-        document.getElementById(p + '-trl').setAttribute('points', `26,${yA.toFixed(1)} 134,${yM.toFixed(1)} 240,${yF.toFixed(1)}`);
-    }
+    const visualDeg = clamp((listDeg || 0) * LIST_SCALE, -MAX_VISUAL_DEG, MAX_VISUAL_DEG);
+    const rad = visualDeg * Math.PI / 180;
+    listLine.setAttribute('x1', (CX - LINE_R * Math.cos(rad)).toFixed(1));
+    listLine.setAttribute('y1', (CY - LINE_R * Math.sin(rad)).toFixed(1));
+    listLine.setAttribute('x2', (CX + LINE_R * Math.cos(rad)).toFixed(1));
+    listLine.setAttribute('y2', (CY + LINE_R * Math.sin(rad)).toFixed(1));
 
-    // Calc panel
-    const sv = (id, val, suf = '', w = false) => {
-        const el = document.getElementById(id); if (!el) return;
-        el.textContent = val !== null ? val.toFixed(3) + suf : '—';
-        el.className = 'cp-val' + (val !== null ? ' v' : '') + (w ? ' w' : '');
-    };
-    sv(p + '-c-mfa', mfa, ' m');
-    sv(p + '-c-mm', mmc, ' m');
-
-    const oe = document.getElementById(p + '-c-otr');
-    if (oTrim !== null) { oe.textContent = Math.abs(oTrim).toFixed(3) + ' m ' + (oTrim >= 0 ? 'Aft' : 'Fwd'); oe.className = 'cp-val v'; }
-    else { oe.textContent = '—'; oe.className = 'cp-val'; }
-
-    const te = document.getElementById(p + '-c-ttr');
-    if (oTrim !== null) { te.textContent = Math.abs(oTrim).toFixed(3) + ' m ' + (oTrim < 0 ? 'Fwd' : 'Aft'); te.className = 'cp-val v' + (oTrim < 0 ? ' w' : ''); }
-    else { te.textContent = '—'; te.className = 'cp-val'; }
-
-    const le = document.getElementById(p + '-c-lst');
-    if (listDeg !== null) { le.textContent = listDeg.toFixed(3) + '°'; le.className = 'cp-val v' + (listDeg > 0 ? ' w' : ''); }
-    else { le.textContent = '—'; le.className = 'cp-val'; }
-
-    const me = document.getElementById(p + '-c-mmc');
-    if (mmc !== null) { me.textContent = mmc.toFixed(3) + ' m'; me.className = 'cp-val v'; }
-    else { me.textContent = '—'; me.className = 'cp-val'; }
-
-    const hm = document.getElementById(p + '-hmmc');
-    if (hm) hm.textContent = mmc !== null ? 'MMC ' + mmc.toFixed(3) + ' m' : 'MMC — m';
-
-    // Deflection
-    const de = document.getElementById(p + '-defl');
-    de.textContent = deflTxt; de.className = 'defl-warn ' + deflCls;
-
-    // Vessel status
-    const lse = document.getElementById(p + '-lst'); lse.textContent = lstTxt; lse.className = 'vs-line ' + lstCls;
-    const tre = document.getElementById(p + '-trm');
-    if (oTrim !== null) { tre.textContent = oTrim < 0 ? 'Trim by Head ' + Math.abs(oTrim).toFixed(3) + ' m' : 'Trim ' + Math.abs(oTrim).toFixed(3) + ' m Aft'; tre.className = 'vs-line' + (oTrim < 0 ? ' warn' : ''); }
-    else tre.textContent = '';
+    const dotY = clamp(CY + (trim || 0) * TRIM_SCALE, MIN_DOT_Y, MAX_DOT_Y);
+    trimDot.setAttribute('cy', dotY.toFixed(1));
 }

@@ -8,7 +8,7 @@ import (
 templ DraftForm(dp components.DraftPageProps) {
 	<main class="page-main">
 		<form id="draft-form">
-			<div class="page-wrap">
+			<div class="page-wrap page-wrap--drafts">
 				<div class="page-top">
 					<a href="#" class="back-link">
 						<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
@@ -19,17 +19,17 @@ templ DraftForm(dp components.DraftPageProps) {
 						{ dp.Survey.VesselData.Name } · IMO { dp.Survey.VesselData.IMO } · { dp.Survey.CargoOperation.Operation } · { dp.Survey.CargoOperation.PlaceOfInspection }
 					</p>
 				</div>
-				for i, _ := range dp.Survey.Drafts {
-					if i > 0 {
-						@divider(i, len(dp.Survey.Drafts))
+				<div class="drafts-grid">
+					for i, _ := range dp.Survey.Drafts {
+						@DraftBlock(dp, i)
 					}
-					@DraftBlock(dp, i)
-				}
+				</div>
 			</div>
 		</form>
 	</main>
 }
 
+// Deprecated and will be removed
 templ divider(index, totalDrafts int) {
 	<div class="draft-divider">
 		<div class="dd-line"></div>
@@ -38,6 +38,7 @@ templ divider(index, totalDrafts int) {
 	</div>
 }
 
+// Deprecated and will be removed
 func draftPrefix(i, total int) string {
 	if i == 0 {
 		return "i"
@@ -48,6 +49,7 @@ func draftPrefix(i, total int) string {
 	return fmt.Sprintf("m%d", i)
 }
 
+// Deprecated and will be removed
 func draftDividerLabel(i, total int) string {
 	if i == total-1 {
 		return "Final Draft"

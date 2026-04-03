@@ -92,7 +92,7 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<!-- Trim List Deflection panel--><div class=\"calc-panel calc-panel--3\"><div class=\"cp-cell\"><span class=\"cp-label\">Trim data</span></div><div class=\"cp-cell\"><span class=\"cp-label\">List Data</span></div><div class=\"cp-cell\"><span class=\"cp-label\">Sagg/Hogg</span></div></div><!-- PP distances + Keel + Calculated panel-->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<!-- Trim List Deflection panel--><div class=\"calc-panel calc-panel--3\"><div class=\"cp-cell\"><span class=\"cp-lbl\">Trim data</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">List Data</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">Sagg/Hogg</span></div></div><!-- PP distances + Keel + Calculated panel-->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
