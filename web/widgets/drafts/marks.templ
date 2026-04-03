@@ -1,0 +1,109 @@
+package drafts
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+	"strconv"
+)
+
+templ Marks(dp components.DraftPageProps, draftIndex int) {
+	{{ draft := dp.Survey.Drafts[draftIndex] }}
+	<!-- Port | Vessel | Stbd -->
+	<div class="readings-area">
+		<div class="col-port">
+			<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Fwd P</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Mid P</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Aft P</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-vessel">
+			<svg class="vessel-svg" viewBox="0 0 260 185" xmlns="http://www.w3.org/2000/svg">
+				<path
+					d="M16 142 L16 55 Q16 46 26 46 L196 46 Q242 46 252 73 L252 142 Z"
+					fill="none"
+					stroke="#3D5159"
+					stroke-width="2"
+				></path>
+				<line x1="12" y1="137" x2="256" y2="137" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"></line>
+				<!-- Perps -->
+				<line x1="26" y1="41" x2="26" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+				<line x1="134" y1="41" x2="134" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+				<line x1="240" y1="41" x2="240" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
+				<text x="26" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">AFT PP</text>
+				<text x="134" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">MID</text>
+				<text x="240" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD PP</text>
+				<text x="134" y="170" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">LBP 182 m</text>
+				<!-- corrected wKeel inside hull -->
+				<text id={ strconv.Itoa(draftIndex) + "-sv-aft" } x="26" y="96" class="hull-val">—</text>
+				<text id={ strconv.Itoa(draftIndex) + "-sv-mid" } x="134" y="96" class="hull-val">—</text>
+				<text id={ strconv.Itoa(draftIndex) + "-sv-fwd" } x="240" y="96" class="hull-val">—</text>
+				<!-- trim line -->
+				<polyline
+					id={ strconv.Itoa(draftIndex) + "-trl" }
+					points="26,115 134,115 240,115"
+					fill="none"
+					stroke="#2563EB"
+					stroke-width="2"
+					stroke-linecap="round"
+				></polyline>
+			</svg>
+		</div>
+		<div class="col-stbd">
+			<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Fwd S</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Mid S</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+			<div class="dr-row">
+				<span class="dr-lbl">Aft S</span>
+				<input name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) } type="number" placeholder="0.000" step="any"/>
+				<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex) }>
+					<option value="" selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
+					<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+					<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+				</select>
+			</div>
+		</div>
+	</div><!-- /readings-area -->
+}

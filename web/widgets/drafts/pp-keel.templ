@@ -1,0 +1,73 @@
+package drafts
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ PPKeel(dp components.DraftPageProps, draftIndex int) {
+	<!-- PP distances + Keel + Calculated panel-->
+	{{ draft := dp.Survey.Drafts[draftIndex] }}
+	<div class="pp-keel-bar">
+		<div class="pp-group">
+			<div class="pp-group-title">Fwd — distances &amp; keel</div>
+			<div class="pp-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.DFwd, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPFwd) } type="number" placeholder="dFwd, m" step="any"/>
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DFwdDir, draftIndex) }>
+					<option selected?={ draft.PPFwdDirection == "A" }>A</option>
+					<option selected?={ draft.PPFwdDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.KeelFwd, draftIndex) } value={ format.FloatOrEmpty(draft.KeelFwd) } type="number" placeholder="Fk, mm" step="any"/>
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+		<div class="pp-group">
+			<div class="pp-group-title">Mid — distances &amp; keel</div>
+			<div class="pp-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.DMid, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPMid) } type="number" placeholder="dMid, m" step="any"/>
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DMidDir, draftIndex) }>
+					<option selected?={ draft.PPMidDirection == "A" }>A</option>
+					<option selected?={ draft.PPMidDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.KeelMid, draftIndex) } value={ format.FloatOrEmpty(draft.KeelMid) } type="number" placeholder="Mk, mm" step="any"/>
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+		<div class="pp-group">
+			<div class="pp-group-title">Aft — distances &amp; keel</div>
+			<div class="pp-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.DAft, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPAft) } type="number" placeholder="dAft, m" step="any"/>
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DAftDir, draftIndex) }>
+					<option selected?={ draft.PPAftDirection == "A" }>A</option>
+					<option selected?={ draft.PPAftDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				<input name={ fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex) } value={ format.FloatOrEmpty(draft.KeelAft) } type="number" placeholder="Ak, mm" step="any"/>
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+	</div>
+	<!-- Calculated panel -->
+	<div class="calc-panel">
+		<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val">—</span></div>
+		<div class="cp-cell cp-cell--mmc">
+			<span class="cp-lbl">MMC</span>
+			<span class="cp-val">—</span>
+			<span class="cp-formula">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) }</span>
+		</div>
+	</div>
+}

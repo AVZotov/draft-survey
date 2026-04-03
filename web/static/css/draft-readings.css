@@ -287,55 +287,6 @@ select.sea-sel:focus {
   text-anchor: middle;
 }
 
-.defl-warn {
-  margin-top: var(--space-xs);
-  padding: 4px var(--space-md);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono), monospace;
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  text-align: center;
-  display: none;
-  background: var(--warning-light);
-  border: 1px solid var(--warning-border);
-  color: #92400E;
-}
-
-.defl-warn.show {
-  display: block;
-}
-
-.defl-warn.critical {
-  background: #FEF08A;
-  border-color: #EAB308;
-  color: #713F12;
-}
-
-.vessel-status {
-  margin-top: var(--space-xs);
-  text-align: center;
-}
-
-.vs-line {
-  font-size: var(--font-size-xs);
-  color: var(--text-dim);
-}
-
-.vs-line+.vs-line {
-  margin-top: 1px;
-}
-
-.vs-line.warn {
-  color: var(--danger-accent);
-  font-weight: 600;
-}
-
-.vs-line.lop {
-  color: var(--danger-accent);
-  font-weight: 700;
-  font-size: var(--font-size-sm);
-}
-
 /* Dynamic state classes applied by JS */
 input.di.over-summer {
   color: var(--danger-accent);
@@ -417,6 +368,10 @@ select.dir-sel:focus {
   grid-template-columns: repeat(6, 1fr);
   border-top: 2px solid var(--border);
   background: var(--bg);
+}
+
+.calc-panel--3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .cp-cell {

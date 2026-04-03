@@ -3,15 +3,11 @@ package drafts
 import (
 	"fmt"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
-	"strconv"
 )
 
 templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
-	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div
 		class={ templ.Classes(
         "draft-block",
@@ -34,317 +30,25 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 			DraftIndex:   &draftIndex,
 		})
 		<!-- Port | Vessel | Stbd -->
-		<div class="readings-area">
-			<div class="col-port">
-				<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Fwd P</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Mid P</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Aft P</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
+		@Marks(dp, draftIndex)
+		<!-- Trim List Deflection panel-->
+		<div class="calc-panel calc-panel--3">
+			<div class="cp-cell">
+				<span class="cp-label">Trim data</span>
 			</div>
-			<div class="col-vessel">
-				<svg class="vessel-svg" viewBox="0 0 260 185" xmlns="http://www.w3.org/2000/svg">
-					<path
-						d="M16 142 L16 55 Q16 46 26 46 L196 46 Q242 46 252 73 L252 142 Z"
-						fill="none"
-						stroke="#3D5159"
-						stroke-width="2"
-					></path>
-					<line x1="12" y1="137" x2="256" y2="137" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"></line>
-					<!-- Perps -->
-					<line x1="26" y1="41" x2="26" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
-					<line x1="134" y1="41" x2="134" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
-					<line x1="240" y1="41" x2="240" y2="147" stroke="#9CA3AF" stroke-width="1" stroke-dasharray="3,2"></line>
-					<text x="26" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">AFT PP</text>
-					<text x="134" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">MID</text>
-					<text x="240" y="156" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD PP</text>
-					<text x="134" y="170" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">LBP 182 m</text>
-					<!-- corrected wKeel inside hull -->
-					<text id={ strconv.Itoa(draftIndex) + "-sv-aft" } x="26" y="96" class="hull-val">—</text>
-					<text id={ strconv.Itoa(draftIndex) + "-sv-mid" } x="134" y="96" class="hull-val">—</text>
-					<text id={ strconv.Itoa(draftIndex) + "-sv-fwd" } x="240" y="96" class="hull-val">—</text>
-					<!-- trim line -->
-					<polyline
-						id={ strconv.Itoa(draftIndex) + "-trl" }
-						points="26,115 134,115 240,115"
-						fill="none"
-						stroke="#2563EB"
-						stroke-width="2"
-						stroke-linecap="round"
-					></polyline>
-				</svg>
-				<div class="defl-warn" id={ strconv.Itoa(draftIndex) + "-defl" }></div>
-				<div class="vessel-status">
-					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-lst" }>Upright</div>
-					<div class="vs-line" id={ strconv.Itoa(draftIndex) + "-trm" }></div>
-				</div>
+			<div class="cp-cell">
+				<span class="cp-label">List Data</span>
 			</div>
-			<div class="col-stbd">
-				<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Fwd S</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Mid S</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
-				<div class="dr-row">
-					<span class="dr-lbl">Aft S</span>
-					<input name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) } value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-				</div>
-			</div>
-		</div><!-- /readings-area -->
-		<!-- PP distances + Keel -->
-		<div class="pp-keel-bar">
-			<div class="pp-group">
-				<div class="pp-group-title">Fwd — distances &amp; keel</div>
-				<div class="pp-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.DFwd, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPFwd) } type="number" placeholder="dFwd, m" step="any"/>
-					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DFwdDir, draftIndex) }>
-						<option selected?={ draft.PPFwdDirection == "A" }>A</option>
-						<option selected?={ draft.PPFwdDirection == "F" }>F</option>
-					</select>
-					<span class="pp-unit">A/F</span>
-				</div>
-				<div class="keel-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.KeelFwd, draftIndex) } value={ format.FloatOrEmpty(draft.KeelFwd) } type="number" placeholder="Fk, mm" step="any"/>
-					<span class="pp-unit">mm keel</span>
-				</div>
-			</div>
-			<div class="pp-group">
-				<div class="pp-group-title">Mid — distances &amp; keel</div>
-				<div class="pp-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.DMid, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPMid) } type="number" placeholder="dMid, m" step="any"/>
-					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DMidDir, draftIndex) }>
-						<option selected?={ draft.PPMidDirection == "A" }>A</option>
-						<option selected?={ draft.PPMidDirection == "F" }>F</option>
-					</select>
-					<span class="pp-unit">A/F</span>
-				</div>
-				<div class="keel-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.KeelMid, draftIndex) } value={ format.FloatOrEmpty(draft.KeelMid) } type="number" placeholder="Mk, mm" step="any"/>
-					<span class="pp-unit">mm keel</span>
-				</div>
-			</div>
-			<div class="pp-group">
-				<div class="pp-group-title">Aft — distances &amp; keel</div>
-				<div class="pp-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.DAft, draftIndex) } value={ format.FloatOrEmpty(draft.DistancePPAft) } type="number" placeholder="dAft, m" step="any"/>
-					<select class="dir-sel" name={ fmt.Sprintf("%s-%d", constants.DAftDir, draftIndex) }>
-						<option selected?={ draft.PPAftDirection == "A" }>A</option>
-						<option selected?={ draft.PPAftDirection == "F" }>F</option>
-					</select>
-					<span class="pp-unit">A/F</span>
-				</div>
-				<div class="keel-fields">
-					<input name={ fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex) } value={ format.FloatOrEmpty(draft.KeelAft) } type="number" placeholder="Ak, mm" step="any"/>
-					<span class="pp-unit">mm keel</span>
-				</div>
+			<div class="cp-cell">
+				<span class="cp-label">Sagg/Hogg</span>
 			</div>
 		</div>
-		<!-- Calculated panel -->
-		<div class="calc-panel">
-			<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val">—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val">—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val">—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val">—</span></div>
-			<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val">—</span></div>
-			<div class="cp-cell cp-cell--mmc">
-				<span class="cp-lbl">MMC</span>
-				<span class="cp-val">—</span>
-				<span class="cp-formula">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) }</span>
-			</div>
-		</div>
+		<!-- PP distances + Keel + Calculated panel-->
+		@PPKeel(dp, draftIndex)
 		<!-- Hydrostatic data -->
-		<div class="hydro-section">
-			<div class="sec-title">
-				<span>Hydrostatic Data</span>
-				<span>
-					<span class="sec-title-mmc">MMC — m</span>
-					<span class="sec-title-method">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) } { format.LBPCorrection(dp.Survey.VesselData.CorrectionMethod) }</span>
-				</span>
-			</div>
-			<table class="hydro-table">
-				<thead><tr><th></th><th>Draft, m</th><th>Displ. (Extreme), MT</th><th>TPC, MT/cm</th><th>LCF / LCA, m</th></tr></thead>
-				<tbody>
-					if len(draft.HydrostaticRows) > 0 {
-						<tr>
-							<td>Upper</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Draft) }/>
-							</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Displacement) }/>
-							</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].TPC) }/>
-							</td>
-							<td class="lcf-field">
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].LCF) }/>
-								<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex) }>
-									<option value="" selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirection("") }>—</option>
-									<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-									<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-									<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
-								</select>
-							</td>
-						</tr>
-						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</td></tr>
-						<tr>
-							<td>Lower</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Draft) }/>
-							</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Displacement) }/>
-							</td>
-							<td>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].TPC) }/>
-							</td>
-							<td class="lcf-field">
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].LCF) }/>
-								<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.LLcfDir, draftIndex) }>
-									<option value="" selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirection("") }>—</option>
-									<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-									<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-									<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
-								</select>
-							</td>
-						</tr>
-					} else {
-						<tr><td>Upper</td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any"/></td></tr>
-						<tr class="mmc-row"><td>MMC (interp.)</td><td id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</td><td id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</td></tr>
-						<tr><td>Lower</td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any"/></td><td><input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any"/></td></tr>
-					}
-				</tbody>
-			</table>
-			<div class="mtc-grid">
-				if len(draft.MTCRows) > 0 {
-					<div class="mtc-card">
-						<div class="mtc-hdr">MTC +0.5 m</div>
-						<div class="mtc-body">
-							<div class="mtc-cell">
-								<label>Draft, m</label>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
-							</div>
-							<div class="mtc-cell">
-								<label>MTC, MT/m</label>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].MTC) }/>
-							</div>
-						</div>
-					</div>
-					<div class="mtc-card">
-						<div class="mtc-hdr">MTC −0.5 m</div>
-						<div class="mtc-body">
-							<div class="mtc-cell">
-								<label>Draft, m</label>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
-							</div>
-							<div class="mtc-cell">
-								<label>MTC, MT/m</label>
-								<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
-							</div>
-						</div>
-						<div class="mtc-delta">ΔMTC: —</div>
-					</div>
-				} else {
-					<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any"/></div></div></div>
-					<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
-				}
-			</div>
-		</div>
+		@Hydrostatics(dp, draftIndex)
 		<!-- Deductibles and Table density-->
-		<div class="deduct-section">
-			<div class="sec-title">Deductibles &amp; Density</div>
-			<div class="density-row">
-				<div class="df">
-					<label>Table Density</label>
-					<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" value={ format.FloatOrEmpty(dp.Survey.VesselData.TableDensity) }/>
-				</div>
-				<div class="df">
-					<label>Dockwater Density</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Density) }/>
-				</div>
-			</div>
-			<div class="deduct-grid">
-				<div class="df">
-					<label>HFO, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.HFO) }/>
-				</div>
-				<div class="df">
-					<label>MDO, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.MDO) }/>
-				</div>
-				<div class="df">
-					<label>Lube Oil, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.LubOil) }/>
-				</div>
-				<div class="df"><label>Fresh Water, MT</label><input type="number" name={ fmt.Sprintf("fw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="df"><label>Ballast Water, MT</label><input type="number" name={ fmt.Sprintf("bw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="df">
-					<label>Bilge Water, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) }/>
-				</div>
-				<div class="df">
-					<label>Cargo Declared, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.CargoDeclared, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.CargoDeclared) }/>
-				</div>
-				<div class="df">
-					<label>Others, MT</label>
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.Others) }/>
-				</div>
-			</div>
-			<button
-				class="btn btn-ghost--ini"
-				hx-post={ "/api/v1/survey/" + dp.Survey.ID + "/draft/save?redirect=/survey/" + dp.Survey.ID + "/tanks/" + strconv.Itoa(draftIndex) }
-				hx-include="#draft-form"
-			>
-				<svg viewBox="0 0 24 24">
-					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-					<polyline points="9 22 9 12 15 12 15 22"></polyline>
-				</svg>
-				BW / FW Tanks →
-			</button>
-		</div>
+		@Deductibles(dp, draftIndex)
 	</div>
 }
 
