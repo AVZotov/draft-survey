@@ -3,6 +3,7 @@ package drafts
 import (
 	"fmt"
 
+	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -25,10 +26,19 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 		</div>
 		<!-- ══════════════ DRAFT BLOCK══════════════════════════════ -->
 		<!-- Sea Condition bar -->
-		@components.SeaCondition(components.SeaConditionProps{
-			SeaCondition: dp.Survey.Drafts[draftIndex].SeaCondition,
-			DraftIndex:   &draftIndex,
-		})
+		<div
+			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.SeaConditionBlock) }
+			hx-trigger="change changed delay:500ms"
+			hx-include="this"
+			hx-sync="this:replace"
+			hx-swap="none"
+			hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		>
+			@components.SeaCondition(components.SeaConditionProps{
+				SeaCondition: dp.Survey.Drafts[draftIndex].SeaCondition,
+				DraftIndex:   &draftIndex,
+			})
+		</div>
 		<!-- Port | Vessel | Stbd -->
 		@Marks(dp, draftIndex)
 		<!-- Trim List Deflection panel-->

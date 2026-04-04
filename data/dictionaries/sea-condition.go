@@ -1,20 +1,22 @@
 package dictionaries
 
-var WaveCondition = []string{
-	"under 0.1m",
-	"0.1-0.5m",
-	"0.5-1.25m",
-	"1.25-2.5m",
-	"2.5-4.0m",
+import "github.com/AVZotov/draft-survey/internal/types"
+
+var WaveConditions = []string{
+	string(types.WaveConditionCalm),
+	string(types.WaveConditionSmooth),
+	string(types.WaveConditionSlight),
+	string(types.WaveConditionModerate),
+	string(types.WaveConditionRough),
 }
 
-var IceCondition = []string{
-	"under 0.05m around",
-	"0.05-0.1m around",
-	"0.1-0.15m around",
-	"0.15-0.2m around",
-	"0.2-0.3m around",
-	"0.3-0.4m around",
-	"0.4-0.6m around",
-	"over 0.6m around",
+var IceConditions = []string{
+	string(types.IceConditionUnder005),
+	string(types.IceCondition005To010),
+	string(types.IceCondition010To015),
+	string(types.IceCondition015To020),
+	string(types.IceCondition020To030),
+	string(types.IceCondition030To040),
+	string(types.IceCondition040To060),
+	string(types.IceConditionOver060),
 }

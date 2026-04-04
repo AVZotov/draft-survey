@@ -7,6 +7,7 @@ const (
 	HXCalcContext = "X-Calc-Context"
 	HXSurveyID    = "X-Survey-ID"
 	HXDraftIndex  = "X-Draft-Index"
+	HXDraftBlock  = "X-Draft-Block"
 	HXTankID      = "X-Tank-ID"
 	HXTankItem    = "X-Tank-Item"
 )
@@ -21,4 +22,9 @@ const (
 const (
 	UpdtTanksWeight = "updt_tanks_weight"
 	UpdtTankVolume  = "updt_tank_volume"
+)
+
+// Draft Block names
+const (
+	SeaConditionBlock = "sea-condition-block"
 )

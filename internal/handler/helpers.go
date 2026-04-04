@@ -29,9 +29,10 @@ type props struct {
 }
 
 type draftProps struct {
-	user     *types.User
-	survey   *types.Survey
-	surveyID string
+	user       *types.User
+	survey     *types.Survey
+	surveyID   string
+	draftIndex int
 }
 
 var ErrEmptyField = errors.New("empty field")
@@ -560,9 +561,61 @@ func getDraftProps(h *Handler, c *fiber.Ctx) (*draftProps, error) {
 		return nil, err
 	}
 
+	draftIndexStr := c.Params("draftIndex")
+	if draftIndexStr == "" {
+		return &draftProps{
+			user:     user,
+			survey:   survey,
+			surveyID: id,
+		}, nil
+	}
+
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return nil, err
+	}
+
 	return &draftProps{
-		user:     user,
-		survey:   survey,
-		surveyID: id,
+		user:       user,
+		survey:     survey,
+		surveyID:   id,
+		draftIndex: draftIndex,
 	}, nil
+
+}
+
+func parseDraftBlocks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	blockCtx := c.Get(constants.HXDraftBlock)
+
+	switch blockCtx {
+	case constants.SeaConditionBlock:
+		parseSeaCondition(c, d, draftIndex)
+
+	}
+}
+
+func parseSeaCondition(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	if d == nil {
+		return
+	}
+
+	seaType, err := parseString(c, fmt.Sprintf("%s-%d", constants.SeaType, draftIndex))
+	if err == nil {
+		d.SeaCondition.Type = types.SeaConditionType(seaType)
+	}
+
+	switch types.SeaConditionType(seaType) {
+	case types.SeaConditionTypeWave:
+		condition, err := parseString(c, fmt.Sprintf("%s-%d", constants.SeaCondition, draftIndex))
+		if err == nil {
+			d.SeaCondition.Wave = types.WaveCondition(condition)
+			d.SeaCondition.Ice = ""
+		}
+	case types.SeaConditionTypeIce:
+		condition, err := parseString(c, fmt.Sprintf("%s-%d", constants.SeaCondition, draftIndex))
+		if err == nil {
+			d.SeaCondition.Ice = types.IceCondition(condition)
+			d.SeaCondition.Wave = ""
+		}
+	}
 }

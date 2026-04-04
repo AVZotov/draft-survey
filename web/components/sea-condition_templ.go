@@ -254,10 +254,10 @@ func SeaSelect(scp SeaConditionProps) templ.Component {
 		ctx = templ.ClearChildren(ctx)
 		conditions := make([]string, 0)
 		if scp.SeaCondition.Type == types.SeaConditionTypeWave {
-			conditions = dictionaries.WaveCondition
+			conditions = dictionaries.WaveConditions
 		}
 		if scp.SeaCondition.Type == types.SeaConditionTypeIce {
-			conditions = dictionaries.IceCondition
+			conditions = dictionaries.IceConditions
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<select name=\"")
 		if templ_7745c5c3_Err != nil {

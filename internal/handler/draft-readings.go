@@ -130,7 +130,7 @@ func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
-func (h *Handler) saveDraft(c *fiber.Ctx) error {
+func (h *Handler) saveDrafts(c *fiber.Ctx) error {
 	redirect := c.Query("redirect")
 	id := c.Params("id")
 	survey, err := h.surveyRepository.Get(id)
@@ -147,5 +147,19 @@ func (h *Handler) saveDraft(c *fiber.Ctx) error {
 	if redirect != "" {
 		c.Set("HX-Redirect", redirect)
 	}
+	return c.SendStatus(http.StatusOK)
+}
+
+func (h *Handler) updateDraft(c *fiber.Ctx) error {
+	p, err := getDraftProps(h, c)
+	if err != nil {
+		return err
+	}
+	parseDraftBlocks(c, &p.survey.Drafts[p.draftIndex], p.draftIndex)
+
+	if err := h.surveyRepository.Save(p.survey); err != nil {
+		return err
+	}
+
 	return c.SendStatus(http.StatusOK)
 }

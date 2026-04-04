@@ -58,10 +58,10 @@ templ SeaSelect(scp SeaConditionProps) {
 	{{
 		conditions := make([]string, 0)
 		if scp.SeaCondition.Type == types.SeaConditionTypeWave {
-			conditions = dictionaries.WaveCondition
+			conditions = dictionaries.WaveConditions
 		}
 		if scp.SeaCondition.Type == types.SeaConditionTypeIce {
-			conditions = dictionaries.IceCondition
+			conditions = dictionaries.IceConditions
 		}
 	}}
 	<select name={ fmt.Sprintf("%s-%s", constants.SeaCondition, format.IntOrEmpty(scp.DraftIndex)) }>
