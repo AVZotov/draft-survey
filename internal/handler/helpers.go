@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 
@@ -12,6 +13,10 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/gofiber/fiber/v2"
 )
+
+func round3(v float64) float64 {
+	return math.Round(v*1000) / 1000
+}
 
 type props struct {
 	surveyID   string
@@ -590,7 +595,8 @@ func parseDraftBlocks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	switch blockCtx {
 	case constants.SeaConditionBlock:
 		parseSeaCondition(c, d, draftIndex)
-
+	case constants.MarksBlock:
+		parseMarks(c, d, draftIndex)
 	}
 }
 
@@ -617,5 +623,59 @@ func parseSeaCondition(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 			d.SeaCondition.Ice = types.IceCondition(condition)
 			d.SeaCondition.Wave = ""
 		}
+	}
+}
+
+func parseMarks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	if d == nil {
+		return
+	}
+	fwdPort, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex))
+	if err == nil {
+		d.Marks.FwdPort.Value = fwdPort
+	}
+	fwdPortMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.FwdPort.Method = types.ReadingMethod(fwdPortMark)
+	}
+	midPort, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.MidPort, draftIndex))
+	if err == nil {
+		d.Marks.MidPort.Value = midPort
+	}
+	midPortMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.MidPort.Method = types.ReadingMethod(midPortMark)
+	}
+	aftPort, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.AftPort, draftIndex))
+	if err == nil {
+		d.Marks.AftPort.Value = aftPort
+	}
+	aftPortMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.AftPort.Method = types.ReadingMethod(aftPortMark)
+	}
+	fwdStbd, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex))
+	if err == nil {
+		d.Marks.FwdStarboard.Value = fwdStbd
+	}
+	fwdStbdMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.FwdStarboard.Method = types.ReadingMethod(fwdStbdMark)
+	}
+	midStbd, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex))
+	if err == nil {
+		d.Marks.MidStarboard.Value = midStbd
+	}
+	midStbdMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.MidStarboard.Method = types.ReadingMethod(midStbdMark)
+	}
+	aftStbd, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex))
+	if err == nil {
+		d.Marks.AftStarboard.Value = aftStbd
+	}
+	aftStbdMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex))
+	if err == nil {
+		d.Marks.AftStarboard.Method = types.ReadingMethod(aftStbdMark)
 	}
 }

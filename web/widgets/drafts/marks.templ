@@ -15,9 +15,18 @@ script calcMarks(idx int) {
 
 templ Marks(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
-	<!-- Port | Vessel | Stbd -->
-	<div class="readings-area">
-		<div class="col-port">
+	<div
+		class="readings-area"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.MarksBlock) }
+		hx-include={ fmt.Sprintf("#col-port-%d, #col-stbd-%d", draftIndex, draftIndex) }
+		hx-trigger="change changed find:input delay:500ms, change changed find:select delay:500ms"
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		hx-swap="none"
+	>
+		<div
+			class="col-port"
+			id={ fmt.Sprintf("col-port-%d", draftIndex) }
+		>
 			<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 			<div class="dr-row">
 				<span class="dr-lbl">Fwd P</span>
@@ -138,7 +147,10 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 				></circle>
 			</svg>
 		</div>
-		<div class="col-stbd">
+		<div
+			class="col-stbd"
+			id={ fmt.Sprintf("col-stbd-%d", draftIndex) }
+		>
 			<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 			<div class="dr-row">
 				<span class="dr-lbl">Fwd S</span>

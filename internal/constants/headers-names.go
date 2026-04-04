@@ -27,4 +27,5 @@ const (
 // Draft Block names
 const (
 	SeaConditionBlock = "sea-condition-block"
+	MarksBlock        = "marks-block"
 )
