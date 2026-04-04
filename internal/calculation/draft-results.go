@@ -4,6 +4,7 @@ import "github.com/AVZotov/draft-survey/internal/types"
 
 type DraftResult struct {
 	MeanDraft             types.MeanDraft
+	MeanFwdAft            float64
 	PPCorrections         types.PPCorrections
 	DraftsWKeel           types.DraftsWKeel
 	MMC                   float64
@@ -15,6 +16,7 @@ type DraftResult struct {
 	Hydrostatics          types.Hydrostatics
 	FirstTrimCorrection   float64
 	SecondTrimCorrection  float64
+	DeltaMTC              float64
 	ListCorrection        float64
 	TotalTrimCorrection   float64
 	DensityCorrection     float64

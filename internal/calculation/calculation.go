@@ -164,6 +164,20 @@ func CalcFirstTrimCorrection(dwk types.DraftsWKeel, tpc float64, lcf float64, lb
 	return round3(firstTrimCorrection)
 }
 
+// CalcDeltaMTC is supporting function to get value for frontend
+func CalcDeltaMTC(mtcRows []types.MTCRow) float64 {
+	var lowerMtcRow, upperMtcRow types.MTCRow
+	if markVal(mtcRows[0].Draft) < markVal(mtcRows[1].Draft) {
+		lowerMtcRow = mtcRows[0]
+		upperMtcRow = mtcRows[1]
+	} else {
+		lowerMtcRow = mtcRows[1]
+		upperMtcRow = mtcRows[0]
+	}
+
+	return markVal(upperMtcRow.MTC) - markVal(lowerMtcRow.MTC)
+}
+
 func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp float64) float64 {
 	var lowerMtcRow, upperMtcRow types.MTCRow
 	if markVal(mtcRows[0].Draft) < markVal(mtcRows[1].Draft) {

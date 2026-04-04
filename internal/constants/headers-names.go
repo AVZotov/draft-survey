@@ -24,8 +24,9 @@ const (
 	UpdtTankVolume  = "updt_tank_volume"
 )
 
-// Draft Block names
+// Draft Block names (values)
 const (
 	SeaConditionBlock = "sea-condition-block"
 	MarksBlock        = "marks-block"
+	PPKeel            = "pp-keel"
 )

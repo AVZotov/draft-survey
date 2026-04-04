@@ -9,6 +9,7 @@ import (
 
 func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	var meanDraft types.MeanDraft
+	var meanFwdAft float64
 	var ppCorrections types.PPCorrections
 	var draftsWKeel types.DraftsWKeel
 	var mmc float64
@@ -20,6 +21,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	var hydrostatics types.Hydrostatics
 	var firstTrimCorrection float64
 	var secondTrimCorrection float64
+	var deltaMTC float64
 	var listCorrection float64
 	var totalTrimCorrection float64
 	var densityCorrection float64
@@ -38,6 +40,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	if v.CorrectionMethod == vessel.CorrectionMethodHalfLBP {
 		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, v.LBP)
 	}
+	meanFwdAft = round3((draftsWKeel.FwdDraftWKeel + draftsWKeel.AftDraftWKeel) / 2)
 	draftsWKeel = CalcDraftsWKeel(meanDraft, ppCorrections, draft)
 	mmc = CalcMMC(draftsWKeel, v)
 	observedTrim = round3(meanDraft.DraftAftMean - meanDraft.DraftFwdMean)
@@ -51,7 +54,9 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	}
 	if len(draft.MTCRows) >= 2 {
 		secondTrimCorrection = CalcSecondTrimCorrection(draftsWKeel, draft.MTCRows, v.LBP)
+		deltaMTC = CalcDeltaMTC(draft.MTCRows)
 	}
+
 	listCorrection = CalcListCorrection(draft.Marks, draft.TPCListPort, draft.TPCListStarboard)
 	totalTrimCorrection = round3(firstTrimCorrection + secondTrimCorrection + listCorrection)
 	if draft.Density != nil {
@@ -81,6 +86,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 
 	return DraftResult{
 		MeanDraft:             meanDraft,
+		MeanFwdAft:            meanFwdAft,
 		PPCorrections:         ppCorrections,
 		DraftsWKeel:           draftsWKeel,
 		MMC:                   mmc,
@@ -92,6 +98,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 		Hydrostatics:          hydrostatics,
 		FirstTrimCorrection:   firstTrimCorrection,
 		SecondTrimCorrection:  secondTrimCorrection,
+		DeltaMTC:              deltaMTC,
 		ListCorrection:        listCorrection,
 		TotalTrimCorrection:   totalTrimCorrection,
 		DensityCorrection:     densityCorrection,
