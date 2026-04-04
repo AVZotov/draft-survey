@@ -1,0 +1,21 @@
+package drafts
+
+import (
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ CalcPanel(dp components.DraftPageProps, draftIndex int) {
+	<div class="calc-panel">
+		<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val">—</span></div>
+		<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val">—</span></div>
+		<div class="cp-cell cp-cell--mmc">
+			<span class="cp-lbl">MMC</span>
+			<span class="cp-val">—</span>
+			<span class="cp-formula">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) }</span>
+		</div>
+	</div>
+}
