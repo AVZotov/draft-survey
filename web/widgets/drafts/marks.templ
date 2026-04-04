@@ -19,7 +19,7 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 		class="readings-area"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.MarksBlock) }
 		hx-include={ fmt.Sprintf("#col-port-%d, #col-stbd-%d", draftIndex, draftIndex) }
-		hx-trigger="change changed find:input delay:500ms, change changed find:select delay:500ms"
+		hx-trigger="change changed target:(input, select) delay:500ms"
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
 		hx-swap="none"
 	>

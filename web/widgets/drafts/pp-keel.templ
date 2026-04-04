@@ -8,7 +8,6 @@ import (
 )
 
 templ PPKeel(dp components.DraftPageProps, draftIndex int) {
-	<!-- PP distances + Keel + Calculated panel-->
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div class="pp-keel-bar">
 		<div class="pp-group">
@@ -55,18 +54,6 @@ templ PPKeel(dp components.DraftPageProps, draftIndex int) {
 				<input name={ fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex) } value={ format.FloatOrEmpty(draft.KeelAft) } type="number" placeholder="Ak, mm" step="any"/>
 				<span class="pp-unit">mm keel</span>
 			</div>
-		</div>
-	</div>
-	<div class="calc-panel">
-		<div class="cp-cell"><span class="cp-lbl">mean F&amp;A</span><span class="cp-val">—</span></div>
-		<div class="cp-cell"><span class="cp-lbl">MM</span><span class="cp-val">—</span></div>
-		<div class="cp-cell"><span class="cp-lbl">Obs. Trim</span><span class="cp-val">—</span></div>
-		<div class="cp-cell"><span class="cp-lbl">True Trim</span><span class="cp-val">—</span></div>
-		<div class="cp-cell"><span class="cp-lbl">List</span><span class="cp-val">—</span></div>
-		<div class="cp-cell cp-cell--mmc">
-			<span class="cp-lbl">MMC</span>
-			<span class="cp-val">—</span>
-			<span class="cp-formula">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) }</span>
 		</div>
 	</div>
 }

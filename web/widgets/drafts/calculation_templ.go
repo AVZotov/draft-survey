@@ -8,10 +8,7 @@ package drafts
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	"github.com/AVZotov/draft-survey/internal/format"
-	"github.com/AVZotov/draft-survey/web/components"
-)
+import "github.com/AVZotov/draft-survey/web/components"
 
 func CalcPanel(dp components.DraftPageProps, draftIndex int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -34,20 +31,7 @@ func CalcPanel(dp components.DraftPageProps, draftIndex int) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"calc-panel\"><div class=\"cp-cell\"><span class=\"cp-lbl\">mean F&amp;A</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">MM</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">Obs. Trim</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">True Trim</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">List</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell cp-cell--mmc\"><span class=\"cp-lbl\">MMC</span> <span class=\"cp-val\">—</span> <span class=\"cp-formula\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(format.MMCShortFormula(dp.Survey.VesselData.VesselType))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calculation.templ`, Line: 18, Col: 85}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</span></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"calc-panel\"><div class=\"cp-cell\"><span class=\"cp-lbl\">mean F&amp;A m</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">Obs. Trim m</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">True Trim m</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">List °</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell\"><span class=\"cp-lbl\">Defl. cm</span><span class=\"cp-val\">—</span></div><div class=\"cp-cell cp-cell--mmc\"><span class=\"cp-lbl\">MMC</span> <span class=\"cp-val\">—</span></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
