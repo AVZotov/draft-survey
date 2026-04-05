@@ -22,6 +22,7 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 		hx-trigger="change changed target:(input, select) delay:500ms"
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
 		hx-swap="none"
+		hx-sync="this:replace"
 	>
 		<div
 			class="col-port"

@@ -55,3 +55,20 @@ function updateVessel(p, listDeg, trim) {
     const dotY = clamp(CY + (trim || 0) * TRIM_SCALE, MIN_DOT_Y, MAX_DOT_Y);
     trimDot.setAttribute('cy', dotY.toFixed(1));
 }
+//Trigger vessel trim list updates on frontend on page load
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
+        const idx = el.id.replace('-fp', '');
+        calc(idx);
+    });
+});
+//Trigger vessel trim list updates on frontend on page load for HTMX swap support
+function initVessels() {
+    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
+        const idx = el.id.replace('-fp', '');
+        calc(idx);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initVessels);
+document.addEventListener('htmx:afterSwap', initVessels);

@@ -9,7 +9,15 @@ import (
 
 templ PPKeel(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
-	<div class="pp-keel-bar">
+	<div
+		class="pp-keel-bar"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.PPKeel) }
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		hx-swap="none"
+		hx-sync="this:replace"
+	>
 		<div class="pp-group">
 			<div class="pp-group-title">Fwd — distances &amp; keel</div>
 			<div class="pp-fields">

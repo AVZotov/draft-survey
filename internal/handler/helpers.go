@@ -597,6 +597,8 @@ func parseDraftBlocks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 		parseSeaCondition(c, d, draftIndex)
 	case constants.MarksBlock:
 		parseMarks(c, d, draftIndex)
+	case constants.PPKeel:
+		parsePPKeel(c, d, draftIndex)
 	}
 }
 
@@ -677,5 +679,47 @@ func parseMarks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	aftStbdMark, err := parseString(c, fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex))
 	if err == nil {
 		d.Marks.AftStarboard.Method = types.ReadingMethod(aftStbdMark)
+	}
+}
+
+func parsePPKeel(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	if d == nil {
+		return
+	}
+	dFwd, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DFwd, draftIndex))
+	if err == nil {
+		d.DistancePPFwd = dFwd
+	}
+	dFwdDir, err := parseString(c, fmt.Sprintf("%s-%d", constants.DFwdDir, draftIndex))
+	if err == nil {
+		d.PPFwdDirection = dFwdDir
+	}
+	dMid, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DMid, draftIndex))
+	if err == nil {
+		d.DistancePPMid = dMid
+	}
+	dMidDir, err := parseString(c, fmt.Sprintf("%s-%d", constants.DMidDir, draftIndex))
+	if err == nil {
+		d.PPMidDirection = dMidDir
+	}
+	dAft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DAft, draftIndex))
+	if err == nil {
+		d.DistancePPAft = dAft
+	}
+	dAftDir, err := parseString(c, fmt.Sprintf("%s-%d", constants.DAftDir, draftIndex))
+	if err == nil {
+		d.PPAftDirection = dAftDir
+	}
+	keelFwd, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.KeelFwd, draftIndex))
+	if err == nil {
+		d.KeelFwd = keelFwd
+	}
+	keelMid, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.KeelMid, draftIndex))
+	if err == nil {
+		d.KeelMid = keelMid
+	}
+	keelAft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex))
+	if err == nil {
+		d.KeelAft = keelAft
 	}
 }
