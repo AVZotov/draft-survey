@@ -9,6 +9,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/widgets/drafts"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
@@ -23,6 +24,13 @@ func (h *Handler) calculate(survey *types.Survey, c *fiber.Ctx, main templ.Compo
 	switch hxCtx {
 	case constants.UpdtTanksWeight:
 		component, err := updtTanksWeight(survey, c, main, oobComponents...)
+		if err != nil {
+			return err
+		}
+		c.Status(http.StatusOK)
+		return tadaptor.Render(c, component)
+	case constants.UpdtDraftCalcPanel:
+		component, err := updtDraftCalcPanels(survey, c)
 		if err != nil {
 			return err
 		}
@@ -70,5 +78,26 @@ func updtTanksWeight(survey *types.Survey, c *fiber.Ctx, main templ.Component, o
 	}
 
 	components = append(components, oobComponets...)
+	return templ.Join(components...), nil
+}
+
+func updtDraftCalcPanels(survey *types.Survey, c *fiber.Ctx) (templ.Component, error) {
+	if survey == nil {
+		return nil, ErrNilPointer
+	}
+
+	draftIndexInterface := c.Locals(constants.HXDraftIndex)
+	if draftIndexInterface == nil {
+		return nil, ErrEmptyField
+	}
+
+	draftIndex, err := strconv.Atoi(draftIndexInterface.(string))
+	if err != nil {
+		return nil, err
+	}
+
+	var components []templ.Component
+
+	components = append(components, drafts.CalcPanel(*survey, draftIndex, true))
 	return templ.Join(components...), nil
 }

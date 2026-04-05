@@ -119,7 +119,7 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<!-- Trim List Deflection panel--><!-- PP distances + Keel + Calculated panel-->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<!-- PP distances + Keel + Calculated panel-->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -131,7 +131,7 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = CalcPanel(dp, draftIndex).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = CalcPanel(dp.Survey, draftIndex, false).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

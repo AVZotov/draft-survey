@@ -64,4 +64,7 @@ const (
 	SeaCondition     = "sea_condition"
 	SeaConditionWave = "sea_wave"
 	SeaConditionIce  = "sea_ice"
+
+	// Auto Update panels
+	CalcPanel = "calc-panel"
 )

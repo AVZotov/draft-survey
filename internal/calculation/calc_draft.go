@@ -40,8 +40,8 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	if v.CorrectionMethod == vessel.CorrectionMethodHalfLBP {
 		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, v.LBP)
 	}
-	meanFwdAft = round3((draftsWKeel.FwdDraftWKeel + draftsWKeel.AftDraftWKeel) / 2)
 	draftsWKeel = CalcDraftsWKeel(meanDraft, ppCorrections, draft)
+	meanFwdAft = round3((draftsWKeel.FwdDraftWKeel + draftsWKeel.AftDraftWKeel) / 2)
 	mmc = CalcMMC(draftsWKeel, v)
 	observedTrim = round3(meanDraft.DraftAftMean - meanDraft.DraftFwdMean)
 	trueTrim = round3(draftsWKeel.AftDraftWKeel - draftsWKeel.FwdDraftWKeel)

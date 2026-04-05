@@ -41,11 +41,10 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 		</div>
 		<!-- Port | Vessel | Stbd -->
 		@Marks(dp, draftIndex)
-		<!-- Trim List Deflection panel-->
 		<!-- PP distances + Keel + Calculated panel-->
 		@PPKeel(dp, draftIndex)
 		<!-- Calculation Panel -->
-		@CalcPanel(dp, draftIndex)
+		@CalcPanel(dp.Survey, draftIndex, false)
 		<!-- Hydrostatic data -->
 		@Hydrostatics(dp, draftIndex)
 		<!-- Deductibles and Table density-->

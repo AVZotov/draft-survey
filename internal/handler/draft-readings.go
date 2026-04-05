@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -161,5 +162,9 @@ func (h *Handler) updateDraft(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.SendStatus(http.StatusOK)
+	c.Locals(constants.HXCalcContext, constants.UpdtDraftCalcPanel)
+	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
+
+	c.Status(http.StatusOK)
+	return h.calculate(p.survey, c, nil)
 }

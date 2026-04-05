@@ -20,8 +20,9 @@ const (
 
 // Context values (values)
 const (
-	UpdtTanksWeight = "updt_tanks_weight"
-	UpdtTankVolume  = "updt_tank_volume"
+	UpdtTanksWeight    = "updt_tanks_weight"
+	UpdtTankVolume     = "updt_tank_volume"
+	UpdtDraftCalcPanel = "updt-draft-calc-panel"
 )
 
 // Draft Block names (values)
