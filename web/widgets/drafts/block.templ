@@ -3,12 +3,13 @@ package drafts
 import (
 	"fmt"
 
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
+templ DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
 	<div
 		class={ templ.Classes(
         "draft-block",
@@ -44,11 +45,11 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int) {
 		<!-- PP distances + Keel + Calculated panel-->
 		@PPKeel(dp, draftIndex)
 		<!-- Calculation Panel -->
-		@CalcPanel(dp.Survey, draftIndex, false)
+		@CalcPanel(dp.Survey, draftIndex, dr, false)
 		<!-- Hydrostatic data -->
-		@Hydrostatics(dp, draftIndex)
+		@Hydrostatics(dp, draftIndex, dr)
 		<!-- Deductibles and Table density-->
-		@Deductibles(dp, draftIndex)
+		@Deductibles(dp, draftIndex, dr)
 	</div>
 }
 

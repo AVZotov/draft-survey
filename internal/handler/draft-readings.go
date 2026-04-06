@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -40,7 +41,9 @@ func (h *Handler) draft(c *fiber.Ctx) error {
 	layoutProps := web.DraftLayoutProps(p.user)
 	pageProps := web.DraftsPageProps(*p.survey)
 
-	return tadaptor.Render(c, pages.DraftReadings(layoutProps, pageProps))
+	dr := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
+
+	return tadaptor.Render(c, pages.DraftReadings(layoutProps, pageProps, dr))
 }
 
 func (h *Handler) startDraft(c *fiber.Ctx) error {

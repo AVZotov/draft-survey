@@ -6,8 +6,7 @@ import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/types"
 import "github.com/AVZotov/draft-survey/internal/calculation"
 
-templ CalcPanel(survey types.Survey, draftIndex int, isOOB bool) {
-	{{ cd := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData) }}
+templ CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
 	<div
 		class="calc-panel"
 		id={ fmt.Sprintf("%s-%d", constants.CalcPanel, draftIndex) }
@@ -17,27 +16,27 @@ templ CalcPanel(survey types.Survey, draftIndex int, isOOB bool) {
 	>
 		<div class="cp-cell">
 			<span class="cp-lbl">mean F&amp;A m</span>
-			<span class="cp-val">{ cd.MeanFwdAft }</span>
+			<span class="cp-val">{ dr.MeanFwdAft }</span>
 		</div>
 		<div class="cp-cell">
 			<span class="cp-lbl">Obs. Trim m</span>
-			<span class="cp-val">{ cd.ObservedTrim } { format.TrimDirection(cd.ObservedTrim) }</span>
+			<span class="cp-val">{ dr.ObservedTrim } { format.TrimDirection(dr.ObservedTrim) }</span>
 		</div>
 		<div class="cp-cell">
 			<span class="cp-lbl">True Trim m</span>
-			<span class="cp-val">{ cd.TrueTrim } { format.TrimDirection(cd.ObservedTrim) }</span>
+			<span class="cp-val">{ dr.TrueTrim } { format.TrimDirection(dr.ObservedTrim) }</span>
 		</div>
 		<div class="cp-cell">
 			<span class="cp-lbl">List °</span>
-			<span class="cp-val">{ cd.ListDegrees } { format.ListDirection(cd.ListMeters) }</span>
+			<span class="cp-val">{ dr.ListDegrees } { format.ListDirection(dr.ListMeters) }</span>
 		</div>
 		<div class="cp-cell">
 			<span class="cp-lbl">Defl. cm</span>
-			<span class="cp-val">{ cd.Deflection }</span>
+			<span class="cp-val">{ dr.Deflection }</span>
 		</div>
 		<div class="cp-cell cp-cell--mmc">
 			<span class="cp-lbl">MMC</span>
-			<span class="cp-val">{ cd.MMC }</span>
+			<span class="cp-val">{ dr.MMC }</span>
 		</div>
 	</div>
 }

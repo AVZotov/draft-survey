@@ -2,10 +2,11 @@ package drafts
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ DraftForm(dp components.DraftPageProps) {
+templ DraftForm(dp components.DraftPageProps, dr calculation.DraftResult) {
 	<main class="page-main">
 		// <form id="draft-form">
 		<div class="page-wrap page-wrap--drafts">
@@ -21,7 +22,7 @@ templ DraftForm(dp components.DraftPageProps) {
 			</div>
 			<div class="drafts-grid">
 				for i, _ := range dp.Survey.Drafts {
-					@DraftBlock(dp, i)
+					@DraftBlock(dp, i, dr)
 				}
 			</div>
 		</div>

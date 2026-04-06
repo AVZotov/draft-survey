@@ -9,7 +9,7 @@ import (
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
+templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<!-- Hydrostatic data -->
 	<div class="hydro-section">
@@ -61,7 +61,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
 				</div>
 			</div>
 			<!-- MMC row -->
-			@MMCRow(dp.Survey, draftIndex, false)
+			@MMCRow(dp.Survey, draftIndex, dr, false)
 			<!-- Lower row -->
 			<div
 				class="hydro-row"
@@ -124,14 +124,13 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
 						<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
 					</div>
 				</div>
-				@DeltaMtc(dp.Survey, draftIndex, false)
+				@DeltaMtc(dp.Survey, draftIndex, dr, false)
 			</div>
 		</div>
 	</div>
 }
 
-templ MMCRow(survey types.Survey, draftIndex int, isOOB bool) {
-	{{ cd := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData) }}
+templ MMCRow(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
 	<div
 		class="hydro-row"
 		id={ fmt.Sprintf("%s-%d", constants.MMCRow, draftIndex) }
@@ -140,20 +139,19 @@ templ MMCRow(survey types.Survey, draftIndex int, isOOB bool) {
 		}
 	>
 		<div class="hydro-grid-cell hydro-grid-cell--mmc hydro-grid-cell--label">MMC</div>
-		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.MMC }</div>
-		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.Hydrostatics.Displacement }</div>
-		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.Hydrostatics.TPC }</div>
-		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ format.LCFWithDir(cd.Hydrostatics.LCF) }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ dr.MMC }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ dr.Hydrostatics.Displacement }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ dr.Hydrostatics.TPC }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ format.LCFWithDir(dr.Hydrostatics.LCF) }</div>
 	</div>
 }
 
-templ DeltaMtc(survey types.Survey, draftIndex int, isOOB bool) {
-	{{ cd := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData) }}
+templ DeltaMtc(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
 	<div
 		class="mtc-delta"
 		id={ fmt.Sprintf("%s-%d", constants.DelataMtc, draftIndex) }
 		if isOOB {
 			hx-swap-oob="true"
 		}
-	>ΔMTC: { cd.DeltaMTC }</div>
+	>ΔMTC: { dr.DeltaMTC }</div>
 }

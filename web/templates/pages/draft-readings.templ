@@ -4,11 +4,12 @@ import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/widgets/drafts"
 import "github.com/AVZotov/draft-survey/web/components"
+import "github.com/AVZotov/draft-survey/internal/calculation"
 
-templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps) {
+templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps, dr calculation.DraftResult) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
-		@drafts.DraftForm(dp)
+		@drafts.DraftForm(dp, dr)
 		@drafts.DraftActionBar(&dp.Survey)
 		@widgets.Footer()
 	}
