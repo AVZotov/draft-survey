@@ -126,11 +126,15 @@ func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v vessel.VesselDat
 	}
 	displacement := Interpolate(mmc, markVal(lower.Draft), markVal(lower.Displacement), markVal(upper.Draft), markVal(upper.Displacement))
 	tpc := Interpolate(mmc, markVal(lower.Draft), markVal(lower.TPC), markVal(upper.Draft), markVal(upper.TPC))
+
 	const k3 = 0.045
+
 	lowerLcf := markVal(lower.LCF)
 	upperLcf := markVal(upper.LCF)
 
-	if upper.LCFDirection == types.LCFDirectionFromAP || markVal(upper.LCF) > v.LBP*k3 {
+	// Auto mode (DSGear k3): detect LCA from AP by magnitude
+	// Manual mode (UNECE): trust direction entered by surveyor
+	if !v.IsLcfDetectionManual && (upper.LCFDirection == types.LCFDirectionFromAP || markVal(upper.LCF) > v.LBP*k3) {
 		lowerLcf = (v.LBP / 2) - markVal(lower.LCF)
 		upperLcf = (v.LBP / 2) - markVal(upper.LCF)
 	} else {
