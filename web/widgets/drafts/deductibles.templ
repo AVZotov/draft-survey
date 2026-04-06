@@ -14,42 +14,54 @@ templ Deductibles(dp components.DraftPageProps, draftIndex int, dr calculation.D
 	<!-- Deductibles and Table density-->
 	<div class="deduct-section">
 		<div class="sec-title">Deductibles &amp; Density</div>
-		<div class="density-row">
-			<div class="df">
-				<label>Table Density</label>
-				<input type="number" name={ constants.TableDensity } placeholder="0.000" step="any" value={ format.FloatOrEmpty(dp.Survey.VesselData.TableDensity) }/>
-			</div>
-			<div class="df">
-				<label>Dockwater Density</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Density) }/>
-			</div>
-		</div>
 		<div class="deduct-grid">
 			<div class="df">
+				<label>Tbl Density</label>
+				<input name={ fmt.Sprintf("%s-%d", constants.TableDensity, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.VesselData.TableDensity) } type="number" placeholder="0.000" step="any"/>
+			</div>
+			<div class="df">
 				<label>HFO, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.HFO) }/>
+				<input name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.HFO) } type="number" placeholder="0.000" step="any"/>
 			</div>
 			<div class="df">
 				<label>MDO, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.MDO) }/>
+				<input name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.MDO) } type="number" placeholder="0.000" step="any"/>
 			</div>
 			<div class="df">
 				<label>Lube Oil, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.LubOil) }/>
+				<input name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.LubOil) } type="number" placeholder="0.000" step="any"/>
 			</div>
-			<div class="df"><label>Fresh Water, MT</label><input type="number" name={ fmt.Sprintf("fw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
-			<div class="df"><label>Ballast Water, MT</label><input type="number" name={ fmt.Sprintf("bw-%d", draftIndex) } placeholder="0.000" step="any"/></div>
 			<div class="df">
 				<label>Bilge Water, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) }/>
+				<input name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) } type="number" placeholder="0.000" step="any"/>
 			</div>
 			<div class="df">
-				<label>Cargo Declared, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.CargoDeclared, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.CargoDeclared) }/>
+				<label>DockW Density</label>
+				<input name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
 			</div>
 			<div class="df">
 				<label>Others, MT</label>
-				<input type="number" name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.Deductibles.Others) }/>
+				<input name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.Others) } type="number" placeholder="0.000" step="any"/>
+			</div>
+			<div class="df">
+				<label>Ballast Water, MT</label>
+				<input readonly name={ fmt.Sprintf("%s-%d", constants.BWTank, draftIndex) } placeholder="0.000" step="any" type="number"/>
+			</div>
+			<div class="df">
+				<label>Fresh Water, MT</label>
+				<input readonly name={ fmt.Sprintf("%s-%d", constants.FWTank, draftIndex) } placeholder="0.000" step="any" type="number"/>
+			</div>
+			<div class="df">
+				<label>Total Deduct, MT</label>
+				<input readonly name={ fmt.Sprintf("%s-%d", constants.TotalDeduct, draftIndex) } value={ dr.TotalDeductibles } type="number" placeholder="0.000" step="any"/>
+			</div>
+			<div class="df">
+				<label>Const Declared, MT</label>
+				<input readonly name={ fmt.Sprintf("%s-%d", constants.ConstDeclared, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.ConstantDeclared) } type="number" placeholder="0.000" step="any"/>
+			</div>
+			<div class="df">
+				<label>Cargo Declared, MT</label>
+				<input readonly name={ fmt.Sprintf("%s-%d", constants.CargoDeclared, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.CargoDeclared) } type="number" placeholder="0.000" step="any"/>
 			</div>
 		</div>
 		<button

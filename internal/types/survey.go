@@ -71,8 +71,6 @@ type Draft struct {
 	BallastWaterTanks []Tank           `json:"ballast_water_tanks"`
 	FreshWaterTanks   []Tank           `json:"fresh_water_tanks"`
 	Density           *float64         `json:"density"`
-	ConstantDeclared  *float64         `json:"constant_declared"`
-	CargoDeclared     *float64         `json:"cargo_declared"`
 	MTCRows           []MTCRow         `json:"mtc_rows"`
 	HydrostaticRows   []HydrostaticRow `json:"hydrostatic_rows"`
 	TPCListPort       float64          `json:"tpc_list_port"`
@@ -88,17 +86,20 @@ type Draft struct {
 	KeelAft           *float64         `json:"keel_aft"`
 	StartedAt         time.Time        `json:"started_at"`
 	FinishedAt        time.Time        `json:"finished_at"`
+	LoadingCommenced  time.Time        `json:"loading_commenced"`
 }
 
 type Survey struct {
-	Surveyor       User              `json:"surveyor"`
-	Status         SurveyStatus      `json:"status"`
-	ID             string            `json:"id"`
-	CreatedAt      time.Time         `json:"created_at"`
-	Drafts         []Draft           `json:"drafts"`
-	Job            Job               `json:"job"`
-	CargoOperation CargoOperation    `json:"cargo_operation"`
-	VesselData     vessel.VesselData `json:"vessel_data"`
-	SeaCondition   SeaCondition      `json:"sea_condition"`
-	Remarks        string            `json:"remarks"`
+	Surveyor         User              `json:"surveyor"`
+	Status           SurveyStatus      `json:"status"`
+	ID               string            `json:"id"`
+	CreatedAt        time.Time         `json:"created_at"`
+	Drafts           []Draft           `json:"drafts"`
+	Job              Job               `json:"job"`
+	CargoOperation   CargoOperation    `json:"cargo_operation"`
+	CargoDeclared    *float64          `json:"cargo_declared"`
+	ConstantDeclared *float64          `json:"constant_declared"`
+	VesselData       vessel.VesselData `json:"vessel_data"`
+	SeaCondition     SeaCondition      `json:"sea_condition"`
+	Remarks          string            `json:"remarks"`
 }

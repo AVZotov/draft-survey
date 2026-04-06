@@ -602,17 +602,10 @@ select.dir-sel:focus {
   padding: var(--space-sm) var(--space-lg);
 }
 
-.density-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-  margin-bottom: var(--space-md);
-}
-
 .deduct-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-md);
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-sm);
 }
 
 /* df: field wrapper — uses global label + input[type=number] */

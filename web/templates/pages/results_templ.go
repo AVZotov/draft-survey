@@ -372,7 +372,7 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if props.Survey != nil && len(props.Survey.Drafts) >= 1 {
-				templ_7745c5c3_Err = draftEditPanel(props.Survey.Drafts[0]).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = draftEditPanel(*props.Survey, props.Survey.Drafts[0]).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -382,7 +382,7 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if props.Survey != nil && len(props.Survey.Drafts) >= 2 {
-				templ_7745c5c3_Err = draftEditPanel(props.Survey.Drafts[1]).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = draftEditPanel(*props.Survey, props.Survey.Drafts[1]).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1232,7 +1232,7 @@ func cargoSection(ini calculation.DraftResult, fin calculation.DraftResult, prop
 }
 
 // draftEditPanel renders the edit form fields for one draft reading.
-func draftEditPanel(draft types.Draft) templ.Component {
+func draftEditPanel(survey types.Survey, draft types.Draft) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -1401,9 +1401,9 @@ func draftEditPanel(draft types.Draft) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var83 string
-		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.ConstantDeclared))
+		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(survey.ConstantDeclared))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 676, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 676, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var83))
 		if templ_7745c5c3_Err != nil {

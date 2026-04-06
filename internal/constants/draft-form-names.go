@@ -51,13 +51,12 @@ const (
 	DelataMtc = "dMtc"
 
 	// Deductibles
-	HFO           = "hfo"
-	MDO           = "mdo"
-	LubOil        = "lub"
-	BilgeWater    = "bilW"
-	Others        = "others"
-	ConstDeclared = "constDeclared"
-	CargoDeclared = "cargoDeclared"
+	HFO         = "hfo"
+	MDO         = "mdo"
+	LubOil      = "lub"
+	BilgeWater  = "bilW"
+	Others      = "others"
+	TotalDeduct = "total_deduct"
 
 	// Density
 	TableDensity     = "tDens"

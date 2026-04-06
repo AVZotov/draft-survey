@@ -264,13 +264,13 @@ templ ResultsPage(props components.LayoutProps) {
 					<!-- Initial tab -->
 					<div class="panel-tab-content active" id="tab-ini">
 						if props.Survey != nil && len(props.Survey.Drafts) >= 1 {
-							@draftEditPanel(props.Survey.Drafts[0])
+							@draftEditPanel(*props.Survey, props.Survey.Drafts[0])
 						}
 					</div>
 					<!-- Final tab -->
 					<div class="panel-tab-content" id="tab-fin">
 						if props.Survey != nil && len(props.Survey.Drafts) >= 2 {
-							@draftEditPanel(props.Survey.Drafts[1])
+							@draftEditPanel(*props.Survey, props.Survey.Drafts[1])
 						}
 					</div>
 				</div>
@@ -595,7 +595,7 @@ templ cargoSection(ini calculation.DraftResult, fin calculation.DraftResult, pro
 }
 
 // draftEditPanel renders the edit form fields for one draft reading.
-templ draftEditPanel(draft types.Draft) {
+templ draftEditPanel(survey types.Survey, draft types.Draft) {
 	<div class="panel-section-title">Observed Drafts</div>
 	<div class="panel-field-row-3">
 		<div class="panel-field">
@@ -673,7 +673,7 @@ templ draftEditPanel(draft types.Draft) {
 	<div class="panel-field-row">
 		<div class="panel-field">
 			<label>Constant Declared, MT</label>
-			<input type="number" step="any" value={ fmtPtrVal(draft.ConstantDeclared) }/>
+			<input type="number" step="any" value={ fmtPtrVal(survey.ConstantDeclared) }/>
 		</div>
 		<div class="panel-field">
 			<label>Others, MT</label>
