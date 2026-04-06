@@ -99,5 +99,7 @@ func updtDraftCalcPanels(survey *types.Survey, c *fiber.Ctx) (templ.Component, e
 	var components []templ.Component
 
 	components = append(components, drafts.CalcPanel(*survey, draftIndex, true))
+	components = append(components, drafts.MMCRow(*survey, draftIndex, true))
+	components = append(components, drafts.DeltaMtc(*survey, draftIndex, true))
 	return templ.Join(components...), nil
 }

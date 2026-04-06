@@ -4,12 +4,22 @@
 // ================================================================
 
 const CX = 80, CY = 118, LINE_R = 42;
-const LIST_SCALE = 4;
-const TRIM_SCALE = 35;
 const MAX_VISUAL_DEG = 45;
 const MIN_DOT_Y = 30;
 const MAX_DOT_Y = 210;
 const BREADTH = 32.26;
+const LIST_LOG_SCALE = 8;
+const LIST_AMP = 20;
+const TRIM_LOG_SCALE = 3;
+const TRIM_AMP = 28;
+//const LIST_SCALE = 4;
+//const TRIM_SCALE = 20;
+
+function scaleLog(value, scale) {
+    if (value === 0) { return 0 };
+    const sign = value > 0 ? 1 : -1
+    return sign * Math.log1p(Math.abs(value) * scale)
+}
 
 function clamp(val, min, max) {
     return Math.max(min, Math.min(max, val));
@@ -33,7 +43,7 @@ function calc(p) {
     let listDeg = null, listSign = 1;
     if (mp !== null && ms !== null) {
         listDeg = Math.atan(Math.abs(mp - ms) / BREADTH) * 180 / Math.PI;
-        listSign = mp < ms ? 1 : -1;
+        listSign = (mp !== null && ms !== null && mp < ms) ? -1 : 1;
     }
 
     // Update vessel indicator only
@@ -45,14 +55,16 @@ function updateVessel(p, listDeg, trim) {
     const trimDot = document.getElementById(p + '-trim-dot');
     if (!listLine || !trimDot) return;
 
-    const visualDeg = clamp((listDeg || 0) * LIST_SCALE, -MAX_VISUAL_DEG, MAX_VISUAL_DEG);
+    const listScaled = scaleLog(listDeg || 0, LIST_LOG_SCALE) * LIST_AMP;
+    const visualDeg = clamp(listScaled, -MAX_VISUAL_DEG, MAX_VISUAL_DEG);
     const rad = visualDeg * Math.PI / 180;
     listLine.setAttribute('x1', (CX - LINE_R * Math.cos(rad)).toFixed(1));
     listLine.setAttribute('y1', (CY - LINE_R * Math.sin(rad)).toFixed(1));
     listLine.setAttribute('x2', (CX + LINE_R * Math.cos(rad)).toFixed(1));
     listLine.setAttribute('y2', (CY + LINE_R * Math.sin(rad)).toFixed(1));
 
-    const dotY = clamp(CY + (trim || 0) * TRIM_SCALE, MIN_DOT_Y, MAX_DOT_Y);
+    const trimScaled = scaleLog(trim || 0, TRIM_LOG_SCALE) * TRIM_AMP;
+    const dotY = clamp(CY + trimScaled, MIN_DOT_Y, MAX_DOT_Y);
     trimDot.setAttribute('cy', dotY.toFixed(1));
 }
 //Trigger vessel trim list updates on frontend on page load

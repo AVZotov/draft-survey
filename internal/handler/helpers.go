@@ -598,8 +598,10 @@ func parseDraftBlocks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 		parseSeaCondition(c, d, draftIndex)
 	case constants.MarksBlock:
 		parseMarks(c, d, draftIndex)
-	case constants.PPKeel:
+	case constants.PPKeelBlock:
 		parsePPKeel(c, d, draftIndex)
+	case constants.HydrostaticsBlock:
+		parseHydrostatic(c, d, draftIndex)
 	}
 }
 
@@ -722,5 +724,67 @@ func parsePPKeel(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	keelAft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.KeelAft, draftIndex))
 	if err == nil {
 		d.KeelAft = keelAft
+	}
+}
+
+func parseHydrostatic(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	if d == nil {
+		return
+	}
+	uDraft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.UDraft, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[0].Draft = uDraft
+	}
+	uDisp, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.UDisp, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[0].Displacement = uDisp
+	}
+	uTpc, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.UTpc, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[0].TPC = uTpc
+	}
+	uLcfLca, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[0].LCF = uLcfLca
+	}
+	uLcfLcaDir, err := parseString(c, fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[0].LCFDirection = types.LCFDirection(uLcfLcaDir)
+	}
+	lDraft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.LDraft, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[1].Draft = lDraft
+	}
+	lDisp, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.LDisp, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[1].Displacement = lDisp
+	}
+	lTpc, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.LTpc, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[1].TPC = lTpc
+	}
+	lLcfLca, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[1].LCF = lLcfLca
+	}
+	lLcfLcaDir, err := parseString(c, fmt.Sprintf("%s-%d", constants.LLcfDir, draftIndex))
+	if err == nil {
+		d.HydrostaticRows[1].LCFDirection = types.LCFDirection(lLcfLcaDir)
+	}
+	pMtcDraft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex))
+	if err == nil {
+		d.MTCRows[0].Draft = pMtcDraft
+	}
+	pMtc, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.PMtc, draftIndex))
+	if err == nil {
+		d.MTCRows[0].MTC = pMtc
+	}
+	nMtcDraft, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex))
+	if err == nil {
+		d.MTCRows[1].Draft = nMtcDraft
+	}
+	nMtc, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.NMtc, draftIndex))
+	if err == nil {
+		d.MTCRows[1].MTC = nMtc
 	}
 }

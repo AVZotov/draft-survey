@@ -175,7 +175,7 @@ func CalcDeltaMTC(mtcRows []types.MTCRow) float64 {
 		upperMtcRow = mtcRows[0]
 	}
 
-	return markVal(upperMtcRow.MTC) - markVal(lowerMtcRow.MTC)
+	return round3(markVal(upperMtcRow.MTC) - markVal(lowerMtcRow.MTC))
 }
 
 func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp float64) float64 {

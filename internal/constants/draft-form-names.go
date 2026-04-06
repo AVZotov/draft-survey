@@ -29,22 +29,26 @@ const (
 	KeelAft = "Ak"
 
 	// Hydrostatics
-	UDraft  = "uDraft"
-	UDisp   = "uDisp"
-	UTpc    = "uTpc"
-	ULcfLca = "uLcfLca"
-	ULcfDir = "uLcfDir"
-	LDraft  = "lDraft"
-	LDisp   = "lDisp"
-	LTpc    = "lTpc"
-	LLcfLca = "lLcfLca"
-	LLcfDir = "lLcfDir"
+	UDraft    = "uDraft"
+	UDisp     = "uDisp"
+	UTpc      = "uTpc"
+	ULcfLca   = "uLcfLca"
+	ULcfDir   = "uLcfDir"
+	LDraft    = "lDraft"
+	LDisp     = "lDisp"
+	LTpc      = "lTpc"
+	LLcfLca   = "lLcfLca"
+	LLcfDir   = "lLcfDir"
+	MMCRow    = "mmc-row"
+	UHydroRow = "u-hydro-row"
+	LHydroRow = "l-hydro-row"
 
 	// MTC
 	PMtcDraft = "pMtcDraft"
 	PMtc      = "pMtc"
 	NMtcDraft = "nMtcDraft"
 	NMtc      = "nMtc"
+	DelataMtc = "dMtc"
 
 	// Deductibles
 	HFO           = "hfo"

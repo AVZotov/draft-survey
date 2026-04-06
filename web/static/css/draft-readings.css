@@ -458,6 +458,10 @@ select.dir-sel:focus {
   margin-bottom: var(--space-md);
 }
 
+.hydro-row {
+  display: contents;
+}
+
 .hydro-grid-cell {
   display: grid;
   background: var(--surface);
@@ -467,7 +471,6 @@ select.dir-sel:focus {
 .hydro-grid-cell.lcf-field {
   padding: var(--space-xs) 0 var(--space-xs) var(--space-xs);
   gap: var(--space-xs);
-  /*align-items: center; */
 }
 
 .hydro-grid-cell--header {

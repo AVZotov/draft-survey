@@ -29,5 +29,6 @@ const (
 const (
 	SeaConditionBlock = "sea-condition-block"
 	MarksBlock        = "marks-block"
-	PPKeel            = "pp-keel"
+	PPKeelBlock       = "ppkeel-block"
+	HydrostaticsBlock = "hydrostatics-block"
 )

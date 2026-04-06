@@ -42,9 +42,9 @@ func PPKeel(dp components.DraftPageProps, draftIndex int) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.PPKeel))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.PPKeelBlock))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/pp-keel.templ`, Line: 14, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/pp-keel.templ`, Line: 14, Col: 89}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

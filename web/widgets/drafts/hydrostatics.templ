@@ -2,11 +2,11 @@ package drafts
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
-	"strconv"
 )
 
 templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
@@ -20,27 +20,38 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
 				<span class="sec-title-method">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) } { format.LBPCorrection(dp.Survey.VesselData.CorrectionMethod) }</span>
 			</span>
 		</div>
-		<div class="hydro-grid">
+		<div
+			class="hydro-grid"
+			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HydrostaticsBlock) }
+			hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+			hx-target={ fmt.Sprintf("#%s-%d", constants.MMCRow, draftIndex) }
+			hx-include={ fmt.Sprintf("#%s-%d, #%s-%d", constants.UHydroRow, draftIndex, constants.LHydroRow, draftIndex) }
+			hx-trigger="change changed delay:500ms"
+			hx-sync="this:replace"
+		>
 			<!-- Header row -->
 			<div class="hydro-grid-cell hydro-grid-cell--header"></div>
 			<div class="hydro-grid-cell hydro-grid-cell--header">Draft, m</div>
 			<div class="hydro-grid-cell hydro-grid-cell--header">Displ, MT</div>
 			<div class="hydro-grid-cell hydro-grid-cell--header">TPC, MT/cm</div>
 			<div class="hydro-grid-cell hydro-grid-cell--header">LCF / LCA, m</div>
-			if len(draft.HydrostaticRows) > 1 {
-				<!-- Upper row -->
+			<!-- Upper row -->
+			<div
+				class="hydro-row"
+				id={ fmt.Sprintf("%s-%d", constants.UHydroRow, draftIndex) }
+			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Upper</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Draft) }/>
+					<input name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Draft) } type="number" placeholder="0.000" step="any"/>
 				</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Displacement) }/>
+					<input name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Displacement) } type="number" placeholder="0.000" step="any"/>
 				</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].TPC) }/>
+					<input name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].TPC) } type="number" placeholder="0.000" step="any"/>
 				</div>
 				<div class="hydro-grid-cell lcf-field">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[0].LCF) }/>
+					<input name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].LCF) } type="number" placeholder="0.000" step="any"/>
 					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex) }>
 						<option value="" selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirection("") }>—</option>
 						<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
@@ -48,13 +59,14 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
 						<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
 					</select>
 				</div>
-				<!-- MMC row -->
-				<div class="hydro-grid-cell hydro-grid-cell--mmc hydro-grid-cell--label">MMC</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</div>
-				<!-- Lower row -->
+			</div>
+			<!-- MMC row -->
+			@MMCRow(dp.Survey, draftIndex, false)
+			<!-- Lower row -->
+			<div
+				class="hydro-row"
+				id={ fmt.Sprintf("%s-%d", constants.LHydroRow, draftIndex) }
+			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Lower</div>
 				<div class="hydro-grid-cell">
 					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Draft) }/>
@@ -74,76 +86,74 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int) {
 						<option value={ types.LCFDirectionFromAP } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
 					</select>
 				</div>
-			} else {
-				<!-- Upper row — empty -->
-				<div class="hydro-grid-cell hydro-grid-cell--label">Upper</div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell lcf-field">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex) }>
-						<option value="">—</option>
-						<option value={ types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-						<option value={ types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-						<option value={ types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
-					</select>
-				</div>
-				<!-- MMC row -->
-				<div class="hydro-grid-cell hydro-grid-cell--mmc hydro-grid-cell--label">MMC</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-d" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-dp" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-t" }>—</div>
-				<div class="hydro-grid-cell hydro-grid-cell--mmc" id={ strconv.Itoa(draftIndex) + "-ht-l" }>—</div>
-				<!-- Lower row — empty -->
-				<div class="hydro-grid-cell hydro-grid-cell--label">Lower</div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell"><input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any"/></div>
-				<div class="hydro-grid-cell lcf-field">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.LLcfDir, draftIndex) }>
-						<option value="">—</option>
-						<option value={ types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
-						<option value={ types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
-						<option value={ types.LCFDirectionFromAP }>{ types.LCFDirectionFromAP }</option>
-					</select>
-				</div>
-			}
+			</div>
 		</div>
-		<div class="mtc-grid">
-			if len(draft.MTCRows) > 0 {
-				<div class="mtc-card">
-					<div class="mtc-hdr">MTC +0.5 m</div>
-					<div class="mtc-body">
-						<div class="mtc-cell">
-							<label>Draft, m</label>
-							<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
-						</div>
-						<div class="mtc-cell">
-							<label>MTC, MT/m</label>
-							<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].MTC) }/>
-						</div>
+		<div
+			class="mtc-grid"
+			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HydrostaticsBlock) }
+			hx-trigger="change changed delay:500ms"
+			hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+			hx-include="this"
+			hx-target={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }
+			hx-select={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }
+			hx-swap="morph"
+			hx-sync="this:replace"
+		>
+			<div class="mtc-card">
+				<div class="mtc-hdr">MTC +0.5 m</div>
+				<div class="mtc-body">
+					<div class="mtc-cell">
+						<label>Draft, m</label>
+						<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
+					</div>
+					<div class="mtc-cell">
+						<label>MTC, MT/m</label>
+						<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].MTC) }/>
 					</div>
 				</div>
-				<div class="mtc-card">
-					<div class="mtc-hdr">MTC −0.5 m</div>
-					<div class="mtc-body">
-						<div class="mtc-cell">
-							<label>Draft, m</label>
-							<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
-						</div>
-						<div class="mtc-cell">
-							<label>MTC, MT/m</label>
-							<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
-						</div>
+			</div>
+			<div class="mtc-card">
+				<div class="mtc-hdr">MTC -0.5 m</div>
+				<div class="mtc-body">
+					<div class="mtc-cell">
+						<label>Draft, m</label>
+						<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
 					</div>
-					<div class="mtc-delta">ΔMTC: —</div>
+					<div class="mtc-cell">
+						<label>MTC, MT/m</label>
+						<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
+					</div>
 				</div>
-			} else {
-				<div class="mtc-card"><div class="mtc-hdr">MTC +0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any"/></div></div></div>
-				<div class="mtc-card"><div class="mtc-hdr">MTC −0.5 m</div><div class="mtc-body"><div class="mtc-cell"><label>Draft, m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any"/></div><div class="mtc-cell"><label>MTC, MT/m</label><input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any"/></div></div><div class="mtc-delta">ΔMTC: —</div></div>
-			}
+				@DeltaMtc(dp.Survey, draftIndex, false)
+			</div>
 		</div>
 	</div>
+}
+
+templ MMCRow(survey types.Survey, draftIndex int, isOOB bool) {
+	{{ cd := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData) }}
+	<div
+		class="hydro-row"
+		id={ fmt.Sprintf("%s-%d", constants.MMCRow, draftIndex) }
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc hydro-grid-cell--label">MMC</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.MMC }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.Hydrostatics.Displacement }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ cd.Hydrostatics.TPC }</div>
+		<div class="hydro-grid-cell hydro-grid-cell--mmc">{ format.LCFWithDir(cd.Hydrostatics.LCF) }</div>
+	</div>
+}
+
+templ DeltaMtc(survey types.Survey, draftIndex int, isOOB bool) {
+	{{ cd := calculation.CalcDraft(survey.Drafts[draftIndex], survey.VesselData) }}
+	<div
+		class="mtc-delta"
+		id={ fmt.Sprintf("%s-%d", constants.DelataMtc, draftIndex) }
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>ΔMTC: { cd.DeltaMTC }</div>
 }

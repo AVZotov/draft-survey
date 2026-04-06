@@ -24,8 +24,10 @@ func (h *Handler) draft(c *fiber.Ctx) error {
 	if len(p.survey.Drafts) == 0 {
 		drafts := []types.Draft{
 			{
-				Type:   types.DraftTypeInitial,
-				Status: types.DraftStatusPending,
+				Type:            types.DraftTypeInitial,
+				Status:          types.DraftStatusPending,
+				MTCRows:         make([]types.MTCRow, 2),
+				HydrostaticRows: make([]types.HydrostaticRow, 2),
 			},
 		}
 		p.survey.Drafts = drafts
@@ -99,8 +101,10 @@ func (h *Handler) addIntermediateDraft(c *fiber.Ctx) error {
 	}
 
 	survey.Drafts = append(survey.Drafts, types.Draft{
-		Type:   types.DraftTypeIntermediate,
-		Status: types.DraftStatusPending,
+		Type:            types.DraftTypeIntermediate,
+		Status:          types.DraftStatusPending,
+		MTCRows:         make([]types.MTCRow, 2),
+		HydrostaticRows: make([]types.HydrostaticRow, 2),
 	})
 
 	if err = h.surveyRepository.Save(survey); err != nil {
@@ -119,8 +123,10 @@ func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
 	}
 
 	survey.Drafts = append(survey.Drafts, types.Draft{
-		Type:   types.DraftTypeFinal,
-		Status: types.DraftStatusPending,
+		Type:            types.DraftTypeFinal,
+		Status:          types.DraftStatusPending,
+		MTCRows:         make([]types.MTCRow, 2),
+		HydrostaticRows: make([]types.HydrostaticRow, 2),
 	})
 
 	if err = h.surveyRepository.Save(survey); err != nil {
