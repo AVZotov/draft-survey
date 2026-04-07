@@ -32,6 +32,38 @@ func MeanDrafts(m types.Marks) types.MeanDraft {
 	}
 }
 
+func CalcFullLBPLBM(draft types.Draft, lbp float64) float64 {
+	var dFwdDir, dAftDir float64
+
+	if dFwdDir = markVal(draft.DistancePPFwd); draft.PPFwdDirection == "A" {
+		dFwdDir *= -1
+	}
+	if dAftDir = markVal(draft.DistancePPAft); draft.PPAftDirection == "A" {
+		dAftDir *= -1
+	}
+
+	return round3(lbp - dAftDir + dFwdDir)
+}
+
+func CalcHalfLBPLBM(draft types.Draft, lbp float64) (lbmAftMid float64, lbmMidFwd float64) {
+	var dFwdDir, dMidDir, dAftDir float64
+
+	if dFwdDir = markVal(draft.DistancePPFwd); draft.PPFwdDirection == "A" {
+		dFwdDir *= -1
+	}
+	if dMidDir = markVal(draft.DistancePPMid); draft.PPMidDirection == "A" {
+		dMidDir *= -1
+	}
+	if dAftDir = markVal(draft.DistancePPAft); draft.PPAftDirection == "A" {
+		dAftDir *= -1
+	}
+
+	lbmMidFwd = round3((lbp / 2) - dMidDir - dFwdDir)
+	lbmAftMid = round3((lbp / 2) - dAftDir - dMidDir)
+
+	return lbmAftMid, lbmMidFwd
+}
+
 func CalcFullLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64) types.PPCorrections {
 	trim := m.DraftAftMean - m.DraftFwdMean
 	var dFwdDir, dMidDir, dAftDir float64

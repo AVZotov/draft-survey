@@ -8,6 +8,9 @@ import (
 )
 
 func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
+	var lbm float64
+	var lbmAftMid float64
+	var lbmMidFwd float64
 	var meanDraft types.MeanDraft
 	var meanFwdAft float64
 	var ppCorrections types.PPCorrections
@@ -33,6 +36,11 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	var totalBwTanksWeight float64
 	var totalFwTanksWeight float64
 
+	if v.VesselType == vessel.VesselTypeMarine {
+		lbm = CalcFullLBPLBM(draft, v.LBP)
+	} else {
+		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, v.LBP)
+	}
 	meanDraft = MeanDrafts(draft.Marks)
 	if v.CorrectionMethod == vessel.CorrectionMethodFullLBP {
 		ppCorrections = CalcFullLBPPPCorrections(meanDraft, draft, v.LBP)
@@ -59,7 +67,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 
 	listCorrection = CalcListCorrection(draft.Marks, draft.TPCListPort, draft.TPCListStarboard)
 	totalTrimCorrection = round3(firstTrimCorrection + secondTrimCorrection + listCorrection)
-	if draft.Density != nil {
+	if draft.Density != nil && v.TableDensity != nil {
 		densityCorrection = CalcDensityCorrection(
 			hydrostatics.Displacement,
 			firstTrimCorrection,
@@ -85,6 +93,9 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	totalFwTanksWeight = TotalTanksWeight(draft.FreshWaterTanks)
 
 	return DraftResult{
+		LBM:                   lbm,
+		LBMAftMid:             lbmAftMid,
+		LBMMidFwd:             lbmMidFwd,
 		MeanDraft:             meanDraft,
 		MeanFwdAft:            meanFwdAft,
 		PPCorrections:         ppCorrections,

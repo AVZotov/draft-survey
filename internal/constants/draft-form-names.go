@@ -51,6 +51,7 @@ const (
 	DelataMtc = "dMtc"
 
 	// Deductibles
+	Deductibles = "deduct"
 	HFO         = "hfo"
 	MDO         = "mdo"
 	LubOil      = "lub"

@@ -595,6 +595,8 @@ func parseDraftBlocks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 		parsePPKeel(c, d, draftIndex)
 	case constants.HydrostaticsBlock:
 		parseHydrostatic(c, d, draftIndex)
+	case constants.DeductiblesBlock:
+		parseDeductibles(c, d, draftIndex)
 	}
 }
 
@@ -779,5 +781,35 @@ func parseHydrostatic(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	nMtc, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.NMtc, draftIndex))
 	if err == nil {
 		d.MTCRows[1].MTC = nMtc
+	}
+}
+
+func parseDeductibles(c *fiber.Ctx, d *types.Draft, draftIndex int) {
+	if d == nil {
+		return
+	}
+	hfo, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.HFO, draftIndex))
+	if err == nil {
+		d.Deductibles.HFO = hfo
+	}
+	mdo, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.MDO, draftIndex))
+	if err == nil {
+		d.Deductibles.MDO = mdo
+	}
+	lub, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.LubOil, draftIndex))
+	if err == nil {
+		d.Deductibles.LubOil = lub
+	}
+	bglW, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex))
+	if err == nil {
+		d.Deductibles.BilgeWater = bglW
+	}
+	dwDen, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex))
+	if err == nil {
+		d.Density = dwDen
+	}
+	others, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex))
+	if err == nil {
+		d.Deductibles.Others = others
 	}
 }

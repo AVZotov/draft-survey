@@ -5,65 +5,16 @@ import (
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strconv"
 )
 
 templ Deductibles(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
-	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<!-- Deductibles and Table density-->
 	<div class="deduct-section">
 		<div class="sec-title">Deductibles &amp; Density</div>
-		<div class="deduct-grid">
-			<div class="df">
-				<label>Tbl Density</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.TableDensity, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.VesselData.TableDensity) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>HFO, MT</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.HFO) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>MDO, MT</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.MDO) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Lube Oil, MT</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.LubOil) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Bilge Water, MT</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>DockW Density</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Others, MT</label>
-				<input name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.Others) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Ballast Water, MT</label>
-				<input readonly name={ fmt.Sprintf("%s-%d", constants.BWTank, draftIndex) } placeholder="0.000" step="any" type="number"/>
-			</div>
-			<div class="df">
-				<label>Fresh Water, MT</label>
-				<input readonly name={ fmt.Sprintf("%s-%d", constants.FWTank, draftIndex) } placeholder="0.000" step="any" type="number"/>
-			</div>
-			<div class="df">
-				<label>Total Deduct, MT</label>
-				<input readonly name={ fmt.Sprintf("%s-%d", constants.TotalDeduct, draftIndex) } value={ dr.TotalDeductibles } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Const Declared, MT</label>
-				<input readonly name={ fmt.Sprintf("%s-%d", constants.ConstDeclared, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.ConstantDeclared) } type="number" placeholder="0.000" step="any"/>
-			</div>
-			<div class="df">
-				<label>Cargo Declared, MT</label>
-				<input readonly name={ fmt.Sprintf("%s-%d", constants.CargoDeclared, draftIndex) } value={ format.FloatOrEmpty(dp.Survey.CargoDeclared) } type="number" placeholder="0.000" step="any"/>
-			</div>
-		</div>
+		@DeductiblesGrid(dp.Survey, draftIndex, dr)
 		<button
 			class="btn btn-ghost--ini"
 			hx-post={ "/api/v1/survey/" + dp.Survey.ID + "/draft/save?redirect=/survey/" + dp.Survey.ID + "/tanks/" + strconv.Itoa(draftIndex) }
@@ -75,5 +26,60 @@ templ Deductibles(dp components.DraftPageProps, draftIndex int, dr calculation.D
 			</svg>
 			BW / FW Tanks →
 		</button>
+	</div>
+}
+
+templ DeductiblesGrid(survey types.Survey, draftIndex int, dr calculation.DraftResult) {
+	{{ draft := survey.Drafts[draftIndex] }}
+	<div
+		class="deduct-grid"
+		id={ fmt.Sprintf("%s-%d", constants.Deductibles, draftIndex) }
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.DeductiblesBlock) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", survey.ID, draftIndex) }
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+		hx-target="this"
+		hx-swap="morph"
+	>
+		<div class="df">
+			<label>Tbl Density</label>
+			<input readonly value={ format.FloatOrEmpty(survey.VesselData.TableDensity) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Ballast Water, MT</label>
+			<input readonly value={ dr.TotalBwTanksWeight } placeholder="0.000" step="any" type="number"/>
+		</div>
+		<div class="df">
+			<label>MDO, MT</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.MDO) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Lube Oil, MT</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.LubOil) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Bilge Water, MT</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>DockW Density</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Fresh Water, MT</label>
+			<input readonly value={ dr.TotalFwTanksWeight } placeholder="0.000" step="any" type="number"/>
+		</div>
+		<div class="df">
+			<label>HFO, MT</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.HFO) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Others, MT</label>
+			<input name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.Others) } type="number" placeholder="0.000" step="any"/>
+		</div>
+		<div class="df">
+			<label>Total Deduct, MT</label>
+			<input readonly value={ dr.TotalDeductibles } type="number" placeholder="0.000" step="any"/>
+		</div>
 	</div>
 }

@@ -3,6 +3,9 @@ package calculation
 import "github.com/AVZotov/draft-survey/internal/types"
 
 type DraftResult struct {
+	LBM                   float64
+	LBMAftMid             float64
+	LBMMidFwd             float64
 	MeanDraft             types.MeanDraft
 	MeanFwdAft            float64
 	PPCorrections         types.PPCorrections

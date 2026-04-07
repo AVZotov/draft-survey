@@ -25,15 +25,11 @@ func (t Tank) CalcWeight() float64 {
 	return *t.Volume * *t.Density
 }
 
-type OtherDeductibles struct {
-	Others     *float64 `json:"others"`
-	OthersName string   `json:"others_name"`
-}
 type Deductibles struct {
 	HFO         *float64 `json:"hfo"`
 	MDO         *float64 `json:"mdo"`
 	LubOil      *float64 `json:"lub_oil"`
 	BilgeWater  *float64 `json:"bilge_water"`
 	SewageWater *float64 `json:"sewage_water"`
-	OtherDeductibles
+	Others      *float64 `json:"others"`
 }

@@ -31,4 +31,5 @@ const (
 	MarksBlock        = "marks-block"
 	PPKeelBlock       = "ppkeel-block"
 	HydrostaticsBlock = "hydrostatics-block"
+	DeductiblesBlock  = "deductibles-block"
 )
