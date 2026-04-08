@@ -2,7 +2,6 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -10,7 +9,7 @@ import (
 	"strconv"
 )
 
-templ Deductibles(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
+templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
 	<!-- Deductibles and Table density-->
 	<div class="deduct-section">
 		<div class="sec-title">Deductibles &amp; Density</div>
@@ -29,7 +28,7 @@ templ Deductibles(dp components.DraftPageProps, draftIndex int, dr calculation.D
 	</div>
 }
 
-templ DeductiblesGrid(survey types.Survey, draftIndex int, dr calculation.DraftResult) {
+templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult) {
 	{{ draft := survey.Drafts[draftIndex] }}
 	<div
 		class="deduct-grid"

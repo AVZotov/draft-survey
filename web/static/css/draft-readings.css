@@ -12,7 +12,7 @@
      6. CALC PANEL
      7. HYDROSTATIC SECTION
      8. DEDUCTIBLES SECTION
-     9. DIVIDER
+     9. TOTALS SECTION
 ================================================================ */
 
 /* #region 1. PAGE LAYOUT ═══════════════════════════════════════ */
@@ -630,29 +630,146 @@ select.dir-sel:focus {
 
 /* #endregion */
 
-/* #region 9. DIVIDER ═══════════════════════════════════════════ */
+/* #region 9. TOTALS SECTION */
 
-.draft-divider {
+.totals-section {
+  border-top: 1px solid var(--border);
+}
+
+.totals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.totals-header:hover {
+  background: var(--ini-light);
+}
+
+.totals-header-right {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  margin: var(--space-xs) 0 var(--space-lg);
 }
 
-.dd-line {
-  flex: 1;
-  height: 1px;
+.totals-preview {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.totals-chevron {
+  color: var(--text-dim);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.totals-chevron--open {
+  transform: rotate(180deg);
+}
+
+.totals-body {
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Primary result — displacement corr'd */
+.totals-primary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+}
+
+.totals-primary-label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.totals-primary-value {
+  font-family: var(--font-mono), monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Secondary grid */
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
   background: var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-.dd-label {
+.totals-cell {
+  background: var(--surface);
+  padding: var(--space-xs) var(--space-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.totals-cell-label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.totals-cell-value {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Cargo weight — final result */
+.totals-cargo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.totals-cargo-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.totals-cargo-value {
+  font-family: var(--font-mono), monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Shared unit label */
+.totals-unit {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
-  white-space: nowrap;
-  padding: 4px var(--space-md);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  font-weight: 400;
 }
 
 /* #endregion */

@@ -1,7 +1,6 @@
 package web
 
 import (
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -63,7 +62,7 @@ func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutPro
 	}
 }
 
-func ResultsPageProps(user *types.User, survey *types.Survey, results *[]calculation.DraftResult) components.LayoutProps {
+func ResultsPageProps(user *types.User, survey *types.Survey, results *[]types.DraftResult) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Results",
 		MetaDescription: "Final findings assessment",

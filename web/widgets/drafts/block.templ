@@ -3,13 +3,13 @@ package drafts
 import (
 	"fmt"
 
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
+templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyResult) {
+	{{ dr := sr.DraftTotals[draftIndex].DraftResult }}
 	<div
 		class={ templ.Classes(
         "draft-block",
@@ -50,6 +50,8 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.Dr
 		@Hydrostatics(dp, draftIndex, dr)
 		<!-- Deductibles and Table density-->
 		@Deductibles(dp, draftIndex, dr)
+		<!-- Totals section-->
+		@Totals(dp, draftIndex, sr)
 	</div>
 }
 

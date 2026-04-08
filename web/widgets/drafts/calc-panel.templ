@@ -4,9 +4,8 @@ import "fmt"
 import "github.com/AVZotov/draft-survey/internal/constants"
 import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/types"
-import "github.com/AVZotov/draft-survey/internal/calculation"
 
-templ CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
+templ CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="calc-panel"
 		id={ fmt.Sprintf("%s-%d", constants.CalcPanel, draftIndex) }
@@ -32,7 +31,7 @@ templ CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult,
 		</div>
 		<div class="cp-cell">
 			<span class="cp-lbl">Defl. cm</span>
-			<span class="cp-val">{ dr.Deflection }</span>
+			<span class="cp-val">{ format.DeflectionFormatted(dr.Deflection) }</span>
 		</div>
 		<div class="cp-cell cp-cell--mmc">
 			<span class="cp-lbl">MMC</span>

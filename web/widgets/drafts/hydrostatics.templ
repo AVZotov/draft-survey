@@ -2,14 +2,13 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) {
+templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<!-- Hydrostatic data -->
 	<div class="hydro-section">
@@ -130,7 +129,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr calculation.
 	</div>
 }
 
-templ MMCRow(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
+templ MMCRow(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="hydro-row"
 		id={ fmt.Sprintf("%s-%d", constants.MMCRow, draftIndex) }
@@ -146,7 +145,7 @@ templ MMCRow(survey types.Survey, draftIndex int, dr calculation.DraftResult, is
 	</div>
 }
 
-templ DeltaMtc(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) {
+templ DeltaMtc(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="mtc-delta"
 		id={ fmt.Sprintf("%s-%d", constants.DelataMtc, draftIndex) }

@@ -3,7 +3,6 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"math"
 	"slices"
 	"strconv"
 
@@ -13,10 +12,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/gofiber/fiber/v2"
 )
-
-func round3(v float64) float64 {
-	return math.Round(v*1000) / 1000
-}
 
 type props struct {
 	surveyID   string

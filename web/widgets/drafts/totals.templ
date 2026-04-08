@@ -1,0 +1,107 @@
+package drafts
+
+import (
+	f "github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ Totals(dp components.DraftPageProps, draftIndex int, sr types.SurveyResult) {
+	{{ dr := sr.DraftTotals[draftIndex].DraftResult }}
+	<!-- COLLAPSED (default) -->
+	<div class="totals-section" x-data="{ open: false }">
+		<!-- Header — always visible, click to toggle -->
+		<div class="totals-header" @click="open = !open">
+			<span class="sec-title" style="margin: 0;">Totals &amp; Results</span>
+			<div class="totals-header-right">
+				<!-- Key value always visible when collapsed -->
+				<span class="totals-preview">{ f.WeightFormatted(dr.DisplacementCorrected) } MT</span>
+				<svg
+					viewBox="0 0 24 24"
+					width="13"
+					height="13"
+					stroke="currentColor"
+					fill="none"
+					stroke-width="2"
+					stroke-linecap="round"
+					class="totals-chevron"
+					:class="{ 'totals-chevron--open': open }"
+				>
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+			</div>
+		</div>
+		<!-- Body — shown when open -->
+		<div class="totals-body" x-show="open">
+			<!-- Primary result -->
+			<div class="totals-primary">
+				<span class="totals-primary-label">Displacement corr'd</span>
+				<span class="totals-primary-value">{ f.WeightFormatted(dr.DisplacementCorrected) } <span class="totals-unit">MT</span></span>
+			</div>
+			<!-- Secondary grid -->
+			<div class="totals-grid">
+				<div class="totals-cell">
+					<span class="totals-cell-label">Displ. at MMC</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.Hydrostatics.Displacement) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Net Displ.</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.NetDisplacement) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Summer DWT</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dp.Survey.VesselData.SummerDWT) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Current DWT</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.CurrentDWT) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">1st Trim Corr.</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.FirstTrimCorrection) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">2nd Trim Corr.</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.SecondTrimCorrection) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">List Corr.</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.ListCorrection) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Total Trim Corr.</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.TotalTrimCorrection) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Constant Declared</span>
+					<span class="totals-cell-value">{ f.WeightFormattedPointer(dp.Survey.ConstantDeclared) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Constant Calculated</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(dr.Constant) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Constant Diff</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(sr.DraftTotals[draftIndex].ConstantDiff) } <span class="totals-unit">MT</span></span>
+				</div>
+				<div class="totals-cell">
+					<span class="totals-cell-label">Cargo Declared</span>
+					<span class="totals-cell-value">{ f.WeightFormattedPointer(dp.Survey.CargoDeclared) } <span class="totals-unit">MT</span></span>
+				</div>
+			</div>
+			<!-- Cargo Weight -->
+			if dp.Survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate {
+				<div class="totals-cargo">
+					<span class="totals-cargo-label">Cargo Loaded</span>
+					<span class="totals-cargo-value">{ f.WeightFormatted(sr.DraftTotals[draftIndex].CargoFromPrev) } <span class="totals-unit">MT</span></span>
+				</div>
+			}
+			if dp.Survey.Drafts[draftIndex].Type == types.DraftTypeFinal {
+				<div class="totals-cargo">
+					<span class="totals-cargo-label">Cargo On Board</span>
+					<span class="totals-cargo-value">{ f.WeightFormatted(sr.CargoOnBoard) } <span class="totals-unit">MT</span></span>
+				</div>
+			}
+		</div>
+	</div>
+}

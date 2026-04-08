@@ -41,9 +41,9 @@ func (h *Handler) draft(c *fiber.Ctx) error {
 	layoutProps := web.DraftLayoutProps(p.user)
 	pageProps := web.DraftsPageProps(*p.survey)
 
-	dr := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
+	sr := calculation.CalcSurvey(*p.survey)
 
-	return tadaptor.Render(c, pages.DraftReadings(layoutProps, pageProps, dr))
+	return tadaptor.Render(c, pages.DraftReadings(layoutProps, pageProps, sr))
 }
 
 func (h *Handler) startDraft(c *fiber.Ctx) error {

@@ -1,22 +1,20 @@
-package calculation
-
-import "github.com/AVZotov/draft-survey/internal/types"
+package types
 
 type DraftResult struct {
 	LBM                   float64
 	LBMAftMid             float64
 	LBMMidFwd             float64
-	MeanDraft             types.MeanDraft
+	MeanDraft             MeanDraft
 	MeanFwdAft            float64
-	PPCorrections         types.PPCorrections
-	DraftsWKeel           types.DraftsWKeel
+	PPCorrections         PPCorrections
+	DraftsWKeel           DraftsWKeel
 	MMC                   float64
 	ObservedTrim          float64
 	TrueTrim              float64
 	ListMeters            float64
 	ListDegrees           float64
 	Deflection            float64
-	Hydrostatics          types.Hydrostatics
+	Hydrostatics          Hydrostatics
 	FirstTrimCorrection   float64
 	SecondTrimCorrection  float64
 	DeltaMTC              float64

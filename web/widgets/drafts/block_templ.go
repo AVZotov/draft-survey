@@ -11,13 +11,12 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-func DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.DraftResult) templ.Component {
+func DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyResult) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -38,6 +37,7 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.Dra
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		dr := sr.DraftTotals[draftIndex].DraftResult
 		var templ_7745c5c3_Var2 = []any{templ.Classes(
 			"draft-block",
 			templ.KV("draft-block--ini", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeInitial),
@@ -152,7 +152,15 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int, dr calculation.Dra
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<!-- Totals section-->")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Totals(dp, draftIndex, sr).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

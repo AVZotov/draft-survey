@@ -188,17 +188,6 @@ CargoWeight = |NetDispl_final - NetDispl_initial|
 | `PPDirection` | `F` / `A` |
 | `CorrectionMethod` | `Full LBP` / `Half LBP` |
 
----
-
-## Known Discrepancies
-
-### #1 — First Trim Correction denominator
-| Source | Denominator |
-|--------|-------------|
-| UNECE 1992, all external sources | `LBP` ✅ |
-| Internal Excel file | `LBM` ⚠️ |
-
-Implementation uses `LBP` per standard. The Excel file likely contains a surveyor-specific deviation. Flagged for clarification.
 
 ---
 

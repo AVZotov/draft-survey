@@ -2,7 +2,6 @@ package pages
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/layouts"
@@ -296,7 +295,7 @@ templ ResultsPage(props components.LayoutProps) {
 }
 
 // draftColumn renders one Initial or Final draft calculation column.
-templ draftColumn(phase string, label string, r calculation.DraftResult, props components.LayoutProps) {
+templ draftColumn(phase string, label string, r types.DraftResult, props components.LayoutProps) {
 	<div class={ "draft-col", "draft-col--" + phase }>
 		<div class="draft-col-header">
 			<div class="col-label">
@@ -539,7 +538,7 @@ templ draftColumn(phase string, label string, r calculation.DraftResult, props c
 }
 
 // cargoSection renders the cargo result summary panel below the side-by-side grid.
-templ cargoSection(ini calculation.DraftResult, fin calculation.DraftResult, props components.LayoutProps) {
+templ cargoSection(ini types.DraftResult, fin types.DraftResult, props components.LayoutProps) {
 	<div class="cargo-section">
 		<div class="cargo-hero">
 			<div class="cargo-hero-left">

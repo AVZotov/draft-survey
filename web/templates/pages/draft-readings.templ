@@ -1,15 +1,17 @@
 package pages
 
-import "github.com/AVZotov/draft-survey/web/layouts"
-import "github.com/AVZotov/draft-survey/web/widgets"
-import "github.com/AVZotov/draft-survey/web/widgets/drafts"
-import "github.com/AVZotov/draft-survey/web/components"
-import "github.com/AVZotov/draft-survey/internal/calculation"
+import (
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/layouts"
+	"github.com/AVZotov/draft-survey/web/widgets"
+	"github.com/AVZotov/draft-survey/web/widgets/drafts"
+)
 
-templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps, dr calculation.DraftResult) {
+templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps, sr types.SurveyResult) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
-		@drafts.DraftForm(dp, dr)
+		@drafts.DraftForm(dp, sr)
 		@drafts.DraftActionBar(&dp.Survey)
 		@widgets.Footer()
 	}

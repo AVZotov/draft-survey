@@ -20,7 +20,7 @@ func (h *Handler) surveyResults(c *fiber.Ctx) error {
 		return err
 	}
 
-	results := make([]calculation.DraftResult, len(survey.Drafts))
+	results := make([]types.DraftResult, len(survey.Drafts))
 	for i, draft := range survey.Drafts {
 		if draft.Status == types.DraftStatusComplete ||
 			draft.Status == types.DraftStatusActive {

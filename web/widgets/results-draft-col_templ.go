@@ -10,13 +10,12 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
-func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel vessel.VesselData) templ.Component {
+func ResultsDraftCol(draft types.Draft, result types.DraftResult, vessel vessel.VesselData) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -80,7 +79,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", result.MMC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 27, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 26, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -93,7 +92,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(format.MMCShortFormula(vessel.VesselType))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 27, Col: 113}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 26, Col: 113}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -106,7 +105,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.LBPCorrection(vessel.CorrectionMethod))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 27, Col: 163}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 26, Col: 163}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -119,7 +118,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.FwdPort.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 39, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 38, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -132,7 +131,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.FwdStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 39, Col: 190}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 38, Col: 190}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -145,7 +144,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.MidPort.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 40, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 39, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -158,7 +157,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.MidStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 40, Col: 190}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 39, Col: 190}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -171,7 +170,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.AftPort.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 41, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 40, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -184,7 +183,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(format.Mark(draft.Marks.AftStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 41, Col: 190}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 40, Col: 190}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -197,7 +196,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(format.Draft(result.MeanDraft.DraftFwdMean))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 42, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 41, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -210,7 +209,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(format.Draft(result.MeanDraft.DraftMidMean))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 43, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 42, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
@@ -223,7 +222,7 @@ func ResultsDraftCol(draft types.Draft, result calculation.DraftResult, vessel v
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(format.Draft(result.MeanDraft.DraftAftMean))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 44, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results-draft-col.templ`, Line: 43, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {

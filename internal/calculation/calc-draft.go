@@ -7,7 +7,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
-func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
+func CalcDraft(draft types.Draft, v vessel.VesselData) types.DraftResult {
 	var lbm float64
 	var lbmAftMid float64
 	var lbmMidFwd float64
@@ -92,7 +92,7 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) DraftResult {
 	totalBwTanksWeight = TotalTanksWeight(draft.BallastWaterTanks)
 	totalFwTanksWeight = TotalTanksWeight(draft.FreshWaterTanks)
 
-	return DraftResult{
+	return types.DraftResult{
 		LBM:                   lbm,
 		LBMAftMid:             lbmAftMid,
 		LBMMidFwd:             lbmMidFwd,

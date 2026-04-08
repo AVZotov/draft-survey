@@ -12,9 +12,8 @@ import "fmt"
 import "github.com/AVZotov/draft-survey/internal/constants"
 import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/types"
-import "github.com/AVZotov/draft-survey/internal/calculation"
 
-func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, isOOB bool) templ.Component {
+func CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -42,7 +41,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s-%d", constants.CalcPanel, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 12, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 11, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -65,7 +64,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(dr.MeanFwdAft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 19, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 18, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -78,7 +77,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(dr.ObservedTrim)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 23, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 22, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -91,7 +90,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(format.TrimDirection(dr.ObservedTrim))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 23, Col: 83}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 22, Col: 83}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -104,7 +103,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(dr.TrueTrim)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 27, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 26, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -117,7 +116,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(format.TrimDirection(dr.ObservedTrim))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 27, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 26, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -130,7 +129,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(dr.ListDegrees)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 31, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 30, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -143,7 +142,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(format.ListDirection(dr.ListMeters))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 31, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 30, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -154,9 +153,9 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
-		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(dr.Deflection)
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(format.DeflectionFormatted(dr.Deflection))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 35, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 34, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -169,7 +168,7 @@ func CalcPanel(survey types.Survey, draftIndex int, dr calculation.DraftResult, 
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(dr.MMC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 39, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc-panel.templ`, Line: 38, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {

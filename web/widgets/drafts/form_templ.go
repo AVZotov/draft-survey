@@ -10,11 +10,11 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-func DraftForm(dp components.DraftPageProps, dr calculation.DraftResult) templ.Component {
+func DraftForm(dp components.DraftPageProps, sr types.SurveyResult) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -92,7 +92,7 @@ func DraftForm(dp components.DraftPageProps, dr calculation.DraftResult) templ.C
 			return templ_7745c5c3_Err
 		}
 		for i, _ := range dp.Survey.Drafts {
-			templ_7745c5c3_Err = DraftBlock(dp, i, dr).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = DraftBlock(dp, i, sr).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
