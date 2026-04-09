@@ -1,0 +1,17 @@
+package pages
+
+import (
+	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/layouts"
+	"github.com/AVZotov/draft-survey/web/widgets"
+	"github.com/AVZotov/draft-survey/web/widgets/survey"
+)
+
+templ NewSurvey(props components.LayoutProps) {
+	@layouts.Layout(props) {
+		@widgets.HeaderUser(props.User)
+		@survey.NewSurveyForm(props.Survey)
+		@survey.NewSurveyActionBar(props.Survey)
+		@widgets.Footer()
+	}
+}
