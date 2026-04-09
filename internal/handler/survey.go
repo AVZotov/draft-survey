@@ -8,6 +8,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/internal/vessel"
 	"github.com/AVZotov/draft-survey/web"
+	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -20,7 +21,7 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 		return err
 	}
 	props := web.NewSurveyProps(user, survey)
-	component := web.NewSurvey(props)
+	component := pages.NewSurvey(props)
 	return tadaptor.Render(c, component)
 }
 
@@ -59,7 +60,7 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 		return err
 	}
 	props := web.NewSurveyProps(user, survey)
-	return tadaptor.Render(c, web.NewSurvey(props))
+	return tadaptor.Render(c, pages.NewSurvey(props))
 }
 
 /*

@@ -2,6 +2,7 @@ package survey
 
 import "github.com/AVZotov/draft-survey/internal/types"
 import "time"
+import "github.com/AVZotov/draft-survey/internal/format"
 
 templ NewSurveyForm(survey *types.Survey) {
 	<main class="page-main">
@@ -35,14 +36,14 @@ templ NewSurveyForm(survey *types.Survey) {
 						<span class="form-card-subtitle">Survey context & logistics</span>
 					</div>
 					<div class="form-section">
-						<div class="field-row-2">
+						<div class="field-col-2">
 							<div class="field">
 								<label for="job-no">Job No. <span class="optional">(optional)</span></label>
 								<input type="text" id="job-no" name="job_no" placeholder="e.g. 345543_002" value={ survey.Job.JobNumber }/>
 							</div>
 							<div class="field">
 								<label for="ds-no">DS No. <span class="optional">(optional)</span></label>
-								<input type="number" id="ds-no" name="ds_no" placeholder="e.g. 1" step="any" value={ formatInt(survey.Job.DSNumber) }/>
+								<input type="number" id="ds-no" name="ds_no" placeholder="e.g. 1" step="any" value={ survey.Job.DSNumber }/>
 							</div>
 						</div>
 						<div class="field">
@@ -72,7 +73,7 @@ templ NewSurveyForm(survey *types.Survey) {
 								</label>
 							</div>
 						</div>
-						<div class="field-row-2">
+						<div class="field-col-2">
 							<div class="field">
 								<label for="port">Port / Berth <span class="optional">(optional)</span></label>
 								<input type="text" id="port" name="port" placeholder="e.g. Vanino, Russia" value={ survey.CargoOperation.PlaceOfInspection }/>
@@ -82,7 +83,7 @@ templ NewSurveyForm(survey *types.Survey) {
 								<input type="text" id="destination" name="destination" placeholder="e.g. China" value={ survey.CargoOperation.Destination }/>
 							</div>
 						</div>
-						<div class="field-row-3">
+						<div class="field-col-3">
 							<div class="field">
 								<label for="cargo-type">Cargo <span class="optional">(optional)</span></label>
 								<input type="text" id="cargo-type" name="cargo" placeholder="e.g. Coal" value={ survey.CargoOperation.Cargo }/>
@@ -113,90 +114,22 @@ templ NewSurveyForm(survey *types.Survey) {
 							</div>
 						</div>
 						<div class="field">
-							<label>Sea Condition <span class="required">*</span></label>
-							<!-- Wave toggle -->
-							<div class="sea-toggle-row">
-								<div class="sea-toggle-group">
-									<label class="sea-toggle-label">
-										<input
-											type="radio"
-											name="sea_type"
-											id="wave-enabled"
-											value="wave"
-											checked?={ survey.SeaCondition.Type != "ice" }
-											onchange="toggleSeaGroup('wave')"
-										/>
-										<span class="sea-toggle-pill">
-											<span class="sea-toggle-dot"></span>
-										</span>
-										Wave
-									</label>
-									<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", survey.SeaCondition.Type == types.SeaConditionTypeIce)) } id="wave-group">
-										<div class="select-wrap">
-											<select id="sea-condition" name="sea_condition" onchange="updateSeaBadge()">
-												<option value="&lt; 0.1m" selected?={ survey.SeaCondition.Wave == "< 0.1m" }>Calm — &lt; 0.1m</option>
-												<option value="0.1-0.5m" selected?={ survey.SeaCondition.Wave == "0.1-0.5m" }>Smooth — 0.1–0.5m</option>
-												<option value="0.5-1.25m" selected?={ survey.SeaCondition.Wave == "0.5-1.25m" }>Slight — 0.5–1.25m</option>
-												<option value="1.25-2.5m" selected?={ survey.SeaCondition.Wave == "1.25-2.5m" }>Moderate — 1.25–2.5m</option>
-												<option value="2.5-4.0m" selected?={ survey.SeaCondition.Wave == "2.5-4.0m" }>Rough — 2.5–4.0m</option>
-											</select>
-										</div>
-										<div class="sea-badge slight" id="sea-badge">
-											<span class="sea-badge-dot"></span>Slight
-										</div>
-									</div>
-								</div>
-								<!-- Ice toggle -->
-								<div class="sea-toggle-group">
-									<label class="sea-toggle-label">
-										<input
-											type="radio"
-											name="sea_type"
-											id="ice-enabled"
-											value="ice"
-											checked?={ survey.SeaCondition.Type == "ice" }
-											onchange="toggleSeaGroup('ice')"
-										/>
-										<span class="sea-toggle-pill">
-											<span class="sea-toggle-dot"></span>
-										</span>
-										Ice
-									</label>
-									<div class={ templ.Classes("sea-selects", templ.KV("sea-selects--disabled", survey.SeaCondition.Type != types.SeaConditionTypeIce)) } id="ice-group">
-										<div class="select-wrap">
-											<select
-												id="ice-condition"
-												name="ice_condition"
-												disabled?={ survey.SeaCondition.Type != types.SeaConditionTypeIce }
-												onchange="updateIceBadge()"
-											>
-												<option value="&lt;0.05m around" selected?={ survey.SeaCondition.Ice == "<0.05m around" }>&lt; 0.05m around</option>
-												<option value="0.05-0.1m around" selected?={ survey.SeaCondition.Ice == "0.05-0.1m around" }>0.05–0.1m around</option>
-												<option value="0.1-0.15m around" selected?={ survey.SeaCondition.Ice == "0.1-0.15m around" }>0.1–0.15m around</option>
-												<option value="0.15-0.2m around" selected?={ survey.SeaCondition.Ice == "0.15-0.2m around" }>0.15–0.2m around</option>
-												<option value="0.2-0.3m around" selected?={ survey.SeaCondition.Ice == "0.2-0.3m around" }>0.2–0.3m around</option>
-												<option value="0.3-0.4m around" selected?={ survey.SeaCondition.Ice == "0.3-0.4m around" }>0.3–0.4m around</option>
-												<option value="0.4-0.6m around" selected?={ survey.SeaCondition.Ice == "0.4-0.6m around" }>0.4–0.6m around</option>
-												<option value="&gt;0.6m around" selected?={ survey.SeaCondition.Ice == "&gt;0.6m around" }>&gt; 0.6m around</option>
-											</select>
-										</div>
-										<div class="sea-badge" id="ice-badge">
-											<span class="sea-badge-dot"></span>—
-										</div>
-									</div>
-								</div>
-							</div>
-							<p class="field-hint">Select sea condition and choose appropriate value</p>
-						</div>
-						<div class="field">
 							<label for="remarks">Remarks <span class="optional">(optional)</span></label>
 							<textarea
 								id="remarks"
 								name="remarks"
 								placeholder="Any observations, notes or disclaimers for the report…"
-							>
-								{ survey.Remarks }
-							</textarea>
+							>{ survey.Remarks }</textarea>
+						</div>
+						<div class="field-col-2">
+							<div class="field">
+								<label for="cargo-declared">Cargo Declared, MT <span class="optional">(optional)</span></label>
+								<input type="number" id="cargo-declared" name="cargo_declared" placeholder="0.000" step="any" value={ format.FloatOrEmpty(survey.CargoDeclared) }/>
+							</div>
+							<div class="field">
+								<label for="table-density">Table Density, t/m³ <span class="optional">(optional)</span></label>
+								<input type="number" id="table-density" name="table_density" placeholder="1.025" step="any" value={ format.FloatOrEmpty(survey.VesselData.TableDensity) }/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -210,7 +143,7 @@ templ NewSurveyForm(survey *types.Survey) {
 						<span class="form-card-subtitle">From vessel's certificates</span>
 					</div>
 					<div class="form-section">
-						<div class="field-row-2">
+						<div class="field-col-2">
 							<div class="field">
 								<label for="vessel-name">Vessel Name <span class="required">*</span></label>
 								<input type="text" id="vessel-name" name="vessel_name" placeholder="e.g. OCEAN CHEERS" value={ survey.VesselData.Name }/>
@@ -220,7 +153,7 @@ templ NewSurveyForm(survey *types.Survey) {
 								<input type="text" id="imo" name="imo" placeholder="e.g. 9233387" value={ survey.VesselData.IMO }/>
 							</div>
 						</div>
-						<div class="field-row-3">
+						<div class="field-col-3">
 							<div class="field">
 								<label for="flag">Home Flag <span class="optional">(optional)</span></label>
 								<div class="select-wrap">
@@ -255,34 +188,33 @@ templ NewSurveyForm(survey *types.Survey) {
 							</div>
 							<div class="field">
 								<label for="built">Built Year <span class="optional">(optional)</span></label>
-								<input type="number" id="built" name="built" placeholder="e.g. 2002" step="any" value={ formatInt(survey.VesselData.BuiltYear) }/>
+								<input type="number" id="built" name="built" placeholder="e.g. 2002" step="any" value={ survey.VesselData.BuiltYear }/>
 							</div>
 							<div class="field">
 								<label for="lightship">Lightship, MT <span class="required">*</span></label>
-								<input type="number" id="lightship" name="lightship" placeholder="0.000" step="any" value={ formatFloat(survey.VesselData.Lightship) }/>
+								<input type="number" id="lightship" name="lightship" placeholder="0.000" step="any" value={ survey.VesselData.Lightship }/>
 							</div>
 						</div>
 					</div>
 					<div class="form-section">
-						<div class="field-row-4">
+						<div class="field-col-4">
 							<div class="field">
 								<label for="lbp">LBP, m <span class="required">*</span></label>
-								<input type="number" id="lbp" name="lbp" placeholder="0.00" step="any" oninput="updateCalcHints()" value={ formatFloat(survey.VesselData.LBP) }/>
+								<input type="number" id="lbp" name="lbp" placeholder="0.00" step="any" oninput="updateCalcHints()" value={ survey.VesselData.LBP }/>
 							</div>
 							<div class="field">
 								<label for="breadth">Breadth, m <span class="required">*</span></label>
-								<input type="number" id="breadth" name="breadth" placeholder="0.00" step="any" value={ formatFloat(survey.VesselData.Breadth) }/>
+								<input type="number" id="breadth" name="breadth" placeholder="0.00" step="any" value={ survey.VesselData.Breadth }/>
 							</div>
 							<div class="field">
 								<label for="depth">Depth, m <span class="optional">(optional)</span></label>
-								<input type="number" id="depth" name="depth" placeholder="0.00" step="any" oninput="checkDepth()" value={ formatFloat(survey.VesselData.Depth) }/>
+								<input type="number" id="depth" name="depth" placeholder="0.00" step="any" oninput="checkDepth()" value={ survey.VesselData.Depth }/>
 							</div>
 							<div class="field">
 								<label>LBP / 2, m</label>
 								<div class="calc-value" id="lbp-half">—</div>
 							</div>
 						</div>
-						<!-- Depth warning: shown when Depth ≠ Summer Draft + Summer Freeboard -->
 						<div class="field-warning" id="depth-warning" style="display:none">
 							<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
 							<p class="field-warning-text">Depth should equal Summer Draft + Summer Freeboard. Please verify.</p>
@@ -299,26 +231,25 @@ templ NewSurveyForm(survey *types.Survey) {
 						<span class="form-card-subtitle">From vessel's load line certificate</span>
 					</div>
 					<div class="form-section">
-						<div class="field-row-4">
+						<div class="field-col-4">
 							<div class="field">
 								<label for="summer-draft">Summer Draft, m <span class="required">*</span></label>
-								<input type="number" id="summer-draft" name="summer_draft" placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ formatFloat(survey.VesselData.SummerDraft) }/>
+								<input type="number" id="summer-draft" name="summer_draft" placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ survey.VesselData.SummerDraft }/>
 							</div>
 							<div class="field">
 								<label for="summer-dwt">Summer DWT, MT <span class="required">*</span></label>
-								<input type="number" id="summer-dwt" name="summer_dwt" placeholder="0.000" step="any" oninput="updateFWA()" value={ formatFloat(survey.VesselData.SummerDWT) }/>
+								<input type="number" id="summer-dwt" name="summer_dwt" placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerDWT }/>
 							</div>
 							<div class="field">
 								<label for="summer-tpc">Summer TPC, MT/cm <span class="required">*</span></label>
-								<input type="number" id="summer-tpc" name="summer_tpc" placeholder="0.000" step="any" oninput="updateFWA()" value={ formatFloat(survey.VesselData.SummerTPC) }/>
+								<input type="number" id="summer-tpc" name="summer_tpc" placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerTPC }/>
 							</div>
 							<div class="field">
 								<label for="summer-freeboard">Summer Freeboard, m <span class="optional">(optional)</span></label>
-								<input type="number" id="summer-freeboard" name="summer_freeboard" placeholder="0.000" step="any" oninput="checkDepth()" value={ formatFloat(survey.VesselData.SummerFreeboard) }/>
+								<input type="number" id="summer-freeboard" name="summer_freeboard" placeholder="0.000" step="any" oninput="checkDepth()" value={ survey.VesselData.SummerFreeboard }/>
 							</div>
 						</div>
-						<!-- Derived values row -->
-						<div class="field-row-3" style="margin-top: var(--space-md)">
+						<div class="field-col-3">
 							<div class="field">
 								<label>0.5% DWT, MT</label>
 								<div class="calc-value" id="half-pct-dwt">—</div>
@@ -354,7 +285,7 @@ templ NewSurveyForm(survey *types.Survey) {
 										name="mmc_method"
 										id="mmc-standard"
 										value="marine"
-										checked?={ survey.VesselData.VesselType !="river" && survey.VesselData.VesselType !="barge" }
+										checked?={ survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" }
 									/>
 									<label for="mmc-standard">
 										<span class="method-label-title">Standard</span>
@@ -403,7 +334,7 @@ templ NewSurveyForm(survey *types.Survey) {
 										name="corr_method"
 										id="corr-full"
 										value="Full LBP"
-										checked?={ survey.VesselData.CorrectionMethod !="Half LBP" }
+										checked?={ survey.VesselData.CorrectionMethod != "Half LBP" }
 									/>
 									<label for="corr-full">
 										<span class="method-label-title">Full LBP</span>
@@ -416,11 +347,44 @@ templ NewSurveyForm(survey *types.Survey) {
 										name="corr_method"
 										id="corr-half"
 										value="Half LBP"
-										checked?={ survey.VesselData.CorrectionMethod =="Half LBP" }
+										checked?={ survey.VesselData.CorrectionMethod == "Half LBP" }
 									/>
 									<label for="corr-half">
 										<span class="method-label-title">Half LBP</span>
 										<span class="method-label-desc">River vessels only</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-section">
+						<div class="field">
+							<label>LCF Detection <span class="required">*</span></label>
+							<div class="lcf-options">
+								<div class="method-option">
+									<input
+										type="radio"
+										name="lcf_detection"
+										id="lcf-auto"
+										value="auto"
+										checked?={ !survey.VesselData.IsLcfDetectionManual }
+									/>
+									<label for="lcf-auto">
+										<span class="method-label-title">Auto</span>
+										<span class="method-label-desc">Direction from hydrostatic table</span>
+									</label>
+								</div>
+								<div class="method-option">
+									<input
+										type="radio"
+										name="lcf_detection"
+										id="lcf-manual"
+										value="manual"
+										checked?={ survey.VesselData.IsLcfDetectionManual }
+									/>
+									<label for="lcf-manual">
+										<span class="method-label-title">Manual</span>
+										<span class="method-label-desc">Set direction per draft manually</span>
 									</label>
 								</div>
 							</div>
