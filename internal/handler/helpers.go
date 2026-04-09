@@ -803,7 +803,7 @@ func parseDeductibles(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	if err == nil {
 		d.Density = dwDen
 	}
-	others, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex))
+	others, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.Others, draftIndex))
 	if err == nil {
 		d.Deductibles.Others = others
 	}

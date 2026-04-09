@@ -51,7 +51,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 		<!-- Deductibles and Table density-->
 		@Deductibles(dp, draftIndex, dr)
 		<!-- Totals section-->
-		@Totals(dp, draftIndex, sr)
+		@Totals(dp.Survey, draftIndex, sr)
 	</div>
 }
 

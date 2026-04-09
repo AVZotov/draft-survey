@@ -9,12 +9,12 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"fmt"
 	f "github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/web/components"
 )
 
-func Totals(dp components.DraftPageProps, draftIndex int, sr types.SurveyResult) templ.Component {
+func Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -36,231 +36,244 @@ func Totals(dp components.DraftPageProps, draftIndex int, sr types.SurveyResult)
 		}
 		ctx = templ.ClearChildren(ctx)
 		dr := sr.DraftTotals[draftIndex].DraftResult
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- COLLAPSED (default) --><div class=\"totals-section\" x-data=\"{ open: false }\"><!-- Header — always visible, click to toggle --><div class=\"totals-header\" @click=\"open = !open\"><span class=\"sec-title\" style=\"margin: 0;\">Totals &amp; Results</span><div class=\"totals-header-right\"><!-- Key value always visible when collapsed --><span class=\"totals-preview\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!-- COLLAPSED (default) --><div class=\"totals-section\" x-data=\"{ open: false }\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.DisplacementCorrected))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("draft-total-%d", draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 18, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 15, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " MT</span> <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" class=\"totals-chevron\" :class=\"{ 'totals-chevron--open': open }\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></div></div><!-- Body — shown when open --><div class=\"totals-body\" x-show=\"open\"><!-- Primary result --><div class=\"totals-primary\"><span class=\"totals-primary-label\">Displacement corr'd</span> <span class=\"totals-primary-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-swap-oob=\"true\"><!-- Header — always visible, click to toggle --><div class=\"totals-header\" @click=\"open = !open\"><span class=\"sec-title\" style=\"margin: 0;\">Totals &amp; Results</span><div class=\"totals-header-right\"><!-- Key value always visible when collapsed --><span class=\"totals-preview\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.DisplacementCorrected))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 39, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 23, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " <span class=\"totals-unit\">MT</span></span></div><!-- Secondary grid --><div class=\"totals-grid\"><div class=\"totals-cell\"><span class=\"totals-cell-label\">Displ. at MMC</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " MT</span> <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" class=\"totals-chevron\" :class=\"{ 'totals-chevron--open': open }\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></div></div><!-- Body — shown when open --><div class=\"totals-body\" x-show=\"open\"><!-- Primary result --><div class=\"totals-primary\"><span class=\"totals-primary-label\">Displacement corr'd</span> <span class=\"totals-primary-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.Hydrostatics.Displacement))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.DisplacementCorrected))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 45, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 44, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Net Displ.</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " <span class=\"totals-unit\">MT</span></span></div><!-- Secondary grid --><div class=\"totals-grid\"><div class=\"totals-cell\"><span class=\"totals-cell-label\">Displ. at MMC</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.NetDisplacement))
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.Hydrostatics.Displacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 49, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 50, Col: 86}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Summer DWT</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Net Displ.</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dp.Survey.VesselData.SummerDWT))
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 53, Col: 88}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 54, Col: 76}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Current DWT</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Summer DWT</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.CurrentDWT))
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(survey.VesselData.SummerDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 57, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 58, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">1st Trim Corr.</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Current DWT</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.FirstTrimCorrection))
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.CurrentDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 61, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 62, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">2nd Trim Corr.</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">1st Trim Corr.</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.SecondTrimCorrection))
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.FirstTrimCorrection))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 65, Col: 81}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 66, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">List Corr.</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">2nd Trim Corr.</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
-		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.ListCorrection))
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.SecondTrimCorrection))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 69, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 70, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Total Trim Corr.</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">List Corr.</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var11 string
-		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.TotalTrimCorrection))
+		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.ListCorrection))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 73, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 74, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Declared</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Total Trim Corr.</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var12 string
-		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormattedPointer(dp.Survey.ConstantDeclared))
+		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.TotalTrimCorrection))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 77, Col: 91}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 78, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Calculated</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Declared</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.Constant))
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormattedPointer(survey.ConstantDeclared))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 81, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 82, Col: 88}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Diff</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Calculated</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var14 string
-		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.DraftTotals[draftIndex].ConstantDiff))
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.Constant))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 85, Col: 97}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 86, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Cargo Declared</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Diff</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var15 string
-		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormattedPointer(dp.Survey.CargoDeclared))
+		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.DraftTotals[draftIndex].ConstantDiff))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 89, Col: 88}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 90, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, " <span class=\"totals-unit\">MT</span></span></div></div><!-- Cargo Weight -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Cargo Declared</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if dp.Survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<div class=\"totals-cargo\"><span class=\"totals-cargo-label\">Cargo Loaded</span> <span class=\"totals-cargo-value\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var16 string
-			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.DraftTotals[draftIndex].CargoFromPrev))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 96, Col: 99}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, " <span class=\"totals-unit\">MT</span></span></div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		var templ_7745c5c3_Var16 string
+		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormattedPointer(survey.CargoDeclared))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 94, Col: 85}
 		}
-		if dp.Survey.Drafts[draftIndex].Type == types.DraftTypeFinal {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div class=\"totals-cargo\"><span class=\"totals-cargo-label\">Cargo On Board</span> <span class=\"totals-cargo-value\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " <span class=\"totals-unit\">MT</span></span></div></div><!-- Cargo Weight -->")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"totals-cargo\"><span class=\"totals-cargo-label\">Cargo Loaded</span> <span class=\"totals-cargo-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var17 string
-			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.CargoOnBoard))
+			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.DraftTotals[draftIndex].CargoFromPrev))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 102, Col: 74}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 101, Col: 99}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, " <span class=\"totals-unit\">MT</span></span></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, " <span class=\"totals-unit\">MT</span></span></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div></div>")
+		if survey.Drafts[draftIndex].Type == types.DraftTypeFinal {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<div class=\"totals-cargo\"><span class=\"totals-cargo-label\">Cargo On Board</span> <span class=\"totals-cargo-value\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var18 string
+			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.CargoOnBoard))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 107, Col: 74}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " <span class=\"totals-unit\">MT</span></span></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
