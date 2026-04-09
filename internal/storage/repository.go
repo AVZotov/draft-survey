@@ -17,3 +17,8 @@ type UserRepository interface {
 	Get() (*types.User, error)
 	Delete() error
 }
+
+type DictionariesRepository interface {
+	GetPorts() (*[]types.Port, error)
+	GetCountries() (*[]types.Country, error)
+}
