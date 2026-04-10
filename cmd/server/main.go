@@ -21,7 +21,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	h := handler.New(userStore, surveyStore)
+	dictionariesStore, err := storage.NewDictionariesStore("./dictionaries")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	h := handler.New(userStore, surveyStore, dictionariesStore)
 
 	handler.SetupRoutes(app, h)
 
