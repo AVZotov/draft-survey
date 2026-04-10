@@ -79,7 +79,6 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 			if !t.IsZero() {
 				createdAt = t
 			}
-
 		}
 	}
 
@@ -94,9 +93,9 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 	cargoOperation := types.CargoOperation{
 		PlaceOfInspection: c.FormValue("port"),
 		Destination:       c.FormValue("destination"),
-		Operation:         c.FormValue("cargo_op"),
-		Cargo:             c.FormValue("cargo"),
-		Packing:           c.FormValue("packing"),
+		Operation: c.FormValue("cargo_op"),
+		Cargo:     c.FormValue("cargo"),
+		Packing:   c.FormValue("packing"),
 	}
 
 	vesselData := vessel.VesselData{

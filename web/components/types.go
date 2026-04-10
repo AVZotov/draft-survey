@@ -33,10 +33,14 @@ type SeaConditionProps struct {
 
 type CountrySelectProps struct {
 	Countries []types.Country
+	Selected  string
+	Name      string
 }
 
 type PortSelectProps struct {
-	Ports []types.Port
+	Ports    []types.Port
+	Selected string
+	Name     string
 }
 
 type Version struct {

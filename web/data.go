@@ -41,6 +41,8 @@ func DraftsPageProps(survey types.Survey) components.DraftPageProps {
 	}
 }
 
+// All below props in todo to split layout and needed props
+
 func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Dashboard",

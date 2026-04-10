@@ -30,12 +30,31 @@ type Job struct {
 	Principal string `json:"principal"`
 }
 
+// PortInfo holds full port data — country, port from UN/LOCODE dict,
+// and optional manual override (prevails over dict selection)
+type PortInfo struct {
+	Country    Country `json:"country"`
+	Port       Port    `json:"port"`
+	PortManual string  `json:"port_manual"`
+}
+
+// DisplayName returns manual port if set, otherwise port name from dict
+func (p PortInfo) DisplayName() string {
+	if p.PortManual != "" {
+		return p.PortManual
+	}
+	if p.Port.Name != "" {
+		return p.Port.Name
+	}
+	return ""
+}
+
 type CargoOperation struct {
-	PlaceOfInspection string `json:"place_of_inspection"`
-	Destination       string `json:"destination"`
-	Operation         string `json:"operation"`
-	Cargo             string `json:"cargo"`
-	Packing           string `json:"packing"`
+	PlaceOfInspection PortInfo `json:"place_of_inspection"`
+	Destination       PortInfo `json:"destination"`
+	Operation         string   `json:"operation"`
+	Cargo             string   `json:"cargo"`
+	Packing           string   `json:"packing"`
 }
 
 type SurveyStatus string
@@ -87,6 +106,8 @@ type Draft struct {
 	StartedAt         time.Time        `json:"started_at"`
 	FinishedAt        time.Time        `json:"finished_at"`
 	LoadingCommenced  time.Time        `json:"loading_commenced"`
+	ConstantDeclared  *float64         `json:"constant_declared"`
+	CargoDeclared     *float64         `json:"cargo_declared"`
 }
 
 type Survey struct {

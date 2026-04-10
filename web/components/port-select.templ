@@ -1,5 +1,12 @@
 package components
 
 templ PortSelect(props PortSelectProps) {
-	<div></div>
+	<div class="select-wrap" data-port-select>
+		<select name={ props.Name }>
+			<option value="">Select port…</option>
+			for _, p := range props.Ports {
+				<option value={ p.Name } selected?={ p.Name == props.Selected }>{ p.Name }</option>
+			}
+		</select>
+	</div>
 }

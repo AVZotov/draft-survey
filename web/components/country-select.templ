@@ -1,5 +1,43 @@
 package components
 
 templ CountrySelect(props CountrySelectProps) {
-	<div></div>
+	<div
+		class="field-wrap-col"
+		x-data="{ search: '', selected: '' }"
+	>
+		<!-- Search input -->
+		<input
+			type="text"
+			placeholder="Search country…"
+			x-model="search"
+		/>
+		<!-- Hidden fixed-name input — always sent as "country" -->
+		<input
+			type="hidden"
+			name="country"
+			x-bind:value="selected"
+		/>
+		<!-- Visible select with dynamic name for form submission -->
+		<div class="select-wrap">
+			<select
+				name={ props.Name }
+				x-on:change="selected = $event.target.value"
+				hx-get="/dictionary/ports"
+				hx-target={ "next [data-port-select]" }
+				hx-swap="outerHTML"
+				hx-trigger="change"
+				hx-include="[name='country']"
+			>
+				<option value="">Select country…</option>
+				for _, c := range props.Countries {
+					<option
+						value={ c.CountryCode }
+						selected?={ c.CountryCode == props.Selected }
+						x-show={ "'" + c.Name + "'.toLowerCase().includes(search.toLowerCase())" }
+					>{ c.Name }</option>
+				}
+			</select>
+		</div>
+		<p class="field-hint">Source: UN/LOCODE 2024-2</p>
+	</div>
 }
