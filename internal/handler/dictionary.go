@@ -40,3 +40,36 @@ func (h *Handler) seaOptions(c *fiber.Ctx) error {
 		return ErrEmptyField
 	}
 }
+
+func (h *Handler) countries(c *fiber.Ctx) error {
+	countries, err := h.dictionariesRepository.GetCountries()
+	if err != nil {
+		return err
+	}
+	return tadaptor.Render(c, components.CountrySelect(components.CountrySelectProps{
+		Countries: *countries,
+	}))
+}
+
+func (h *Handler) ports(c *fiber.Ctx) error {
+	countryCode := c.Query("country")
+	if countryCode == "" {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	ports, err := h.dictionariesRepository.GetPorts()
+	if err != nil {
+		return err
+	}
+
+	filtered := make([]types.Port, 0)
+	for _, p := range *ports {
+		if p.CountryCode == countryCode {
+			filtered = append(filtered, p)
+		}
+	}
+
+	return tadaptor.Render(c, components.PortSelect(components.PortSelectProps{
+		Ports: filtered,
+	}))
+}

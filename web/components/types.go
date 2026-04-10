@@ -31,6 +31,14 @@ type SeaConditionProps struct {
 	DraftIndex   *int
 }
 
+type CountrySelectProps struct {
+	Countries []types.Country
+}
+
+type PortSelectProps struct {
+	Ports []types.Port
+}
+
 type Version struct {
 	Version string
 }

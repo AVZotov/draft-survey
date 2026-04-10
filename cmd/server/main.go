@@ -21,7 +21,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dictionariesStore, err := storage.NewDictionariesStore("./dictionaries")
+	dictionariesStore, err := storage.NewDictionariesStore("./data/dictionaries")
 	if err != nil {
 		log.Fatal(err)
 	}
