@@ -10,6 +10,7 @@ const (
 	HXDraftBlock  = "X-Draft-Block"
 	HXTankID      = "X-Tank-ID"
 	HXTankItem    = "X-Tank-Item"
+	HXSurveyBlock = "X-Survey-Block"
 )
 
 // Tanks values (values)
@@ -32,4 +33,11 @@ const (
 	PPKeelBlock       = "ppkeel-block"
 	HydrostaticsBlock = "hydrostatics-block"
 	DeductiblesBlock  = "deductibles-block"
+)
+
+// Survey Page names (values)
+const (
+	SurveyBlock   = "survey-block"
+	VesselBlock   = "vessel-block"
+	SettingsBlock = "settings-block"
 )

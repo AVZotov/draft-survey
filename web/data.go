@@ -46,7 +46,6 @@ func SurveyLayoutProps(user *types.User) components.LayoutProps {
 		Title:           "New Survey",
 		MetaDescription: "General Survey Info",
 		ExtraCSS:        []string{"/static/css/new-survey.css"},
-		ExtraJS:         []string{"/static/js/new-survey.js"},
 		User:            user,
 	}
 }

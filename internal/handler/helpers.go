@@ -10,10 +10,11 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/vessel"
 	"github.com/gofiber/fiber/v2"
 )
 
-type props struct {
+type tankProps struct {
 	surveyID   string
 	draftIndex int
 	survey     *types.Survey
@@ -33,6 +34,12 @@ type draftProps struct {
 	survey     *types.Survey
 	surveyID   string
 	draftIndex int
+}
+
+type surveyProps struct {
+	user     *types.User
+	survey   *types.Survey
+	surveyID string
 }
 
 var ErrEmptyField = errors.New("empty field")
@@ -281,7 +288,7 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
-func getTankProps(h *Handler, c *fiber.Ctx) (*props, error) {
+func getTankProps(h *Handler, c *fiber.Ctx) (*tankProps, error) {
 	id := c.Params("id")
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
@@ -321,7 +328,7 @@ func getTankProps(h *Handler, c *fiber.Ctx) (*props, error) {
 	tankID := c.Params("tankID")
 
 	if tankID == "" {
-		return &props{
+		return &tankProps{
 			surveyID:   id,
 			draftIndex: draftIndex,
 			survey:     survey,
@@ -357,7 +364,7 @@ func getTankProps(h *Handler, c *fiber.Ctx) (*props, error) {
 		return nil, errors.New("undefined tank type")
 	}
 
-	return &props{
+	return &tankProps{
 		surveyID:   id,
 		draftIndex: draftIndex,
 		survey:     survey,
@@ -810,4 +817,155 @@ func parseDeductibles(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	}
 }
 
+func getSurveyProps(h *Handler, c *fiber.Ctx) (*surveyProps, error) {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return nil, err
+	}
 
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	return &surveyProps{
+		user:     user,
+		survey:   survey,
+		surveyID: id,
+	}, nil
+}
+
+func parseSurveyPage(c *fiber.Ctx, s *types.Survey) {
+	blockCtx := c.Get(constants.HXSurveyBlock)
+
+	switch blockCtx {
+	case constants.SurveyBlock:
+		parseSurveyBlock(c, s)
+	case constants.VesselBlock:
+		parseVesselBlock(c, s)
+	case constants.SettingsBlock:
+		parseSettingBlock(c, s)
+	}
+}
+
+func parseSurveyBlock(c *fiber.Ctx, s *types.Survey) {
+	jobNumber, err := parseString(c, constants.JobNumber)
+	if err == nil {
+		s.Job.JobNumber = jobNumber
+	}
+
+	dsNumber, err := parseInt(c, constants.DSNumber)
+	if err == nil {
+		s.Job.DSNumber = *dsNumber
+	}
+
+	operation, err := parseString(c, constants.CargoOperation)
+	if err == nil {
+		s.CargoOperation.Operation = operation
+	}
+
+	cargo, err := parseString(c, constants.Cargo)
+	if err == nil {
+		s.CargoOperation.Cargo = cargo
+	}
+
+	packing, err := parseString(c, constants.Packing)
+	if err == nil {
+		s.CargoOperation.Packing = packing
+	}
+
+	principal, err := parseString(c, constants.Client)
+	if err == nil {
+		s.Job.Principal = principal
+	}
+
+	cargoDeclared, err := parseFloat(c, constants.CargoDeclared)
+	if err == nil {
+		s.CargoDeclared = cargoDeclared
+	}
+
+	remarks, err := parseString(c, constants.Remarks)
+	if err == nil {
+		s.Remarks = remarks
+	}
+}
+
+func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
+	vesselName, err := parseString(c, constants.VesselName)
+	if err == nil {
+		s.VesselData.Name = vesselName
+	}
+
+	imo, err := parseString(c, constants.IMO)
+	if err == nil {
+		s.VesselData.IMO = imo
+	}
+
+	builtYear, err := parseInt(c, constants.Built)
+	if err == nil {
+		s.VesselData.BuiltYear = *builtYear
+	}
+
+	tableDensity, err := parseFloat(c, constants.TableDensity)
+	if err == nil {
+		s.VesselData.TableDensity = tableDensity
+	}
+
+	lightship, err := parseFloat(c, constants.Lightship)
+	if err == nil {
+		s.VesselData.Lightship = *lightship
+	}
+
+	lbp, err := parseFloat(c, constants.LBP)
+	if err == nil {
+		s.VesselData.LBP = *lbp
+	}
+
+	breadth, err := parseFloat(c, constants.Breadth)
+	if err == nil {
+		s.VesselData.Breadth = *breadth
+	}
+
+	depth, err := parseFloat(c, constants.Depth)
+	if err == nil {
+		s.VesselData.Depth = *depth
+	}
+
+	summerDraft, err := parseFloat(c, constants.SummerDraft)
+	if err == nil {
+		s.VesselData.SummerDraft = *summerDraft
+	}
+
+	summerDWT, err := parseFloat(c, constants.SummerDWT)
+	if err == nil {
+		s.VesselData.SummerDWT = *summerDWT
+	}
+
+	summerTPC, err := parseFloat(c, constants.SummerTPC)
+	if err == nil {
+		s.VesselData.SummerTPC = *summerTPC
+	}
+
+	summerFreeboard, err := parseFloat(c, constants.SummerFreeboard)
+	if err == nil {
+		s.VesselData.SummerFreeboard = *summerFreeboard
+	}
+}
+
+func parseSettingBlock(c *fiber.Ctx, s *types.Survey) {
+	mmcMethod, err := parseString(c, constants.MMCMethod)
+	if err == nil {
+		s.VesselData.VesselType = vessel.VesselType(mmcMethod)
+	}
+
+	corrMethod, err := parseString(c, constants.CorrMethod)
+	if err == nil {
+		s.VesselData.CorrectionMethod = vessel.CorrectionMethod(corrMethod)
+	}
+
+	lcfDetection, err := parseString(c, constants.LCFDetection)
+	if err == nil {
+		s.VesselData.IsLcfDetectionManual = lcfDetection == "manual"
+	}
+}

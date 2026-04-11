@@ -19,7 +19,7 @@ templ NewSurveyForm(sp components.SurveyPageProps) {
 			@SurveyBlock(sp)
 			<!-- ══ 2. VESSEL DATA ══════════════════════════════════════ -->
 			@VesselBlock(sp)
-			<!-- ══ 3. SUMMER MARKS & CALCULATION SETTINGS ══════════════ -->
+			<!-- ══ 3. CALCULATION SETTINGS ══════════════ -->
 			@VesselSettingBlock(sp)
 		</div><!-- /survey-layout -->
 	</main>
@@ -30,9 +30,11 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 	<div
 		class="form-card"
 		id="survey-survey-block"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SurveyBlock) }
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"
+		hx-swap="none"
 	>
 		<div class="form-card-header">
 			<div class="form-card-header-icon">
@@ -57,21 +59,23 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 				<div class="operation-toggle">
 					<input
 						type="radio"
+						id="loading"
 						name={ constants.CargoOperation }
 						value="loading"
 						checked?={ survey.CargoOperation.Operation != "discharge" }
 					/>
-					<label for="op-loading">
+					<label for="loading">
 						<svg viewBox="0 0 24 24"><path d="M12 2v14M5 9l7 7 7-7"></path><path d="M5 20h14"></path></svg>
 						Loading
 					</label>
 					<input
 						type="radio"
+						id="discharge"
 						name={ constants.CargoOperation }
 						value="discharge"
 						checked?={ survey.CargoOperation.Operation == "discharge" }
 					/>
-					<label for="op-discharge">
+					<label for="discharge">
 						<svg viewBox="0 0 24 24"><path d="M12 22V8M5 15l7-7 7 7"></path><path d="M5 4h14"></path></svg>
 						Discharging
 					</label>
@@ -205,127 +209,125 @@ templ VesselBlock(sp components.SurveyPageProps) {
 
 templ VesselSettingBlock(sp components.SurveyPageProps) {
 	{{ survey := sp.Survey }}
-	<div class="block">
-		<div class="form-card" id="section-calc">
-			<div class="form-card-header">
-				<div class="form-card-header-icon">
-					<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
-				</div>
-				<span class="form-card-title">Calculation Settings</span>
-				<span class="form-card-subtitle">UNECE 1992 method parameters</span>
+	<div class="form-card" id="section-calc">
+		<div class="form-card-header">
+			<div class="form-card-header-icon">
+				<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
 			</div>
-			<div class="form-section">
-				<div class="field">
-					<label>MMC Calculation Method <span class="required">*</span></label>
-					<div class="method-options">
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.MMCMethod }
-								id="mmc-standard"
-								value="marine"
-								checked?={ survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" }
-							/>
-							<label for="mmc-standard">
-								<span class="method-label-title">Standard</span>
-								<span class="method-label-formula">(f + 6m + a) / 8</span>
-								<span class="method-label-desc">Sea vessel</span>
-							</label>
-						</div>
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.MMCMethod }
-								id="mmc-river"
-								value="river"
-								checked?={ survey.VesselData.VesselType == "river" }
-							/>
-							<label for="mmc-river">
-								<span class="method-label-title">River</span>
-								<span class="method-label-formula">(f + 4m + a) / 6</span>
-								<span class="method-label-desc">River vessel</span>
-							</label>
-						</div>
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.MMCMethod }
-								id="mmc-barge"
-								value="barge"
-								checked?={ survey.VesselData.VesselType == "barge" }
-							/>
-							<label for="mmc-barge">
-								<span class="method-label-title">Barge</span>
-								<span class="method-label-formula">(3f + 14m + 3a) / 20</span>
-								<span class="method-label-desc">Barge</span>
-							</label>
-						</div>
+			<span class="form-card-title">Calculation Settings</span>
+			<span class="form-card-subtitle">UNECE 1992 method parameters</span>
+		</div>
+		<div class="form-section">
+			<div class="field">
+				<label>MMC Calculation Method <span class="required">*</span></label>
+				<div class="method-options">
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.MMCMethod }
+							id="mmc-standard"
+							value="marine"
+							checked?={ survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" }
+						/>
+						<label for="mmc-standard">
+							<span class="method-label-title">Standard</span>
+							<span class="method-label-formula">(f + 6m + a) / 8</span>
+							<span class="method-label-desc">Sea vessel</span>
+						</label>
+					</div>
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.MMCMethod }
+							id="mmc-river"
+							value="river"
+							checked?={ survey.VesselData.VesselType == "river" }
+						/>
+						<label for="mmc-river">
+							<span class="method-label-title">River</span>
+							<span class="method-label-formula">(f + 4m + a) / 6</span>
+							<span class="method-label-desc">River vessel</span>
+						</label>
+					</div>
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.MMCMethod }
+							id="mmc-barge"
+							value="barge"
+							checked?={ survey.VesselData.VesselType == "barge" }
+						/>
+						<label for="mmc-barge">
+							<span class="method-label-title">Barge</span>
+							<span class="method-label-formula">(3f + 14m + 3a) / 20</span>
+							<span class="method-label-desc">Barge</span>
+						</label>
 					</div>
 				</div>
 			</div>
-			<div class="form-section">
-				<div class="field">
-					<label>Correction Method <span class="required">*</span></label>
-					<div class="correction-options">
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.CorrMethod }
-								id="corr-full"
-								value="Full LBP"
-								checked?={ survey.VesselData.CorrectionMethod != "Half LBP" }
-							/>
-							<label for="corr-full">
-								<span class="method-label-title">Full LBP</span>
-								<span class="method-label-desc">Standard — sea vessels</span>
-							</label>
-						</div>
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.CorrMethod }
-								id="corr-half"
-								value="Half LBP"
-								checked?={ survey.VesselData.CorrectionMethod == "Half LBP" }
-							/>
-							<label for="corr-half">
-								<span class="method-label-title">Half LBP</span>
-								<span class="method-label-desc">River vessels only</span>
-							</label>
-						</div>
+		</div>
+		<div class="form-section">
+			<div class="field">
+				<label>Correction Method <span class="required">*</span></label>
+				<div class="correction-options">
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.CorrMethod }
+							id="corr-full"
+							value="Full LBP"
+							checked?={ survey.VesselData.CorrectionMethod != "Half LBP" }
+						/>
+						<label for="corr-full">
+							<span class="method-label-title">Full LBP</span>
+							<span class="method-label-desc">Standard — sea vessels</span>
+						</label>
+					</div>
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.CorrMethod }
+							id="corr-half"
+							value="Half LBP"
+							checked?={ survey.VesselData.CorrectionMethod == "Half LBP" }
+						/>
+						<label for="corr-half">
+							<span class="method-label-title">Half LBP</span>
+							<span class="method-label-desc">River vessels only</span>
+						</label>
 					</div>
 				</div>
 			</div>
-			<div class="form-section">
-				<div class="field">
-					<label>LCF Detection <span class="required">*</span></label>
-					<div class="lcf-options">
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.LCFDetection }
-								id="lcf-auto"
-								value="auto"
-								checked?={ !survey.VesselData.IsLcfDetectionManual }
-							/>
-							<label for="lcf-auto">
-								<span class="method-label-title">Auto</span>
-								<span class="method-label-desc">Direction from hydrostatic table</span>
-							</label>
-						</div>
-						<div class="method-option">
-							<input
-								type="radio"
-								name={ constants.LCFDetection }
-								id="lcf-manual"
-								value="manual"
-								checked?={ survey.VesselData.IsLcfDetectionManual }
-							/>
-							<label for="lcf-manual">
-								<span class="method-label-title">Manual</span>
-								<span class="method-label-desc">Set direction per draft manually</span>
-							</label>
-						</div>
+		</div>
+		<div class="form-section">
+			<div class="field">
+				<label>LCF Detection <span class="required">*</span></label>
+				<div class="lcf-options">
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.LCFDetection }
+							id="lcf-auto"
+							value="auto"
+							checked?={ !survey.VesselData.IsLcfDetectionManual }
+						/>
+						<label for="lcf-auto">
+							<span class="method-label-title">Auto</span>
+							<span class="method-label-desc">Direction from hydrostatic table</span>
+						</label>
+					</div>
+					<div class="method-option">
+						<input
+							type="radio"
+							name={ constants.LCFDetection }
+							id="lcf-manual"
+							value="manual"
+							checked?={ survey.VesselData.IsLcfDetectionManual }
+						/>
+						<label for="lcf-manual">
+							<span class="method-label-title">Manual</span>
+							<span class="method-label-desc">Set direction per draft manually</span>
+						</label>
 					</div>
 				</div>
 			</div>
