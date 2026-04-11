@@ -22,7 +22,7 @@ import (
 )
 
 func (h *Handler) tanks(c *fiber.Ctx) error {
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func (h *Handler) tanks(c *fiber.Ctx) error {
 
 func (h *Handler) newTank(c *fiber.Ctx) error {
 	tankID := uuid.New().String()
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 }
 
 func (h *Handler) deleteTank(c *fiber.Ctx) error {
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func (h *Handler) deleteTank(c *fiber.Ctx) error {
 }
 
 func (h *Handler) updateTank(c *fiber.Ctx) error {
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func (h *Handler) updateTank(c *fiber.Ctx) error {
 }
 
 func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}
@@ -159,7 +159,7 @@ func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
 }
 
 func (h *Handler) updateTanks(c *fiber.Ctx) error {
-	p, err := getProps(h, c)
+	p, err := getTankProps(h, c)
 	if err != nil {
 		return err
 	}

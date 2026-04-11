@@ -79,9 +79,9 @@ func DraftForm(dp components.DraftPageProps, sr types.SurveyResult) templ.Compon
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(dp.Survey.CargoOperation.PlaceOfInspection)
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(dp.Survey.CargoOperation.PlaceOfInspection.DisplayName())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/form.templ`, Line: 20, Col: 160}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/form.templ`, Line: 20, Col: 174}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

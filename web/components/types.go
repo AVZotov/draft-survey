@@ -43,6 +43,10 @@ type PortSelectProps struct {
 	Name     string
 }
 
+type SurveyPageProps struct {
+	Survey types.Survey
+}
+
 type Version struct {
 	Version string
 }

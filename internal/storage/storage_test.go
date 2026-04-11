@@ -20,8 +20,8 @@ func getSurvey() *types.Survey {
 			Principal: "testPrincipal",
 		},
 		CargoOperation: types.CargoOperation{
-			PlaceOfInspection: "testPlace",
-			Destination:       "testDestination",
+			PlaceOfInspection: types.PortInfo{},
+			Destination:       types.PortInfo{},
 			Operation:         "testOperation",
 			Cargo:             "testCargo",
 			Packing:           "testPacking",
@@ -92,6 +92,7 @@ func TestJSONStore_GetAll(t *testing.T) {
 	for i, survey := range surveysExpected {
 		survey.ID = id + strconv.Itoa(i)
 		if err := store.Save(survey); err != nil {
+			t.Fatal(err)
 		}
 	}
 

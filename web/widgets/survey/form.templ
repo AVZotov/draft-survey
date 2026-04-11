@@ -1,397 +1,334 @@
 package survey
 
-import "github.com/AVZotov/draft-survey/internal/types"
-import "time"
 import "github.com/AVZotov/draft-survey/internal/format"
+import "github.com/AVZotov/draft-survey/web/components"
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/constants"
+import "github.com/AVZotov/draft-survey/data/dictionaries"
 
-templ NewSurveyForm(survey *types.Survey) {
+templ NewSurveyForm(sp components.SurveyPageProps) {
 	<main class="page-main">
-		<form
-			id="survey-form"
-			method="post"
-			hx-post="/api/v1/survey"
-		>
-			<input type="hidden" name="survey_id" value={ survey.ID }/>
-			<input type="hidden" name="created_at" value={ survey.CreatedAt.Format(time.RFC3339) }/>
-			<div class="survey-layout">
-				<a
-					href="/"
-					hx-post="/api/v1/survey"
-					hx-include="closest form"
-					hx-vals='{"next": "dashboard"}'
-					class="back-link"
-				>
-					<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
-					Back to Dashboard
-				</a>
-				<h1 class="page-title">New Survey</h1>
-				<p class="page-subtitle">Fill in the details below. You can proceed to draft readings at any time and return to complete missing fields.</p>
-				<!-- ══ 1. SURVEY INFORMATION ═══════════════════════════════ -->
-				<div class="form-card" id="section-survey">
-					<div class="form-card-header">
-						<div class="form-card-header-icon">
-							<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
-						</div>
-						<span class="form-card-title">Survey Information</span>
-						<span class="form-card-subtitle">Survey context & logistics</span>
-					</div>
-					<div class="form-section">
-						<div class="field-col-2">
-							<div class="field">
-								<label for="job-no">Job No. <span class="optional">(optional)</span></label>
-								<input type="text" id="job-no" name="job_no" placeholder="e.g. 345543_002" value={ survey.Job.JobNumber }/>
-							</div>
-							<div class="field">
-								<label for="ds-no">DS No. <span class="optional">(optional)</span></label>
-								<input type="number" id="ds-no" name="ds_no" placeholder="e.g. 1" step="any" value={ survey.Job.DSNumber }/>
-							</div>
-						</div>
-						<div class="field">
-							<label>Cargo Operation <span class="required">*</span></label>
-							<div class="operation-toggle">
-								<input
-									type="radio"
-									name="cargo_op"
-									id="op-loading"
-									value="loading"
-									checked?={ survey.CargoOperation.Operation != "discharge" }
-								/>
-								<label for="op-loading">
-									<svg viewBox="0 0 24 24"><path d="M12 2v14M5 9l7 7 7-7"></path><path d="M5 20h14"></path></svg>
-									Loading
-								</label>
-								<input
-									type="radio"
-									name="cargo_op"
-									id="op-discharge"
-									value="discharge"
-									checked?={ survey.CargoOperation.Operation == "discharge" }
-								/>
-								<label for="op-discharge">
-									<svg viewBox="0 0 24 24"><path d="M12 22V8M5 15l7-7 7 7"></path><path d="M5 4h14"></path></svg>
-									Discharging
-								</label>
-							</div>
-						</div>
-						<div class="field-col-2">
-							<div class="field">
-								<label for="port">Port / Berth <span class="optional">(optional)</span></label>
-								<input type="text" id="port" name="port" placeholder="e.g. Vanino, Russia" value={ survey.CargoOperation.PlaceOfInspection }/>
-							</div>
-							<div class="field">
-								<label for="destination">Destination / Origin <span class="optional">(optional)</span></label>
-								<input type="text" id="destination" name="destination" placeholder="e.g. China" value={ survey.CargoOperation.Destination }/>
-							</div>
-						</div>
-						<div class="field-col-3">
-							<div class="field">
-								<label for="cargo-type">Cargo <span class="optional">(optional)</span></label>
-								<input type="text" id="cargo-type" name="cargo" placeholder="e.g. Coal" value={ survey.CargoOperation.Cargo }/>
-							</div>
-							<div class="field">
-								<label for="packing">Packing <span class="optional">(optional)</span></label>
-								<div class="select-wrap">
-									<select id="packing" name="packing">
-										<option value="" disabled selected?={ survey.CargoOperation.Packing == "" }>Select…</option>
-										<option selected?={ survey.CargoOperation.Packing == "bulk" }>bulk</option>
-										<option selected?={ survey.CargoOperation.Packing == "bags" }>bags</option>
-										<option selected?={ survey.CargoOperation.Packing == "bales" }>bales</option>
-										<option selected?={ survey.CargoOperation.Packing == "bars" }>bars</option>
-										<option selected?={ survey.CargoOperation.Packing == "big bags" }>big bags</option>
-										<option selected?={ survey.CargoOperation.Packing == "boxes" }>boxes</option>
-										<option selected?={ survey.CargoOperation.Packing == "coils" }>coils</option>
-										<option selected?={ survey.CargoOperation.Packing == "containers" }>containers</option>
-										<option selected?={ survey.CargoOperation.Packing == "pallets" }>pallets</option>
-										<option selected?={ survey.CargoOperation.Packing == "plates" }>plates</option>
-										<option selected?={ survey.CargoOperation.Packing == "pieces" }>pieces</option>
-										<option selected?={ survey.CargoOperation.Packing == "Other" }>Other</option>
-									</select>
-								</div>
-							</div>
-							<div class="field">
-								<label for="client">Principal / Client <span class="optional">(optional)</span></label>
-								<input type="text" id="client" name="client" placeholder="e.g. Company" value={ survey.Job.Principal }/>
-							</div>
-						</div>
-						<div class="field">
-							<label for="remarks">Remarks <span class="optional">(optional)</span></label>
-							<textarea
-								id="remarks"
-								name="remarks"
-								placeholder="Any observations, notes or disclaimers for the report…"
-							>{ survey.Remarks }</textarea>
-						</div>
-						<div class="field-col-2">
-							<div class="field">
-								<label for="cargo-declared">Cargo Declared, MT <span class="optional">(optional)</span></label>
-								<input type="number" id="cargo-declared" name="cargo_declared" placeholder="0.000" step="any" value={ format.FloatOrEmpty(survey.CargoDeclared) }/>
-							</div>
-							<div class="field">
-								<label for="table-density">Table Density, t/m³ <span class="optional">(optional)</span></label>
-								<input type="number" id="table-density" name="table_density" placeholder="1.025" step="any" value={ format.FloatOrEmpty(survey.VesselData.TableDensity) }/>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- ══ 2. VESSEL DATA ══════════════════════════════════════ -->
-				<div class="form-card" id="section-vessel">
-					<div class="form-card-header">
-						<div class="form-card-header-icon">
-							<svg viewBox="0 0 24 24"><path d="M3 17l2-7h14l2 7H3z"></path><path d="M8 10V6h8v4"></path><path d="M12 6V3"></path></svg>
-						</div>
-						<span class="form-card-title">Vessel Data</span>
-						<span class="form-card-subtitle">From vessel's certificates</span>
-					</div>
-					<div class="form-section">
-						<div class="field-col-2">
-							<div class="field">
-								<label for="vessel-name">Vessel Name <span class="required">*</span></label>
-								<input type="text" id="vessel-name" name="vessel_name" placeholder="e.g. OCEAN CHEERS" value={ survey.VesselData.Name }/>
-							</div>
-							<div class="field">
-								<label for="imo">IMO No. <span class="optional">(optional)</span></label>
-								<input type="text" id="imo" name="imo" placeholder="e.g. 9233387" value={ survey.VesselData.IMO }/>
-							</div>
-						</div>
-						<div class="field-col-3">
-							<div class="field">
-								<label for="flag">Home Flag <span class="optional">(optional)</span></label>
-								<div class="select-wrap">
-									<select id="flag" name="flag">
-										<option value="" disabled selected?={ survey.VesselData.Flag == "" }>Select flag…</option>
-										<option selected?={ survey.VesselData.Flag == "Antigua and Barbuda" }>Antigua and Barbuda</option>
-										<option selected?={ survey.VesselData.Flag == "Australia" }>Australia</option>
-										<option selected?={ survey.VesselData.Flag == "Bahamas" }>Bahamas</option>
-										<option selected?={ survey.VesselData.Flag == "Belize" }>Belize</option>
-										<option selected?={ survey.VesselData.Flag == "Cambodia" }>Cambodia</option>
-										<option selected?={ survey.VesselData.Flag == "China" }>China</option>
-										<option selected?={ survey.VesselData.Flag == "Cyprus" }>Cyprus</option>
-										<option selected?={ survey.VesselData.Flag == "Denmark" }>Denmark</option>
-										<option selected?={ survey.VesselData.Flag == "Germany" }>Germany</option>
-										<option selected?={ survey.VesselData.Flag == "Greece" }>Greece</option>
-										<option selected?={ survey.VesselData.Flag == "Hong Kong" }>Hong Kong</option>
-										<option selected?={ survey.VesselData.Flag == "Indonesia" }>Indonesia</option>
-										<option selected?={ survey.VesselData.Flag == "Japan" }>Japan</option>
-										<option selected?={ survey.VesselData.Flag == "Liberia" }>Liberia</option>
-										<option selected?={ survey.VesselData.Flag == "Malta" }>Malta</option>
-										<option selected?={ survey.VesselData.Flag == "Marshall Islands" }>Marshall Islands</option>
-										<option selected?={ survey.VesselData.Flag == "Netherlands" }>Netherlands</option>
-										<option selected?={ survey.VesselData.Flag == "Norway" }>Norway</option>
-										<option selected?={ survey.VesselData.Flag == "Panama" }>Panama</option>
-										<option selected?={ survey.VesselData.Flag == "Russia" }>Russia</option>
-										<option selected?={ survey.VesselData.Flag == "Singapore" }>Singapore</option>
-										<option selected?={ survey.VesselData.Flag == "St. Vincent and the Grenadines" }>St. Vincent and the Grenadines</option>
-										<option selected?={ survey.VesselData.Flag == "United Kingdom" }>United Kingdom</option>
-										<option selected?={ survey.VesselData.Flag == "Other" }>Other</option>
-									</select>
-								</div>
-							</div>
-							<div class="field">
-								<label for="built">Built Year <span class="optional">(optional)</span></label>
-								<input type="number" id="built" name="built" placeholder="e.g. 2002" step="any" value={ survey.VesselData.BuiltYear }/>
-							</div>
-							<div class="field">
-								<label for="lightship">Lightship, MT <span class="required">*</span></label>
-								<input type="number" id="lightship" name="lightship" placeholder="0.000" step="any" value={ survey.VesselData.Lightship }/>
-							</div>
-						</div>
-					</div>
-					<div class="form-section">
-						<div class="field-col-4">
-							<div class="field">
-								<label for="lbp">LBP, m <span class="required">*</span></label>
-								<input type="number" id="lbp" name="lbp" placeholder="0.00" step="any" oninput="updateCalcHints()" value={ survey.VesselData.LBP }/>
-							</div>
-							<div class="field">
-								<label for="breadth">Breadth, m <span class="required">*</span></label>
-								<input type="number" id="breadth" name="breadth" placeholder="0.00" step="any" value={ survey.VesselData.Breadth }/>
-							</div>
-							<div class="field">
-								<label for="depth">Depth, m <span class="optional">(optional)</span></label>
-								<input type="number" id="depth" name="depth" placeholder="0.00" step="any" oninput="checkDepth()" value={ survey.VesselData.Depth }/>
-							</div>
-							<div class="field">
-								<label>LBP / 2, m</label>
-								<div class="calc-value" id="lbp-half">—</div>
-							</div>
-						</div>
-						<div class="field-warning" id="depth-warning" style="display:none">
-							<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-							<p class="field-warning-text">Depth should equal Summer Draft + Summer Freeboard. Please verify.</p>
-						</div>
-					</div>
-				</div>
-				<!-- ══ 3. SUMMER MARKS ════════════════════════════════════ -->
-				<div class="form-card" id="section-marks">
-					<div class="form-card-header">
-						<div class="form-card-header-icon">
-							<svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"></path><circle cx="12" cy="12" r="4"></circle></svg>
-						</div>
-						<span class="form-card-title">Summer Marks</span>
-						<span class="form-card-subtitle">From vessel's load line certificate</span>
-					</div>
-					<div class="form-section">
-						<div class="field-col-4">
-							<div class="field">
-								<label for="summer-draft">Summer Draft, m <span class="required">*</span></label>
-								<input type="number" id="summer-draft" name="summer_draft" placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ survey.VesselData.SummerDraft }/>
-							</div>
-							<div class="field">
-								<label for="summer-dwt">Summer DWT, MT <span class="required">*</span></label>
-								<input type="number" id="summer-dwt" name="summer_dwt" placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerDWT }/>
-							</div>
-							<div class="field">
-								<label for="summer-tpc">Summer TPC, MT/cm <span class="required">*</span></label>
-								<input type="number" id="summer-tpc" name="summer_tpc" placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerTPC }/>
-							</div>
-							<div class="field">
-								<label for="summer-freeboard">Summer Freeboard, m <span class="optional">(optional)</span></label>
-								<input type="number" id="summer-freeboard" name="summer_freeboard" placeholder="0.000" step="any" oninput="checkDepth()" value={ survey.VesselData.SummerFreeboard }/>
-							</div>
-						</div>
-						<div class="field-col-3">
-							<div class="field">
-								<label>0.5% DWT, MT</label>
-								<div class="calc-value" id="half-pct-dwt">—</div>
-							</div>
-							<div class="field">
-								<label>FWA, mm</label>
-								<div class="calc-value" id="fwa">—</div>
-								<p class="field-hint">FWA = DWT / (4 × TPC)</p>
-							</div>
-							<div class="field">
-								<label>Depth check (Draft + FB)</label>
-								<div class="calc-value" id="depth-check">—</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- ══ 4. CALCULATION SETTINGS ════════════════════════════ -->
-				<div class="form-card" id="section-calc">
-					<div class="form-card-header">
-						<div class="form-card-header-icon">
-							<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
-						</div>
-						<span class="form-card-title">Calculation Settings</span>
-						<span class="form-card-subtitle">UNECE 1992 method parameters</span>
-					</div>
-					<div class="form-section">
-						<div class="field">
-							<label>MMC Calculation Method <span class="required">*</span></label>
-							<div class="method-options">
-								<div class="method-option">
-									<input
-										type="radio"
-										name="mmc_method"
-										id="mmc-standard"
-										value="marine"
-										checked?={ survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" }
-									/>
-									<label for="mmc-standard">
-										<span class="method-label-title">Standard</span>
-										<span class="method-label-formula">(f + 6m + a) / 8</span>
-										<span class="method-label-desc">Sea vessel</span>
-									</label>
-								</div>
-								<div class="method-option">
-									<input
-										type="radio"
-										name="mmc_method"
-										id="mmc-river"
-										value="river"
-										checked?={ survey.VesselData.VesselType == "river" }
-									/>
-									<label for="mmc-river">
-										<span class="method-label-title">River</span>
-										<span class="method-label-formula">(f + 4m + a) / 6</span>
-										<span class="method-label-desc">River vessel</span>
-									</label>
-								</div>
-								<div class="method-option">
-									<input
-										type="radio"
-										name="mmc_method"
-										id="mmc-barge"
-										value="barge"
-										checked?={ survey.VesselData.VesselType == "barge" }
-									/>
-									<label for="mmc-barge">
-										<span class="method-label-title">Barge</span>
-										<span class="method-label-formula">(3f + 14m + 3a) / 20</span>
-										<span class="method-label-desc">Barge</span>
-									</label>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="form-section">
-						<div class="field">
-							<label>Correction Method <span class="required">*</span></label>
-							<div class="correction-options">
-								<div class="method-option">
-									<input
-										type="radio"
-										name="corr_method"
-										id="corr-full"
-										value="Full LBP"
-										checked?={ survey.VesselData.CorrectionMethod != "Half LBP" }
-									/>
-									<label for="corr-full">
-										<span class="method-label-title">Full LBP</span>
-										<span class="method-label-desc">Standard — sea vessels</span>
-									</label>
-								</div>
-								<div class="method-option">
-									<input
-										type="radio"
-										name="corr_method"
-										id="corr-half"
-										value="Half LBP"
-										checked?={ survey.VesselData.CorrectionMethod == "Half LBP" }
-									/>
-									<label for="corr-half">
-										<span class="method-label-title">Half LBP</span>
-										<span class="method-label-desc">River vessels only</span>
-									</label>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="form-section">
-						<div class="field">
-							<label>LCF Detection <span class="required">*</span></label>
-							<div class="lcf-options">
-								<div class="method-option">
-									<input
-										type="radio"
-										name="lcf_detection"
-										id="lcf-auto"
-										value="auto"
-										checked?={ !survey.VesselData.IsLcfDetectionManual }
-									/>
-									<label for="lcf-auto">
-										<span class="method-label-title">Auto</span>
-										<span class="method-label-desc">Direction from hydrostatic table</span>
-									</label>
-								</div>
-								<div class="method-option">
-									<input
-										type="radio"
-										name="lcf_detection"
-										id="lcf-manual"
-										value="manual"
-										checked?={ survey.VesselData.IsLcfDetectionManual }
-									/>
-									<label for="lcf-manual">
-										<span class="method-label-title">Manual</span>
-										<span class="method-label-desc">Set direction per draft manually</span>
-									</label>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div><!-- /survey-layout -->
-		</form>
+		<div class="survey-layout">
+			<a href="/" class="back-link">
+				<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+				Back to Dashboard
+			</a>
+			<h1 class="page-title">New Survey</h1>
+			<p class="page-subtitle">Fill in the details below. You can proceed to draft readings at any time and return to complete missing fields.</p>
+			<!-- ══ 1. SURVEY INFORMATION ═══════════════════════════════ -->
+			@SurveyBlock(sp)
+			<!-- ══ 2. VESSEL DATA ══════════════════════════════════════ -->
+			@VesselBlock(sp)
+			<!-- ══ 3. SUMMER MARKS & CALCULATION SETTINGS ══════════════ -->
+			@VesselSettingBlock(sp)
+		</div><!-- /survey-layout -->
 	</main>
+}
+
+templ SurveyBlock(sp components.SurveyPageProps) {
+	{{ survey := sp.Survey }}
+	<div
+		class="form-card"
+		id="survey-survey-block"
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
+		hx-include="this"
+		hx-trigger="change changed delay:500ms"
+	>
+		<div class="form-card-header">
+			<div class="form-card-header-icon">
+				<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+			</div>
+			<span class="form-card-title">Survey Information</span>
+			<span class="form-card-subtitle">Survey context & logistics</span>
+		</div>
+		<div class="form-section">
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ constants.JobNumber }>Job No. <span class="optional">(optional)</span></label>
+					<input name={ constants.JobNumber } value={ survey.Job.JobNumber } placeholder="e.g. 345543_002" type="text"/>
+				</div>
+				<div class="field">
+					<label for={ constants.DSNumber }>DS No. <span class="optional">(optional)</span></label>
+					<input name={ constants.DSNumber } value={ survey.Job.DSNumber } placeholder="e.g. 1" step="any" type="number"/>
+				</div>
+			</div>
+			<div class="field">
+				<label>Cargo Operation <span class="required">*</span></label>
+				<div class="operation-toggle">
+					<input
+						type="radio"
+						name={ constants.CargoOperation }
+						value="loading"
+						checked?={ survey.CargoOperation.Operation != "discharge" }
+					/>
+					<label for="op-loading">
+						<svg viewBox="0 0 24 24"><path d="M12 2v14M5 9l7 7 7-7"></path><path d="M5 20h14"></path></svg>
+						Loading
+					</label>
+					<input
+						type="radio"
+						name={ constants.CargoOperation }
+						value="discharge"
+						checked?={ survey.CargoOperation.Operation == "discharge" }
+					/>
+					<label for="op-discharge">
+						<svg viewBox="0 0 24 24"><path d="M12 22V8M5 15l7-7 7 7"></path><path d="M5 4h14"></path></svg>
+						Discharging
+					</label>
+				</div>
+			</div>
+			<div class="field-col-2">
+				<div class="field">
+					<label for="port">Port / Berth <span class="optional">(optional)</span></label>
+					<input type="text" id="port" name="port" placeholder="e.g. Vanino, Russia" value={ survey.CargoOperation.PlaceOfInspection.DisplayName() }/>
+				</div>
+				<div class="field">
+					<label for="destination">Destination / Origin <span class="optional">(optional)</span></label>
+					<input type="text" id="destination" name="destination" placeholder="e.g. China" value={ survey.CargoOperation.Destination.DisplayName() }/>
+				</div>
+			</div>
+			<div class="field-col-4">
+				<div class="field">
+					<label for={ constants.Cargo }>Cargo <span class="optional">(optional)</span></label>
+					<input name={ constants.Cargo } value={ survey.CargoOperation.Cargo } type="text" placeholder="e.g. Coal"/>
+				</div>
+				<div class="field">
+					<label for={ constants.Packing }>Packing <span class="optional">(optional)</span></label>
+					<div class="select-wrap">
+						<select name={ constants.Packing }>
+							<option value="" selected?={ survey.CargoOperation.Packing == "" }>Select…</option>
+							for _, p := range dictionaries.Packing {
+								<option value={ p } selected?={ survey.CargoOperation.Packing == p }>{ p }</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="field">
+					<label for={ constants.Client }>Principal / Client <span class="optional">(optional)</span></label>
+					<input name={ constants.Client } value={ survey.Job.Principal } placeholder="e.g. Company" type="text"/>
+				</div>
+				<div class="field">
+					<label for={ constants.CargoDeclared }>Cargo Declared, MT <span class="optional">(optional)</span></label>
+					<input name={ constants.CargoDeclared } value={ format.FloatOrEmpty(survey.CargoDeclared) } placeholder="0.000" step="any" type="number"/>
+				</div>
+			</div>
+			<div class="field">
+				<label for={ constants.Remarks }>Remarks <span class="optional">(optional)</span></label>
+				<textarea
+					name={ constants.Remarks }
+					placeholder="Any observations, notes or disclaimers for the report…"
+				>{ survey.Remarks }</textarea>
+			</div>
+		</div>
+	</div>
+}
+
+templ VesselBlock(sp components.SurveyPageProps) {
+	{{ survey := sp.Survey }}
+	<div class="form-card" id="section-vessel">
+		<div class="form-card-header">
+			<div class="form-card-header-icon">
+				<svg viewBox="0 0 24 24"><path d="M3 17l2-7h14l2 7H3z"></path><path d="M8 10V6h8v4"></path><path d="M12 6V3"></path></svg>
+			</div>
+			<span class="form-card-title">Vessel Data</span>
+			<span class="form-card-subtitle">From vessel's certificates</span>
+		</div>
+		<div class="form-section">
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ constants.VesselName }>Vessel Name <span class="required">*</span></label>
+					<input name={ constants.VesselName } value={ survey.VesselData.Name } type="text" placeholder="e.g. OCEAN CHEERS"/>
+				</div>
+				<div class="field">
+					<label for={ constants.IMO }>IMO No. <span class="optional">(optional)</span></label>
+					<input name={ constants.IMO } value={ survey.VesselData.IMO } placeholder="e.g. 9233387" type="text"/>
+				</div>
+			</div>
+			<div class="field-col-3">
+				<div class="field">
+					<label for="flag">Home Flag <span class="optional">(optional)</span></label>
+					<div class="select-wrap">
+						<select id="flag" name="flag">
+							<option value="" disabled selected?={ survey.VesselData.Flag == "" }>Select flag…</option>
+							<option selected?={ survey.VesselData.Flag == "Antigua and Barbuda" }>Antigua and Barbuda</option>
+						</select>
+					</div>
+				</div>
+				<div class="field">
+					<label for={ constants.Built }>Built Year <span class="optional">(optional)</span></label>
+					<input value={ survey.VesselData.BuiltYear } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.TableDensity }>Table Density, t/m³ <span class="required">*</span></label>
+					<input name={ constants.TableDensity } value={ format.FloatOrEmpty(survey.VesselData.TableDensity) } type="number" placeholder="1.025" step="any"/>
+				</div>
+			</div>
+		</div>
+		<div class="form-section">
+			<div class="field-col-4">
+				<div class="field">
+					<label for={ constants.Lightship }>Lightship, MT <span class="required">*</span></label>
+					<input name={ constants.Lightship } value={ survey.VesselData.Lightship } placeholder="0.000" step="any" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.LBP }>LBP, m <span class="required">*</span></label>
+					<input name={ constants.LBP } value={ survey.VesselData.LBP } placeholder="0.00" step="any" oninput="updateCalcHints()" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.Breadth }>Breadth, m <span class="required">*</span></label>
+					<input name={ constants.Breadth } value={ survey.VesselData.Breadth } placeholder="0.00" step="any" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.Depth }>Depth, m <span class="optional">(optional)</span></label>
+					<input name={ constants.Depth } value={ survey.VesselData.Depth } placeholder="0.00" step="any" oninput="checkDepth()" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.SummerDraft }>Summer Draft, m <span class="required">*</span></label>
+					<input type="number" name={ constants.SummerDraft } placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ survey.VesselData.SummerDraft }/>
+				</div>
+				<div class="field">
+					<label for={ constants.SummerDWT }>Summer DWT, MT <span class="required">*</span></label>
+					<input type="number" name={ constants.SummerDWT } placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerDWT }/>
+				</div>
+				<div class="field">
+					<label for={ constants.SummerTPC }>Summer TPC, MT/cm <span class="required">*</span></label>
+					<input type="number" name={ constants.SummerTPC } placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerTPC }/>
+				</div>
+				<div class="field">
+					<label for={ constants.SummerFreeboard }>Summer Freeboard, m <span class="optional">(optional)</span></label>
+					<input type="number" name={ constants.SummerFreeboard } placeholder="0.000" step="any" oninput="checkDepth()" value={ survey.VesselData.SummerFreeboard }/>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ VesselSettingBlock(sp components.SurveyPageProps) {
+	{{ survey := sp.Survey }}
+	<div class="block">
+		<div class="form-card" id="section-calc">
+			<div class="form-card-header">
+				<div class="form-card-header-icon">
+					<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>
+				</div>
+				<span class="form-card-title">Calculation Settings</span>
+				<span class="form-card-subtitle">UNECE 1992 method parameters</span>
+			</div>
+			<div class="form-section">
+				<div class="field">
+					<label>MMC Calculation Method <span class="required">*</span></label>
+					<div class="method-options">
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.MMCMethod }
+								id="mmc-standard"
+								value="marine"
+								checked?={ survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" }
+							/>
+							<label for="mmc-standard">
+								<span class="method-label-title">Standard</span>
+								<span class="method-label-formula">(f + 6m + a) / 8</span>
+								<span class="method-label-desc">Sea vessel</span>
+							</label>
+						</div>
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.MMCMethod }
+								id="mmc-river"
+								value="river"
+								checked?={ survey.VesselData.VesselType == "river" }
+							/>
+							<label for="mmc-river">
+								<span class="method-label-title">River</span>
+								<span class="method-label-formula">(f + 4m + a) / 6</span>
+								<span class="method-label-desc">River vessel</span>
+							</label>
+						</div>
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.MMCMethod }
+								id="mmc-barge"
+								value="barge"
+								checked?={ survey.VesselData.VesselType == "barge" }
+							/>
+							<label for="mmc-barge">
+								<span class="method-label-title">Barge</span>
+								<span class="method-label-formula">(3f + 14m + 3a) / 20</span>
+								<span class="method-label-desc">Barge</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-section">
+				<div class="field">
+					<label>Correction Method <span class="required">*</span></label>
+					<div class="correction-options">
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.CorrMethod }
+								id="corr-full"
+								value="Full LBP"
+								checked?={ survey.VesselData.CorrectionMethod != "Half LBP" }
+							/>
+							<label for="corr-full">
+								<span class="method-label-title">Full LBP</span>
+								<span class="method-label-desc">Standard — sea vessels</span>
+							</label>
+						</div>
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.CorrMethod }
+								id="corr-half"
+								value="Half LBP"
+								checked?={ survey.VesselData.CorrectionMethod == "Half LBP" }
+							/>
+							<label for="corr-half">
+								<span class="method-label-title">Half LBP</span>
+								<span class="method-label-desc">River vessels only</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-section">
+				<div class="field">
+					<label>LCF Detection <span class="required">*</span></label>
+					<div class="lcf-options">
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.LCFDetection }
+								id="lcf-auto"
+								value="auto"
+								checked?={ !survey.VesselData.IsLcfDetectionManual }
+							/>
+							<label for="lcf-auto">
+								<span class="method-label-title">Auto</span>
+								<span class="method-label-desc">Direction from hydrostatic table</span>
+							</label>
+						</div>
+						<div class="method-option">
+							<input
+								type="radio"
+								name={ constants.LCFDetection }
+								id="lcf-manual"
+								value="manual"
+								checked?={ survey.VesselData.IsLcfDetectionManual }
+							/>
+							<label for="lcf-manual">
+								<span class="method-label-title">Manual</span>
+								<span class="method-label-desc">Set direction per draft manually</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 }

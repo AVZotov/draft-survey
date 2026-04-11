@@ -15,14 +15,16 @@ import (
 
 func (h *Handler) newSurvey(c *fiber.Ctx) error {
 	id := uuid.New().String()
-	survey := &types.Survey{ID: id}
+	survey := &types.Survey{ID: id, CreatedAt: time.Now()}
 	user, err := h.userRepository.Get()
 	if err != nil {
 		return err
 	}
-	props := web.NewSurveyProps(user, survey)
-	component := pages.NewSurvey(props)
-	return tadaptor.Render(c, component)
+
+	slp := web.SurveyLayoutProps(user)
+	spp := web.SurveyPageProps(*survey)
+
+	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }
 
 func (h *Handler) saveSurvey(c *fiber.Ctx) error {
@@ -59,8 +61,9 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	props := web.NewSurveyProps(user, survey)
-	return tadaptor.Render(c, pages.NewSurvey(props))
+	slp := web.SurveyLayoutProps(user)
+	spp := web.SurveyPageProps(*survey)
+	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }
 
 /*
@@ -91,8 +94,8 @@ func (h *Handler) getNewSurvey(c *fiber.Ctx) (*types.Survey, error) {
 	}
 
 	cargoOperation := types.CargoOperation{
-		PlaceOfInspection: c.FormValue("port"),
-		Destination:       c.FormValue("destination"),
+		//PlaceOfInspection: c.FormValue("port"),
+		//Destination:       c.FormValue("destination"),
 		Operation: c.FormValue("cargo_op"),
 		Cargo:     c.FormValue("cargo"),
 		Packing:   c.FormValue("packing"),

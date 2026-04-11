@@ -41,6 +41,22 @@ func DraftsPageProps(survey types.Survey) components.DraftPageProps {
 	}
 }
 
+func SurveyLayoutProps(user *types.User) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "New Survey",
+		MetaDescription: "General Survey Info",
+		ExtraCSS:        []string{"/static/css/new-survey.css"},
+		ExtraJS:         []string{"/static/js/new-survey.js"},
+		User:            user,
+	}
+}
+
+func SurveyPageProps(survey types.Survey) components.SurveyPageProps {
+	return components.SurveyPageProps{
+		Survey: survey,
+	}
+}
+
 // All below props in todo to split layout and needed props
 
 func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
@@ -48,17 +64,6 @@ func DashboardProps(user *types.User, survey *types.Survey) components.LayoutPro
 		Title:           "Dashboard",
 		MetaDescription: "Main page of Draft Survey application",
 		ExtraCSS:        []string{"/static/css/dashboard.css"},
-		User:            user,
-		Survey:          survey,
-	}
-}
-
-func NewSurveyProps(user *types.User, survey *types.Survey) components.LayoutProps {
-	return components.LayoutProps{
-		Title:           "New Survey",
-		MetaDescription: "Calculate vessel cargo",
-		ExtraCSS:        []string{"/static/css/new-survey.css"},
-		ExtraJS:         []string{"/static/js/new-survey.js"},
 		User:            user,
 		Survey:          survey,
 	}

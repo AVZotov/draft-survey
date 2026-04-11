@@ -73,6 +73,7 @@ func parseString(c *fiber.Ctx, field string) (string, error) {
 	return v, nil
 }
 
+// Deprecated To be deleted and substituted with granulated parsings
 func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	tableDensity, err := parseFloat(c, constants.TableDensity)
 	if err == nil {
@@ -280,6 +281,98 @@ func (h *Handler) parseDraft(c *fiber.Ctx, survey *types.Survey) {
 	}
 }
 
+func getTankProps(h *Handler, c *fiber.Ctx) (*props, error) {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return nil, err
+	}
+
+	draftIndexStr := c.Params("draftIndex")
+	draftIndex, err := strconv.Atoi(draftIndexStr)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	var trueTrim, listDegrees *float64
+	draft := survey.Drafts[draftIndex]
+	if draft.Marks.FwdPort.Value != nil && draft.Marks.FwdPort.Method != "" &&
+		draft.Marks.AftPort.Value != nil && draft.Marks.AftPort.Method != "" &&
+		draft.Marks.MidPort.Value != nil && draft.Marks.MidPort.Method != "" &&
+		draft.DistancePPFwd != nil && draft.DistancePPMid != nil && draft.DistancePPAft != nil &&
+		survey.VesselData.LBP > 0 {
+		results := calculation.CalcDraft(draft, survey.VesselData)
+		trueTrim = &results.TrueTrim
+		listDegrees = &results.ListDegrees
+	}
+	var trimDir, listDir string
+	if trueTrim != nil && listDegrees != nil {
+		trimDir = format.TrimDirection(*trueTrim)
+		listDir = format.ListDirection(*listDegrees)
+	}
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
+
+	tankID := c.Params("tankID")
+
+	if tankID == "" {
+		return &props{
+			surveyID:   id,
+			draftIndex: draftIndex,
+			survey:     survey,
+			user:       user,
+			bwTanks:    bwTanks,
+			fwTanks:    fwTanks,
+			trim:       trueTrim,
+			trimDir:    trimDir,
+			list:       listDegrees,
+			listDir:    listDir,
+		}, nil
+	}
+
+	wtType := c.Get(constants.HXTankType)
+	var tankIndex int
+
+	switch wtType {
+	case constants.BWTank:
+		tankIndex = slices.IndexFunc(bwTanks, func(tank types.Tank) bool {
+			return tank.ID == tankID
+		})
+		if tankIndex == -1 {
+			return nil, errors.New("tank not found")
+		}
+	case constants.FWTank:
+		tankIndex = slices.IndexFunc(fwTanks, func(tank types.Tank) bool {
+			return tank.ID == tankID
+		})
+		if tankIndex == -1 {
+			return nil, errors.New("tank not found")
+		}
+	default:
+		return nil, errors.New("undefined tank type")
+	}
+
+	return &props{
+		surveyID:   id,
+		draftIndex: draftIndex,
+		survey:     survey,
+		user:       user,
+		tankID:     tankID,
+		tankIndex:  tankIndex,
+		bwTanks:    bwTanks,
+		fwTanks:    fwTanks,
+		trim:       trueTrim,
+		trimDir:    trimDir,
+		list:       listDegrees,
+		listDir:    listDir,
+	}, nil
+}
+
 func parseTank(c *fiber.Ctx, tank *types.Tank) {
 	if tank == nil {
 		return
@@ -449,98 +542,6 @@ func parseCorrectionRows(c *fiber.Ctx, tank *types.Tank) {
 	if err == nil {
 		tank.Correction.CorrectionRows[1].TableVolume = volumeUp
 	}
-}
-
-func getProps(h *Handler, c *fiber.Ctx) (*props, error) {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return nil, err
-	}
-
-	draftIndexStr := c.Params("draftIndex")
-	draftIndex, err := strconv.Atoi(draftIndexStr)
-	if err != nil {
-		return nil, err
-	}
-
-	user, err := h.userRepository.Get()
-	if err != nil {
-		return nil, err
-	}
-
-	var trueTrim, listDegrees *float64
-	draft := survey.Drafts[draftIndex]
-	if draft.Marks.FwdPort.Value != nil && draft.Marks.FwdPort.Method != "" &&
-		draft.Marks.AftPort.Value != nil && draft.Marks.AftPort.Method != "" &&
-		draft.Marks.MidPort.Value != nil && draft.Marks.MidPort.Method != "" &&
-		draft.DistancePPFwd != nil && draft.DistancePPMid != nil && draft.DistancePPAft != nil &&
-		survey.VesselData.LBP > 0 {
-		results := calculation.CalcDraft(draft, survey.VesselData)
-		trueTrim = &results.TrueTrim
-		listDegrees = &results.ListDegrees
-	}
-	var trimDir, listDir string
-	if trueTrim != nil && listDegrees != nil {
-		trimDir = format.TrimDirection(*trueTrim)
-		listDir = format.ListDirection(*listDegrees)
-	}
-	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
-	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
-
-	tankID := c.Params("tankID")
-
-	if tankID == "" {
-		return &props{
-			surveyID:   id,
-			draftIndex: draftIndex,
-			survey:     survey,
-			user:       user,
-			bwTanks:    bwTanks,
-			fwTanks:    fwTanks,
-			trim:       trueTrim,
-			trimDir:    trimDir,
-			list:       listDegrees,
-			listDir:    listDir,
-		}, nil
-	}
-
-	wtType := c.Get(constants.HXTankType)
-	var tankIndex int
-
-	switch wtType {
-	case constants.BWTank:
-		tankIndex = slices.IndexFunc(bwTanks, func(tank types.Tank) bool {
-			return tank.ID == tankID
-		})
-		if tankIndex == -1 {
-			return nil, errors.New("tank not found")
-		}
-	case constants.FWTank:
-		tankIndex = slices.IndexFunc(fwTanks, func(tank types.Tank) bool {
-			return tank.ID == tankID
-		})
-		if tankIndex == -1 {
-			return nil, errors.New("tank not found")
-		}
-	default:
-		return nil, errors.New("undefined tank type")
-	}
-
-	return &props{
-		surveyID:   id,
-		draftIndex: draftIndex,
-		survey:     survey,
-		user:       user,
-		tankID:     tankID,
-		tankIndex:  tankIndex,
-		bwTanks:    bwTanks,
-		fwTanks:    fwTanks,
-		trim:       trueTrim,
-		trimDir:    trimDir,
-		list:       listDegrees,
-		listDir:    listDir,
-	}, nil
 }
 
 func getDraftProps(h *Handler, c *fiber.Ctx) (*draftProps, error) {
@@ -808,3 +809,5 @@ func parseDeductibles(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 		d.Deductibles.Others = others
 	}
 }
+
+

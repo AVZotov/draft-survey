@@ -7,11 +7,11 @@ import (
 	"github.com/AVZotov/draft-survey/web/widgets/survey"
 )
 
-templ NewSurvey(props components.LayoutProps) {
-	@layouts.Layout(props) {
-		@widgets.HeaderUser(props.User)
-		@survey.NewSurveyForm(props.Survey)
-		@survey.NewSurveyActionBar(props.Survey)
+templ NewSurvey(lp components.LayoutProps, sp components.SurveyPageProps) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
+		@survey.NewSurveyForm(sp)
+		@survey.NewSurveyActionBar(lp.Survey)
 		@widgets.Footer()
 	}
 }
