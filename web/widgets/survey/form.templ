@@ -32,6 +32,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 		id="survey-survey-block"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SurveyBlock) }
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
+		hx-replace-url="true"
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"
 		hx-swap="none"
@@ -129,7 +130,16 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 
 templ VesselBlock(sp components.SurveyPageProps) {
 	{{ survey := sp.Survey }}
-	<div class="form-card" id="section-vessel">
+	<div
+		class="form-card"
+		id="survey-vessel-block"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.VesselBlock) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
+		hx-replace-url="true"
+		hx-include="this"
+		hx-trigger="change changed delay:500ms"
+		hx-swap="none"
+	>
 		<div class="form-card-header">
 			<div class="form-card-header-icon">
 				<svg viewBox="0 0 24 24"><path d="M3 17l2-7h14l2 7H3z"></path><path d="M8 10V6h8v4"></path><path d="M12 6V3"></path></svg>
@@ -209,7 +219,16 @@ templ VesselBlock(sp components.SurveyPageProps) {
 
 templ VesselSettingBlock(sp components.SurveyPageProps) {
 	{{ survey := sp.Survey }}
-	<div class="form-card" id="section-calc">
+	<div
+		class="form-card"
+		id="survey-settings-block"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SettingsBlock) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
+		hx-replace-url="true"
+		hx-include="this"
+		hx-trigger="change changed delay:500ms"
+		hx-swap="none"
+	>
 		<div class="form-card-header">
 			<div class="form-card-header-icon">
 				<svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"></rect><path d="M8 6h8M8 10h8M8 14h4"></path></svg>

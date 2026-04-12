@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -14,9 +15,18 @@ import (
 
 func (h *Handler) newSurvey(c *fiber.Ctx) error {
 	id := uuid.New().String()
-	survey := &types.Survey{ID: id, CreatedAt: time.Now()}
 	user, err := h.userRepository.Get()
 	if err != nil {
+		return err
+	}
+	survey := &types.Survey{
+		Status:    types.SurveyStatusDraft,
+		ID:        id,
+		CreatedAt: time.Now(),
+		Surveyor:  *user,
+	}
+
+	if err := h.surveyRepository.Save(survey); err != nil {
 		return err
 	}
 
@@ -38,6 +48,9 @@ func (h *Handler) saveSurvey(c *fiber.Ctx) error {
 		return err
 	}
 
+	url := fmt.Sprintf("/survey/%s", p.surveyID)
+	c.Set("HX-Replace-Url", url)
+
 	return c.SendStatus(http.StatusOK)
 }
 
@@ -47,11 +60,14 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
 	user, err := h.userRepository.Get()
 	if err != nil {
 		return err
 	}
+
 	slp := web.SurveyLayoutProps(user)
 	spp := web.SurveyPageProps(*survey)
+
 	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }
