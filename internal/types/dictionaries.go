@@ -10,4 +10,5 @@ type Port struct {
 	Name        string `json:"name"`
 	CountryCode string `json:"country_code"`
 	Coordinates string `json:"coordinates"`
+	PortManual  string `json:"port_manual"`
 }

@@ -102,8 +102,10 @@ type Draft struct {
 	StartedAt         time.Time        `json:"started_at"`
 	FinishedAt        time.Time        `json:"finished_at"`
 	LoadingCommenced  time.Time        `json:"loading_commenced"`
-	ConstantDeclared  *float64         `json:"constant_declared"`
-	CargoDeclared     *float64         `json:"cargo_declared"`
+	LoadPort          Port             `json:"loading_port"`
+	DischargePort     Port             `json:"discharge_port"`
+	ProductGrade      string           `json:"product_grade"`
+	HoldsActive       []int            `json:"holds_active"`
 }
 
 type Survey struct {

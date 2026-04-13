@@ -24,9 +24,40 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 				<span class="block-dot"></span>
 				{ draftTitle(dp.Survey.Drafts[draftIndex], draftIndex) }
 			</div>
+			<div
+				class={ templ.Classes(
+    			"block-header-fields",
+    			templ.KV("block-header-fields--2col", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeInitial),
+    			templ.KV("block-header-fields--3col", dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial),
+					) }
+			>
+				<input
+					class="block-header-input"
+					type="text"
+					name={ fmt.Sprintf("%s-%d", constants.LoadPort, draftIndex) }
+					value={ draftLoadPort(dp.Survey.Drafts, draftIndex) }
+					placeholder="Load port…"
+				/>
+				if dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial {
+					<input
+						class="block-header-input"
+						type="text"
+						name={ fmt.Sprintf("%s-%d", constants.DischargePort, draftIndex) }
+						value={ draftDischargePort(dp.Survey.Drafts, draftIndex) }
+						placeholder="Discharge port…"
+					/>
+				}
+				<input
+					class="block-header-input"
+					type="text"
+					name={ fmt.Sprintf("%s-%d", constants.ProductGrade, draftIndex) }
+					value={ draftGrade(dp.Survey.Drafts, draftIndex) }
+					placeholder="Grade…"
+				/>
+			</div>
 		</div>
 		<!-- ══════════════ DRAFT BLOCK══════════════════════════════ -->
-		<!-- Sea Condition bar -->
+		<!-- Sea Condition & Holds bars -->
 		<div
 			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.SeaConditionBlock) }
 			hx-trigger="change changed delay:500ms"
@@ -39,7 +70,11 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 				SeaCondition: dp.Survey.Drafts[draftIndex].SeaCondition,
 				DraftIndex:   &draftIndex,
 			})
+			if dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial {
+				@HoldsBar(dp, draftIndex)
+			}
 		</div>
+		<!-- Holds bar -->
 		<!-- Port | Vessel | Stbd -->
 		@Marks(dp, draftIndex)
 		<!-- PP distances + Keel + Calculated panel-->
@@ -62,6 +97,36 @@ func draftTitle(draft types.Draft, draftIndex int) string {
 	case types.DraftTypeFinal:
 		return "Final Draft"
 	default:
-		return fmt.Sprintf("Intermediate Draft %d", draftIndex)
+		return fmt.Sprintf("Int Draft %d", draftIndex)
 	}
+}
+
+func draftLoadPort(drafts []types.Draft, index int) string {
+	if drafts[index].LoadPort.PortManual != "" {
+		return drafts[index].LoadPort.PortManual
+	}
+	if len(drafts) > 0 {
+		return drafts[0].LoadPort.PortManual
+	}
+	return ""
+}
+
+func draftDischargePort(drafts []types.Draft, index int) string {
+	if drafts[index].DischargePort.PortManual != "" {
+		return drafts[index].DischargePort.PortManual
+	}
+	if len(drafts) > 0 {
+		return drafts[0].DischargePort.PortManual
+	}
+	return ""
+}
+
+func draftGrade(drafts []types.Draft, index int) string {
+	if drafts[index].ProductGrade != "" {
+		return drafts[index].ProductGrade
+	}
+	if len(drafts) > 0 {
+		return drafts[0].ProductGrade
+	}
+	return ""
 }

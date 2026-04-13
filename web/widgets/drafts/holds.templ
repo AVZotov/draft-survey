@@ -1,0 +1,50 @@
+package drafts
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/web/components"
+	"strconv"
+)
+
+templ HoldsBar(dp components.DraftPageProps, draftIndex int) {
+	{{ draft := dp.Survey.Drafts[draftIndex] }}
+	{{ total := dp.Survey.VesselData.HoldsTotal }}
+	<div
+		class="holds-bar"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HoldsBlock) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		hx-trigger="change changed delay:500ms"
+		hx-sync="this:replace"
+		hx-swap="none"
+		hx-include="this"
+	>
+		<span class="holds-bar__label">Holds to load</span>
+		<div class="holds-bar__circles">
+			for i := 1; i <= total; i++ {
+				{{ active := isHoldActive(draft.HoldsActive, i) }}
+				<label class="holds-bar__hold">
+					<input
+						type="checkbox"
+						name={ fmt.Sprintf("%s-%d", constants.HoldsActive, draftIndex) }
+						value={ strconv.Itoa(i) }
+						checked?={ active }
+					/>
+					<span
+						class="holds-bar__dot"
+						:class="{ 'holds-bar__dot--active': checked }"
+					>{ strconv.Itoa(i) }</span>
+				</label>
+			}
+		</div>
+	</div>
+}
+
+func isHoldActive(active []int, hold int) bool {
+	for _, h := range active {
+		if h == hold {
+			return true
+		}
+	}
+	return false
+}

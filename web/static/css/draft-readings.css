@@ -28,6 +28,54 @@
   gap: var(--space-lg);
 }
 
+.block-header-fields {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.block-header-input {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--border);
+  border-radius: 0;
+  padding: 2px 6px;
+  width: 120px;
+  outline: none;
+}
+
+.block-header-input:focus {
+  border-bottom-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.block-header-input::placeholder {
+  color: var(--text-dim);
+}
+
+.block-header-fields--2col {
+  grid-template-columns: 2fr 1fr;
+  max-width: 280px;
+}
+
+.block-header-fields--3col {
+  grid-template-columns: 2fr 2fr 1fr;
+  max-width: 420px;
+}
+
+.block-header-input {
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.block-header-input:focus,
+.block-header-input:not(:placeholder-shown) {
+  opacity: 1;
+}
+
 /* #endregion */
 
 /* #region 2. DRAFT BLOCK ═══════════════════════════════════════ */
@@ -110,7 +158,7 @@
 
 /* #endregion */
 
-/* #region 3. SEA BAR ═══════════════════════════════════════════ */
+/* #region 3. SEA BAR AND HOLDS BAR   ════════════════════════════ */
 
 .sea-bar {
   display: flex;
@@ -187,6 +235,61 @@ select.sea-sel:focus {
 .sea-option input[type="radio"]:checked {
   border-color: var(--accent);
   background: var(--accent);
+}
+
+.holds-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xs) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.holds-bar__label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.holds-bar__circles {
+  display: flex;
+  gap: 6px;
+}
+
+.holds-bar__hold input[type="checkbox"] {
+  display: none;
+}
+
+.holds-bar__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.holds-bar__hold input:checked+.holds-bar__dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.holds-bar__dot:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* #endregion */

@@ -71,4 +71,13 @@ const (
 
 	// Auto Update panels
 	CalcPanel = "calc-panel"
+
+	// Load Discharge conditions per draft
+	DischargePort = "discharge_port"
+	LoadPort      = "load_port"
+	ProductGrade  = "product_grade"
+
+	//holds to be appointed to load for draft (not initial)
+	HoldsBlock  = "holds_block"
+	HoldsActive = "holds_active"
 )
