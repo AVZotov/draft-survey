@@ -8,7 +8,10 @@ package survey
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
 func NewSurveyActionBar(survey *types.Survey) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -31,7 +34,20 @@ func NewSurveyActionBar(survey *types.Survey) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"action-bar\"><div class=\"action-bar-info\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Required fields: Vessel Name, Lightship, LBP, Breadth, Summer Draft / DWT / TPC</div><div class=\"action-bar-btns\"><button class=\"btn btn-primary\" type=\"button\" hx-post=\"/api/v1/survey\" hx-include=\"#survey-form\" hx-vals='{\"next\": \"draft\"}'>Proceed to Draft Readings <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></button></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"action-bar\"><div class=\"action-bar-info\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M12 16v-4M12 8h.01\"></path></svg> Required fields: Vessel Name, Lightship, LBP, Breadth, Summer Draft / DWT / TPC and etc</div><div class=\"action-bar-btns\"><a class=\"btn btn-primary\" href=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 templ.SafeURL
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(fmt.Sprintf("/survey/%s/draft", survey.ID))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/actionbar.templ`, Line: 17, Col: 53}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">Proceed to Draft Readings <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -11,7 +11,7 @@ templ NewSurvey(lp components.LayoutProps, sp components.SurveyPageProps) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
 		@survey.NewSurveyForm(sp)
-		@survey.NewSurveyActionBar(lp.Survey)
+		@survey.NewSurveyActionBar(&sp.Survey)
 		@widgets.Footer()
 	}
 }

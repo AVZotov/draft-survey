@@ -64,7 +64,7 @@ func NewSurvey(lp components.LayoutProps, sp components.SurveyPageProps) templ.C
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = survey.NewSurveyActionBar(lp.Survey).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = survey.NewSurveyActionBar(&sp.Survey).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
