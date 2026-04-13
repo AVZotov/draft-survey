@@ -72,6 +72,8 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 			})
 			if dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial {
 				@HoldsBar(dp, draftIndex)
+			} else {
+				@HoldsBarTotal(dp)
 			}
 		</div>
 		<!-- Holds bar -->

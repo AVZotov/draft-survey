@@ -231,6 +231,11 @@ func DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRes
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+		} else {
+			templ_7745c5c3_Err = HoldsBarTotal(dp).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</div><!-- Holds bar --><!-- Port | Vessel | Stbd -->")
 		if templ_7745c5c3_Err != nil {

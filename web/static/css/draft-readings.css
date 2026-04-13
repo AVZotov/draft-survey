@@ -244,6 +244,7 @@ select.sea-sel:focus {
   padding: var(--space-xs) var(--space-lg);
   border-bottom: 1px solid var(--border);
   background: var(--bg);
+  height: 1.8rem;
 }
 
 .holds-bar__label {
