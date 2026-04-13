@@ -2,8 +2,6 @@ package types
 
 import (
 	"time"
-
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 type MeanDraft struct {
@@ -50,11 +48,9 @@ func (p PortInfo) DisplayName() string {
 }
 
 type CargoOperation struct {
-	PlaceOfInspection PortInfo `json:"place_of_inspection"`
-	Destination       PortInfo `json:"destination"`
-	Operation         string   `json:"operation"`
-	Cargo             string   `json:"cargo"`
-	Packing           string   `json:"packing"`
+	Operation string `json:"operation"`
+	Cargo     string `json:"cargo"`
+	Packing   string `json:"packing"`
 }
 
 type SurveyStatus string
@@ -111,16 +107,17 @@ type Draft struct {
 }
 
 type Survey struct {
-	Surveyor         User              `json:"surveyor"`
-	Status           SurveyStatus      `json:"status"`
-	ID               string            `json:"id"`
-	CreatedAt        time.Time         `json:"created_at"`
-	Drafts           []Draft           `json:"drafts"`
-	Job              Job               `json:"job"`
-	CargoOperation   CargoOperation    `json:"cargo_operation"`
-	CargoDeclared    *float64          `json:"cargo_declared"`
-	ConstantDeclared *float64          `json:"constant_declared"`
-	VesselData       vessel.VesselData `json:"vessel_data"`
-	SeaCondition     SeaCondition      `json:"sea_condition"`
-	Remarks          string            `json:"remarks"`
+	Surveyor         User           `json:"surveyor"`
+	Status           SurveyStatus   `json:"status"`
+	ID               string         `json:"id"`
+	CreatedAt        time.Time      `json:"created_at"`
+	Drafts           []Draft        `json:"drafts"`
+	Job              Job            `json:"job"`
+	CargoOperation   CargoOperation `json:"cargo_operation"`
+	CargoDeclared    *float64       `json:"cargo_declared"`
+	ConstantDeclared *float64       `json:"constant_declared"`
+	VesselData       VesselData     `json:"vessel_data"`
+	SeaCondition     SeaCondition   `json:"sea_condition"`
+	Remarks          string         `json:"remarks"`
+	Country          Country        `json:"country"`
 }

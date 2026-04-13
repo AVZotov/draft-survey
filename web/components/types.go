@@ -31,20 +31,23 @@ type SeaConditionProps struct {
 	DraftIndex   *int
 }
 
-type CountrySelectProps struct {
+type SurveyPageProps struct {
+	Survey    types.Survey
 	Countries []types.Country
-	Selected  string
-	Name      string
+}
+
+type CountrySelectProps struct {
+	Countries     []types.Country
+	SelectedCode  string // country code e.g. "RU"
+	SelectedName  string // country name e.g. "Russia"
+	CountryCodeID string // hidden input name for code e.g. "country_code"
+	CountryNameID string // hidden input name for name e.g. "country_name"
 }
 
 type PortSelectProps struct {
 	Ports    []types.Port
 	Selected string
 	Name     string
-}
-
-type SurveyPageProps struct {
-	Survey types.Survey
 }
 
 type Version struct {

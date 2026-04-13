@@ -10,7 +10,7 @@ templ DraftActionBar(survey *types.Survey) {
 	<div class="action-bar">
 		<div class="ab-info">
 			<span class="ab-vessel">{ survey.VesselData.Name }</span>
-			<span class="ab-meta">IMO { survey.VesselData.IMO } · Loading · { survey.CargoOperation.PlaceOfInspection.DisplayName() } · { time.Now().Format("Mon, 02 Jan 2006") } </span>
+			<span class="ab-meta">IMO { survey.VesselData.IMO } · Loading · { survey.Country.Name } · { time.Now().Format("Mon, 02 Jan 2006") } </span>
 		</div>
 		<div class="ab-btns">
 			@draftActionButtons(survey)

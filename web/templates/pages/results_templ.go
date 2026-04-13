@@ -86,9 +86,9 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(props.Survey.CargoOperation.PlaceOfInspection.DisplayName())
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(props.Survey.Country.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 35, Col: 91}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 35, Col: 57}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -320,53 +320,40 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, " · ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</span>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</div><div class=\"action-bar-btns\"><button class=\"btn btn-ghost\" onclick=\"history.back()\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Drafts</button> <button class=\"btn btn-ghost\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z\"></path> <path d=\"M17 21v-8H7v8M7 3v5h8\"></path></svg> Save</button> <button class=\"btn btn-ghost\" onclick=\"openEditPanel()\"><svg viewBox=\"0 0 24 24\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg> Edit Drafts</button><!-- Print dropdown --><div class=\"print-wrap\"><button class=\"btn btn-ghost\" onclick=\"togglePrintMenu()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"6 9 6 2 18 2 18 9\"></polyline> <path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"></path> <rect x=\"6\" y=\"14\" width=\"12\" height=\"8\"></rect></svg> Print Report <svg viewBox=\"0 0 24 24\" style=\"width:10px;height:10px\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></button><div class=\"print-menu\" id=\"print-menu\"><div class=\"print-menu-title\">Select report type</div><button class=\"print-item\" onclick=\"printReport('ds')\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path> <polyline points=\"14 2 14 8 20 8\"></polyline></svg><div><div>Draft Survey Report</div><div class=\"print-item-desc\">Official report for signing</div></div></button> <button class=\"print-item\" onclick=\"printReport('internal')\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path> <polyline points=\"14 2 14 8 20 8\"></polyline> <line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"></line> <line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"></line></svg><div><div>Draft Survey — Internal Use</div><div class=\"print-item-desc\">Working copy with full calculation detail</div></div></button> <button class=\"print-item\" onclick=\"printReport('ballast')\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"></path> <polyline points=\"9 22 9 12 15 12 15 22\"></polyline></svg><div><div>Ballast Tanks Report</div><div class=\"print-item-desc\">BW / FW tanks breakdown</div></div></button></div></div><button class=\"btn btn-primary\" onclick=\"openEditPanel()\"><svg viewBox=\"0 0 24 24\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg> Edit &amp; Recalculate</button></div></div><!-- EDIT PANEL --> <div class=\"panel-overlay\" id=\"panel-overlay\"><div class=\"panel-backdrop\" onclick=\"closeEditPanel()\"></div><div class=\"edit-panel\"><div class=\"panel-header\"><div><div class=\"panel-title\">Edit Draft Readings</div><div class=\"panel-subtitle\">Changes recalculate automatically on backend</div></div><button class=\"panel-close\" onclick=\"closeEditPanel()\"><svg viewBox=\"0 0 24 24\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"></line> <line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"></line></svg></button></div><!-- Live result strip --><div style=\"padding: 8px 16px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0;\"><div class=\"panel-result-strip\" style=\"margin-bottom:0\"><div><div class=\"prs-label\">Cargo Loaded</div><div class=\"prs-note\">Recalculates on Submit</div></div><div style=\"text-align:right\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if props.Results != nil && len(*props.Results) >= 2 {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"prs-value\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var18 string
-				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(props.Survey.CargoOperation.PlaceOfInspection.DisplayName())
+				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", (*props.Results)[1].NetDisplacement-(*props.Results)[0].NetDisplacement))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 140, Col: 151}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 248, Col: 125}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</span>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</div><div class=\"action-bar-btns\"><button class=\"btn btn-ghost\" onclick=\"history.back()\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Drafts</button> <button class=\"btn btn-ghost\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z\"></path> <path d=\"M17 21v-8H7v8M7 3v5h8\"></path></svg> Save</button> <button class=\"btn btn-ghost\" onclick=\"openEditPanel()\"><svg viewBox=\"0 0 24 24\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg> Edit Drafts</button><!-- Print dropdown --><div class=\"print-wrap\"><button class=\"btn btn-ghost\" onclick=\"togglePrintMenu()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"6 9 6 2 18 2 18 9\"></polyline> <path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"></path> <rect x=\"6\" y=\"14\" width=\"12\" height=\"8\"></rect></svg> Print Report <svg viewBox=\"0 0 24 24\" style=\"width:10px;height:10px\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></button><div class=\"print-menu\" id=\"print-menu\"><div class=\"print-menu-title\">Select report type</div><button class=\"print-item\" onclick=\"printReport('ds')\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path> <polyline points=\"14 2 14 8 20 8\"></polyline></svg><div><div>Draft Survey Report</div><div class=\"print-item-desc\">Official report for signing</div></div></button> <button class=\"print-item\" onclick=\"printReport('internal')\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path> <polyline points=\"14 2 14 8 20 8\"></polyline> <line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"></line> <line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"></line></svg><div><div>Draft Survey — Internal Use</div><div class=\"print-item-desc\">Working copy with full calculation detail</div></div></button> <button class=\"print-item\" onclick=\"printReport('ballast')\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"></path> <polyline points=\"9 22 9 12 15 12 15 22\"></polyline></svg><div><div>Ballast Tanks Report</div><div class=\"print-item-desc\">BW / FW tanks breakdown</div></div></button></div></div><button class=\"btn btn-primary\" onclick=\"openEditPanel()\"><svg viewBox=\"0 0 24 24\"><path d=\"M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z\"></path></svg> Edit &amp; Recalculate</button></div></div><!-- EDIT PANEL --> <div class=\"panel-overlay\" id=\"panel-overlay\"><div class=\"panel-backdrop\" onclick=\"closeEditPanel()\"></div><div class=\"edit-panel\"><div class=\"panel-header\"><div><div class=\"panel-title\">Edit Draft Readings</div><div class=\"panel-subtitle\">Changes recalculate automatically on backend</div></div><button class=\"panel-close\" onclick=\"closeEditPanel()\"><svg viewBox=\"0 0 24 24\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"></line> <line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"></line></svg></button></div><!-- Live result strip --><div style=\"padding: 8px 16px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0;\"><div class=\"panel-result-strip\" style=\"margin-bottom:0\"><div><div class=\"prs-label\">Cargo Loaded</div><div class=\"prs-note\">Recalculates on Submit</div></div><div style=\"text-align:right\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if props.Results != nil && len(*props.Results) >= 2 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "<div class=\"prs-value\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var19 string
-				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", (*props.Results)[1].NetDisplacement-(*props.Results)[0].NetDisplacement))
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 248, Col: 125}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, " MT</div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, " MT</div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"prs-value pending\">—</div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"prs-value pending\">—</div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<!-- TODO: bind discrepancy vs S/P --><div class=\"prs-note\" style=\"color:var(--success)\">vs S/P (TODO)</div></div></div></div><!-- Tabs --><div class=\"panel-tabs\"><button class=\"panel-tab active\" onclick=\"switchTab('ini', this)\">● Initial Draft</button> <button class=\"panel-tab\" onclick=\"switchTab('fin', this)\">● Final Draft</button></div><div class=\"panel-body\"><!-- Initial tab --><div class=\"panel-tab-content active\" id=\"tab-ini\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<!-- TODO: bind discrepancy vs S/P --><div class=\"prs-note\" style=\"color:var(--success)\">vs S/P (TODO)</div></div></div></div><!-- Tabs --><div class=\"panel-tabs\"><button class=\"panel-tab active\" onclick=\"switchTab('ini', this)\">● Initial Draft</button> <button class=\"panel-tab\" onclick=\"switchTab('fin', this)\">● Final Draft</button></div><div class=\"panel-body\"><!-- Initial tab --><div class=\"panel-tab-content active\" id=\"tab-ini\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -376,7 +363,7 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</div><!-- Final tab --><div class=\"panel-tab-content\" id=\"tab-fin\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</div><!-- Final tab --><div class=\"panel-tab-content\" id=\"tab-fin\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -386,7 +373,7 @@ func ResultsPage(props components.LayoutProps) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "</div></div><div class=\"panel-footer\"><button class=\"btn btn-ghost\" style=\"flex:1\" onclick=\"resetPanel()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"1 4 1 10 7 10\"></polyline> <path d=\"M3.51 15a9 9 0 1 0 .49-3.95\"></path></svg> Reset</button> <button class=\"btn btn-primary\" style=\"flex:2\" onclick=\"submitPanel()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"20 6 9 17 4 12\"></polyline></svg> Submit &amp; Recalculate</button></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</div></div><div class=\"panel-footer\"><button class=\"btn btn-ghost\" style=\"flex:1\" onclick=\"resetPanel()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"1 4 1 10 7 10\"></polyline> <path d=\"M3.51 15a9 9 0 1 0 .49-3.95\"></path></svg> Reset</button> <button class=\"btn btn-primary\" style=\"flex:2\" onclick=\"submitPanel()\"><svg viewBox=\"0 0 24 24\"><polyline points=\"20 6 9 17 4 12\"></polyline></svg> Submit &amp; Recalculate</button></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -421,618 +408,618 @@ func draftColumn(phase string, label string, r types.DraftResult, props componen
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var20 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var20 == nil {
-			templ_7745c5c3_Var20 = templ.NopComponent
+		templ_7745c5c3_Var19 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var19 == nil {
+			templ_7745c5c3_Var19 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var21 = []any{"draft-col", "draft-col--" + phase}
-		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var21...)
+		var templ_7745c5c3_Var20 = []any{"draft-col", "draft-col--" + phase}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var20...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<div class=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var21 string
+		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var20).String())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 1, Col: 0}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\"><div class=\"draft-col-header\"><div class=\"col-label\"><span class=\"col-dot\"></span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var22 string
-		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var21).String())
+		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(label)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 1, Col: 0}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 303, Col: 11}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\"><div class=\"draft-col-header\"><div class=\"col-label\"><span class=\"col-dot\"></span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "</div><span class=\"col-mmc\">MMC ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var23 string
-		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(label)
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 303, Col: 11}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 306, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "</div><span class=\"col-mmc\">MMC ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var24 string
-		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 306, Col: 36}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, " m ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, " m ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.Survey != nil {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "· (")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "· (")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var25 string
-			templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(string(props.Survey.VesselData.CorrectionMethod))
+			var templ_7745c5c3_Var24 string
+			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(string(props.Survey.VesselData.CorrectionMethod))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 308, Col: 59}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, ")")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, ")")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "</span></div><div class=\"draft-col-body\"><!-- Step 1: Observed Drafts & Means --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">1</span> <span class=\"step-title\">Observed Drafts &amp; Means</span> <span class=\"step-status ok\">OK</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind Fwd/Mid/Aft P/S from props.Survey.Drafts[i].Marks --><div class=\"vrow\"><span class=\"vrow-label indent\">Fwd P / Fwd S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Mid P / Mid S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Aft P / Aft S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanF</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</span></div><div class=\"draft-col-body\"><!-- Step 1: Observed Drafts & Means --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">1</span> <span class=\"step-title\">Observed Drafts &amp; Means</span> <span class=\"step-status ok\">OK</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind Fwd/Mid/Aft P/S from props.Survey.Drafts[i].Marks --><div class=\"vrow\"><span class=\"vrow-label indent\">Fwd P / Fwd S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Mid P / Mid S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Aft P / Aft S</span><span class=\"vrow-value\">— / — m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanF</span><span class=\"vrow-value\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var25 string
+		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftFwdMean))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 326, Col: 142}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanM</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var26 string
-		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftFwdMean))
+		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftMidMean))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 326, Col: 142}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 327, Col: 142}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanM</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanA</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var27 string
-		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftMidMean))
+		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftAftMean))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 327, Col: 142}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 328, Col: 142}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">meanA</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, " m</span></div></div></div><!-- Step 2-3: PP & Keel Corrections --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">2–3</span> <span class=\"step-title\">PP &amp; Keel Corrections</span> <span class=\"step-status ok\">Applied</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind PP distances and keel values from props.Survey.Drafts[i] --><div class=\"vrow\"><span class=\"vrow-label indent\">dFwd — · Fk — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">dMid — · Mk — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">dAft — · Ak — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">FWD corrected wKeel</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var28 string
-		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MeanDraft.DraftAftMean))
+		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.FwdDraftWKeel))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 328, Col: 142}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 344, Col: 159}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, " m</span></div></div></div><!-- Step 2-3: PP & Keel Corrections --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">2–3</span> <span class=\"step-title\">PP &amp; Keel Corrections</span> <span class=\"step-status ok\">Applied</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind PP distances and keel values from props.Survey.Drafts[i] --><div class=\"vrow\"><span class=\"vrow-label indent\">dFwd — · Fk — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">dMid — · Mk — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">dAft — · Ak — mm</span><span class=\"vrow-formula\">corrPP + corrKeel</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">FWD corrected wKeel</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">MID corrected wKeel</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var29 string
-		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.FwdDraftWKeel))
+		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.MidDraftWKeel))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 344, Col: 159}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 345, Col: 159}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">MID corrected wKeel</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">AFT corrected wKeel</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var30 string
-		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.MidDraftWKeel))
+		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.AftDraftWKeel))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 345, Col: 159}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 346, Col: 159}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, " m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">AFT corrected wKeel</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, " m</span></div></div></div><!-- Step 4: List & Trim --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">4</span> <span class=\"step-title\">List &amp; Trim</span><!-- TODO: bind status text based on r.ListMeters and trim direction --><span class=\"step-status ok\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var31 string
-		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DraftsWKeel.AftDraftWKeel))
+		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TrueTrim))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 346, Col: 159}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 355, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, " m</span></div></div></div><!-- Step 4: List & Trim --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">4</span> <span class=\"step-title\">List &amp; Trim</span><!-- TODO: bind status text based on r.ListMeters and trim direction --><span class=\"step-status ok\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, " m</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow\"><span class=\"vrow-label\">Obs. Trim</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var32 string
-		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TrueTrim))
+		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ObservedTrim))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 355, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 359, Col: 126}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, " m</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow\"><span class=\"vrow-label\">Obs. Trim</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 48, " m</span></div><div class=\"vrow\"><span class=\"vrow-label\">True Trim</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var33 string
-		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ObservedTrim))
+		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TrueTrim))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 359, Col: 126}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 360, Col: 122}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, " m</span></div><div class=\"vrow\"><span class=\"vrow-label\">True Trim</span><span class=\"vrow-value\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var34 string
-		templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TrueTrim))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 360, Col: 122}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, " m</span></div><div class=\"vrow\"><span class=\"vrow-label\">List</span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 49, " m</span></div><div class=\"vrow\"><span class=\"vrow-label\">List</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if r.ListMeters == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "<span class=\"vrow-value dim\">Upright</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "<span class=\"vrow-value dim\">Upright</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "<span class=\"vrow-value\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "<span class=\"vrow-value\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var34 string
+			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ListMeters))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 366, Col: 67}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, " m / ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var35 string
-			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ListMeters))
+			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f", r.ListDegrees))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 366, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 366, Col: 110}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, " m / ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 53, "°</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "</div><div class=\"vrow\"><span class=\"vrow-label\">Deflection</span><!-- TODO: label Hogging/Sagging based on deflection sign -->")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if r.Deflection != 0 {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<span class=\"vrow-value warn\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var36 string
-			templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f", r.ListDegrees))
+			templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f", r.Deflection))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 366, Col: 110}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 373, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "°</span>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "</div><div class=\"vrow\"><span class=\"vrow-label\">Deflection</span><!-- TODO: label Hogging/Sagging based on deflection sign -->")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if r.Deflection != 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "<span class=\"vrow-value warn\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var37 string
-			templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f", r.Deflection))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 373, Col: 72}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, " cm ⚠</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, " cm ⚠</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<span class=\"vrow-value dim\">0.0 cm</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<span class=\"vrow-value dim\">0.0 cm</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "</div></div></div><!-- Step 5-6: Mean of Means & MMC --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">5–6</span> <span class=\"step-title\">Mean of Means &amp; MMC</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind Mean F&A and MM intermediate values separately --><div class=\"vrow\"><span class=\"vrow-label\">Mean F&amp;A</span><span class=\"vrow-value\">— m</span></div><div class=\"vrow\"><span class=\"vrow-label\">MM (mean of means)</span><span class=\"vrow-value\">— m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">MMC wKeel</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "</div></div></div><!-- Step 5-6: Mean of Means & MMC --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">5–6</span> <span class=\"step-title\">Mean of Means &amp; MMC</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind Mean F&A and MM intermediate values separately --><div class=\"vrow\"><span class=\"vrow-label\">Mean F&amp;A</span><span class=\"vrow-value\">— m</span></div><div class=\"vrow\"><span class=\"vrow-label\">MM (mean of means)</span><span class=\"vrow-value\">— m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">MMC wKeel</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var38 string
-		templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
+		var templ_7745c5c3_Var37 string
+		templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 391, Col: 132}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, " m</span></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, " m</span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.Survey != nil {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<div class=\"vrow\"><span class=\"vrow-label dim\">Formula: (F + 6M + A) / 8 — standard</span><span class=\"vrow-formula\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "<div class=\"vrow\"><span class=\"vrow-label dim\">Formula: (F + 6M + A) / 8 — standard</span><span class=\"vrow-formula\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var39 string
-			templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(string(props.Survey.VesselData.CorrectionMethod))
+			var templ_7745c5c3_Var38 string
+			templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(string(props.Survey.VesselData.CorrectionMethod))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 393, Col: 175}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "</span></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "</span></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</div></div><!-- Step 7: Hydrostatic Interpolation --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">7</span> <span class=\"step-title\">Hydrostatic Interpolation at MMC ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "</div></div><!-- Step 7: Hydrostatic Interpolation --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">7</span> <span class=\"step-title\">Hydrostatic Interpolation at MMC ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var39 string
+		templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 401, Col: 91}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, " m</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind upper/lower hydrostatic rows from props.Survey.Drafts[i].HydrostaticRows --><div class=\"vrow\"><span class=\"vrow-label indent\">Upper: — m</span><span class=\"vrow-value\">— MT · TPC — · LCF — m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">MMC interpolated</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var40 string
-		templ_7745c5c3_Var40, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.MMC))
+		templ_7745c5c3_Var40, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.Displacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 401, Col: 91}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 407, Col: 161}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var40))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, " m</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind upper/lower hydrostatic rows from props.Survey.Drafts[i].HydrostaticRows --><div class=\"vrow\"><span class=\"vrow-label indent\">Upper: — m</span><span class=\"vrow-value\">— MT · TPC — · LCF — m</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">MMC interpolated</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Lower: — m</span><span class=\"vrow-value\">— MT · TPC — · LCF — m</span></div><div class=\"vrow\"><span class=\"vrow-label\">TPC at MMC</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var41 string
-		templ_7745c5c3_Var41, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.Displacement))
+		templ_7745c5c3_Var41, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.TPC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 407, Col: 161}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 409, Col: 131}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var41))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Lower: — m</span><span class=\"vrow-value\">— MT · TPC — · LCF — m</span></div><div class=\"vrow\"><span class=\"vrow-label\">TPC at MMC</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, " MT/cm</span></div><div class=\"vrow\"><span class=\"vrow-label\">LCF/LCA at MMC</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var42 string
-		templ_7745c5c3_Var42, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.TPC))
+		templ_7745c5c3_Var42, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.LCF))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 409, Col: 131}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 410, Col: 135}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var42))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, " MT/cm</span></div><div class=\"vrow\"><span class=\"vrow-label\">LCF/LCA at MMC</span><span class=\"vrow-value\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var43 string
-		templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.LCF))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 410, Col: 135}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, " m</span></div><!-- TODO: bind ΔMTC from MTCRows interpolation --><div class=\"vrow\"><span class=\"vrow-label\">ΔMTC (direct)</span><span class=\"vrow-value\">— MT·m</span></div></div></div><!-- Step 8: Trim & List Corrections --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">8</span> <span class=\"step-title\">Trim &amp; List Corrections</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow\"><span class=\"vrow-label indent\">1st Trim Correction</span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, " m</span></div><!-- TODO: bind ΔMTC from MTCRows interpolation --><div class=\"vrow\"><span class=\"vrow-label\">ΔMTC (direct)</span><span class=\"vrow-value\">— MT·m</span></div></div></div><!-- Step 8: Trim & List Corrections --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">8</span> <span class=\"step-title\">Trim &amp; List Corrections</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow\"><span class=\"vrow-label indent\">1st Trim Correction</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if r.FirstTrimCorrection < 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "<span class=\"vrow-value neg\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "<span class=\"vrow-value neg\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var43 string
+			templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.FirstTrimCorrection))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 426, Col: 80}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, " MT</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "<span class=\"vrow-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var44 string
 			templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.FirstTrimCorrection))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 426, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 428, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, " MT</span>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, "<span class=\"vrow-value\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var45 string
-			templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.FirstTrimCorrection))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 428, Col: 76}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, " MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, " MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "</div><div class=\"vrow\"><span class=\"vrow-label indent\">2nd Trim Correction</span> <span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, "</div><div class=\"vrow\"><span class=\"vrow-label indent\">2nd Trim Correction</span> <span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var46 string
-		templ_7745c5c3_Var46, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.SecondTrimCorrection))
+		var templ_7745c5c3_Var45 string
+		templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.SecondTrimCorrection))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 433, Col: 76}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var46))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">List Correction</span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">List Correction</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if r.ListCorrection == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "<span class=\"vrow-value dim\">0.000 MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "<span class=\"vrow-value dim\">0.000 MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "<span class=\"vrow-value\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "<span class=\"vrow-value\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var46 string
+			templ_7745c5c3_Var46, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ListCorrection))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 440, Col: 71}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var46))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, " MT</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "</div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Total Trim &amp; List Correction</span> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if r.TotalTrimCorrection < 0 {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "<span class=\"vrow-value neg\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var47 string
-			templ_7745c5c3_Var47, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.ListCorrection))
+			templ_7745c5c3_Var47, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TotalTrimCorrection))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 440, Col: 71}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 446, Col: 80}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var47))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, " MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 78, " MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "</div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Total Trim &amp; List Correction</span> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if r.TotalTrimCorrection < 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 78, "<span class=\"vrow-value neg\">")
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 79, "<span class=\"vrow-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var48 string
 			templ_7745c5c3_Var48, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TotalTrimCorrection))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 446, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 448, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var48))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 79, " MT</span>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, "<span class=\"vrow-value\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var49 string
-			templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TotalTrimCorrection))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 448, Col: 76}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var49))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 81, " MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, " MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, "</div><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Displ. corr'd to Trim &amp; List</span> <span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 81, "</div><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Displ. corr'd to Trim &amp; List</span> <span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var50 string
-		templ_7745c5c3_Var50, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.Displacement+r.TotalTrimCorrection))
+		var templ_7745c5c3_Var49 string
+		templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Hydrostatics.Displacement+r.TotalTrimCorrection))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 453, Col: 103}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var50))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var49))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, " MT</span></div></div></div><!-- Step 9: Density Correction --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">9</span> <span class=\"step-title\">Density Correction</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind table density from vessel data; dockwater from props.Survey.Drafts[i].Density --><div class=\"vrow\"><span class=\"vrow-label\">Table Density</span><span class=\"vrow-value\">— t/m³</span></div><div class=\"vrow\"><span class=\"vrow-label\">Dockwater Density</span><span class=\"vrow-value\">— t/m³</span></div><!-- TODO: bind FWA and DWA --><div class=\"vrow\"><span class=\"vrow-label dim\">FWA = Summer DWT / (4 × Summer TPC)</span><span class=\"vrow-value dim\">— mm</span></div><div class=\"vrow\"><span class=\"vrow-label dim\">DWA = FWA × (tableDens − Density) / (tableDens − 1)</span><span class=\"vrow-value dim\">— mm</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">Density Correction</span> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, " MT</span></div></div></div><!-- Step 9: Density Correction --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">9</span> <span class=\"step-title\">Density Correction</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind table density from vessel data; dockwater from props.Survey.Drafts[i].Density --><div class=\"vrow\"><span class=\"vrow-label\">Table Density</span><span class=\"vrow-value\">— t/m³</span></div><div class=\"vrow\"><span class=\"vrow-label\">Dockwater Density</span><span class=\"vrow-value\">— t/m³</span></div><!-- TODO: bind FWA and DWA --><div class=\"vrow\"><span class=\"vrow-label dim\">FWA = Summer DWT / (4 × Summer TPC)</span><span class=\"vrow-value dim\">— mm</span></div><div class=\"vrow\"><span class=\"vrow-label dim\">DWA = FWA × (tableDens − Density) / (tableDens − 1)</span><span class=\"vrow-value dim\">— mm</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label\">Density Correction</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if r.DensityCorrection == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 84, "<span class=\"vrow-value dim\">0.000 MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, "<span class=\"vrow-value dim\">0.000 MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, "<span class=\"vrow-value\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 84, "<span class=\"vrow-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var51 string
-			templ_7745c5c3_Var51, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DensityCorrection))
+			var templ_7745c5c3_Var50 string
+			templ_7745c5c3_Var50, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DensityCorrection))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 476, Col: 74}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var51))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var50))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, " MT</span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, " MT</span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 87, "</div><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Displ. corr'd to Density</span> <span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, "</div><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Displ. corr'd to Density</span> <span class=\"vrow-value\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var51 string
+		templ_7745c5c3_Var51, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DisplacementCorrected))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 481, Col: 77}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var51))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 87, " MT</span></div></div></div><!-- Step 10: Deductibles --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">10</span> <span class=\"step-title\">Deductibles</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind deductibles from props.Survey.Drafts[i].Deductibles and tanks --><div class=\"vrow\"><span class=\"vrow-label indent\">HFO</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">MDO</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Lube Oil</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Fresh Water</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Ballast Water</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Bilge Water</span><span class=\"vrow-value dim\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Constant Declared</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Others</span><span class=\"vrow-value dim\">— MT</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Total Deductibles</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var52 string
-		templ_7745c5c3_Var52, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.DisplacementCorrected))
+		templ_7745c5c3_Var52, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TotalDeductibles))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 481, Col: 77}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 502, Col: 153}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var52))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, " MT</span></div></div></div><!-- Step 10: Deductibles --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">10</span> <span class=\"step-title\">Deductibles</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind deductibles from props.Survey.Drafts[i].Deductibles and tanks --><div class=\"vrow\"><span class=\"vrow-label indent\">HFO</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">MDO</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Lube Oil</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Fresh Water</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Ballast Water</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Bilge Water</span><span class=\"vrow-value dim\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Constant Declared</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label indent\">Others</span><span class=\"vrow-value dim\">— MT</span></div><div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Total Deductibles</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, " MT</span></div></div></div><!-- Step 11-12: Net Displacement & Current DWT --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">11–12</span> <span class=\"step-title\">Net Displacement &amp; Current DWT</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Net Displacement</span><span class=\"vrow-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var53 string
-		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.TotalDeductibles))
+		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 502, Col: 153}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 513, Col: 148}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var53))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, " MT</span></div></div></div><!-- Step 11-12: Net Displacement & Current DWT --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">11–12</span> <span class=\"step-title\">Net Displacement &amp; Current DWT</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><div class=\"vrow vrow--total\"><span class=\"vrow-label\">Net Displacement</span><span class=\"vrow-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label dim\">Current DWT = Displ. corr'd to Density − Lightship</span><span class=\"vrow-value dim\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var54 string
-		templ_7745c5c3_Var54, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.NetDisplacement))
+		templ_7745c5c3_Var54, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.CurrentDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 513, Col: 148}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 514, Col: 175}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var54))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, " MT</span></div><div class=\"vrow\"><span class=\"vrow-label dim\">Current DWT = Displ. corr'd to Density − Lightship</span><span class=\"vrow-value dim\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, " MT</span></div></div></div><!-- Step 13: Constant Check --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">13</span> <span class=\"step-title\">Constant Check</span><!-- TODO: bind status text/class (ok/warn) based on r.Constant vs declared --><span class=\"step-status warn\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var55 string
-		templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.CurrentDWT))
+		templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Constant))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 514, Col: 175}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 523, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var55))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 91, " MT</span></div></div></div><!-- Step 13: Constant Check --><div class=\"step\"><div class=\"step-header\" onclick=\"toggleStep(this)\"><span class=\"step-num\">13</span> <span class=\"step-title\">Constant Check</span><!-- TODO: bind status text/class (ok/warn) based on r.Constant vs declared --><span class=\"step-status warn\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var56 string
-		templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Constant))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 523, Col: 69}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var56))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, " MT</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind constant declared and cargo declared from survey draft --><div class=\"vrow\"><span class=\"vrow-label\">Constant Declared</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label\">Cargo Declared (S/P)</span><span class=\"vrow-value\">— MT</span></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 91, " MT</span> <svg class=\"step-chevron\" viewBox=\"0 0 24 24\"><polyline points=\"18 15 12 9 6 15\"></polyline></svg></div><div class=\"step-body\"><!-- TODO: bind constant declared and cargo declared from survey draft --><div class=\"vrow\"><span class=\"vrow-label\">Constant Declared</span><span class=\"vrow-value\">— MT</span></div><div class=\"vrow\"><span class=\"vrow-label\">Cargo Declared (S/P)</span><span class=\"vrow-value\">— MT</span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.Survey != nil {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 93, "<div class=\"vrow\"><span class=\"vrow-label\">Lightship</span><span class=\"vrow-value\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, "<div class=\"vrow\"><span class=\"vrow-label\">Lightship</span><span class=\"vrow-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var57 string
-			templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", props.Survey.VesselData.Lightship))
+			var templ_7745c5c3_Var56 string
+			templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", props.Survey.VesselData.Lightship))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 531, Col: 146}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var57))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var56))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, " MT</span></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 93, " MT</span></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, "<div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Constant Calculated</span><span class=\"vrow-value warn\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, "<div class=\"vrow vrow--sub\"><span class=\"vrow-label bold\">Constant Calculated</span><span class=\"vrow-value warn\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var58 string
-		templ_7745c5c3_Var58, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Constant))
+		var templ_7745c5c3_Var57 string
+		templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", r.Constant))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 533, Col: 152}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var58))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var57))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 96, " MT</span></div></div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, " MT</span></div></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1057,172 +1044,172 @@ func cargoSection(ini types.DraftResult, fin types.DraftResult, props components
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var59 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var59 == nil {
-			templ_7745c5c3_Var59 = templ.NopComponent
+		templ_7745c5c3_Var58 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var58 == nil {
+			templ_7745c5c3_Var58 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "<div class=\"cargo-section\"><div class=\"cargo-hero\"><div class=\"cargo-hero-left\"><div><div class=\"cargo-op-label\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 96, "<div class=\"cargo-section\"><div class=\"cargo-hero\"><div class=\"cargo-hero-left\"><div><div class=\"cargo-op-label\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.Survey != nil {
-			var templ_7745c5c3_Var60 string
-			templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.JoinStringErrs(props.Survey.CargoOperation.Operation)
+			var templ_7745c5c3_Var59 string
+			templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.JoinStringErrs(props.Survey.CargoOperation.Operation)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 548, Col: 46}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var60))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var59))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 98, "Cargo Loaded")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "Cargo Loaded")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 99, "</div><div><!-- TODO: format with space-separated thousands --><span class=\"cargo-weight\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 98, "</div><div><!-- TODO: format with space-separated thousands --><span class=\"cargo-weight\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var60 string
+		templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.NetDisplacement-ini.NetDisplacement))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 555, Col: 95}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var60))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 99, "</span> <span class=\"cargo-weight-unit\">MT</span></div></div><!-- TODO: bind discrepancy vs S/P (requires CargoDeclared from survey draft) --><div class=\"cargo-disc ok\">Discrepancy from S/P: <span>— MT / —%</span></div></div></div><div class=\"cargo-top\"><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Initial Draft</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Net Displacement</span><span class=\"cargo-cell-val\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var61 string
-		templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.NetDisplacement-ini.NetDisplacement))
+		templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 555, Col: 95}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 568, Col: 156}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var61))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, "</span> <span class=\"cargo-weight-unit\">MT</span></div></div><!-- TODO: bind discrepancy vs S/P (requires CargoDeclared from survey draft) --><div class=\"cargo-disc ok\">Discrepancy from S/P: <span>— MT / —%</span></div></div></div><div class=\"cargo-top\"><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Initial Draft</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Net Displacement</span><span class=\"cargo-cell-val\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Current DWT</span><span class=\"cargo-cell-val dim\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var62 string
-		templ_7745c5c3_Var62, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.NetDisplacement))
+		templ_7745c5c3_Var62, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.CurrentDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 568, Col: 156}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 569, Col: 150}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var62))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Current DWT</span><span class=\"cargo-cell-val dim\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">MMC</span><span class=\"cargo-cell-val\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var63 string
-		templ_7745c5c3_Var63, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.CurrentDWT))
+		templ_7745c5c3_Var63, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.MMC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 569, Col: 150}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 570, Col: 131}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var63))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 102, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">MMC</span><span class=\"cargo-cell-val\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 102, " m</span></div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Final Draft</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Net Displacement</span><span class=\"cargo-cell-val\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var64 string
-		templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.MMC))
+		templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 570, Col: 131}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 574, Col: 156}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var64))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, " m</span></div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Final Draft</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Net Displacement</span><span class=\"cargo-cell-val\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Current DWT</span><span class=\"cargo-cell-val dim\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var65 string
-		templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.NetDisplacement))
+		templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.CurrentDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 574, Col: 156}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 575, Col: 150}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var65))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Current DWT</span><span class=\"cargo-cell-val dim\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">MMC</span><span class=\"cargo-cell-val\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var66 string
-		templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.CurrentDWT))
+		templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.MMC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 575, Col: 150}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 576, Col: 131}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var66))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">MMC</span><span class=\"cargo-cell-val\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var67 string
-		templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.MMC))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 576, Col: 131}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var67))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, " m</span></div></div><div class=\"cargo-cell\"><!-- TODO: bind CargoDeclared and ConstantDeclared from props.Survey.Drafts --><div class=\"cargo-cell-label\">Declared</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Cargo (S/P)</span><span class=\"cargo-cell-val\">— MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Constant Declared</span><span class=\"cargo-cell-val\">— MT</span></div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Constants</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, " m</span></div></div><div class=\"cargo-cell\"><!-- TODO: bind CargoDeclared and ConstantDeclared from props.Survey.Drafts --><div class=\"cargo-cell-label\">Declared</div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Cargo (S/P)</span><span class=\"cargo-cell-val\">— MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Constant Declared</span><span class=\"cargo-cell-val\">— MT</span></div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Constants</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.Survey != nil {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 107, "<div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Lightship</span><span class=\"cargo-cell-val\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "<div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Lightship</span><span class=\"cargo-cell-val\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var68 string
-			templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", props.Survey.VesselData.Lightship))
+			var templ_7745c5c3_Var67 string
+			templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", props.Survey.VesselData.Lightship))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 587, Col: 164}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var68))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var67))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 108, " MT</span></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 107, " MT</span></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, "<div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Const. Calculated (ini)</span><span class=\"cargo-cell-val warn\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 108, "<div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Const. Calculated (ini)</span><span class=\"cargo-cell-val warn\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var68 string
+		templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.Constant))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 589, Col: 161}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var68))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Const. Checking (fin)</span><span class=\"cargo-cell-val warn\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var69 string
-		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", ini.Constant))
+		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.Constant))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 589, Col: 161}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 590, Col: 159}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var69))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 110, " MT</span></div><div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">Const. Checking (fin)</span><span class=\"cargo-cell-val warn\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var70 string
-		templ_7745c5c3_Var70, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.3f", fin.Constant))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 590, Col: 159}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var70))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, " MT</span></div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 110, " MT</span></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1247,181 +1234,181 @@ func draftEditPanel(survey types.Survey, draft types.Draft) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var71 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var71 == nil {
-			templ_7745c5c3_Var71 = templ.NopComponent
+		templ_7745c5c3_Var70 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var70 == nil {
+			templ_7745c5c3_Var70 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 112, "<div class=\"panel-section-title\">Observed Drafts</div><div class=\"panel-field-row-3\"><div class=\"panel-field\"><label>Fwd Port, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, "<div class=\"panel-section-title\">Observed Drafts</div><div class=\"panel-field-row-3\"><div class=\"panel-field\"><label>Fwd Port, m</label> <input type=\"number\" step=\"any\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var71 string
+		templ_7745c5c3_Var71, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.FwdPort.Value))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 602, Col: 80}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var71))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 112, "\"></div><div class=\"panel-field\"><label>Mid Port, m</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var72 string
-		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.FwdPort.Value))
+		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.MidPort.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 602, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 606, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var72))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 113, "\"></div><div class=\"panel-field\"><label>Mid Port, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 113, "\"></div><div class=\"panel-field\"><label>Aft Port, m</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var73 string
-		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.MidPort.Value))
+		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.AftPort.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 606, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 610, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var73))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 114, "\"></div><div class=\"panel-field\"><label>Aft Port, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 114, "\"></div></div><div class=\"panel-field-row-3\"><div class=\"panel-field\"><label>Fwd Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var74 string
-		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.AftPort.Value))
+		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.FwdStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 610, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 616, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var74))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "\"></div></div><div class=\"panel-field-row-3\"><div class=\"panel-field\"><label>Fwd Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "\"></div><div class=\"panel-field\"><label>Mid Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var75 string
-		templ_7745c5c3_Var75, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.FwdStarboard.Value))
+		templ_7745c5c3_Var75, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.MidStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 616, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 620, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var75))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 116, "\"></div><div class=\"panel-field\"><label>Mid Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 116, "\"></div><div class=\"panel-field\"><label>Aft Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var76 string
-		templ_7745c5c3_Var76, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.MidStarboard.Value))
+		templ_7745c5c3_Var76, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.AftStarboard.Value))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 620, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 624, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var76))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 117, "\"></div><div class=\"panel-field\"><label>Aft Starboard, m</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 117, "\"></div></div><div class=\"panel-section-title\">Density</div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Dockwater Density, t/m³</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var77 string
-		templ_7745c5c3_Var77, templ_7745c5c3_Err = templ.JoinStringErrs(fmtMarkVal(draft.Marks.AftStarboard.Value))
+		templ_7745c5c3_Var77, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Density))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 624, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 631, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var77))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 118, "\"></div></div><div class=\"panel-section-title\">Density</div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Dockwater Density, t/m³</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 118, "\"></div><!-- TODO: bind table density from vessel data (not stored in Draft struct) --><div class=\"panel-field\"><label>Table Density, t/m³</label> <input type=\"number\" step=\"any\" value=\"1.025\"></div></div><div class=\"panel-section-title\">Deductibles</div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>HFO, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var78 string
-		templ_7745c5c3_Var78, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Density))
+		templ_7745c5c3_Var78, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.HFO))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 631, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 643, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var78))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 119, "\"></div><!-- TODO: bind table density from vessel data (not stored in Draft struct) --><div class=\"panel-field\"><label>Table Density, t/m³</label> <input type=\"number\" step=\"any\" value=\"1.025\"></div></div><div class=\"panel-section-title\">Deductibles</div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>HFO, MT</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 119, "\"></div><div class=\"panel-field\"><label>MDO, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var79 string
-		templ_7745c5c3_Var79, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.HFO))
+		templ_7745c5c3_Var79, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.MDO))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 643, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 647, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var79))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, "\"></div><div class=\"panel-field\"><label>MDO, MT</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, "\"></div></div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Lube Oil, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var80 string
-		templ_7745c5c3_Var80, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.MDO))
+		templ_7745c5c3_Var80, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.LubOil))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 647, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 653, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var80))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\"></div></div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Lube Oil, MT</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\"></div><!-- TODO: Fresh Water is sum of FreshWaterTanks, not a scalar field --><div class=\"panel-field\"><label>Fresh Water, MT</label> <input type=\"number\" step=\"any\" value=\"0.000\"></div></div><div class=\"panel-field-row\"><!-- TODO: Ballast Water is sum of BallastWaterTanks, not a scalar field --><div class=\"panel-field\"><label>Ballast Water, MT</label> <input type=\"number\" step=\"any\" value=\"0.000\"></div><div class=\"panel-field\"><label>Bilge Water, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var81 string
-		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.LubOil))
+		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.BilgeWater))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 653, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 669, Col: 82}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var81))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "\"></div><!-- TODO: Fresh Water is sum of FreshWaterTanks, not a scalar field --><div class=\"panel-field\"><label>Fresh Water, MT</label> <input type=\"number\" step=\"any\" value=\"0.000\"></div></div><div class=\"panel-field-row\"><!-- TODO: Ballast Water is sum of BallastWaterTanks, not a scalar field --><div class=\"panel-field\"><label>Ballast Water, MT</label> <input type=\"number\" step=\"any\" value=\"0.000\"></div><div class=\"panel-field\"><label>Bilge Water, MT</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "\"></div></div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Constant Declared, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var82 string
-		templ_7745c5c3_Var82, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.BilgeWater))
+		templ_7745c5c3_Var82, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(survey.ConstantDeclared))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 669, Col: 82}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 675, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var82))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 123, "\"></div></div><div class=\"panel-field-row\"><div class=\"panel-field\"><label>Constant Declared, MT</label> <input type=\"number\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 123, "\"></div><div class=\"panel-field\"><label>Others, MT</label> <input type=\"number\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var83 string
-		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(survey.ConstantDeclared))
+		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.Others))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 675, Col: 77}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 679, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var83))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 124, "\"></div><div class=\"panel-field\"><label>Others, MT</label> <input type=\"number\" step=\"any\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var84 string
-		templ_7745c5c3_Var84, templ_7745c5c3_Err = templ.JoinStringErrs(fmtPtrVal(draft.Deductibles.Others))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/results.templ`, Line: 679, Col: 78}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var84))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 125, "\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 124, "\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

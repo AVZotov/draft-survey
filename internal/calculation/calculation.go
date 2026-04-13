@@ -6,7 +6,6 @@ import (
 
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 func TotalTanksWeight(tanks []types.Tank) float64 {
@@ -126,16 +125,16 @@ func CalcDraftsWKeel(
 	}
 }
 
-func CalcMMC(draftsWKeel types.DraftsWKeel, v vessel.VesselData) float64 {
-	if v.VesselType == vessel.VesselTypeMarine {
+func CalcMMC(draftsWKeel types.DraftsWKeel, v types.VesselData) float64 {
+	if v.VesselType == types.VesselTypeMarine {
 		return round3((draftsWKeel.FwdDraftWKeel + round3(6*draftsWKeel.MidDraftWKeel) + draftsWKeel.AftDraftWKeel) / 8)
 	}
 
-	if v.VesselType == vessel.VesselTypeRiver {
+	if v.VesselType == types.VesselTypeRiver {
 		return round3((draftsWKeel.FwdDraftWKeel + round3(4*draftsWKeel.MidDraftWKeel) + draftsWKeel.AftDraftWKeel) / 6)
 	}
 
-	if v.VesselType == vessel.VesselTypeBarge {
+	if v.VesselType == types.VesselTypeBarge {
 		return round3((round3(3*draftsWKeel.FwdDraftWKeel) + round3(14*draftsWKeel.MidDraftWKeel) + round3(3*draftsWKeel.AftDraftWKeel)) / 20)
 	}
 
@@ -147,7 +146,7 @@ func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) f
 	return result
 }
 
-func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v vessel.VesselData) types.Hydrostatics {
+func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v types.VesselData) types.Hydrostatics {
 	var lower, upper types.HydrostaticRow
 	if markVal(hr[0].Draft) < markVal(hr[1].Draft) {
 		lower = hr[0]

@@ -32,7 +32,7 @@ templ ResultsPage(props components.LayoutProps) {
 					<div class="survey-pill">
 						<span class="pill-vessel">{ props.Survey.VesselData.Name }</span>
 						<span class="op-badge">{ props.Survey.CargoOperation.Operation }</span>
-						<span class="pill-port">{ props.Survey.CargoOperation.PlaceOfInspection.DisplayName() }</span>
+						<span class="pill-port">{ props.Survey.Country.Name }</span>
 					</div>
 				}
 				<div class="header-divider"></div>
@@ -137,7 +137,7 @@ templ ResultsPage(props components.LayoutProps) {
 				if props.Survey != nil {
 					<span class="ab-vessel">{ props.Survey.VesselData.Name }</span>
 					<span class="ab-meta">
-						IMO { props.Survey.VesselData.IMO } · { props.Survey.CargoOperation.Operation } · { props.Survey.CargoOperation.PlaceOfInspection.DisplayName() }
+						IMO { props.Survey.VesselData.IMO } · { props.Survey.CargoOperation.Operation }
 					</span>
 				}
 			</div>

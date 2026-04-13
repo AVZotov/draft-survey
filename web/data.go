@@ -50,9 +50,10 @@ func SurveyLayoutProps(user *types.User) components.LayoutProps {
 	}
 }
 
-func SurveyPageProps(survey types.Survey) components.SurveyPageProps {
+func SurveyPageProps(survey types.Survey, countries []types.Country) components.SurveyPageProps {
 	return components.SurveyPageProps{
-		Survey: survey,
+		Survey:    survey,
+		Countries: countries,
 	}
 }
 

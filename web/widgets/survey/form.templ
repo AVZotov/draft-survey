@@ -1,10 +1,13 @@
 package survey
 
-import "github.com/AVZotov/draft-survey/internal/format"
-import "github.com/AVZotov/draft-survey/web/components"
-import "fmt"
-import "github.com/AVZotov/draft-survey/internal/constants"
-import "github.com/AVZotov/draft-survey/data/dictionaries"
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/data/dictionaries"
+	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/web/components"
+	"strconv"
+)
 
 templ NewSurveyForm(sp components.SurveyPageProps) {
 	<main class="page-main">
@@ -36,6 +39,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"
 		hx-swap="none"
+		hx-sync="this:replace"
 	>
 		<div class="form-card-header">
 			<div class="form-card-header-icon">
@@ -45,7 +49,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 			<span class="form-card-subtitle">Survey context & logistics</span>
 		</div>
 		<div class="form-section">
-			<div class="field-col-2">
+			<div class="field-col-4">
 				<div class="field">
 					<label for={ constants.JobNumber }>Job No. <span class="optional">(optional)</span></label>
 					<input name={ constants.JobNumber } value={ survey.Job.JobNumber } placeholder="e.g. 345543_002" type="text"/>
@@ -53,6 +57,20 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 				<div class="field">
 					<label for={ constants.DSNumber }>DS No. <span class="optional">(optional)</span></label>
 					<input name={ constants.DSNumber } value={ survey.Job.DSNumber } placeholder="e.g. 1" step="any" type="number"/>
+				</div>
+				<div class="field">
+					<label for={ constants.Client }>Principal / Client <span class="optional">(optional)</span></label>
+					<input name={ constants.Client } value={ survey.Job.Principal } placeholder="e.g. Company" type="text"/>
+				</div>
+				<div class="filed">
+					<label>Country of inspection <span class="required">*</span></label>
+					@components.CountrySelect(components.CountrySelectProps{
+						Countries:     sp.Countries,
+						SelectedCode:  sp.Survey.Country.CountryCode,
+						SelectedName:  sp.Survey.Country.Name,
+						CountryCodeID: constants.CountryCode,
+						CountryNameID: constants.CountryName,
+					})
 				</div>
 			</div>
 			<div class="field">
@@ -82,17 +100,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 					</label>
 				</div>
 			</div>
-			<div class="field-col-2">
-				<div class="field">
-					<label for="port">Port / Berth <span class="optional">(optional)</span></label>
-					<input type="text" id="port" name="port" placeholder="e.g. Vanino, Russia" value={ survey.CargoOperation.PlaceOfInspection.DisplayName() }/>
-				</div>
-				<div class="field">
-					<label for="destination">Destination / Origin <span class="optional">(optional)</span></label>
-					<input type="text" id="destination" name="destination" placeholder="e.g. China" value={ survey.CargoOperation.Destination.DisplayName() }/>
-				</div>
-			</div>
-			<div class="field-col-4">
+			<div class="field-col-3">
 				<div class="field">
 					<label for={ constants.Cargo }>Cargo <span class="optional">(optional)</span></label>
 					<input name={ constants.Cargo } value={ survey.CargoOperation.Cargo } type="text" placeholder="e.g. Coal"/>
@@ -107,10 +115,6 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 							}
 						</select>
 					</div>
-				</div>
-				<div class="field">
-					<label for={ constants.Client }>Principal / Client <span class="optional">(optional)</span></label>
-					<input name={ constants.Client } value={ survey.Job.Principal } placeholder="e.g. Company" type="text"/>
 				</div>
 				<div class="field">
 					<label for={ constants.CargoDeclared }>Cargo Declared, MT <span class="optional">(optional)</span></label>
@@ -148,26 +152,27 @@ templ VesselBlock(sp components.SurveyPageProps) {
 			<span class="form-card-subtitle">From vessel's certificates</span>
 		</div>
 		<div class="form-section">
-			<div class="field-col-2">
+			<div class="field-col-3">
 				<div class="field">
 					<label for={ constants.VesselName }>Vessel Name <span class="required">*</span></label>
 					<input name={ constants.VesselName } value={ survey.VesselData.Name } type="text" placeholder="e.g. OCEAN CHEERS"/>
 				</div>
 				<div class="field">
-					<label for={ constants.IMO }>IMO No. <span class="optional">(optional)</span></label>
+					<label for={ constants.IMO }>IMO No. <span class="required">*</span></label>
 					<input name={ constants.IMO } value={ survey.VesselData.IMO } placeholder="e.g. 9233387" type="text"/>
+				</div>
+				<div class="filed">
+					<label>Vessel Flag <span class="optional">(optional)</span></label>
+					@components.CountrySelect(components.CountrySelectProps{
+						Countries:     sp.Countries,
+						SelectedCode:  sp.Survey.VesselData.Flag.CountryCode,
+						SelectedName:  sp.Survey.VesselData.Flag.Name,
+						CountryCodeID: constants.CountryCode,
+						CountryNameID: constants.CountryName,
+					})
 				</div>
 			</div>
 			<div class="field-col-3">
-				<div class="field">
-					<label for="flag">Home Flag <span class="optional">(optional)</span></label>
-					<div class="select-wrap">
-						<select id="flag" name="flag">
-							<option value="" disabled selected?={ survey.VesselData.Flag == "" }>Select flag…</option>
-							<option selected?={ survey.VesselData.Flag == "Antigua and Barbuda" }>Antigua and Barbuda</option>
-						</select>
-					</div>
-				</div>
 				<div class="field">
 					<label for={ constants.Built }>Built Year <span class="optional">(optional)</span></label>
 					<input value={ survey.VesselData.BuiltYear } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
@@ -175,6 +180,20 @@ templ VesselBlock(sp components.SurveyPageProps) {
 				<div class="field">
 					<label for={ constants.TableDensity }>Table Density, t/m³ <span class="required">*</span></label>
 					<input name={ constants.TableDensity } value={ format.FloatOrEmpty(survey.VesselData.TableDensity) } type="number" placeholder="1.025" step="any"/>
+				</div>
+				<div class="field">
+					<label>Holds Total <span class="optional">(optional)</span></label>
+					<div class="select-wrap">
+						<select name={ constants.HoldsTotal }>
+							<option value="0" selected?={ survey.VesselData.HoldsTotal == 0 }>—</option>
+							for i := 1; i <= 10; i++ {
+								<option
+									value={ strconv.Itoa(i) }
+									selected?={ survey.VesselData.HoldsTotal == i }
+								>{ strconv.Itoa(i) }</option>
+							}
+						</select>
+					</div>
 				</div>
 			</div>
 		</div>

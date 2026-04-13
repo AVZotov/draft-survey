@@ -4,10 +4,9 @@ import (
 	"math"
 
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
-func CalcDraft(draft types.Draft, v vessel.VesselData) types.DraftResult {
+func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 	var lbm float64
 	var lbmAftMid float64
 	var lbmMidFwd float64
@@ -36,16 +35,16 @@ func CalcDraft(draft types.Draft, v vessel.VesselData) types.DraftResult {
 	var totalBwTanksWeight float64
 	var totalFwTanksWeight float64
 
-	if v.VesselType == vessel.VesselTypeMarine {
+	if v.VesselType == types.VesselTypeMarine {
 		lbm = CalcFullLBPLBM(draft, v.LBP)
 	} else {
 		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, v.LBP)
 	}
 	meanDraft = MeanDrafts(draft.Marks)
-	if v.CorrectionMethod == vessel.CorrectionMethodFullLBP {
+	if v.CorrectionMethod == types.CorrectionMethodFullLBP {
 		ppCorrections = CalcFullLBPPPCorrections(meanDraft, draft, v.LBP)
 	}
-	if v.CorrectionMethod == vessel.CorrectionMethodHalfLBP {
+	if v.CorrectionMethod == types.CorrectionMethodHalfLBP {
 		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, v.LBP)
 	}
 	draftsWKeel = CalcDraftsWKeel(meanDraft, ppCorrections, draft)

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 func fp(v float64) *float64 { return &v }
@@ -58,10 +57,10 @@ func getMarks() types.Marks {
 	}
 }
 
-func getVesselData() vessel.VesselData {
-	return vessel.VesselData{
+func getVesselData() types.VesselData {
+	return types.VesselData{
 		LBP:        182.000,
-		VesselType: vessel.VesselTypeMarine,
+		VesselType: types.VesselTypeMarine,
 		Lightship:  8390.000,
 	}
 }

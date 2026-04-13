@@ -1,4 +1,4 @@
-package vessel
+package types
 
 type VesselType string
 
@@ -24,7 +24,7 @@ const (
 
 type VesselData struct {
 	Name                 string           `json:"name"`
-	Flag                 string           `json:"flag"`
+	Flag                 Country          `json:"flag"`
 	IMO                  string           `json:"imo"`
 	BuiltYear            int              `json:"built_year"`
 	Lightship            float64          `json:"lightship"` // вес порожнем, MT
@@ -47,5 +47,6 @@ type VesselData struct {
 	VesselType           VesselType       `json:"vessel_type"`
 	CorrectionMethod     CorrectionMethod `json:"correction_method"`
 	IsLcfDetectionManual bool             `json:"is_lcf_detection_manual"`
-	TableDensity         *float64         `json:"table_density"`
+	TableDensity         *float64         `json:"table_density"` //oficial vessel documentation. With table corrections made on specified density
+	HoldsTotal           int              `json:"holds_total"`
 }

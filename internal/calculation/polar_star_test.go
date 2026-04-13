@@ -4,15 +4,14 @@ import (
 	"testing"
 
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 // POLAR STAR - TrimnoList tests
 
-func getPolarStarTrimNoListVessel() vessel.VesselData {
-	return vessel.VesselData{
+func getPolarStarTrimNoListVessel() types.VesselData {
+	return types.VesselData{
 		LBP:        183.000,
-		VesselType: vessel.VesselTypeMarine,
+		VesselType: types.VesselTypeMarine,
 	}
 }
 
@@ -200,10 +199,10 @@ func TestPolarStar_TrimNoList_DensityCorrection(t *testing.T) {
 
 // POLAR STAR - TrimList tests
 
-func getPolarStarTrimListVessel() vessel.VesselData {
-	return vessel.VesselData{
+func getPolarStarTrimListVessel() types.VesselData {
+	return types.VesselData{
 		LBP:        183.000,
-		VesselType: vessel.VesselTypeMarine,
+		VesselType: types.VesselTypeMarine,
 	}
 }
 

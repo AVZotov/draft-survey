@@ -31,7 +31,12 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 	}
 
 	slp := web.SurveyLayoutProps(user)
-	spp := web.SurveyPageProps(*survey)
+
+	countries, err := h.dictionariesRepository.GetCountries()
+	if err != nil {
+		return err
+	}
+	spp := web.SurveyPageProps(*survey, *countries)
 
 	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }
@@ -67,7 +72,11 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 	}
 
 	slp := web.SurveyLayoutProps(user)
-	spp := web.SurveyPageProps(*survey)
+	countries, err := h.dictionariesRepository.GetCountries()
+	if err != nil {
+		return err
+	}
+	spp := web.SurveyPageProps(*survey, *countries)
 
 	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }

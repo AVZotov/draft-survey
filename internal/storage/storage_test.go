@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 const id = "123-456-789"
@@ -20,13 +19,11 @@ func getSurvey() *types.Survey {
 			Principal: "testPrincipal",
 		},
 		CargoOperation: types.CargoOperation{
-			PlaceOfInspection: types.PortInfo{},
-			Destination:       types.PortInfo{},
-			Operation:         "testOperation",
-			Cargo:             "testCargo",
-			Packing:           "testPacking",
+			Operation: "testOperation",
+			Cargo:     "testCargo",
+			Packing:   "testPacking",
 		},
-		VesselData: vessel.VesselData{},
+		VesselData: types.VesselData{},
 	}
 }
 

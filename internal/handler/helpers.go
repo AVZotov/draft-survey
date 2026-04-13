@@ -10,7 +10,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -889,6 +888,16 @@ func parseSurveyBlock(c *fiber.Ctx, s *types.Survey) {
 	if err == nil {
 		s.Remarks = remarks
 	}
+
+	countryCode, err := parseString(c, constants.CountryCode)
+	if err == nil {
+		s.Country.CountryCode = countryCode
+	}
+
+	countryName, err := parseString(c, constants.CountryName)
+	if err == nil {
+		s.Country.Name = countryName
+	}
 }
 
 func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
@@ -951,17 +960,32 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 	if err == nil {
 		s.VesselData.SummerFreeboard = *summerFreeboard
 	}
+
+	countryCode, err := parseString(c, constants.CountryCode)
+	if err == nil {
+		s.VesselData.Flag.CountryCode = countryCode
+	}
+
+	countryName, err := parseString(c, constants.CountryName)
+	if err == nil {
+		s.VesselData.Flag.Name = countryName
+	}
+
+	holdsTotal, err := parseInt(c, constants.HoldsTotal)
+	if err == nil {
+		s.VesselData.HoldsTotal = *holdsTotal
+	}
 }
 
 func parseSettingBlock(c *fiber.Ctx, s *types.Survey) {
 	mmcMethod, err := parseString(c, constants.MMCMethod)
 	if err == nil {
-		s.VesselData.VesselType = vessel.VesselType(mmcMethod)
+		s.VesselData.VesselType = types.VesselType(mmcMethod)
 	}
 
 	corrMethod, err := parseString(c, constants.CorrMethod)
 	if err == nil {
-		s.VesselData.CorrectionMethod = vessel.CorrectionMethod(corrMethod)
+		s.VesselData.CorrectionMethod = types.CorrectionMethod(corrMethod)
 	}
 
 	lcfDetection, err := parseString(c, constants.LCFDetection)

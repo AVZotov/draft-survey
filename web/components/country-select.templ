@@ -1,43 +1,24 @@
 package components
 
 templ CountrySelect(props CountrySelectProps) {
-	<div
-		class="field-wrap-col"
-		x-data="{ search: '', selected: '' }"
-	>
-		<!-- Search input -->
-		<input
-			type="text"
-			placeholder="Search country…"
-			x-model="search"
-		/>
-		<!-- Hidden fixed-name input — always sent as "country" -->
-		<input
-			type="hidden"
-			name="country"
-			x-bind:value="selected"
-		/>
-		<!-- Visible select with dynamic name for form submission -->
+	<div class="field-wrap-col" x-data>
 		<div class="select-wrap">
 			<select
-				name={ props.Name }
-				x-on:change="selected = $event.target.value"
-				hx-get="/dictionary/ports"
-				hx-target={ "next [data-port-select]" }
-				hx-swap="outerHTML"
-				hx-trigger="change"
-				hx-include="[name='country']"
+				x-on:change="
+					$refs.code.value = $el.value;
+					$refs.name.value = $el.options[$el.selectedIndex].text
+				"
 			>
 				<option value="">Select country…</option>
 				for _, c := range props.Countries {
 					<option
 						value={ c.CountryCode }
-						selected?={ c.CountryCode == props.Selected }
-						x-show={ "'" + c.Name + "'.toLowerCase().includes(search.toLowerCase())" }
+						selected?={ c.CountryCode == props.SelectedCode }
 					>{ c.Name }</option>
 				}
 			</select>
 		</div>
-		<p class="field-hint">Source: UN/LOCODE 2024-2</p>
+		<input type="hidden" name={ props.CountryCodeID } x-ref="code" value={ props.SelectedCode }/>
+		<input type="hidden" name={ props.CountryNameID } x-ref="name" value={ props.SelectedName }/>
 	</div>
 }

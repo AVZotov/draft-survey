@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/vessel"
 )
 
 func Mark(p *float64) string {
@@ -118,21 +117,21 @@ func Draft(v float64) string {
 	return fmt.Sprintf("%.3f m", v)
 }
 
-func LBPCorrection(correction vessel.CorrectionMethod) string {
-	lbpCorrections := vessel.CorrectionMethodFullLBP
-	if correction == vessel.CorrectionMethodHalfLBP {
-		lbpCorrections = vessel.CorrectionMethodHalfLBP
+func LBPCorrection(correction types.CorrectionMethod) string {
+	lbpCorrections := types.CorrectionMethodFullLBP
+	if correction == types.CorrectionMethodHalfLBP {
+		lbpCorrections = types.CorrectionMethodHalfLBP
 	}
 
 	return string(lbpCorrections)
 }
 
-func MMCShortFormula(vesselType vessel.VesselType) string {
+func MMCShortFormula(vesselType types.VesselType) string {
 	mmcCorrections := "(6m/8)"
-	if vesselType == vessel.VesselTypeRiver {
+	if vesselType == types.VesselTypeRiver {
 		mmcCorrections = "(4m/6)"
 	}
-	if vesselType == vessel.VesselTypeBarge {
+	if vesselType == types.VesselTypeBarge {
 		mmcCorrections = "(14m/20)"
 	}
 

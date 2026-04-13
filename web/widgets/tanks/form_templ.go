@@ -52,9 +52,9 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 			tp.Survey.VesselData.Name,
 			tp.Survey.VesselData.IMO,
 			tp.Survey.CargoOperation.Operation,
-			tp.Survey.CargoOperation.PlaceOfInspection))
+			tp.Survey.Country.Name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 30, Col: 49}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 30, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
