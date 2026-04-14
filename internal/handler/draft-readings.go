@@ -58,8 +58,6 @@ func (h *Handler) startDraft(c *fiber.Ctx) error {
 		return err
 	}
 
-	h.parseDraft(c, survey)
-
 	survey.Drafts[index].Status = types.DraftStatusActive
 	survey.Drafts[index].StartedAt = time.Now()
 
@@ -82,8 +80,6 @@ func (h *Handler) finishDraft(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	h.parseDraft(c, survey)
 
 	survey.Drafts[index].Status = types.DraftStatusComplete
 	survey.Drafts[index].FinishedAt = time.Now()
@@ -137,26 +133,6 @@ func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
 	}
 
 	c.Set("HX-Redirect", "/survey/"+id+"/draft")
-	return c.SendStatus(http.StatusOK)
-}
-
-func (h *Handler) saveDrafts(c *fiber.Ctx) error {
-	redirect := c.Query("redirect")
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return err
-	}
-
-	h.parseDraft(c, survey)
-
-	if err = h.surveyRepository.Save(survey); err != nil {
-		return err
-	}
-
-	if redirect != "" {
-		c.Set("HX-Redirect", redirect)
-	}
 	return c.SendStatus(http.StatusOK)
 }
 

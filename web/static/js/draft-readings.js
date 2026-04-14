@@ -9,15 +9,13 @@ const MIN_DOT_Y = 30;
 const MAX_DOT_Y = 210;
 const BREADTH = 32.26;
 const LIST_LOG_SCALE = 8;
-const LIST_AMP = 20;
+const LIST_AMP = 10;
 const TRIM_LOG_SCALE = 3;
 const TRIM_AMP = 28;
-//const LIST_SCALE = 4;
-//const TRIM_SCALE = 20;
 
 function scaleLog(value, scale) {
     if (value === 0) { return 0 };
-    const sign = value > 0 ? 1 : -1
+    const sign = value > 0 ? -1 : 1
     return sign * Math.log1p(Math.abs(value) * scale)
 }
 

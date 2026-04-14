@@ -78,6 +78,7 @@ const (
 	ProductGrade  = "product_grade"
 
 	//holds to be appointed to load for draft (not initial)
-	HoldsBlock  = "holds_block"
-	HoldsActive = "holds_active"
+	HoldsBlock     = "holds_block"
+	HoldsActive    = "holds_active"
+	DraftInfoBlock = "draft_info_block"
 )

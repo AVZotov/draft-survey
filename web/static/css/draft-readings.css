@@ -26,6 +26,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
   gap: var(--space-lg);
+  align-items: start;
 }
 
 .block-header-fields {
@@ -244,7 +245,7 @@ select.sea-sel:focus {
   padding: var(--space-xs) var(--space-lg);
   border-bottom: 1px solid var(--border);
   background: var(--bg);
-  height: 1.8rem;
+  height: 2rem;
 }
 
 .holds-bar__label {

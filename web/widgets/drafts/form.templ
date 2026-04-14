@@ -32,15 +32,6 @@ templ DraftForm(dp components.DraftPageProps, sr types.SurveyResult) {
 }
 
 // Deprecated and will be removed
-templ divider(index, totalDrafts int) {
-	<div class="draft-divider">
-		<div class="dd-line"></div>
-		<span class="dd-label">↓ { draftDividerLabel(index, totalDrafts) }</span>
-		<div class="dd-line"></div>
-	</div>
-}
-
-// Deprecated and will be removed
 func draftPrefix(i, total int) string {
 	if i == 0 {
 		return "i"
@@ -49,12 +40,4 @@ func draftPrefix(i, total int) string {
 		return "f"
 	}
 	return fmt.Sprintf("m%d", i)
-}
-
-// Deprecated and will be removed
-func draftDividerLabel(i, total int) string {
-	if i == total-1 {
-		return "Final Draft"
-	}
-	return fmt.Sprintf("Intermediate Draft %d", i+1)
 }

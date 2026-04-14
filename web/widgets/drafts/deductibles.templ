@@ -6,7 +6,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
-	"strconv"
 )
 
 templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
@@ -14,17 +13,16 @@ templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftRe
 	<div class="deduct-section">
 		<div class="sec-title">Deductibles &amp; Density</div>
 		@DeductiblesGrid(dp.Survey, draftIndex, dr)
-		<button
+		<a
 			class="btn btn-ghost--ini"
-			hx-post={ "/api/v1/survey/" + dp.Survey.ID + "/draft/save?redirect=/survey/" + dp.Survey.ID + "/tanks/" + strconv.Itoa(draftIndex) }
-			hx-include="#draft-form"
+			href={ fmt.Sprintf("/survey/%s/tanks/%d", dp.Survey.ID, draftIndex) }
 		>
 			<svg viewBox="0 0 24 24">
 				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
 				<polyline points="9 22 9 12 15 12 15 22"></polyline>
 			</svg>
 			BW / FW Tanks →
-		</button>
+		</a>
 	</div>
 }
 

@@ -29,6 +29,7 @@ type DraftPageProps struct {
 type SeaConditionProps struct {
 	SeaCondition types.SeaCondition
 	DraftIndex   *int
+	SurveyID     string
 }
 
 type SurveyPageProps struct {

@@ -14,9 +14,7 @@ templ HoldsBar(dp components.DraftPageProps, draftIndex int) {
 		class="holds-bar"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HoldsBlock) }
 		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
-		hx-trigger="change changed delay:500ms"
-		hx-sync="this:replace"
-		hx-swap="none"
+		hx-trigger="change"
 		hx-include="this"
 	>
 		<span class="holds-bar__label">Holds to load</span>

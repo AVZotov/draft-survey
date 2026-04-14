@@ -7,7 +7,14 @@ import "github.com/AVZotov/draft-survey/data/dictionaries"
 import "github.com/AVZotov/draft-survey/internal/format"
 
 templ SeaCondition(scp SeaConditionProps) {
-	<div class="sea-bar">
+	<div
+		class="sea-bar"
+		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.SeaConditionBlock) }
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+		hx-sync="this:replace"
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", scp.SurveyID, *scp.DraftIndex) }
+	>
 		<label
 			class="sea-option"
 			if scp.DraftIndex == nil {
