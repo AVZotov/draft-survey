@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+	"time"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/types/dto"
+	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -835,4 +838,79 @@ func parseSettingBlock(c *fiber.Ctx, s *types.Survey) {
 	if err == nil {
 		s.VesselData.IsLcfDetectionManual = lcfDetection == "manual"
 	}
+}
+
+func getSurveyListProps(h *Handler) (*components.SurveyListProps, error) {
+	surveys, err := h.surveyRepository.GetAll()
+	if err == nil {
+		return new(components.SurveyListProps), err
+	}
+
+	now := time.Now()
+	weekAgo := now.AddDate(0, 0, -7)
+	monthAgo := now.AddDate(0, -1, 0)
+	allSurveysDTO := make([]dto.SurveyDTO, 0)
+	weekSurveysDTO := make([]dto.SurveyDTO, 0)
+	monthSurveysDTO := make([]dto.SurveyDTO, 0)
+	var total, draft, inProgress, complete int
+	total = len(surveys)
+
+	for _, survey := range surveys {
+		sDTO := getSurveyDTO(survey)
+		allSurveysDTO = append(allSurveysDTO, sDTO)
+
+		switch sDTO.Status {
+		case types.SurveyStatusDraft:
+			draft++
+		case types.SurveyStatusInProgress:
+			inProgress++
+		case types.SurveyStatusComplete:
+			complete++
+		}
+
+		if sDTO.SurveyDate.After(monthAgo) {
+			monthSurveysDTO = append(monthSurveysDTO, sDTO)
+			if sDTO.SurveyDate.After(weekAgo) {
+				weekSurveysDTO = append(weekSurveysDTO, sDTO)
+			}
+		}
+	}
+
+	return &components.SurveyListProps{
+		Total:      total,
+		Complete:   complete,
+		InProgress: inProgress,
+		Draft:      draft,
+		AllDTO:     allSurveysDTO,
+		WeekDTO:    weekSurveysDTO,
+		MonthDTO:   monthSurveysDTO,
+	}, nil
+}
+
+func getSurveyDTO(s *types.Survey) dto.SurveyDTO {
+	status := s.Status
+	surveyDTO := dto.SurveyDTO{
+		SurveyID:       s.ID,
+		Name:           s.VesselData.Name,
+		IMO:            s.VesselData.IMO,
+		SurveyDate:     s.CreatedAt,
+		LoadingCountry: s.Country.Name,
+		Operation:      s.CargoOperation.Operation,
+		Status:         status,
+	}
+
+	if surveyDTO.Status == types.SurveyStatusInProgress || surveyDTO.Status == types.SurveyStatusComplete {
+		if len(s.Drafts) > 0 {
+			surveyDTO.LoadingPort = s.Drafts[0].LoadPort.PortManual
+		}
+		if len(s.Drafts) > 1 {
+			surveyDTO.DestinationCountry = s.Drafts[len(s.Drafts)-1].DischargePort.PortManual
+		}
+	}
+
+	if surveyDTO.Status == types.SurveyStatusComplete {
+		surveyDTO.CargoOnBoard = calculation.CalcSurvey(*s).CargoOnBoard
+	}
+
+	return surveyDTO
 }

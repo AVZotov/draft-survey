@@ -2,7 +2,6 @@ package web
 
 import (
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/types/dto"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
@@ -64,13 +63,6 @@ func SurveyListLayoutProps(user *types.User) components.LayoutProps {
 		MetaDescription: "List of all stored surveys",
 		User:            user,
 		ExtraCSS:        []string{"/static/css/survey-list.css"},
-	}
-}
-
-func SurveyListPageProps(dtos []dto.SurveyDTO) components.SurveyListProps {
-	return components.SurveyListProps{
-		
-		SurveyDTOs: dtos,
 	}
 }
 

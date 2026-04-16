@@ -14,7 +14,10 @@ func (h *Handler) surveys(c *fiber.Ctx) error {
 	}
 
 	lp := web.SurveyListLayoutProps(user)
-	slp := web.SurveyListPageProps(nil)
+	slp, err := getSurveyListProps(h)
+	if err != nil {
+		return err
+	}
 
-	return tadaptor.Render(c, pages.SurveyList(lp, slp))
+	return tadaptor.Render(c, pages.SurveyList(lp, *slp))
 }

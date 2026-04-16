@@ -54,11 +54,12 @@ type PortSelectProps struct {
 
 type SurveyListProps struct {
 	Total      int
-	Found      int
 	Complete   int
 	InProgress int
 	Draft      int
-	SurveyDTOs []dto.SurveyDTO
+	AllDTO     []dto.SurveyDTO
+	WeekDTO    []dto.SurveyDTO
+	MonthDTO   []dto.SurveyDTO
 }
 
 //To be reviewed props

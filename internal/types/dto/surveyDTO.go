@@ -1,16 +1,20 @@
 package dto
 
-import "time"
+import (
+	"time"
+
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
 type SurveyDTO struct {
 	SurveyID           string
 	Name               string
 	IMO                string
-	LoadingDate        time.Time
+	SurveyDate         time.Time
 	LoadingCountry     string
 	LoadingPort        string
 	DestinationCountry string
 	Operation          string
 	CargoOnBoard       float64
-	Status             string
+	Status             types.SurveyStatus
 }
