@@ -16,6 +16,7 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	app.Get("/survey/:id/results", h.surveyResults)
 	app.Get("/survey/:id/tanks/:draftIndex", h.tanks)
 	app.Get("/survey/:id/tanks/:draftIndex/bw-tank/:tankID/corrections", h.tanksCorrections)
+	app.Get("/survey-list", h.surveys)
 
 	api := app.Group("/api/v1")
 	api.Post("/profile", h.createProfile)

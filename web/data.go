@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/types/dto"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
@@ -45,7 +46,7 @@ func SurveyLayoutProps(user *types.User) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "New Survey",
 		MetaDescription: "General Survey Info",
-		ExtraCSS:        []string{"/static/css/new-survey.css"},
+		ExtraCSS:        []string{"/static/css/survey.css"},
 		User:            user,
 	}
 }
@@ -54,6 +55,22 @@ func SurveyPageProps(survey types.Survey, countries []types.Country) components.
 	return components.SurveyPageProps{
 		Survey:    survey,
 		Countries: countries,
+	}
+}
+
+func SurveyListLayoutProps(user *types.User) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Survey List",
+		MetaDescription: "List of all stored surveys",
+		User:            user,
+		ExtraCSS:        []string{"/static/css/survey-list.css"},
+	}
+}
+
+func SurveyListPageProps(dtos []dto.SurveyDTO) components.SurveyListProps {
+	return components.SurveyListProps{
+		
+		SurveyDTOs: dtos,
 	}
 }
 

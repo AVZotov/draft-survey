@@ -117,6 +117,8 @@
   --font-size-xs: 10px;
   --font-size-sm: 12px;
   --font-size-md: 14px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
 
   /* Border radius */
   --radius-sm: 4px;
@@ -953,6 +955,7 @@ textarea {
 }
 
 .page-wrap--wide {
+  width: 92%;
   max-width: 1400px;
 }
 

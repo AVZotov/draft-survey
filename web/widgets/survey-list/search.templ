@@ -1,0 +1,35 @@
+package surveylist
+
+templ Search() {
+	<div class="survey-search">
+		<div class="survey-search__input-wrap">
+			<svg
+				class="survey-search__icon"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+			>
+				<circle cx="11" cy="11" r="8"></circle>
+				<path d="m21 21-4.35-4.35"></path>
+			</svg>
+			<input
+				class="survey-search__input"
+				type="text"
+				placeholder="Vessel name or IMO…"
+				name="q"
+			/>
+		</div>
+		<div class="survey-search__dates">
+			<input class="survey-search__date" type="date" name="from"/>
+			<span class="survey-search__sep">—</span>
+			<input class="survey-search__date" type="date" name="to"/>
+		</div>
+		<div class="survey-search__quick">
+			<button class="survey-search__btn" type="button">Week</button>
+			<button class="survey-search__btn" type="button">Month</button>
+			<button class="survey-search__btn survey-search__btn--clear" type="button">✕</button>
+		</div>
+	</div>
+}

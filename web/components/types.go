@@ -2,6 +2,7 @@ package components
 
 import (
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/types/dto"
 )
 
 type LayoutProps struct {
@@ -50,6 +51,17 @@ type PortSelectProps struct {
 	Selected string
 	Name     string
 }
+
+type SurveyListProps struct {
+	Total      int
+	Found      int
+	Complete   int
+	InProgress int
+	Draft      int
+	SurveyDTOs []dto.SurveyDTO
+}
+
+//To be reviewed props
 
 type Version struct {
 	Version string

@@ -1,0 +1,45 @@
+package surveylist
+
+templ SurveyRow() {
+	<div class="survey-row">
+		<!-- Vessel -->
+		<div class="survey-cell">
+			<div class="survey-cell__vessel-name">POLAR STAR</div>
+			<div class="survey-cell__vessel-imo">IMO 9233387</div>
+		</div>
+		<!-- Date -->
+		<div class="survey-cell">
+			<div class="survey-cell__date-main">16 Feb 2026</div>
+			<div class="survey-cell__date-time">08:45</div>
+		</div>
+		<!-- Port -->
+		<div class="survey-cell survey-cell--text">
+			Vanino, Russia
+		</div>
+		<!-- Destination -->
+		<div class="survey-cell survey-cell--text">
+			China
+		</div>
+		<!-- Operation -->
+		<div class="survey-cell">
+			<span class="badge badge--load">Loading</span>
+		</div>
+		<!-- Cargo -->
+		<div class="survey-cell survey-cell--mono">
+			78,556.093
+		</div>
+		<!-- Status -->
+		<div class="survey-cell">
+			<span class="badge badge--complete">Complete</span>
+		</div>
+		<!-- Actions -->
+		<div class="survey-cell survey-cell--actions">
+			<button class="ia ia--open" title="Open survey">
+				<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+			</button>
+			<button class="ia" title="More">
+				<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+			</button>
+		</div>
+	</div>
+}
