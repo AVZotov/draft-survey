@@ -257,6 +257,8 @@
 }
 
 .survey-cell {
+  min-width: 0;
+  overflow: hidden;
   padding: var(--space-sm) var(--space-md);
 }
 
@@ -286,8 +288,25 @@
 }
 
 .survey-cell--text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
+}
+
+.survey-cell__line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+.survey-cell__line--dim {
+  color: var(--text-dim);
+  font-size: var(--font-size-xs);
+  margin-top: 2px;
 }
 
 .survey-cell--mono {

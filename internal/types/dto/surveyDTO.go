@@ -1,8 +1,6 @@
 package dto
 
 import (
-	"time"
-
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
@@ -10,7 +8,8 @@ type SurveyDTO struct {
 	SurveyID           string
 	Name               string
 	IMO                string
-	SurveyDate         time.Time
+	SurveyDate         string
+	SurveyTime         string
 	LoadingCountry     string
 	LoadingPort        string
 	DestinationCountry string

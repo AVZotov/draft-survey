@@ -78,10 +78,10 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 				<div class="operation-toggle">
 					<input
 						type="radio"
-						id="loading"
+						id={ constants.CargoLoading }
 						name={ constants.CargoOperation }
-						value="loading"
-						checked?={ survey.CargoOperation.Operation != "discharge" }
+						value={ constants.CargoLoading }
+						checked?={ survey.CargoOperation.Operation !=  constants.CargoDischarge }
 					/>
 					<label for="loading">
 						<svg viewBox="0 0 24 24"><path d="M12 2v14M5 9l7 7 7-7"></path><path d="M5 20h14"></path></svg>
@@ -89,12 +89,12 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 					</label>
 					<input
 						type="radio"
-						id="discharge"
+						id={ constants.CargoDischarge }
 						name={ constants.CargoOperation }
-						value="discharge"
-						checked?={ survey.CargoOperation.Operation == "discharge" }
+						value={ constants.CargoDischarge }
+						checked?={ survey.CargoOperation.Operation ==  constants.CargoDischarge }
 					/>
-					<label for="discharge">
+					<label for={ constants.CargoDischarge }>
 						<svg viewBox="0 0 24 24"><path d="M12 22V8M5 15l7-7 7 7"></path><path d="M5 4h14"></path></svg>
 						Discharging
 					</label>

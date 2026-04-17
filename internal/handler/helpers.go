@@ -708,6 +708,8 @@ func parseSurveyBlock(c *fiber.Ctx, s *types.Survey) {
 	operation, err := parseString(c, constants.CargoOperation)
 	if err == nil {
 		s.CargoOperation.Operation = operation
+	} else {
+		s.CargoOperation.Operation = constants.CargoLoading
 	}
 
 	cargo, err := parseString(c, constants.Cargo)
@@ -842,7 +844,7 @@ func parseSettingBlock(c *fiber.Ctx, s *types.Survey) {
 
 func getSurveyListProps(h *Handler) (*components.SurveyListProps, error) {
 	surveys, err := h.surveyRepository.GetAll()
-	if err == nil {
+	if err != nil {
 		return new(components.SurveyListProps), err
 	}
 
@@ -868,9 +870,9 @@ func getSurveyListProps(h *Handler) (*components.SurveyListProps, error) {
 			complete++
 		}
 
-		if sDTO.SurveyDate.After(monthAgo) {
+		if survey.CreatedAt.After(monthAgo) {
 			monthSurveysDTO = append(monthSurveysDTO, sDTO)
-			if sDTO.SurveyDate.After(weekAgo) {
+			if survey.CreatedAt.After(weekAgo) {
 				weekSurveysDTO = append(weekSurveysDTO, sDTO)
 			}
 		}
@@ -893,7 +895,8 @@ func getSurveyDTO(s *types.Survey) dto.SurveyDTO {
 		SurveyID:       s.ID,
 		Name:           s.VesselData.Name,
 		IMO:            s.VesselData.IMO,
-		SurveyDate:     s.CreatedAt,
+		SurveyDate:     s.CreatedAt.Format("02 Jan 2006"),
+		SurveyTime:     s.CreatedAt.Format("15:04 MST"),
 		LoadingCountry: s.Country.Name,
 		Operation:      s.CargoOperation.Operation,
 		Status:         status,

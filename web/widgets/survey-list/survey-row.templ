@@ -1,37 +1,59 @@
 package surveylist
 
-templ SurveyRow() {
+import "github.com/AVZotov/draft-survey/internal/types/dto"
+
+import "strings"
+import "unicode"
+import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/internal/format"
+import "github.com/AVZotov/draft-survey/internal/constants"
+
+templ SurveyRow(dto dto.SurveyDTO) {
 	<div class="survey-row">
 		<!-- Vessel -->
 		<div class="survey-cell">
-			<div class="survey-cell__vessel-name">POLAR STAR</div>
-			<div class="survey-cell__vessel-imo">IMO 9233387</div>
+			<div class="survey-cell__vessel-name">{ dto.Name }</div>
+			<div class="survey-cell__vessel-imo">{ dto.IMO }</div>
 		</div>
 		<!-- Date -->
 		<div class="survey-cell">
-			<div class="survey-cell__date-main">16 Feb 2026</div>
-			<div class="survey-cell__date-time">08:45</div>
+			<div class="survey-cell__date-main">{ dto.SurveyDate }</div>
+			<div class="survey-cell__date-time">{ dto.SurveyTime }</div>
 		</div>
 		<!-- Port -->
-		<div class="survey-cell survey-cell--text">
-			Vanino, Russia
+		<div class="survey-cell">
+			<div class="survey-cell__line">{ port(dto.LoadingPort) }</div>
+			<div class="survey-cell__line survey-cell__line--dim">{ country(dto.LoadingCountry) }</div>
 		</div>
 		<!-- Destination -->
 		<div class="survey-cell survey-cell--text">
-			China
+			{ country(dto.DestinationCountry) }
 		</div>
 		<!-- Operation -->
-		<div class="survey-cell">
-			<span class="badge badge--load">Loading</span>
-		</div>
+		<span
+			class={ templ.Classes(
+    "badge",
+    templ.KV("badge--load",  dto.Operation == string(constants.CargoLoading)),
+    templ.KV("badge--disch", dto.Operation == string(constants.CargoDischarge)),
+) }
+		>
+			{ dto.Operation }
+		</span>
 		<!-- Cargo -->
 		<div class="survey-cell survey-cell--mono">
-			78,556.093
+			{ weight(dto) }
 		</div>
 		<!-- Status -->
-		<div class="survey-cell">
-			<span class="badge badge--complete">Complete</span>
-		</div>
+		<span
+			class={ templ.Classes(
+    "badge",
+    templ.KV("badge--complete", dto.Status == types.SurveyStatusComplete),
+    templ.KV("badge--progress", dto.Status == types.SurveyStatusInProgress),
+    templ.KV("badge--draft",    dto.Status == types.SurveyStatusDraft),
+) }
+		>
+			{ string(dto.Status) }
+		</span>
 		<!-- Actions -->
 		<div class="survey-cell survey-cell--actions">
 			<button class="ia ia--open" title="Open survey">
@@ -42,4 +64,40 @@ templ SurveyRow() {
 			</button>
 		</div>
 	</div>
+}
+
+func country(s string) string {
+	c := transform(s)
+	if c == "" {
+		c = "No country Info"
+	}
+	return c
+}
+
+func port(s string) string {
+	p := transform(s)
+
+	if p == "" {
+		p = "No port info"
+	}
+
+	return p
+}
+
+func weight(dto dto.SurveyDTO) string {
+	if dto.Status == types.SurveyStatusDraft || dto.Status == types.SurveyStatusInProgress {
+		return "―"
+	}
+	return format.WeightFormatted(dto.CargoOnBoard)
+}
+
+func transform(s string) string {
+	if s == "" {
+		return ""
+	}
+
+	s = strings.ToLower(s)
+	runes := []rune(s)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
 }

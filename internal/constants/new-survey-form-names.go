@@ -7,6 +7,8 @@ const (
 	JobNumber       = "job-number"
 	DSNumber        = "ds-number"
 	CargoOperation  = "cargo-op"
+	CargoLoading    = "loading"
+	CargoDischarge  = "discharge"
 	Cargo           = "cargo"
 	Packing         = "packing"
 	Client          = "client"
