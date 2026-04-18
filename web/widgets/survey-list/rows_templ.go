@@ -8,7 +8,9 @@ package surveylist
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Surveys() templ.Component {
+import "github.com/AVZotov/draft-survey/internal/types/dto"
+
+func Rows(rows []dto.SurveyDTO) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,9 +31,11 @@ func Surveys() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-grid\"><div class=\"survey-grid--header\"><div class=\"survey-cell survey-cell--header\">Vessel</div><div class=\"survey-cell survey-cell--header\">Date</div><div class=\"survey-cell survey-cell--header\">Port</div><div class=\"survey-cell survey-cell--header\">Destination</div><div class=\"survey-cell survey-cell--header\">Operation</div><div class=\"survey-cell survey-cell--header\">Cargo, MT</div><div class=\"survey-cell survey-cell--header\">Status</div><div class=\"survey-cell survey-cell--header\"></div></div><div id=\"survey-results\" hx-get=\"/survey-list/rows?offset=0&limit=20\" hx-trigger=\"load\" hx-swap=\"innerHTML\"></div></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
+		for _, row := range rows {
+			templ_7745c5c3_Err = Row(row).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		return nil
 	})

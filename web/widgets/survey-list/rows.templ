@@ -1,0 +1,9 @@
+package surveylist
+
+import "github.com/AVZotov/draft-survey/internal/types/dto"
+
+templ Rows(rows []dto.SurveyDTO) {
+	for _, row := range rows {
+		@Row(row)
+	}
+}

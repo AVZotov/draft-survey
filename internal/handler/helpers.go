@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
@@ -842,26 +843,43 @@ func parseSettingBlock(c *fiber.Ctx, s *types.Survey) {
 	}
 }
 
-func getSurveyListProps(h *Handler) (*components.SurveyListProps, error) {
-	surveys, err := h.surveyRepository.GetAll()
-	if err != nil {
-		return new(components.SurveyListProps), err
+func filterSurveys(s []*types.Survey, q, from, to string) []*types.Survey {
+	result := make([]*types.Survey, 0)
+
+	var fromTime, toTime time.Time
+	if from != "" {
+		fromTime, _ = time.Parse("2006-01-02", from)
+	}
+	if to != "" {
+		toTime, _ = time.Parse("2006-01-02", to)
+		toTime = toTime.Add(24*time.Hour - time.Second) // конец дня
 	}
 
-	now := time.Now()
-	weekAgo := now.AddDate(0, 0, -7)
-	monthAgo := now.AddDate(0, -1, 0)
-	allSurveysDTO := make([]dto.SurveyDTO, 0)
-	weekSurveysDTO := make([]dto.SurveyDTO, 0)
-	monthSurveysDTO := make([]dto.SurveyDTO, 0)
+	for _, item := range s {
+		if q != "" {
+			matchName := strings.HasPrefix(strings.ToLower(item.VesselData.Name), strings.ToLower(q))
+			matchIMO := strings.HasPrefix(strings.ToLower(item.VesselData.IMO), strings.ToLower(q))
+			if !matchName && !matchIMO {
+				continue
+			}
+		}
+		if !fromTime.IsZero() && item.CreatedAt.Before(fromTime) {
+			continue
+		}
+		if !toTime.IsZero() && item.CreatedAt.After(toTime) {
+			continue
+		}
+		result = append(result, item)
+	}
+	return result
+}
+
+func getSurveyStats(surveys []*types.Survey) components.SurveyListProps {
 	var total, draft, inProgress, complete int
 	total = len(surveys)
 
 	for _, survey := range surveys {
-		sDTO := getSurveyDTO(survey)
-		allSurveysDTO = append(allSurveysDTO, sDTO)
-
-		switch sDTO.Status {
+		switch survey.Status {
 		case types.SurveyStatusDraft:
 			draft++
 		case types.SurveyStatusInProgress:
@@ -869,24 +887,29 @@ func getSurveyListProps(h *Handler) (*components.SurveyListProps, error) {
 		case types.SurveyStatusComplete:
 			complete++
 		}
-
-		if survey.CreatedAt.After(monthAgo) {
-			monthSurveysDTO = append(monthSurveysDTO, sDTO)
-			if survey.CreatedAt.After(weekAgo) {
-				weekSurveysDTO = append(weekSurveysDTO, sDTO)
-			}
-		}
 	}
 
-	return &components.SurveyListProps{
+	return components.SurveyListProps{
 		Total:      total,
 		Complete:   complete,
 		InProgress: inProgress,
 		Draft:      draft,
-		AllDTO:     allSurveysDTO,
-		WeekDTO:    weekSurveysDTO,
-		MonthDTO:   monthSurveysDTO,
-	}, nil
+	}
+}
+
+func getSurveyRows(surveys []*types.Survey, offset, limit int) []dto.SurveyDTO {
+	result := make([]dto.SurveyDTO, 0)
+	end := offset + limit
+	if end > len(surveys) {
+		end = len(surveys)
+	}
+	if offset >= len(surveys) {
+		return result
+	}
+	for _, survey := range surveys[offset:end] {
+		result = append(result, getSurveyDTO(survey))
+	}
+	return result
 }
 
 func getSurveyDTO(s *types.Survey) dto.SurveyDTO {

@@ -1,9 +1,14 @@
 package surveylist
 
-import "github.com/AVZotov/draft-survey/web/components"
-
-templ Search(slp components.SurveyListProps) {
-	<div class="survey-search">
+templ Search() {
+	<form
+		hx-get="/survey-list/rows"
+		hx-trigger="input changed delay:400ms, change"
+		hx-target="#survey-results"
+		hx-swap="innerHTML"
+		hx-sync="this:replace"
+		class="survey-search"
+	>
 		<div class="survey-search__input-wrap">
 			<svg
 				class="survey-search__icon"
@@ -17,6 +22,7 @@ templ Search(slp components.SurveyListProps) {
 				<path d="m21 21-4.35-4.35"></path>
 			</svg>
 			<input
+				id="search-input"
 				class="survey-search__input"
 				type="text"
 				placeholder="Vessel name or IMO…"
@@ -29,9 +35,18 @@ templ Search(slp components.SurveyListProps) {
 			<input class="survey-search__date" type="date" name="to"/>
 		</div>
 		<div class="survey-search__quick">
-			<button class="survey-search__btn" type="button">Week</button>
-			<button class="survey-search__btn" type="button">Month</button>
-			<button class="survey-search__btn survey-search__btn--clear" type="button">✕</button>
+			<button class="survey-search__btn" type="button" disabled>Week</button>
+			<button class="survey-search__btn" type="button" disabled>Month</button>
+			<button
+				type="button"
+				class="survey-search__btn survey-search__btn--clear"
+				onclick="
+        document.getElementById('search-input').value='';
+        document.querySelector('[name=from]').value='';
+        document.querySelector('[name=to]').value='';
+        document.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));
+    "
+			>✕</button>
 		</div>
-	</div>
+	</form>
 }

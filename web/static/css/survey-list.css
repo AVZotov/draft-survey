@@ -207,6 +207,12 @@
   padding: 6px 10px;
 }
 
+.survey-search__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* #endregion */
 
 /* #region 4. SURVEY TABLE ═══════════════════════════════════════ */

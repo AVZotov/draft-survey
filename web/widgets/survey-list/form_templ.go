@@ -53,11 +53,11 @@ func Form(lp components.LayoutProps, slp components.SurveyListProps) templ.Compo
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = Search(slp).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Search().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = Surveys(slp).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Surveys().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -8,9 +8,7 @@ package surveylist
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/web/components"
-
-func Search(slp components.SurveyListProps) templ.Component {
+func Search() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,7 +29,7 @@ func Search(slp components.SurveyListProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-search\"><div class=\"survey-search__input-wrap\"><svg class=\"survey-search__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.35-4.35\"></path></svg> <input class=\"survey-search__input\" type=\"text\" placeholder=\"Vessel name or IMO…\" name=\"q\"></div><div class=\"survey-search__dates\"><input class=\"survey-search__date\" type=\"date\" name=\"from\"> <span class=\"survey-search__sep\">—</span> <input class=\"survey-search__date\" type=\"date\" name=\"to\"></div><div class=\"survey-search__quick\"><button class=\"survey-search__btn\" type=\"button\">Week</button> <button class=\"survey-search__btn\" type=\"button\">Month</button> <button class=\"survey-search__btn survey-search__btn--clear\" type=\"button\">✕</button></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-get=\"/survey-list/rows\" hx-trigger=\"input changed delay:400ms, change\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" hx-sync=\"this:replace\" class=\"survey-search\"><div class=\"survey-search__input-wrap\"><svg class=\"survey-search__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.35-4.35\"></path></svg> <input id=\"search-input\" class=\"survey-search__input\" type=\"text\" placeholder=\"Vessel name or IMO…\" name=\"q\"></div><div class=\"survey-search__dates\"><input class=\"survey-search__date\" type=\"date\" name=\"from\"> <span class=\"survey-search__sep\">—</span> <input class=\"survey-search__date\" type=\"date\" name=\"to\"></div><div class=\"survey-search__quick\"><button class=\"survey-search__btn\" type=\"button\" disabled>Week</button> <button class=\"survey-search__btn\" type=\"button\" disabled>Month</button> <button type=\"button\" class=\"survey-search__btn survey-search__btn--clear\" onclick=\"\n        document.getElementById('search-input').value='';\n        document.querySelector('[name=from]').value='';\n        document.querySelector('[name=to]').value='';\n        document.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));\n    \">✕</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

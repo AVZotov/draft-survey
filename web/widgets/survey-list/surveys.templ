@@ -1,8 +1,6 @@
 package surveylist
 
-import "github.com/AVZotov/draft-survey/web/components"
-
-templ Surveys(slp components.SurveyListProps) {
+templ Surveys() {
 	<div class="survey-grid">
 		<div class="survey-grid--header">
 			<div class="survey-cell survey-cell--header">Vessel</div>
@@ -14,8 +12,11 @@ templ Surveys(slp components.SurveyListProps) {
 			<div class="survey-cell survey-cell--header">Status</div>
 			<div class="survey-cell survey-cell--header"></div>
 		</div>
-		for _, dto := range slp.AllDTO {
-			@SurveyRow(dto)
-		}
+		<div
+			id="survey-results"
+			hx-get="/survey-list/rows?offset=0&limit=20"
+			hx-trigger="load"
+			hx-swap="innerHTML"
+		></div>
 	</div>
 }
