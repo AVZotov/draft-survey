@@ -14,7 +14,7 @@ templ NewSurveyActionBar(survey *types.Survey) {
 		<div class="action-bar-btns">
 			<a
 				class="btn btn-primary"
-				hx-patch={ fmt.Sprintf("/api/v1/survey/%s?redirect=/survey/%s/draft", survey.ID, survey.ID) }
+				hx-patch={ fmt.Sprintf("/api/v1/survey/%s/save?redirect=/survey/%s/draft", survey.ID, survey.ID) }
 				hx-include="#survey-survey-block, #survey-vessel-block, #survey-settings-block"
 				hx-swap="none"
 			>

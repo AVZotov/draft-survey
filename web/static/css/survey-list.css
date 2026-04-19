@@ -8,6 +8,7 @@
      2. STATS
      3. SURVEY SEARCH
      4. SURVEY TABLE
+     5. ROW MENU
 
 ================================================================ */
 
@@ -324,6 +325,7 @@
 
 .survey-cell--actions {
   display: flex;
+  overflow: visible;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-xs);
@@ -369,6 +371,71 @@
 .ia--open:hover {
   background: #DBEAFE;
   border-color: var(--info-accent);
+}
+
+/* #endregion */
+
+/* #region 6. ROW MENU ═══════════════════════════════════════════ */
+
+.row-menu {
+  position: relative;
+}
+
+.row-menu__dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 160px;
+  z-index: 50;
+  overflow: hidden;
+  padding: var(--space-xs) 0;
+}
+
+.row-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.row-menu__item:hover {
+  background: var(--bg);
+}
+
+.row-menu__item svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  flex-shrink: 0;
+  color: var(--text-dim);
+}
+
+.row-menu__item--danger {
+  color: var(--danger-accent);
+}
+
+.row-menu__item--danger:hover {
+  background: var(--danger-light);
+}
+
+.row-menu__item--danger svg {
+  color: var(--danger-accent);
 }
 
 /* #endregion */
