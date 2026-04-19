@@ -80,3 +80,22 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 
 	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
 }
+
+func (h *Handler) saveSurveyAndNavigate(c *fiber.Ctx) error {
+	p, err := getSurveyProps(h, c)
+	if err != nil {
+		return err
+	}
+
+	parseSurveyBlock(c, p.survey)
+	parseVesselBlock(c, p.survey)
+	parseSettingBlock(c, p.survey)
+
+	if err = h.surveyRepository.Save(p.survey); err != nil {
+		return err
+	}
+
+	redirect := c.Query("redirect")
+	c.Set("HX-Redirect", redirect)
+	return c.SendStatus(http.StatusOK)
+}

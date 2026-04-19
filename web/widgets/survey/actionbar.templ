@@ -14,7 +14,9 @@ templ NewSurveyActionBar(survey *types.Survey) {
 		<div class="action-bar-btns">
 			<a
 				class="btn btn-primary"
-				href={ fmt.Sprintf("/survey/%s/draft", survey.ID) }
+				hx-patch={ fmt.Sprintf("/api/v1/survey/%s?redirect=/survey/%s/draft", survey.ID, survey.ID) }
+				hx-include="#survey-survey-block, #survey-vessel-block, #survey-settings-block"
+				hx-swap="none"
 			>
 				Proceed to Draft Readings
 				<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>

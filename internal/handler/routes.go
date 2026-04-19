@@ -22,6 +22,7 @@ func SetupRoutes(app *fiber.App, h *Handler) {
 	api := app.Group("/api/v1")
 	api.Post("/profile", h.createProfile)
 	api.Put("/survey/:id", h.saveSurvey)
+	api.Patch("/survey/:id", h.saveSurveyAndNavigate)
 	api.Post("/survey/:id/draft/:index/start", h.startDraft)
 	api.Post("/survey/:id/draft/:index/finish", h.finishDraft)
 	api.Post("/survey/:id/draft/add-intermediate", h.addIntermediateDraft)

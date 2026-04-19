@@ -904,6 +904,7 @@ textarea {
 
 .back-link:hover {
   color: var(--text-primary);
+  cursor: pointer;
 }
 
 .back-link svg {
