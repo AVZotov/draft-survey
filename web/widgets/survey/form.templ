@@ -14,7 +14,7 @@ templ NewSurveyForm(sp components.SurveyPageProps) {
 		<div class="survey-layout">
 			<a
 				class="back-link"
-				hx-patch={ fmt.Sprintf("/api/v1/survey/%s/save?redirect=/", sp.Survey.ID) }
+				hx-post={ fmt.Sprintf("/api/v1/survey/%s?redirect=/", sp.Survey.ID) }
 				hx-include="#survey-survey-block, #survey-vessel-block, #survey-settings-block"
 				hx-swap="none"
 			>
@@ -39,7 +39,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 		class="form-card"
 		id="survey-survey-block"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SurveyBlock) }
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/save", sp.Survey.ID) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
 		hx-replace-url="true"
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"
@@ -143,7 +143,7 @@ templ VesselBlock(sp components.SurveyPageProps) {
 		class="form-card"
 		id="survey-vessel-block"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.VesselBlock) }
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/save", sp.Survey.ID) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
 		hx-replace-url="true"
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"
@@ -247,7 +247,7 @@ templ VesselSettingBlock(sp components.SurveyPageProps) {
 		class="form-card"
 		id="survey-settings-block"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SettingsBlock) }
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/save", sp.Survey.ID) }
+		hx-put={ fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID) }
 		hx-replace-url="true"
 		hx-include="this"
 		hx-trigger="change changed delay:500ms"

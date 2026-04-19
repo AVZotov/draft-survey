@@ -7,9 +7,13 @@ import "unicode"
 import "github.com/AVZotov/draft-survey/internal/types"
 import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/constants"
+import "fmt"
 
 templ Row(dto dto.SurveyDTO) {
-	<div class="survey-row">
+	<div
+		x-data="{ open: false}"
+		class="survey-row"
+	>
 		<!-- Vessel -->
 		<div class="survey-cell">
 			<div class="survey-cell__vessel-name">{ dto.Name }</div>
@@ -55,11 +59,16 @@ templ Row(dto dto.SurveyDTO) {
 			{ string(dto.Status) }
 		</span>
 		<!-- Actions -->
-		<div class="survey-cell survey-cell--actions">
-			<button class="ia ia--open" title="View results">
+		<div
+			class="survey-cell survey-cell--actions"
+		>
+			<button
+				class="ia ia--open"
+				title="View results"
+			>
 				<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
 			</button>
-			<div class="row-menu" x-data="{ open: false }" @click.outside="open = false">
+			<div class="row-menu" @click.outside="open = false">
 				<button class="ia" @click="open = !open" title="More actions">
 					<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
 				</button>
@@ -69,6 +78,10 @@ templ Row(dto dto.SurveyDTO) {
 						Edit survey
 					</a>
 					<button
+						hx-confirm={ fmt.Sprintf("Warning:\n\tThis operation will permanently remove survey\n\tVessel: %s; IMO: %s", dto.Name, dto.IMO) }
+						hx-delete={ fmt.Sprintf("/api/v1/survey-list/rows/%s", dto.SurveyID) }
+						hx-swap="delete swap:500ms"
+						hx-target="closest .survey-row"
 						class="row-menu__item row-menu__item--danger"
 						type="button"
 					>

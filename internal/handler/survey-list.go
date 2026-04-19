@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"slices"
 
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
@@ -49,4 +50,25 @@ func (h *Handler) surveyRows(c *fiber.Ctx) error {
 	rows := getSurveyRows(surveys, offset, limit)
 
 	return tadaptor.Render(c, surveylist.Rows(rows))
+}
+
+func (h *Handler) surveyStats(c *fiber.Ctx) error {
+	surveys, err := h.surveyRepository.GetAll()
+	if err != nil {
+		return err
+	}
+	stats := getSurveyStats(surveys)
+
+	return tadaptor.Render(c, surveylist.Stats(stats))
+}
+
+func (h *Handler) deleteSurveyRow(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if err := h.surveyRepository.Delete(id); err != nil {
+		return err
+	}
+
+	c.Set("HX-Trigger", "survey-deleted")
+
+	return c.SendStatus(http.StatusOK)
 }
