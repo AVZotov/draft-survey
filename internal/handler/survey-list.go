@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"slices"
 
+	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -33,7 +34,7 @@ func (h *Handler) surveys(c *fiber.Ctx) error {
 func (h *Handler) surveyRows(c *fiber.Ctx) error {
 	q := c.Query("q")
 	offset := c.QueryInt("offset", 0)
-	limit := c.QueryInt("limit", 20)
+	limit := c.QueryInt("limit", constants.SurveyListLimit)
 	from := c.Query("from")
 	to := c.Query("to")
 
@@ -49,7 +50,10 @@ func (h *Handler) surveyRows(c *fiber.Ctx) error {
 	surveys = filterSurveys(surveys, q, from, to)
 	rows := getSurveyRows(surveys, offset, limit)
 
-	return tadaptor.Render(c, surveylist.Rows(rows))
+	nextOffset := offset + limit
+	hasMore := nextOffset < len(surveys)
+
+	return tadaptor.Render(c, surveylist.Rows(rows, nextOffset, hasMore))
 }
 
 func (h *Handler) surveyStats(c *fiber.Ctx) error {

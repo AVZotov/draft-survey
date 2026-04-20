@@ -9,6 +9,7 @@
      3. SURVEY SEARCH
      4. SURVEY TABLE
      5. ROW MENU
+     6. LOAD MORE
 
 ================================================================ */
 
@@ -375,7 +376,7 @@
 
 /* #endregion */
 
-/* #region 6. ROW MENU ═══════════════════════════════════════════ */
+/* #region 5. ROW MENU ═══════════════════════════════════════════ */
 
 .row-menu {
   position: relative;
@@ -436,6 +437,19 @@
 
 .row-menu__item--danger svg {
   color: var(--danger-accent);
+}
+
+/* #endregion */
+
+/* #region 6. LOAD MORE ═══════════════════════════════════════════ */
+
+.survey-load-more {
+  height: 20px;
+  grid-column: 1 / -1;
+}
+
+.survey-spinner {
+  grid-column: 1 / -1;
 }
 
 /* #endregion */

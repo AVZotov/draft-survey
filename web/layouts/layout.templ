@@ -54,6 +54,9 @@ templ Layout(props components.LayoutProps) {
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}
+			<div id="global-spinner" class="global-spinner">
+				<div class="loader"></div>
+			</div>
 		</body>
 	</html>
 }

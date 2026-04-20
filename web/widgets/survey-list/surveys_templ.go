@@ -8,6 +8,9 @@ package surveylist
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/constants"
+
 func Surveys() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,7 +32,20 @@ func Surveys() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-grid\"><div class=\"survey-grid--header\"><div class=\"survey-cell survey-cell--header\">Vessel</div><div class=\"survey-cell survey-cell--header\">Date</div><div class=\"survey-cell survey-cell--header\">Port</div><div class=\"survey-cell survey-cell--header\">Destination</div><div class=\"survey-cell survey-cell--header\">Operation</div><div class=\"survey-cell survey-cell--header\">Cargo, MT</div><div class=\"survey-cell survey-cell--header\">Status</div><div class=\"survey-cell survey-cell--header\"></div></div><div id=\"survey-results\" hx-get=\"/survey-list/rows?offset=0&limit=20\" hx-trigger=\"load\" hx-swap=\"innerHTML\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-grid\"><div class=\"survey-grid--header\"><div class=\"survey-cell survey-cell--header\">Vessel</div><div class=\"survey-cell survey-cell--header\">Date</div><div class=\"survey-cell survey-cell--header\">Port</div><div class=\"survey-cell survey-cell--header\">Destination</div><div class=\"survey-cell survey-cell--header\">Operation</div><div class=\"survey-cell survey-cell--header\">Cargo, MT</div><div class=\"survey-cell survey-cell--header\">Status</div><div class=\"survey-cell survey-cell--header\"></div></div><div id=\"survey-results\" hx-get=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", constants.SurveyListLimit))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/surveys.templ`, Line: 20, Col: 89}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"load\" hx-swap=\"innerHTML\" hx-indicator=\"#global-spinner\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

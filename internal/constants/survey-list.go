@@ -1,5 +1,6 @@
 package constants
 
 const (
-	Stats = "stats"
+	Stats           = "stats"
+	SurveyListLimit = 10
 )
