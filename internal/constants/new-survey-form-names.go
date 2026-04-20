@@ -28,7 +28,9 @@ const (
 	CorrMethod      = "corr_method"
 	LCFDetection    = "lcf_detection"
 	HoldsTotal      = "holds_total"
-	CountryCode     = "country_code"
-	CountryName     = "country_name"
 	Flag            = "flag"
+	LoadCountryCode = "load_country_code"
+	LoadCountryName = "load_country_name"
+	FlagCountryCode = "flag_country_code"
+	FlagCountryName = "flag_country_name"
 )

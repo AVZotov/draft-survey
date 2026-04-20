@@ -73,8 +73,8 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 						Countries:     sp.Countries,
 						SelectedCode:  sp.Survey.Country.CountryCode,
 						SelectedName:  sp.Survey.Country.Name,
-						CountryCodeID: constants.CountryCode,
-						CountryNameID: constants.CountryName,
+						CountryCodeID: constants.LoadCountryCode,
+						CountryNameID: constants.LoadCountryName,
 					})
 				</div>
 			</div>
@@ -172,8 +172,8 @@ templ VesselBlock(sp components.SurveyPageProps) {
 						Countries:     sp.Countries,
 						SelectedCode:  sp.Survey.VesselData.Flag.CountryCode,
 						SelectedName:  sp.Survey.VesselData.Flag.Name,
-						CountryCodeID: constants.CountryCode,
-						CountryNameID: constants.CountryName,
+						CountryCodeID: constants.FlagCountryCode,
+						CountryNameID: constants.FlagCountryName,
 					})
 				</div>
 			</div>

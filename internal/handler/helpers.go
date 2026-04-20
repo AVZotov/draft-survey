@@ -738,12 +738,12 @@ func parseSurveyBlock(c *fiber.Ctx, s *types.Survey) {
 		s.Remarks = remarks
 	}
 
-	countryCode, err := parseString(c, constants.CountryCode)
+	countryCode, err := parseString(c, constants.LoadCountryCode)
 	if err == nil {
 		s.Country.CountryCode = countryCode
 	}
 
-	countryName, err := parseString(c, constants.CountryName)
+	countryName, err := parseString(c, constants.LoadCountryName)
 	if err == nil {
 		s.Country.Name = countryName
 	}
@@ -810,12 +810,12 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 		s.VesselData.SummerFreeboard = *summerFreeboard
 	}
 
-	countryCode, err := parseString(c, constants.CountryCode)
+	countryCode, err := parseString(c, constants.FlagCountryCode)
 	if err == nil {
 		s.VesselData.Flag.CountryCode = countryCode
 	}
 
-	countryName, err := parseString(c, constants.CountryName)
+	countryName, err := parseString(c, constants.FlagCountryName)
 	if err == nil {
 		s.VesselData.Flag.Name = countryName
 	}

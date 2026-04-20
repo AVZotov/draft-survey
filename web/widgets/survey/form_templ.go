@@ -256,8 +256,8 @@ func SurveyBlock(sp components.SurveyPageProps) templ.Component {
 			Countries:     sp.Countries,
 			SelectedCode:  sp.Survey.Country.CountryCode,
 			SelectedName:  sp.Survey.Country.Name,
-			CountryCodeID: constants.CountryCode,
-			CountryNameID: constants.CountryName,
+			CountryCodeID: constants.LoadCountryCode,
+			CountryNameID: constants.LoadCountryName,
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -714,8 +714,8 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			Countries:     sp.Countries,
 			SelectedCode:  sp.Survey.VesselData.Flag.CountryCode,
 			SelectedName:  sp.Survey.VesselData.Flag.Name,
-			CountryCodeID: constants.CountryCode,
-			CountryNameID: constants.CountryName,
+			CountryCodeID: constants.FlagCountryCode,
+			CountryNameID: constants.FlagCountryName,
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
