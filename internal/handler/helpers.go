@@ -765,6 +765,11 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 		s.VesselData.BuiltYear = *builtYear
 	}
 
+	constDeclared, err := parseFloat(c, constants.ConstDeclared)
+	if err == nil {
+		s.ConstantDeclared = constDeclared
+	}
+
 	tableDensity, err := parseFloat(c, constants.TableDensity)
 	if err == nil {
 		s.VesselData.TableDensity = tableDensity

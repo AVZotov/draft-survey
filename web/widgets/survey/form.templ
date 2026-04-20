@@ -157,7 +157,7 @@ templ VesselBlock(sp components.SurveyPageProps) {
 			<span class="form-card-subtitle">From vessel's certificates</span>
 		</div>
 		<div class="form-section">
-			<div class="field-col-3">
+			<div class="field-col-4">
 				<div class="field">
 					<label for={ constants.VesselName }>Vessel Name <span class="required">*</span></label>
 					<input name={ constants.VesselName } value={ survey.VesselData.Name } type="text" placeholder="e.g. OCEAN CHEERS"/>
@@ -176,11 +176,15 @@ templ VesselBlock(sp components.SurveyPageProps) {
 						CountryNameID: constants.FlagCountryName,
 					})
 				</div>
-			</div>
-			<div class="field-col-3">
 				<div class="field">
 					<label for={ constants.Built }>Built Year <span class="optional">(optional)</span></label>
 					<input value={ survey.VesselData.BuiltYear } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
+				</div>
+			</div>
+			<div class="field-col-3">
+				<div class="field">
+					<label for={ constants.ConstDeclared }>Const declared <span class="required">*</span></label>
+					<input value={ format.FloatOrEmpty(survey.ConstantDeclared) } name={ constants.ConstDeclared } placeholder="0.000" step="any" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.TableDensity }>Table Density, t/m³ <span class="required">*</span></label>

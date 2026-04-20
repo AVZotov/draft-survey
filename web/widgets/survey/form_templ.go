@@ -628,7 +628,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "\" hx-replace-url=\"true\" hx-include=\"this\" hx-trigger=\"change changed delay:500ms\" hx-swap=\"none\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 17l2-7h14l2 7H3z\"></path><path d=\"M8 10V6h8v4\"></path><path d=\"M12 6V3\"></path></svg></div><span class=\"form-card-title\">Vessel Data</span> <span class=\"form-card-subtitle\">From vessel's certificates</span></div><div class=\"form-section\"><div class=\"field-col-3\"><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "\" hx-replace-url=\"true\" hx-include=\"this\" hx-trigger=\"change changed delay:500ms\" hx-swap=\"none\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M3 17l2-7h14l2 7H3z\"></path><path d=\"M8 10V6h8v4\"></path><path d=\"M12 6V3\"></path></svg></div><span class=\"form-card-title\">Vessel Data</span> <span class=\"form-card-subtitle\">From vessel's certificates</span></div><div class=\"form-section\"><div class=\"field-col-4\"><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -720,14 +720,14 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "</div></div><div class=\"field-col-3\"><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "</div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var44 string
 		templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Built)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 182, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 180, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 		if templ_7745c5c3_Err != nil {
@@ -740,7 +740,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var45 string
 		templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.BuiltYear)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 183, Col: 47}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 181, Col: 47}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
 		if templ_7745c5c3_Err != nil {
@@ -753,180 +753,180 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var46 string
 		templ_7745c5c3_Var46, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Built)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 183, Col: 72}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 181, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var46))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "\" placeholder=\"e.g. 2002\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "\" placeholder=\"e.g. 2002\" step=\"any\" type=\"number\"></div></div><div class=\"field-col-3\"><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var47 string
-		templ_7745c5c3_Var47, templ_7745c5c3_Err = templ.JoinStringErrs(constants.TableDensity)
+		templ_7745c5c3_Var47, templ_7745c5c3_Err = templ.JoinStringErrs(constants.ConstDeclared)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 186, Col: 40}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 186, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var47))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "\">Table Density, t/m³ <span class=\"required\">*</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "\">Const declared <span class=\"required\">*</span></label> <input value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var48 string
-		templ_7745c5c3_Var48, templ_7745c5c3_Err = templ.JoinStringErrs(constants.TableDensity)
+		templ_7745c5c3_Var48, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(survey.ConstantDeclared))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 187, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 187, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var48))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var49 string
-		templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(survey.VesselData.TableDensity))
+		templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(constants.ConstDeclared)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 187, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 187, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var49))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "\" type=\"number\" placeholder=\"1.025\" step=\"any\"></div><div class=\"field\"><label>Holds Total <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "\" placeholder=\"0.000\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var50 string
-		templ_7745c5c3_Var50, templ_7745c5c3_Err = templ.JoinStringErrs(constants.HoldsTotal)
+		templ_7745c5c3_Var50, templ_7745c5c3_Err = templ.JoinStringErrs(constants.TableDensity)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 192, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 190, Col: 40}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var50))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\"><option value=\"0\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\">Table Density, t/m³ <span class=\"required\">*</span></label> <input name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if survey.VesselData.HoldsTotal == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, " selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		var templ_7745c5c3_Var51 string
+		templ_7745c5c3_Var51, templ_7745c5c3_Err = templ.JoinStringErrs(constants.TableDensity)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 191, Col: 41}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, ">—</option> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var51))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for i := 1; i <= 10; i++ {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "<option value=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var51 string
-			templ_7745c5c3_Var51, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 196, Col: 32}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var51))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if survey.VesselData.HoldsTotal == i {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, " selected")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, ">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var52 string
-			templ_7745c5c3_Var52, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 198, Col: 26}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var52))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "</option>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "</select></div></div></div></div><div class=\"form-section\"><div class=\"field-col-4\"><div class=\"field\"><label for=\"")
+		var templ_7745c5c3_Var52 string
+		templ_7745c5c3_Var52, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(survey.VesselData.TableDensity))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 191, Col: 103}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var52))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "\" type=\"number\" placeholder=\"1.025\" step=\"any\"></div><div class=\"field\"><label>Holds Total <span class=\"optional\">(optional)</span></label><div class=\"select-wrap\"><select name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var53 string
-		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Lightship)
+		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinStringErrs(constants.HoldsTotal)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 208, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 196, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var53))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "\">Lightship, MT <span class=\"required\">*</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "\"><option value=\"0\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var54 string
-		templ_7745c5c3_Var54, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Lightship)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 209, Col: 38}
+		if survey.VesselData.HoldsTotal == 0 {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, " selected")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var54))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, ">—</option> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var55 string
-		templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Lightship)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 209, Col: 76}
+		for i := 1; i <= 10; i++ {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, "<option value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var54 string
+			templ_7745c5c3_Var54, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 200, Col: 32}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var54))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if survey.VesselData.HoldsTotal == i {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, " selected")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, ">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var55 string
+			templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 202, Col: 26}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var55))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "</option>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var55))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "\" placeholder=\"0.000\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "</select></div></div></div></div><div class=\"form-section\"><div class=\"field-col-4\"><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var56 string
-		templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LBP)
+		templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Lightship)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 212, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 212, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var56))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "\">LBP, m <span class=\"required\">*</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "\">Lightship, MT <span class=\"required\">*</span></label> <input name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var57 string
-		templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LBP)
+		templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Lightship)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 213, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 213, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var57))
 		if templ_7745c5c3_Err != nil {
@@ -937,35 +937,35 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var58 string
-		templ_7745c5c3_Var58, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.LBP)
+		templ_7745c5c3_Var58, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Lightship)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 213, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 213, Col: 76}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var58))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 79, "\" placeholder=\"0.00\" step=\"any\" oninput=\"updateCalcHints()\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 79, "\" placeholder=\"0.000\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var59 string
-		templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Breadth)
+		templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LBP)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 216, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 216, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var59))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, "\">Breadth, m <span class=\"required\">*</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 80, "\">LBP, m <span class=\"required\">*</span></label> <input name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var60 string
-		templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Breadth)
+		templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LBP)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var60))
 		if templ_7745c5c3_Err != nil {
@@ -976,35 +976,35 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var61 string
-		templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Breadth)
+		templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.LBP)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 72}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var61))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, "\" placeholder=\"0.00\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 82, "\" placeholder=\"0.00\" step=\"any\" oninput=\"updateCalcHints()\" type=\"number\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var62 string
-		templ_7745c5c3_Var62, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Depth)
+		templ_7745c5c3_Var62, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Breadth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 220, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 220, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var62))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, "\">Depth, m <span class=\"optional\">(optional)</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, "\">Breadth, m <span class=\"required\">*</span></label> <input name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var63 string
-		templ_7745c5c3_Var63, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Depth)
+		templ_7745c5c3_Var63, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Breadth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var63))
 		if templ_7745c5c3_Err != nil {
@@ -1015,87 +1015,87 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var64 string
-		templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Depth)
+		templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Breadth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 68}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var64))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, "\" placeholder=\"0.00\" step=\"any\" oninput=\"checkDepth()\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 85, "\" placeholder=\"0.00\" step=\"any\" type=\"number\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var65 string
-		templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDraft)
+		templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Depth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 224, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 224, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var65))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, "\">Summer Draft, m <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, "\">Depth, m <span class=\"optional\">(optional)</span></label> <input name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var66 string
-		templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDraft)
+		templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.JoinStringErrs(constants.Depth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var66))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 87, "\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth(); updateFWA()\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 87, "\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var67 string
-		templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerDraft)
+		templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.Depth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 161}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 68}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var67))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "\" placeholder=\"0.00\" step=\"any\" oninput=\"checkDepth()\" type=\"number\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var68 string
-		templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDWT)
+		templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDraft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 228, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 228, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var68))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, "\">Summer DWT, MT <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, "\">Summer Draft, m <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var69 string
-		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDWT)
+		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDraft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var69))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, "\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, "\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth(); updateFWA()\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var70 string
-		templ_7745c5c3_Var70, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerDWT)
+		templ_7745c5c3_Var70, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerDraft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 143}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 161}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var70))
 		if templ_7745c5c3_Err != nil {
@@ -1106,7 +1106,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var71 string
-		templ_7745c5c3_Var71, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerTPC)
+		templ_7745c5c3_Var71, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDWT)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 232, Col: 37}
 		}
@@ -1114,12 +1114,12 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, "\">Summer TPC, MT/cm <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, "\">Summer DWT, MT <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var72 string
-		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerTPC)
+		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerDWT)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 233, Col: 52}
 		}
@@ -1132,7 +1132,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var73 string
-		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerTPC)
+		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerDWT)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 233, Col: 143}
 		}
@@ -1145,41 +1145,80 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var74 string
-		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerFreeboard)
+		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerTPC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 236, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 236, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var74))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, "\">Summer Freeboard, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, "\">Summer TPC, MT/cm <span class=\"required\">*</span></label> <input type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var75 string
-		templ_7745c5c3_Var75, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerFreeboard)
+		templ_7745c5c3_Var75, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerTPC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var75))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 96, "\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth()\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 96, "\" placeholder=\"0.000\" step=\"any\" oninput=\"updateFWA()\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var76 string
-		templ_7745c5c3_Var76, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerFreeboard)
+		templ_7745c5c3_Var76, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerTPC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 156}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 143}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var76))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "\"></div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 97, "\"></div><div class=\"field\"><label for=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var77 string
+		templ_7745c5c3_Var77, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerFreeboard)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 240, Col: 43}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var77))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 98, "\">Summer Freeboard, m <span class=\"optional\">(optional)</span></label> <input type=\"number\" name=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var78 string
+		templ_7745c5c3_Var78, templ_7745c5c3_Err = templ.JoinStringErrs(constants.SummerFreeboard)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 241, Col: 58}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var78))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 99, "\" placeholder=\"0.000\" step=\"any\" oninput=\"checkDepth()\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var79 string
+		templ_7745c5c3_Var79, templ_7745c5c3_Err = templ.JoinStringErrs(survey.VesselData.SummerFreeboard)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 241, Col: 156}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var79))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, "\"></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1203,200 +1242,200 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var77 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var77 == nil {
-			templ_7745c5c3_Var77 = templ.NopComponent
+		templ_7745c5c3_Var80 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var80 == nil {
+			templ_7745c5c3_Var80 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		survey := sp.Survey
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 98, "<div class=\"form-card\" id=\"survey-settings-block\" hx-headers=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var78 string
-		templ_7745c5c3_Var78, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SettingsBlock))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 249, Col: 92}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var78))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 99, "\" hx-put=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var79 string
-		templ_7745c5c3_Var79, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 250, Col: 57}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var79))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, "\" hx-replace-url=\"true\" hx-include=\"this\" hx-trigger=\"change changed delay:500ms\" hx-swap=\"none\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect><path d=\"M8 6h8M8 10h8M8 14h4\"></path></svg></div><span class=\"form-card-title\">Calculation Settings</span> <span class=\"form-card-subtitle\">UNECE 1992 method parameters</span></div><div class=\"form-section\"><div class=\"field\"><label>MMC Calculation Method <span class=\"required\">*</span></label><div class=\"method-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var80 string
-		templ_7745c5c3_Var80, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 270, Col: 33}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var80))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, "\" id=\"mmc-standard\" value=\"marine\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 102, " checked")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, "> <label for=\"mmc-standard\"><span class=\"method-label-title\">Standard</span> <span class=\"method-label-formula\">(f + 6m + a) / 8</span> <span class=\"method-label-desc\">Sea vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, "<div class=\"form-card\" id=\"survey-settings-block\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var81 string
-		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
+		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXSurveyBlock, constants.SettingsBlock))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 284, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 253, Col: 92}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var81))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, "\" id=\"mmc-river\" value=\"river\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if survey.VesselData.VesselType == "river" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, " checked")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "> <label for=\"mmc-river\"><span class=\"method-label-title\">River</span> <span class=\"method-label-formula\">(f + 4m + a) / 6</span> <span class=\"method-label-desc\">River vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 102, "\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var82 string
-		templ_7745c5c3_Var82, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
+		templ_7745c5c3_Var82, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s", sp.Survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 298, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 254, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var82))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 107, "\" id=\"mmc-barge\" value=\"barge\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if survey.VesselData.VesselType == "barge" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 108, " checked")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, "> <label for=\"mmc-barge\"><span class=\"method-label-title\">Barge</span> <span class=\"method-label-formula\">(3f + 14m + 3a) / 20</span> <span class=\"method-label-desc\">Barge</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>Correction Method <span class=\"required\">*</span></label><div class=\"correction-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, "\" hx-replace-url=\"true\" hx-include=\"this\" hx-trigger=\"change changed delay:500ms\" hx-swap=\"none\"><div class=\"form-card-header\"><div class=\"form-card-header-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect><path d=\"M8 6h8M8 10h8M8 14h4\"></path></svg></div><span class=\"form-card-title\">Calculation Settings</span> <span class=\"form-card-subtitle\">UNECE 1992 method parameters</span></div><div class=\"form-section\"><div class=\"field\"><label>MMC Calculation Method <span class=\"required\">*</span></label><div class=\"method-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var83 string
-		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(constants.CorrMethod)
+		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 319, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 274, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var83))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 110, "\" id=\"corr-full\" value=\"Full LBP\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, "\" id=\"mmc-standard\" value=\"marine\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if survey.VesselData.CorrectionMethod != "Half LBP" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, " checked")
+		if survey.VesselData.VesselType != "river" && survey.VesselData.VesselType != "barge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 112, "> <label for=\"corr-full\"><span class=\"method-label-title\">Full LBP</span> <span class=\"method-label-desc\">Standard — sea vessels</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "> <label for=\"mmc-standard\"><span class=\"method-label-title\">Standard</span> <span class=\"method-label-formula\">(f + 6m + a) / 8</span> <span class=\"method-label-desc\">Sea vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var84 string
-		templ_7745c5c3_Var84, templ_7745c5c3_Err = templ.JoinStringErrs(constants.CorrMethod)
+		templ_7745c5c3_Var84, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 332, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 288, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var84))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 113, "\" id=\"corr-half\" value=\"Half LBP\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 107, "\" id=\"mmc-river\" value=\"river\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if survey.VesselData.CorrectionMethod == "Half LBP" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 114, " checked")
+		if survey.VesselData.VesselType == "river" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 108, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "> <label for=\"corr-half\"><span class=\"method-label-title\">Half LBP</span> <span class=\"method-label-desc\">River vessels only</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>LCF Detection <span class=\"required\">*</span></label><div class=\"lcf-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 109, "> <label for=\"mmc-river\"><span class=\"method-label-title\">River</span> <span class=\"method-label-formula\">(f + 4m + a) / 6</span> <span class=\"method-label-desc\">River vessel</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var85 string
-		templ_7745c5c3_Var85, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LCFDetection)
+		templ_7745c5c3_Var85, templ_7745c5c3_Err = templ.JoinStringErrs(constants.MMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 352, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 302, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var85))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 116, "\" id=\"lcf-auto\" value=\"auto\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 110, "\" id=\"mmc-barge\" value=\"barge\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if !survey.VesselData.IsLcfDetectionManual {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 117, " checked")
+		if survey.VesselData.VesselType == "barge" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 118, "> <label for=\"lcf-auto\"><span class=\"method-label-title\">Auto</span> <span class=\"method-label-desc\">Direction from hydrostatic table</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 112, "> <label for=\"mmc-barge\"><span class=\"method-label-title\">Barge</span> <span class=\"method-label-formula\">(3f + 14m + 3a) / 20</span> <span class=\"method-label-desc\">Barge</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>Correction Method <span class=\"required\">*</span></label><div class=\"correction-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var86 string
-		templ_7745c5c3_Var86, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LCFDetection)
+		templ_7745c5c3_Var86, templ_7745c5c3_Err = templ.JoinStringErrs(constants.CorrMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 365, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 323, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var86))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 119, "\" id=\"lcf-manual\" value=\"manual\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 113, "\" id=\"corr-full\" value=\"Full LBP\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if survey.VesselData.IsLcfDetectionManual {
+		if survey.VesselData.CorrectionMethod != "Half LBP" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 114, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "> <label for=\"corr-full\"><span class=\"method-label-title\">Full LBP</span> <span class=\"method-label-desc\">Standard — sea vessels</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var87 string
+		templ_7745c5c3_Var87, templ_7745c5c3_Err = templ.JoinStringErrs(constants.CorrMethod)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 336, Col: 34}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var87))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 116, "\" id=\"corr-half\" value=\"Half LBP\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.CorrectionMethod == "Half LBP" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 117, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 118, "> <label for=\"corr-half\"><span class=\"method-label-title\">Half LBP</span> <span class=\"method-label-desc\">River vessels only</span></label></div></div></div></div><div class=\"form-section\"><div class=\"field\"><label>LCF Detection <span class=\"required\">*</span></label><div class=\"lcf-options\"><div class=\"method-option\"><input type=\"radio\" name=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var88 string
+		templ_7745c5c3_Var88, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LCFDetection)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 356, Col: 36}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var88))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 119, "\" id=\"lcf-auto\" value=\"auto\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !survey.VesselData.IsLcfDetectionManual {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "> <label for=\"lcf-manual\"><span class=\"method-label-title\">Manual</span> <span class=\"method-label-desc\">Set direction per draft manually</span></label></div></div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "> <label for=\"lcf-auto\"><span class=\"method-label-title\">Auto</span> <span class=\"method-label-desc\">Direction from hydrostatic table</span></label></div><div class=\"method-option\"><input type=\"radio\" name=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var89 string
+		templ_7745c5c3_Var89, templ_7745c5c3_Err = templ.JoinStringErrs(constants.LCFDetection)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 369, Col: 36}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var89))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "\" id=\"lcf-manual\" value=\"manual\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if survey.VesselData.IsLcfDetectionManual {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 123, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 124, "> <label for=\"lcf-manual\"><span class=\"method-label-title\">Manual</span> <span class=\"method-label-desc\">Set direction per draft manually</span></label></div></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
