@@ -123,4 +123,6 @@ type Survey struct {
 	SeaCondition     SeaCondition   `json:"sea_condition"`
 	Remarks          string         `json:"remarks"`
 	Country          Country        `json:"country"`
+	Audit            AuditEvent     `json:"audit"`
+	MetaData         MetaData       `json:"metadata"`
 }
