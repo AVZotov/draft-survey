@@ -10,7 +10,7 @@ const MAX_DOT_Y = 210;
 const BREADTH = 32.26;
 const LIST_LOG_SCALE = 8;
 const LIST_AMP = 10;
-const TRIM_LOG_SCALE = 3;
+const TRIM_LOG_SCALE = 4;
 const TRIM_AMP = 28;
 
 function scaleLog(value, scale) {
@@ -53,7 +53,8 @@ function updateVessel(p, listDeg, trim) {
     const trimDot = document.getElementById(p + '-trim-dot');
     if (!listLine || !trimDot) return;
 
-    const listScaled = scaleLog(listDeg || 0, LIST_LOG_SCALE) * LIST_AMP;
+    const listVal = listDeg || 0;
+    const listScaled = (listVal > 0 ? -1 : 1) * Math.log1p(Math.abs(listVal) * LIST_LOG_SCALE) * LIST_AMP;
     const visualDeg = clamp(listScaled, -MAX_VISUAL_DEG, MAX_VISUAL_DEG);
     const rad = visualDeg * Math.PI / 180;
     listLine.setAttribute('x1', (CX - LINE_R * Math.cos(rad)).toFixed(1));
@@ -61,7 +62,8 @@ function updateVessel(p, listDeg, trim) {
     listLine.setAttribute('x2', (CX + LINE_R * Math.cos(rad)).toFixed(1));
     listLine.setAttribute('y2', (CY + LINE_R * Math.sin(rad)).toFixed(1));
 
-    const trimScaled = scaleLog(trim || 0, TRIM_LOG_SCALE) * TRIM_AMP;
+    const trimVal = trim || 0;
+    const trimScaled = (trimVal > 0 ? 1 : -1) * Math.log1p(Math.abs(trimVal) * TRIM_LOG_SCALE) * TRIM_AMP;
     const dotY = clamp(CY + trimScaled, MIN_DOT_Y, MAX_DOT_Y);
     trimDot.setAttribute('cy', dotY.toFixed(1));
 }
