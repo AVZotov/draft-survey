@@ -53,6 +53,11 @@ func (h *Handler) startDraft(c *fiber.Ctx) error {
 		return err
 	}
 
+	user, err := h.userRepository.Get()
+	if err != nil {
+		return err
+	}
+
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
 		return err
@@ -60,6 +65,7 @@ func (h *Handler) startDraft(c *fiber.Ctx) error {
 
 	survey.Drafts[index].Status = types.DraftStatusActive
 	survey.Drafts[index].StartedAt = time.Now()
+	survey.Drafts[index].Surveyor = *user
 
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err

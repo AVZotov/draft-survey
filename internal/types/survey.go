@@ -78,6 +78,7 @@ const (
 )
 
 type Draft struct {
+	Surveyor          User             `json:"surveyor"`
 	Type              DraftType        `json:"type"`
 	Status            DraftStatus      `json:"status"`
 	SeaCondition      SeaCondition     `json:"sea_condition"`
