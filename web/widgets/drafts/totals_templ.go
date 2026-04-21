@@ -179,7 +179,7 @@ func Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) templ.Co
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Declared</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Const Declared</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -192,14 +192,14 @@ func Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) templ.Co
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Constant Calculated</span> <span class=\"totals-cell-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " <span class=\"totals-unit\">MT</span></span></div><div class=\"totals-cell\"><span class=\"totals-cell-label\">Const Calculated</span> <span class=\"totals-cell-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var14 string
-		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.Constant))
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(sr.DraftTotals[draftIndex].TrueConstant))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 86, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 86, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {

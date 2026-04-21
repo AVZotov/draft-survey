@@ -4,6 +4,7 @@ type DraftTotal struct {
 	DraftResult   DraftResult
 	CargoFromPrev float64 // груз с предыдущего драфта
 	ConstantDiff  float64 // разница с заявленной константой
+	TrueConstant  float64 // always calculate constant substract cargo loaded
 }
 
 type SurveyResult struct {

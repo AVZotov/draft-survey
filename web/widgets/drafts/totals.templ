@@ -78,12 +78,12 @@ templ Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) {
 					<span class="totals-cell-value">{ f.WeightFormatted(dr.TotalTrimCorrection) } <span class="totals-unit">MT</span></span>
 				</div>
 				<div class="totals-cell">
-					<span class="totals-cell-label">Constant Declared</span>
+					<span class="totals-cell-label">Const Declared</span>
 					<span class="totals-cell-value">{ f.WeightFormattedPointer(survey.ConstantDeclared) } <span class="totals-unit">MT</span></span>
 				</div>
 				<div class="totals-cell">
-					<span class="totals-cell-label">Constant Calculated</span>
-					<span class="totals-cell-value">{ f.WeightFormatted(dr.Constant) } <span class="totals-unit">MT</span></span>
+					<span class="totals-cell-label">Const Calculated</span>
+					<span class="totals-cell-value">{ f.WeightFormatted(sr.DraftTotals[draftIndex].TrueConstant) } <span class="totals-unit">MT</span></span>
 				</div>
 				<div class="totals-cell">
 					<span class="totals-cell-label">Constant Diff</span>

@@ -284,8 +284,8 @@ func CalcCargoWeight(netDisplacementIni, netDisplacementFin float64) float64 {
 	return round3(math.Abs(netDisplacementFin - netDisplacementIni))
 }
 
-func CalcConstant(netDisplacementIni float64, lightship float64) float64 {
-	return round3(netDisplacementIni - lightship)
+func CalcConstant(netDisplacement float64, lightship float64) float64 {
+	return round3(netDisplacement - lightship)
 }
 
 func CalcCurrentDWT(displCorrToDensity float64, lightship float64) float64 {
