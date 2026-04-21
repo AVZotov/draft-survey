@@ -170,7 +170,7 @@ func TestPolarStar_TrimNoList_SecondTrimCorrection(t *testing.T) {
 
 func TestPolarStar_TrimNoList_ListCorrection(t *testing.T) {
 	marks := getPolarStarTrimNoListMarks()
-	got := CalcListCorrection(marks, 0, 0)
+	got := CalcListCorrectionV1(marks, 0, 0)
 
 	if got != 0 {
 		t.Errorf("List corr: expected 0, got %f", got)
@@ -189,7 +189,7 @@ func TestPolarStar_TrimNoList_DensityCorrection(t *testing.T) {
 	mtcRows := getPolarStarTrimNoListMTCRows()
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, mtcRows, vesselData.LBP)
-	listCorrection := CalcListCorrection(marks, 0, 0)
+	listCorrection := CalcListCorrectionV1(marks, 0, 0)
 	got := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorrection, 1.017, 1.025)
 
 	if got != -147.328 {
@@ -320,7 +320,7 @@ func TestPolarStar_TrimList_SecondTrimCorrection(t *testing.T) {
 }
 
 func TestPolarStar_TrimList_ListCorrection(t *testing.T) {
-	got := CalcListCorrection(getPolarStarTrimListMarks(), 45.212, 45.129)
+	got := CalcListCorrectionV1(getPolarStarTrimListMarks(), 45.212, 45.129)
 	if got != 0.05 {
 		t.Errorf("List corr: expected 0.050, got %f", got)
 	}
@@ -335,7 +335,7 @@ func TestPolarStar_TrimList_DensityCorrection(t *testing.T) {
 	hydrostatics := CalcHydrostatics(mmc, getPolarStarTrimListHydrostaticRows(), vesselData)
 	firstTrim := CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, vesselData.LBP)
 	secondTrim := CalcSecondTrimCorrection(draftsWKeel, getPolarStarTrimListMTCRows(), vesselData.LBP)
-	listCorr := CalcListCorrection(marks, 45.212, 45.129)
+	listCorr := CalcListCorrectionV1(marks, 45.212, 45.129)
 	got := CalcDensityCorrection(hydrostatics.Displacement, firstTrim, secondTrim, listCorr, 1.017, 1.025)
 	if got != -146.234 {
 		t.Errorf("Density corr: expected -146.234, got %f", got)

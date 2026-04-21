@@ -229,11 +229,38 @@ func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp
 	return round3(50 * math.Pow(trueTrim, 2) * deltaMtc / lbp)
 }
 
-func CalcListCorrection(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
+// List correcion Calculation based on UNECE 1992 Reference Implementation
+// without if TPC equal use Summer TPC for interpolation
+func CalcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
 	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
 	}
 	return round3(6 * math.Abs(markVal(marks.MidPort.Value)-markVal(marks.MidStarboard.Value)) * math.Abs(tpcListPort-tpcListStarboard))
+}
+
+// CalcListCorrectionV2 calculates list correction using interpolation
+// between MMC hydrostatic TPC and Summer TPC as the upper reference point.
+// Used when hydrostatic table TPC values are identical for upper and lower rows
+// (standard interpolation would yield zero correction).
+// UNECE Form C, line 162 — list correction
+func CalcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v types.VesselData) float64 {
+	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
+		return 0.0
+	}
+
+	if v.SummerDraft <= mmc {
+		return 0.0
+	}
+
+	midPort := markVal(marks.MidPort.Value)
+	midStbd := markVal(marks.MidStarboard.Value)
+
+	// Interpolate TPC at each midship draft
+	// using (MMC, hydroTPC) as lower point and (SummerDraft, SummerTPC) as upper point
+	tpcPort := round3(hydroTPC + (midPort-mmc)*(v.SummerTPC-hydroTPC)/(v.SummerDraft-mmc))
+	tpcStbd := round3(hydroTPC + (midStbd-mmc)*(v.SummerTPC-hydroTPC)/(v.SummerDraft-mmc))
+
+	return round3(6 * math.Abs(midPort-midStbd) * math.Abs(tpcPort-tpcStbd))
 }
 
 func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, dockwaterDensity float64, tableDensity float64) float64 {

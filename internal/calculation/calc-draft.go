@@ -64,7 +64,12 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 		deltaMTC = CalcDeltaMTC(draft.MTCRows)
 	}
 
-	listCorrection = CalcListCorrection(draft.Marks, draft.TPCListPort, draft.TPCListStarboard)
+	if markVal(draft.HydrostaticRows[0].TPC) == markVal(draft.HydrostaticRows[1].TPC) {
+		listCorrection = CalcListCorrectionV2(draft.Marks, mmc, hydrostatics.TPC, v)
+	} else {
+		listCorrection = CalcListCorrectionV1(draft.Marks, draft.TPCListPort, draft.TPCListStarboard)
+	}
+
 	totalTrimCorrection = round3(firstTrimCorrection + secondTrimCorrection + listCorrection)
 	if draft.Density != nil && v.TableDensity != nil {
 		densityCorrection = CalcDensityCorrection(
