@@ -70,6 +70,7 @@ const (
 	SeaConditionIce  = "sea_ice"
 
 	// Auto Update panels
+	LBM       = "lbm"
 	CalcPanel = "calc-panel"
 
 	// Load Discharge conditions per draft

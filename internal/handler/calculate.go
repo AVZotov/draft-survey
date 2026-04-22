@@ -106,5 +106,6 @@ func updtDraftCalcPanels(survey *types.Survey, c *fiber.Ctx) (templ.Component, e
 	components = append(components, drafts.DeltaMtc(*survey, draftIndex, dr, true))
 	components = append(components, drafts.DeductiblesGrid(*survey, draftIndex, dr))
 	components = append(components, drafts.Totals(*survey, draftIndex, sr))
+	components = append(components, drafts.LBM(dr, draftIndex, true))
 	return templ.Join(components...), nil
 }

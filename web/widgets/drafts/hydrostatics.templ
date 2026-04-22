@@ -15,7 +15,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 		<div class="sec-title">
 			<span>Hydrostatic Data</span>
 			<span>
-				<span class="sec-title-mmc">LBM { dr.LBM }m</span>
+				@LBM(dr, draftIndex, false)
 				<span class="sec-title-method">{ format.MMCShortFormula(dp.Survey.VesselData.VesselType) } { format.LBPCorrection(dp.Survey.VesselData.CorrectionMethod) }</span>
 			</span>
 		</div>
@@ -127,6 +127,18 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			</div>
 		</div>
 	</div>
+}
+
+templ LBM(dr types.DraftResult, draftIndex int, isOOB bool) {
+	<span
+		class="sec-title-mmc"
+		id={ fmt.Sprintf("%s-%d", constants.LBM, draftIndex) }
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>
+		LBM { dr.LBM }m
+	</span>
 }
 
 templ MMCRow(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
