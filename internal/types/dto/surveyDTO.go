@@ -14,6 +14,7 @@ type SurveyDTO struct {
 	LoadingPort        string
 	DestinationCountry string
 	Operation          string
+	TableDensity       float64
 	CargoOnBoard       float64
 	Status             types.SurveyStatus
 }

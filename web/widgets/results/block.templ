@@ -1,0 +1,107 @@
+package results
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ Block(indexVar string, rp components.ResultProps) {
+	<div
+		class="draft-col"
+		:class={ "typeClass(drafts[" + indexVar + "]?.draft.type)" }
+	>
+		<div class="draft-col-header">
+			<div class="col-label">
+				<span class="col-dot"></span>
+				<span x-text={ "drafts[" + indexVar + "]?.label" }></span>
+			</div>
+			<span
+				class="col-mmc"
+				x-text={ "'MMC ' + results[" + indexVar + "]?.draft_result.mmc.toFixed(3) + ' m'" }
+			></span>
+		</div>
+		<div class="draft-col-body">
+			<!-- SECTIONS POSITIONS -->
+			@Section("1", "OBSERVED DRAFTS & MEANS") {
+				@RowPair("Fwd P / Fwd S", draft(indexVar, "marks.fwd_port.value"), draft(indexVar, "marks.fwd_starboard.value"), "m")
+				@RowPair("Mid P / Mid S", draft(indexVar, "marks.mid_port.value"), draft(indexVar, "marks.mid_starboard.value"), "m")
+				@RowPair("Aft P / Aft S", draft(indexVar, "marks.aft_port.value"), draft(indexVar, "marks.aft_starboard.value"), "m")
+				@Row("meanF", calc(indexVar, "mean_draft.draft_fwd_mean"), "m")
+				@Row("meanM", calc(indexVar, "mean_draft.draft_mid_mean"), "m")
+				@Row("meanA", calc(indexVar, "mean_draft.draft_aft_mean"), "m")
+			}
+			@Section("2", "PP & Keel Corrections") {
+				@RowPair("dFwd / Dir", draft(indexVar, "distance_pp_fwd"), draftStr(indexVar, "pp_fwd_direction"), "m")
+				@RowPair("dMid / Dir", draft(indexVar, "distance_pp_mid"), draftStr(indexVar, "pp_mid_direction"), "m")
+				@RowPair("dAft / Dir", draft(indexVar, "distance_pp_aft"), draftStr(indexVar, "pp_aft_direction"), "m")
+				@RowTriple("Fk / Mk / Ak", draft(indexVar, "keel_fwd"), draft(indexVar, "keel_mid"), draft(indexVar, "keel_aft"), "mm")
+				@Row("FWD corrected wKeel", calc(indexVar, "drafts_w_keel.fwd_draft_w_keel"), "m")
+				@Row("MID corrected wKeel", calc(indexVar, "drafts_w_keel.mid_draft_w_keel"), "m")
+				@Row("AFT corrected wKeel", calc(indexVar, "drafts_w_keel.aft_draft_w_keel"), "m")
+			}
+			@Section("3", "LIST & TRIM") {
+				@Row("Obs. Trim", calc(indexVar, "observed_trim"), "m")
+				@Row("True Trim", calc(indexVar, "true_trim"), "m")
+				@Row("List", calc(indexVar, "list_meters"), "m")
+				@Row("Deflection", calc(indexVar, "deflection"), "cm")
+			}
+			@Section("4", "MEAN OF MEANS & MMC") {
+				@Row("Mean F&A", calc(indexVar, "mean_fwd_aft"), "m")
+				@Row("MMC wKeel", calc(indexVar, "mmc"), "m")
+			}
+			@Section("5", "HYDROSTATIC INTERPOLATION AT MMC") {
+				@Row("Displ. at MMC", calc(indexVar, "hydrostatics.displacement"), "MT")
+				@Row("TPC at MMC", calc(indexVar, "hydrostatics.tpc"), "MT/cm")
+				@Row("LCF/LCA at MMC", calc(indexVar, "hydrostatics.lcf"), "m")
+				@Row("ΔMTC (direct)", calc(indexVar, "delta_mtc"), "MT·m")
+			}
+			@Section("6", "TRIM LIST CORRECTION") {
+				@Row("1st Trim Correction", calc(indexVar, "first_trim_correction"), "MT")
+				@Row("2nd Trim Correction", calc(indexVar, "second_trim_correction"), "MT")
+				@Row("List Correction", calc(indexVar, "list_correction"), "MT")
+				@Row("Total Trim & List Correction", calc(indexVar, "total_trim_correction"), "MT")
+				@Row("Displ. corrected", calc(indexVar, "displacement_corrected"), "MT")
+			}
+			@Section("7", "DENSITY CORRECTION") {
+				@RowPairOneStatic("Table / Dockwater Density", fmt.Sprintf("%.3f", rp.Survey.TableDensity), draft(indexVar, "density"), "t/m³")
+				@Row("Density Correction", calc(indexVar, "density_correction"), "MT")
+			}
+			@Section("8", "DEDUCTIBLES") {
+				@Row("HFO", draft(indexVar, "deductibles.hfo"), "MT")
+				@Row("MDO", draft(indexVar, "deductibles.mdo"), "MT")
+				@Row("LubOil", draft(indexVar, "deductibles.lub_oil"), "MT")
+				@Row("BilgeWater", draft(indexVar, "deductibles.bilge_water"), "MT")
+				@Row("SewageWater", draft(indexVar, "deductibles.sewage_water"), "MT")
+				@Row("Others", draft(indexVar, "deductibles.others"), "MT")
+				@Row("Ballast Water", calc(indexVar, "total_bw_tanks_weight"), "MT")
+				@Row("FreshWater", calc(indexVar, "total_fw_tanks_weight"), "MT")
+				@Row("Total Deduct's", calc(indexVar, "total_deductibles"), "MT")
+			}
+			@Section("9", "DISPLACEMENT & DWT") {
+				@Row("Displacement Corr'd", calc(indexVar, "displacement_corrected"), "MT")
+				@Row("Net Displacement", calc(indexVar, "net_displacement"), "MT")
+				@Row("Current DWT", calc(indexVar, "current_dwt"), "MT")
+				@Row("Constant Calc", calcRaw(indexVar, "true_constant.toFixed(3)"), "MT")
+			}
+		</div>
+	</div>
+}
+
+// Querry inside Draft-Result
+func calc(indexVar string, field string) string {
+	return fmt.Sprintf("results[%s]?.draft_result.%s?.toFixed(3)", indexVar, field)
+}
+
+// Querry outside Draft-Result
+func calcRaw(indexVar string, field string) string {
+	return fmt.Sprintf("results[%s]?.%s", indexVar, field)
+}
+
+// для draft полей
+func draft(indexVar string, field string) string {
+	return fmt.Sprintf("drafts[%s]?.draft.%s?.toFixed(3)", indexVar, field)
+}
+
+func draftStr(indexVar string, field string) string {
+	return fmt.Sprintf("drafts[%s]?.draft.%s", indexVar, field)
+}

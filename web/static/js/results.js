@@ -31,6 +31,13 @@ function resultsPage(alpine, lastIndex) {
 
     get secondSelector() {
       return this.drafts.filter(item => item.index > this.firstIndex)
-    }
+    },
+
+    openSections: [false, false, false, false, false, false, false, false, false, false],
+
+    typeClass(type) {
+      const map = { initial: 'draft-col--ini', final: 'draft-col--fin', intermediate: 'draft-col--mid' }
+      return map[type] || 'draft-col--ini'
+    },
   }
 }

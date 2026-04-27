@@ -175,7 +175,7 @@ func LCFWithDir(lcf float64) string {
 	if lcf < 0 {
 		return fmt.Sprintf("%s %s", Weight(-lcf), types.LCFDirectionForward)
 	}
-	return fmt.Sprintf("%s %s", Weight(-lcf), types.LCFDirectionAft)
+	return fmt.Sprintf("%s %s", Weight(lcf), types.LCFDirectionAft)
 }
 
 func TankNameID(prefix string, tank types.Tank) string {

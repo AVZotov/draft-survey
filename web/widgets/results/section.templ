@@ -1,0 +1,20 @@
+package results
+
+templ Section(num string, title string) {
+	<div class="step">
+		<div class="step-header" @click={ "openSections[" + num + "] = !openSections[" + num + "]" }>
+			<span class="step-num">{ num }</span>
+			<span class="step-title">{ title }</span>
+			<svg
+				class="step-chevron"
+				viewBox="0 0 24 24"
+				:style={ "'transform: rotate(' + (openSections[" + num + "] ? '0' : '-90') + 'deg)'" }
+			>
+				<polyline points="6 9 12 15 18 9"></polyline>
+			</svg>
+		</div>
+		<div class="step-body" x-show={ "openSections[" + num + "]" }>
+			{ children... }
+		</div>
+	</div>
+}

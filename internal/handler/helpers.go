@@ -919,6 +919,11 @@ func getSurveyRows(surveys []*types.Survey, offset, limit int) []dto.SurveyDTO {
 
 func getSurveyDTO(s *types.Survey) dto.SurveyDTO {
 	status := s.Status
+
+	var td float64
+	if s.VesselData.TableDensity != nil {
+		td = *s.VesselData.TableDensity
+	}
 	surveyDTO := dto.SurveyDTO{
 		SurveyID:       s.ID,
 		Name:           s.VesselData.Name,
@@ -928,6 +933,7 @@ func getSurveyDTO(s *types.Survey) dto.SurveyDTO {
 		LoadingCountry: s.Country.Name,
 		Operation:      s.CargoOperation.Operation,
 		Status:         status,
+		TableDensity:   td,
 	}
 
 	if surveyDTO.Status == types.SurveyStatusInProgress || surveyDTO.Status == types.SurveyStatusComplete {

@@ -1,0 +1,69 @@
+package results
+
+// Вычисленное — яркое
+templ Row(label string, xText string, unit string) {
+	<div class="result-row result-row--calc">
+		<span class="result-row__label">{ label }</span>
+		<span class="result-row__value">
+			<span x-text={ xText }></span>
+			if unit != "" {
+				<span class="result-row__unit">{ unit }</span>
+			}
+		</span>
+	</div>
+}
+
+// Два введённых значения — блеклые
+templ RowPair(label string, xText1 string, xText2 string, unit string) {
+	<div class="result-row result-row--sub">
+		<span class="result-row__label">{ label }</span>
+		<span class="result-row__value">
+			<span x-text={ xText1 }></span>
+			<span class="result-row__sep">/</span>
+			<span x-text={ xText2 }></span>
+			if unit != "" {
+				<span class="result-row__unit">{ unit }</span>
+			}
+		</span>
+	</div>
+}
+
+// Два введённых значения — блеклые
+templ RowPairOneStatic(label string, text string, xText1 string, unit string) {
+	<div class="result-row result-row--sub">
+		<span class="result-row__label">{ label }</span>
+		<span class="result-row__value">
+			<span>{ text }</span>
+			<span class="result-row__sep">/</span>
+			<span x-text={ xText1 }></span>
+			if unit != "" {
+				<span class="result-row__unit">{ unit }</span>
+			}
+		</span>
+	</div>
+}
+
+// 3 field in row
+templ RowTriple(label string, xText1 string, xText2 string, xText3 string, unit string) {
+	<div class="result-row result-row--sub">
+		<span class="result-row__label">{ label }</span>
+		<span class="result-row__value">
+			<span x-text={ xText1 }></span>
+			<span class="result-row__sep">/</span>
+			<span x-text={ xText2 }></span>
+			<span class="result-row__sep">/</span>
+			<span x-text={ xText3 }></span>
+			if unit != "" {
+				<span class="result-row__unit">{ unit }</span>
+			}
+		</span>
+	</div>
+}
+
+// Формула справа — для PP&Keel
+templ RowSub(label string, formula string) {
+	<div class="result-row result-row--sub">
+		<span class="result-row__label">{ label }</span>
+		<span class="result-row__value result-row__value--dim">{ formula }</span>
+	</div>
+}
