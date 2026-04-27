@@ -62,6 +62,12 @@ type SurveyListProps struct {
 	MonthDTO   []dto.SurveyDTO
 }
 
+type ResultProps struct {
+	Survey    dto.SurveyDTO
+	Alpine    string
+	Lastindex int
+}
+
 //To be reviewed props
 
 type Version struct {

@@ -1,0 +1,34 @@
+package results
+
+templ Selector() {
+	<div class="selector-bar">
+		<span class="selector-label">Compare</span>
+		<div class="selector-group">
+			<span class="phase-badge phase-badge--ini">Initial</span>
+			<div class="sel-wrap">
+				<select x-model="firstIndex">
+					<template x-for="item in firstSelector" :key="item.index">
+						<option
+							:value="item.index"
+							x-text="item.label + ' - MMC ' + results[item.index].draft_result.mmc"
+						></option>
+					</template>
+				</select>
+			</div>
+		</div>
+		<div class="selector-divider"></div>
+		<div class="selector-group">
+			<span class="phase-badge phase-badge--fin">Final</span>
+			<div class="sel-wrap">
+				<select x-model="secondIndex">
+					<template x-for="item in secondSelector" :key="item.index">
+						<option
+							:value="item.index"
+							x-text="item.label + ' - MMC ' + results[item.index].draft_result.mmc"
+						></option>
+					</template>
+				</select>
+			</div>
+		</div>
+	</div>
+}

@@ -1,4 +1,4 @@
-package widgets
+package results
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ ResultsDraftCol(draft types.Draft, result types.DraftResult, vessel types.VesselData) {
+templ Draft(draft types.Draft, result types.DraftResult, vessel types.VesselData) {
 	<div
 		class={ templ.Classes("draft-col", 
       templ.KV("draft-col--ini", draft.Type == types.DraftTypeInitial),

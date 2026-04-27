@@ -66,6 +66,16 @@ func SurveyListLayoutProps(user *types.User) components.LayoutProps {
 	}
 }
 
+func ResultsLayoutProps(user *types.User) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Survey Results",
+		MetaDescription: "Cummulative information about finilized survey",
+		User:            user,
+		ExtraCSS:        []string{"/static/css/results.css"},
+		ExtraJS:         []string{"/static/js/results.js"},
+	}
+}
+
 // All below props in todo to split layout and needed props
 
 func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
