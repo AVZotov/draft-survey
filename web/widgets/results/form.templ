@@ -19,76 +19,13 @@ templ Form(rp components.ResultProps) {
 				@Block("secondIndex", rp)
 			</div>
 			<!-- ── CARGO RESULT ─────────────────────────────────────────── -->
-			// <div class="cargo-section">
-			// 	<div class="cargo-main">
-			// 		<!-- Левая часть: большая цифра + ячейки -->
-			// 		<div class="cargo-data">
-			// 			<div class="cargo-hero">
-			// 				<div>
-			// 					<div class="cargo-op-label">Cargo Loaded</div>
-			// 					<div>
-			// 						<span class="cargo-weight">78 556.093</span>
-			// 						<span class="cargo-weight-unit">MT</span>
-			// 					</div>
-			// 				</div>
-			// 				<div class="cargo-disc ok">
-			// 					Discrepancy from S/P: <span>+6.893 MT / +0.01%</span>
-			// 				</div>
-			// 			</div>
-			// 			<div class="cargo-top">
-			// 				<div class="cargo-cell">
-			// 					<div class="cargo-cell-label">Initial Draft</div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Net Displacement</span><span class="cargo-cell-val">20 193.825 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Current DWT</span><span class="cargo-cell-val dim">16 983.921 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">MMC</span><span class="cargo-cell-val">6.323 m</span></div>
-			// 				</div>
-			// 				<div class="cargo-cell">
-			// 					<div class="cargo-cell-label">Final Draft</div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Net Displacement</span><span class="cargo-cell-val">95 829.871 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Current DWT</span><span class="cargo-cell-val dim">83 239.771 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">MMC</span><span class="cargo-cell-val">12.203 m</span></div>
-			// 				</div>
-			// 				<div class="cargo-cell">
-			// 					<div class="cargo-cell-label">Declared</div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Cargo (S/P)</span><span class="cargo-cell-val">78 549.200 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Constant Declared</span><span class="cargo-cell-val">490.000 MT</span></div>
-			// 				</div>
-			// 				<div class="cargo-cell">
-			// 					<div class="cargo-cell-label">Constants</div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Lightship</span><span class="cargo-cell-val">15 637.000 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Const. Calculated</span><span class="cargo-cell-val warn">480.090 MT</span></div>
-			// 					<div class="cargo-cell-row"><span class="cargo-cell-name">Const. Checking (fin)</span><span class="cargo-cell-val warn">486.983 MT</span></div>
-			// 				</div>
-			// 			</div>
-			// 		</div>
-			// 		<!-- Правая часть: алерты всегда видны -->
-			// 		<div class="cargo-alerts-wrap">
-			// 			<div class="cargo-alerts">
-			// 				<div class="cargo-alerts-title">Survey Status</div>
-			// 				<div class="cargo-alert cargo-alert--warn">
-			// 					<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-			// 					<span>Constant 10% up to declared — verify before signing</span>
-			// 				</div>
-			// 				<div class="cargo-alert cargo-alert--warn">
-			// 					<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-			// 					<span>Constant 10% up to declared — verify before signing</span>
-			// 				</div>
-			// 				<div class="cargo-alert cargo-alert--warn">
-			// 					<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-			// 					<span>Constant 10% up to declared — verify before signing</span>
-			// 				</div>
-			// 				<div class="cargo-alert cargo-alert--ok">
-			// 					<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-			// 					<span>Summer DWT not exceeded</span>
-			// 				</div>
-			// 				<div class="cargo-alert cargo-alert--ok">
-			// 					<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-			// 					<span>Upright vessel · No LOP required</span>
-			// 				</div>
-			// 			</div>
-			// 		</div>
-			// 	</div>
-			// </div>
+			<div class="cargo-section">
+				<div class="cargo-main">
+					@CargoData()
+					@CargoAlerts()
+				</div>
+			</div>
 		</div>
+		@ActionBar()
 	</main>
 }
