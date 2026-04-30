@@ -1,8 +1,8 @@
 # Draft Survey Tool — Development Roadmap
 
-**Project:** https://github.com/AVZotov/draft-survey  
-**Status:** Phase 0 Complete ✅  
-**Last Updated:** 2026-02-17
+**Project:** https://github.com/AVZotov/draft-survey
+**Current Version:** v0.1.0-rc
+**Last Updated:** 2026-04-30
 
 ---
 
@@ -20,221 +20,224 @@
 - **Go Version:** 1.25 (minimum compatibility)
 - **CI Runner:** ubuntu-22.04 (LTS, reproducible builds)
 - **PDF Reports:** Generate on-demand only (no auto-save)
-- **Backup Strategy:** Each survey = separate JSON file (max 10-20/month)
+- **Backup Strategy:** Each survey = separate JSON file
 - **Temp Files:** Auto-deleted after final report generated
-
-### Open Questions for Phase 1
-- [ ] Storage backend for open source version (JSON files vs SQLite)
-- [ ] Installer/distribution strategy
-- [ ] Custom errors location (`internal/errors/`)
 
 ---
 
 ## PHASE 1: MVP — Open Source (Offline-First)
 
 **Goal:** Working draft survey calculator with local storage
+**Status:** 🚧 Near Complete — PDF report remaining
 
-### 1.1 Core Mathematics Module ⭐ HIGHEST PRIORITY ✅ COMPLETE
+---
+
+### 1.1 Core Mathematics Module ✅ COMPLETE
 **Location:** `internal/calculation/`
 
-**Tasks:**
-- [X] Implement UNECE 1992 formulas:
-  - Quarter Mean Draft
-  - First Trim Correction (FTC)
-  - Second Trim Correction (STC)
-  - Density Correction
-  - Displacement calculation
-- [X] Unit tests with hardcoded "golden" test data
-- [ ] Validation logic for input ranges
+- [x] UNECE 1992 formulas: Quarter Mean Draft, FTC, STC, Density Correction, Displacement
+- [x] PP & Keel corrections (Full LBP and Half LBP methods)
+- [x] List correction
+- [x] LCF/LCA interpolation (auto and manual direction detection)
+- [x] Second trim correction via MTC rows
+- [x] Tank volume calculation — 3 calibration table types:
+  - Type 1: Volume by Trim (bilinear interpolation)
+  - Type 2: Sounding Correction by Trim
+  - Type 3: Volume Correction by Trim
+- [x] List correction for all tank calibration types (optional)
+- [x] `CalcSurvey` — orchestrates multi-draft survey calculation
+- [x] Unit tests with hardcoded golden data (POLAR STAR, BEAM vessels)
+- [ ] Input range validation logic
 
-**Deliverable:** Calculation engine that passes all test cases
+**Deliverable:** ✅ Calculation engine passing all test cases
 
 ---
 
 ### 1.2 Vessel Data Module ✅ COMPLETE
 **Location:** `internal/vessel/`, `internal/types/`
 
-**Tasks:**
 - [x] VesselData structure (name, IMO, flag, dimensions, summer marks)
 - [x] Vessel geometry (LBP, PP corrections, Keel thickness)
-- [x] Shared domain types package (Marks, Deductibles, Hydrostatics, SeaCondition, Survey)
-- [x] SeaCondition types (Wave and Ice conditions)
-- [x] CalcConstant and CalcCurrentDWT functions
+- [x] Shared domain types (Marks, Deductibles, Hydrostatics, SeaCondition, Survey)
+- [x] SeaCondition types (Wave and Ice conditions with dictionaries)
+- [x] MMC calculation methods: Standard (6/8), River (4/6), Barge (3+14+3/20)
+- [x] Correction methods: Full LBP, Half LBP
 
 **Decisions Made:**
-- `internal/types/` — shared domain types used by both calculation and vessel packages
+- `internal/types/` — shared domain types used across all packages
 - `internal/vessel/` — vessel passport data (VesselData)
-- Storage interface deferred to Phase 1.4 (Repository pattern planned)
 
-**Deliverable:** Complete vessel data structures with domain types
+**Deliverable:** ✅ Complete vessel data structures with domain types
 
 ---
 
-### 1.3 User Profile (Local) ✅ COMPLETE
+### 1.3 User Profile ✅ COMPLETE
 **Location:** `internal/types/`, `internal/storage/`
 
-**Tasks:**
 - [x] Surveyor profile (name, position, company, employee ID)
-- [x] Local storage (no authentication)
-- [x] Profile persistence in JSON (user.json)
-- [x] UserRepository interface
-- [x] UserStore implementation
+- [x] Local storage — no authentication
+- [x] Profile persistence in `user.json`
+- [x] `UserRepository` interface + `UserStore` implementation
 - [x] Unit tests (SaveAndGet, GetWithNoUser, Delete)
-- [x] Surveyor field added to Survey struct
+- [x] `Survey.Surveyor` field — surveyor embedded in survey record
 
 **Decisions Made:**
-- `User` type in `internal/types/` — consistent with Survey pattern, avoids circular imports
-- `UserRepository` interface in `internal/storage/repository.go` — single place for all storage interfaces
-- `UserStore` in `internal/storage/user_store.go` — renamed `json_store.go` → `survey_store.go` for consistency
-- `Survey.Surveyor *User` — pointer allows nil (survey can exist without surveyor profile)
 - Logout = `UserStore.Delete()` removes `user.json` from disk
+- `Survey.Surveyor *User` — pointer allows nil (survey can exist without profile)
 
-**Deliverable:** Surveyor can set up profile once, profile persists between app restarts
+**Deliverable:** ✅ Surveyor can set up profile once, persists between restarts
 
 ---
 
 ### 1.4 Storage Layer ✅ COMPLETE
 **Location:** `internal/storage/`
-Last Updated → 2026-02-23
 
-**Decision Point:** JSON files
-- JSON: Simple, no dependencies, human-readable
-- Final decision with naming convention: UUID.json
-
-
-**Tasks:**
-- [X] Survey CRUD operations
-- [X] Auto-save drafts (temp files in `data/temp/`) will be implemented in service layer
-- [X] List All surveys
-- [X] Backup mechanism (copy to `data/backups/`)
-
-**Deliverable:** Surveys persist between app restarts
-
----
-
-### 1.5 Report Generation
-**Location:** `internal/report/`
-
-**Tasks:**
-- [ ] PDF generation library selection (gofpdf / unidoc)
-- [ ] UNECE-compliant report template
-- [ ] Include vessel data, calculations, surveyor signature
-- [ ] Save to custom location (user chooses path)
-
-**Deliverable:** Generate professional PDF report
-
----
-
-### 1.6 Web Interface (HTMX) 🚧 IN PROGRESS
-**Location:** `web/templates/`, `web/static/`
-**Last Updated:** 2026-03-04
+- [x] Survey CRUD (Create, Read, Update, Delete)
+- [x] List all surveys with DTO projection
+- [x] Search and filter surveys (by name, IMO, date range)
+- [x] Pagination support (offset + limit)
+- [x] `SurveyRepository` interface + `SurveyStore` implementation
+- [x] `UserRepository` interface + `UserStore` implementation
+- [x] `DictionariesRepository` interface + `DictionariesStore` with `embed.FS`
+- [x] Dictionaries embedded in binary via `go:embed` (countries, ports)
 
 **Decisions Made:**
-- Fiber server + HTMX + templ (type-safe HTML templates)
+- JSON files — simple, no dependencies, human-readable
+- UUID-based filenames: `{uuid}.json`
+- Dictionaries embedded in binary — no external files needed at runtime
+- Future: MySQL as optional cloud-sync backend (Phase 2)
+
+**Deliverable:** ✅ Surveys persist between app restarts, binary is self-contained
+
+---
+
+### 1.5 Report Generation 🔴 NEXT PRIORITY
+**Location:** `internal/report/`
+
+- [ ] PDF generation library selection (gofpdf / unidoc / chromedp)
+- [ ] UNECE-compliant report template
+- [ ] Include: vessel data, all draft readings, calculation steps, cargo result
+- [ ] Surveyor signature block
+- [ ] Save to user-chosen location
+
+**Deliverable:** Generate professional PDF report suitable for official use
+
+---
+
+### 1.6 Web Interface ✅ COMPLETE
+**Location:** `web/`
+
+**Tech Stack Decisions:**
+- Fiber v2 + HTMX + Templ (type-safe HTML templates)
+- Alpine.js for lightweight client-side interactivity
 - IBM Plex Sans/Mono fonts, custom CSS design tokens (no Tailwind)
 - CSS split by page: `styles.css` (global) + page-specific files
-- Repository pattern for storage (UserRepository, SurveyRepository)
-- Manual form parsing via `c.FormValue()` (no BodyParser for nested structs)
-- `components.LayoutProps` — shared props pattern for all pages
-- `ExtraCSS/ExtraJS` in LayoutProps for page-specific assets
-- Draft structure: `[]Draft` slice (ordered, guaranteed) replaces InitialDraft/FinalDraft
-- `DraftType`: initial / intermediate / final
-- `DraftStatus`: pending / active / complete
-- One `DraftBlock` templ component for all draft types (prefix-based IDs)
-- Remove draft only when `Status == pending`, sacred after Start
+- Repository pattern for all storage access
+- Manual form parsing via `c.FormValue()` (granular, block-based saving)
+- On-the-fly save with "save before navigate" pattern for data safety
 
-**Action Bar Logic:**
-- `Initial pending`   → [▶ Start Initial DS]
-- `Initial active`    → [⏹ Finish Initial DS]
-- `Initial complete`  → [+ Add Intermediate] [+ Add Final]
-- `Intermediate active`  → [⏹ Finish Intermediate DS]
-- `Intermediate complete` → [+ Add Intermediate] [+ Add Final]
-- `Final active`      → [⏹ Finish Final DS]
-- `Final complete`    → [✓ Calculate & View Results]
-
-**Tasks:**
-- [x] Fiber server setup (`cmd/server/main.go`)
-- [x] Profile creation page (`/profile`)
+**Pages Implemented:**
+- [x] Surveyor profile setup (`/profile`)
 - [x] Dashboard (`/`)
-- [x] New Survey form (`/survey/new`) with full vessel/cargo/job data
-- [x] Sea condition wave/ice toggle with badges
-- [x] Survey persistence and editing (`/survey/:id`)
-- [x] CreatedAt preservation on survey update
-- [x] Draft Readings page (`/survey/:id/draft`)
-- [x] DraftBlock component (unified Initial/Intermediate/Final)
-- [x] Sea condition toggle in DraftBlock (wave/ice, prefix-based)
-- [ ] Action bar with Start/Finish timestamp buttons
-- [ ] Add Intermediate / Add Final buttons
-- [ ] Draft form name attributes + save handler
-- [ ] SVG vessel diagram (dynamic trim/list visualization)
-- [ ] Calculation integration (connect Phase 1.1 math)
-- [ ] Form validation (client + server side)
-- [ ] Survey list / search page
+- [x] Survey list with search, date filter, stats (`/survey-list`)
+- [x] New survey form — vessel data, cargo, job info (`/survey/new`)
+- [x] Survey edit (`/survey/:id`)
+- [x] Draft readings (`/survey/:id/draft`) with:
+  - [x] Initial / Intermediate / Final draft blocks
+  - [x] SVG vessel diagram (dynamic trim/list visualization)
+  - [x] Sea condition toggle (Wave/Ice with condition dropdowns)
+  - [x] PP & Keel distance inputs
+  - [x] Real-time calculation panel (MMC, trim, list, deflection)
+  - [x] Hydrostatic data input with interpolated MMC row
+  - [x] MTC rows for second trim correction
+  - [x] Deductibles section (HFO, MDO, LubOil, BilgeWater, Others)
+  - [x] Start/Finish timestamps with action bar state machine
+- [x] BW/FW Tanks page (`/survey/:id/tanks/:draftIndex`) with:
+  - [x] Add / Remove tanks (BW and FW separately)
+  - [x] Global density apply to tanks with nil density
+  - [x] Tank calibration modal (3 table types, optional list correction)
+  - [x] Real-time total weight calculation
+  - [x] Trim/list correction warning banner
+- [x] Calculation results page (`/survey/:id/results`) with:
+  - [x] Draft selector (compare any two drafts)
+  - [x] Step-by-step calculation display (collapsible sections)
+  - [x] Cargo on board with discrepancy from S/P
+  - [x] Survey status alerts (constant %, data warnings)
 
-**Deliverable:** Working UI at `localhost:3399`
+**Deliverable:** ✅ Working UI at `localhost:3399`
 
 ---
 
-### 1.7 Logging
+### 1.7 Logging 🔴 TODO
 **Location:** `internal/logger/`
 
-**Tasks:**
-- [ ] Structured logging (slog / zap / zerolog)
+- [ ] Structured logging (`slog` — standard library, no dependencies)
 - [ ] Log to file (`data/app.log`)
-- [ ] Log rotation strategy
 - [ ] Log levels (DEBUG/INFO/WARN/ERROR)
+- [ ] Request logging middleware for Fiber
 
-**Deliverable:** All operations logged for debugging
+**Deliverable:** All operations logged for debugging and audit
 
 ---
 
-### 1.8 Error Handling
+### 1.8 Error Handling 🔴 TODO
 **Location:** `internal/errors/`
 
-**Tasks:**
-- [ ] Custom error types for validation
-- [ ] Error messages dictionary (for i18n later)
-- [ ] User-friendly error display in UI
+- [ ] Custom error types for domain validation
+- [ ] User-friendly error display in UI (banners, inline messages)
+- [ ] HTTP error pages (404, 500)
 
-**Deliverable:** Consistent error handling throughout app
+**Deliverable:** Consistent, user-friendly error handling throughout app
 
 ---
 
-### 1.9 Testing
-**Tasks:**
-- [ ] Unit tests for calculation module (golden data)
-- [ ] Integration tests for storage
-- [ ] E2E test: create survey → calculate → generate PDF
+### 1.9 Testing 🟡 PARTIAL
+**Location:** `internal/calculation/`
+
+- [x] Unit tests for calculation module (golden data — POLAR STAR, BEAM)
+- [x] Tank volume calculation tests (all 3 calibration types)
+- [x] Storage unit tests (SaveAndGet, Delete, GetWithNoUser)
+- [ ] Integration tests for HTTP handlers
+- [ ] E2E test: create survey → draft readings → tanks → calculate → PDF
 
 **Target Coverage:** >80% for `internal/calculation/`
 
 ---
 
-### 1.10 Dictionaries (Static Data)
-**Location:** `data/dictionaries/`
+### 1.10 Dictionaries ✅ COMPLETE
+**Location:** `data/dictionaries/`, `embed.go`
 
-**Tasks:**
-- [ ] Ports list (JSON)
-- [ ] Country flags (JSON)
-- [ ] Units of measurement
-- [ ] Load from files on startup
+- [x] Countries list (JSON, embedded in binary)
+- [x] Ports list (JSON, embedded in binary)
+- [x] Wave conditions dictionary (Go)
+- [x] Ice conditions dictionary (Go)
+- [x] Cargo types dictionary (Go)
+- [x] Packing types dictionary (Go)
+- [x] Tank type names dictionary (Go)
+- [x] Glossary EN + RU (Markdown, embedded in binary)
 
-**Deliverable:** Dropdown lists populated from JSON
+**Deliverable:** ✅ All dropdowns populated, binary is self-contained
 
 ---
 
-### 1.11 Installer/Distribution
-**Decision Point:** How users install the app?
+### 1.11 Audit & Metadata 🟡 IN PROGRESS
+**Location:** `internal/types/audit.go`, `internal/types/metadata.go`
 
-**Options:**
-- Single binary (Go strength)
-- Installer (creates directories, shortcuts)
-- Docker image (for server deployment)
+- [x] `SurveyMetadata` struct — schema version, app version
+- [x] `AuditEvent` struct — timestamp, event type, message, user
+- [ ] Audit event recording (suspicious data, overrides, warnings)
+- [ ] Telegram notification for critical audit events
 
-**Tasks:**
-- [ ] Build script / Makefile
-- [ ] Cross-compilation (Windows / macOS / Linux)
-- [ ] First-run setup (create directories)
+**Deliverable:** Full audit trail embedded in each survey record
+
+---
+
+### 1.12 Distribution 🔴 TODO
+
+- [ ] `go build` with embedded assets — single binary
+- [ ] Makefile with cross-compilation (Windows / macOS / Linux)
+- [ ] First-run setup (auto-create `data/` directories)
+- [ ] GitHub Releases with pre-built binaries
 
 ---
 
@@ -244,15 +247,15 @@ Last Updated → 2026-02-23
 
 ### 2.1 Authentication
 - [ ] User login/password
-- [ ] Long-lived tokens (2 months offline support)
+- [ ] JWT with configurable expiry (temporary access for assistants)
 - [ ] Session management
 
-### 2.2 Backend Server
-**Tech Stack:** Go + Fiber + PostgreSQL
+### 2.2 Backend & Database
+**Tech Stack:** Go + Fiber + MySQL
 
-- [ ] REST API design
+- [ ] MySQL as cloud storage backend (parallel to JSON for offline)
 - [ ] Database schema (users, surveys, sync state)
-- [ ] UUID-based IDs (not auto-increment)
+- [ ] REST API for sync
 
 ### 2.3 Offline-First Sync
 - [ ] Conflict resolution strategy
@@ -261,18 +264,16 @@ Last Updated → 2026-02-23
 
 ### 2.4 User Roles
 - [ ] Surveyor (create surveys)
+- [ ] Assistant (temporary access via time-limited JWT)
 - [ ] Coordinator (manage ports/dictionaries)
 - [ ] Admin (user management)
 
 ### 2.5 Dictionary Management
-- [ ] CRUD for ports (coordinators only)
-- [ ] IANA timezone selection
-- [ ] Sync dictionaries to clients
+- [ ] CRUD for ports and countries (coordinators only)
+- [ ] Push updated dictionaries to clients on sync
 
 ### 2.6 Deployment
-- [ ] Docker Compose (app + PostgreSQL)
-- [ ] Terraform (infrastructure as code)
-- [ ] Ansible (configuration management)
+- [ ] Docker Compose (app + MySQL)
 - [ ] Self-hosted instructions
 - [ ] Security hardening
 
@@ -281,20 +282,19 @@ Last Updated → 2026-02-23
 ## PHASE 3: Polish & Scale
 
 ### 3.1 Internationalization (i18n)
-- [ ] Russian
-- [ ] English
-- [ ] Other languages TBD
+- [ ] Russian interface
+- [ ] English interface (current)
 
 ### 3.2 Performance
-- [ ] Optimize for low-end laptops
-- [ ] Caching strategy
-- [ ] Large dataset handling
+- [ ] Survey index file for fast list loading (avoid loading all JSON files)
+- [ ] Caching strategy for dictionaries
 
 ### 3.3 Advanced Features
-- [ ] Multiple vessel types
-- [ ] Historical data analysis
-- [ ] Export to Excel
+- [ ] Multiple surveyors per survey (primary + assistant)
 - [ ] Digital signatures (e-signing PDFs)
+- [ ] Export to Excel
+- [ ] Historical data analysis
+- [ ] gRPC between microservices (if cloud version scales to multiple services)
 
 ---
 
@@ -303,36 +303,33 @@ Last Updated → 2026-02-23
 ### Branching
 - `main` — stable releases only
 - `feature/*` — work on specific features
-- PR to `main` when ready
+- PR to `main` when feature complete
 
 ### Versioning
-- Semantic versioning (v0.1.0, v0.2.0, v1.0.0)
+- Semantic versioning: v0.1.0, v0.2.0, v1.0.0
 - Git tags for releases
+- `SurveyMetadata.SchemaVersion` — tracks breaking changes to survey structure
 
 ### CI/CD
-- GitHub Actions on every push
-- Automated tests
-- Build artifacts for releases
+- GitHub Actions on every push to `feature/*`
+- Automated tests (`go test ./...`)
+- Build artifacts on merge to `main`
 
 ---
 
-## Next Steps (Immediate)
+## Immediate Next Steps (v0.1.0 → v0.2.0)
 
-1. **Decision:** JSON files vs SQLite for Phase 1 storage
-2. **Decision:** PDF library (gofpdf vs unidoc)
-3. **Decision:** CSS framework (Tailwind vs minimal)
-4. **Start Phase 1.1:** Implement calculation module
-   - Read UNECE 1992 code (already in project files)
-   - Define Go structs for draft readings
-   - Write first test case
+1. **PDF Report** (Phase 1.5) — core deliverable for real usage
+2. **Audit event recording** (Phase 1.11) — log suspicious data automatically
+3. **Logging middleware** (Phase 1.7) — structured request logging
+4. **Distribution** (Phase 1.12) — Makefile + GitHub Release with binaries
+5. **go:embed for static assets** — embed CSS/JS into binary (full self-contained build)
 
 ---
 
 ## Notes
 
-- This is a living document — update as decisions are made
-- Check off items as completed
-- Add new tasks as they emerge
-- Keep focus on MVP (Phase 1) before expanding
-
-**Ready to start Phase 1.1 — Core Mathematics Module!**
+- This is a living document — update with each significant change
+- `SchemaVersion` in `SurveyMetadata` must be bumped on breaking struct changes
+- Keep Phase 1 focus before expanding to Phase 2
+- Open source version stays JSON-based; MySQL is Phase 2 cloud feature
