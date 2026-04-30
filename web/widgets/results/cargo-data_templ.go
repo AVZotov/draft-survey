@@ -29,7 +29,117 @@ func CargoData() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"cargo-data\"><div class=\"cargo-hero\"><div><div class=\"cargo-op-label\">Cargo Loaded</div><div><span class=\"cargo-weight\">—</span> <span class=\"cargo-weight-unit\">MT</span></div></div><div class=\"cargo-disc\">Discrepancy from S/P: <span>—</span></div></div><div class=\"cargo-top\"><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Initial Draft</div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Final Draft</div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Declared</div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Constants</div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div x-data=\"{\n\t\tcargoDeclared: data.survey.cargo_declared,\n\t\tcargoOnBoard: data.survey_results.cargo_on_board,\n\t\tget firstDraft() { return drafts[0] },\n\t\tget lastDraft() { return drafts[drafts.length - 1] },\n\t\tget firstSelectedDraft() { return drafts[firstIndex] },\n\t\tget lastSelectedDraft() { return drafts[lastIndex] },\n\t\tget firstResult() { return results[0] },\n\t\tget lastResult() { return results[results.length - 1] },\n\t\tget firstSelectedResult() { return results[firstIndex] },\n\t\tget lastSelectedResult() { return results[lastIndex] },\n\t\t}\" class=\"cargo-data\"><div class=\"cargo-hero\"><div><div class=\"cargo-op-label\">Cargo On Board</div><div><span class=\"cargo-weight\" x-text=\"formatWeight(cargoOnBoard)\"></span> <span class=\"cargo-weight-unit\">MT</span></div></div><div class=\"cargo-disc\">Discrepancy from S/P:  <span x-text=\"cargoDeclared=== '' ? '—' : formatWeight(cargoOnBoard - cargoDeclared)\"></span> <span class=\"result-row__unit\">MT</span></div></div><div class=\"cargo-top\"><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Initial Draft</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("Net Displacement", "formatWeight(firstResult?.draft_result?.net_displacement)", "MT").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("Current DWT", "formatWeight(firstResult?.draft_result?.current_dwt)", "MT").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("MMC", "formatWeight(firstResult?.draft_result?.mmc)", "m").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Final Draft</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("Net Displacement", "formatWeight(lastResult?.draft_result?.net_displacement)", "MT").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("Current DWT", "formatWeight(lastResult?.draft_result?.current_dwt)", "MT").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CargoCellRow("MMC", "formatWeight(lastResult?.draft_result?.mmc)", "m").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Declared</div></div><div class=\"cargo-cell\"><div class=\"cargo-cell-label\">Constants</div></div></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func CargoCellRow(label string, xText string, unit string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"cargo-cell-row\"><span class=\"cargo-cell-name\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(label)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/cargo-data.templ`, Line: 58, Col: 39}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span> <span class=\"cargo-cell-val\" x-text=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(xText)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/cargo-data.templ`, Line: 59, Col: 45}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"></span> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if unit != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<span class=\"cargo-cell-unit\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(unit)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/cargo-data.templ`, Line: 61, Col: 39}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

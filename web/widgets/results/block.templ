@@ -2,6 +2,7 @@ package results
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
@@ -63,7 +64,7 @@ templ Block(indexVar string, rp components.ResultProps) {
 				@Row("Displ. corrected", calc(indexVar, "displacement_corrected"), "MT")
 			}
 			@Section("7", "DENSITY CORRECTION") {
-				@RowPairOneStatic("Table / Dockwater Density", fmt.Sprintf("%.3f", rp.Survey.TableDensity), draft(indexVar, "density"), "t/m³")
+				@RowPairOneStatic("Table / Dockwater Density", format.FloatOrEmpty(rp.Survey.VesselData.TableDensity), draft(indexVar, "density"), "t/m³")
 				@Row("Density Correction", calc(indexVar, "density_correction"), "MT")
 			}
 			@Section("8", "DEDUCTIBLES") {

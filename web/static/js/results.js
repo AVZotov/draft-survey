@@ -7,12 +7,12 @@ function resultsPage(alpine, lastIndex) {
     results: [],
 
     init() {
-      this.drafts = this.data.drafts.map((draft, i) => ({
+      this.drafts = this.data.survey.drafts.map((draft, i) => ({
         draft,
         index: i,
         label: this.labelFor(draft, i)
       }))
-      this.results = this.data.draft_totals
+      this.results = this.data.survey_results.draft_totals
 
       this.$watch('firstIndex', value => {
         this.secondIndex = value + 1
@@ -38,6 +38,18 @@ function resultsPage(alpine, lastIndex) {
     typeClass(type) {
       const map = { initial: 'draft-col--ini', final: 'draft-col--fin', intermediate: 'draft-col--mid' }
       return map[type] || 'draft-col--ini'
-    },
+    }
   }
+}
+
+function formatWeight(value) {
+  if (value === null || value === undefined) return '—'
+
+  const fixed = Math.abs(value).toFixed(3)
+  const [whole, decimal] = fixed.split('.')
+
+  const formatted = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
+  const result = formatted + '.' + decimal
+  return value < 0 ? '-' + result : result
 }

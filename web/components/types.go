@@ -63,7 +63,7 @@ type SurveyListProps struct {
 }
 
 type ResultProps struct {
-	Survey    dto.SurveyDTO
+	Survey    types.Survey
 	Alpine    string
 	Lastindex int
 }

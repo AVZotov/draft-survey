@@ -25,13 +25,11 @@ func (h *Handler) results(c *fiber.Ctx) error {
 		return err
 	}
 
-	surveyDTO := getSurveyDTO(survey)
-
 	surveyResults := calculation.CalcSurvey(*survey)
 
 	alpineData := dto.AlpineDTO{
-		Drafts:      survey.Drafts,
-		DraftTotals: surveyResults.DraftTotals,
+		Survey:        *survey,
+		SurveyResults: surveyResults,
 	}
 
 	alpineJSON, err := json.Marshal(alpineData)
@@ -40,7 +38,7 @@ func (h *Handler) results(c *fiber.Ctx) error {
 	}
 
 	props := components.ResultProps{
-		Survey:    surveyDTO,
+		Survey:    *survey,
 		Alpine:    string(alpineJSON),
 		Lastindex: len(surveyResults.DraftTotals) - 1,
 	}

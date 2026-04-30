@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
@@ -41,7 +42,7 @@ func Block(indexVar string, rp components.ResultProps) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("typeClass(drafts[" + indexVar + "]?.draft.type)")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 11, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 12, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -54,7 +55,7 @@ func Block(indexVar string, rp components.ResultProps) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("drafts[" + indexVar + "]?.label")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 16, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 17, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -67,7 +68,7 @@ func Block(indexVar string, rp components.ResultProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("'MMC ' + results[" + indexVar + "]?.draft_result.mmc.toFixed(3) + ' m'")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 20, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/block.templ`, Line: 21, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -397,7 +398,7 @@ func Block(indexVar string, rp components.ResultProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = RowPairOneStatic("Table / Dockwater Density", fmt.Sprintf("%.3f", rp.Survey.TableDensity), draft(indexVar, "density"), "t/m³").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = RowPairOneStatic("Table / Dockwater Density", format.FloatOrEmpty(rp.Survey.VesselData.TableDensity), draft(indexVar, "density"), "t/m³").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
