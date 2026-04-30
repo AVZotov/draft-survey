@@ -1,9 +1,19 @@
 package handler
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"net/http"
+
+	draft_survey "github.com/AVZotov/draft-survey"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
+)
 
 func SetupRoutes(app *fiber.App, h *Handler) {
-	app.Static("/static", "./web/static")
+	app.Use("/static", filesystem.New(filesystem.Config{
+		Root:       http.FS(draft_survey.StaticFiles),
+		PathPrefix: "web/static",
+		Browse:     false,
+	}))
 
 	app.Get("/", h.home)
 	app.Get("/profile", h.profile)

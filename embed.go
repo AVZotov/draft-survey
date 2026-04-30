@@ -12,3 +12,6 @@ var Dictionaries embed.FS
 //go:embed docs/glossary_ru.md
 //go:embed docs/CALCULATION.md
 var Docs embed.FS
+
+//go:embed web/static
+var StaticFiles embed.FS
