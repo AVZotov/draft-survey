@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	draft_survey "github.com/AVZotov/draft-survey"
 	"github.com/AVZotov/draft-survey/internal/handler"
 	"github.com/AVZotov/draft-survey/internal/storage"
 	"github.com/gofiber/fiber/v2"
@@ -21,10 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dictionariesStore, err := storage.NewDictionariesStore("./data/dictionaries")
-	if err != nil {
-		log.Fatal(err)
-	}
+	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
 	h := handler.New(userStore, surveyStore, dictionariesStore)
 
