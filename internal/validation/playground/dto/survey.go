@@ -79,7 +79,7 @@ func NewDraftDto(d *types.Draft) *Draft {
 	}
 }
 
-func NewSurveyDto(s *types.Survey) *Survey {
+func NewSurveyDTO(s *types.Survey) *Survey {
 	if s == nil {
 		return nil
 	}

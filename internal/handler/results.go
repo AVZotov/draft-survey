@@ -6,6 +6,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types/dto"
+	vdto "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
@@ -23,6 +24,12 @@ func (h *Handler) results(c *fiber.Ctx) error {
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
 		return err
+	}
+
+	validationDTO := vdto.NewSurveyDTO(survey)
+	if fieldErrors := h.validator.Validate(validationDTO); fieldErrors != nil {
+		//TODO: Add UI Dialog with errors messages wrapped
+		return c.Status(422).SendString("validation failed")
 	}
 
 	surveyResults := calculation.CalcSurvey(*survey)

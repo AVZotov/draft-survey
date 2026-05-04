@@ -6,6 +6,7 @@ import (
 	draft_survey "github.com/AVZotov/draft-survey"
 	"github.com/AVZotov/draft-survey/internal/handler"
 	"github.com/AVZotov/draft-survey/internal/storage"
+	"github.com/AVZotov/draft-survey/internal/validation"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,7 +25,9 @@ func main() {
 
 	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
-	h := handler.New(userStore, surveyStore, dictionariesStore)
+	validator := validation.New()
+
+	h := handler.New(userStore, surveyStore, dictionariesStore, validator)
 
 	handler.SetupRoutes(app, h)
 
