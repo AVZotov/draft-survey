@@ -6,7 +6,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types/dto"
-	vdto "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
+	_ "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
@@ -26,11 +26,11 @@ func (h *Handler) results(c *fiber.Ctx) error {
 		return err
 	}
 
-	validationDTO := vdto.NewSurveyDTO(survey)
-	if fieldErrors := h.validator.Validate(validationDTO); fieldErrors != nil {
-		//TODO: Add UI Dialog with errors messages wrapped
-		return c.Status(422).SendString("validation failed")
-	}
+	// validationDTO := vdto.NewSurveyDTO(survey)
+	// if fieldErrors := h.validator.Validate(validationDTO); fieldErrors != nil {
+	// 	//TODO: Add UI Dialog with errors messages wrapped
+	// 	return c.Status(422).SendString(fieldErrors.Error())
+	// }
 
 	surveyResults := calculation.CalcSurvey(*survey)
 
@@ -53,4 +53,27 @@ func (h *Handler) results(c *fiber.Ctx) error {
 	lp := web.ResultsLayoutProps(user)
 
 	return tadaptor.Render(c, pages.Results(lp, props))
+}
+
+func (h *Handler) noticeTest(c *fiber.Ctx) error {
+	notices := []dto.NoticeItem{
+		{Type: dto.NoticeError, Field: "Initial Draft — Fwd P", Message: "Required for calculation"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
+		{Type: dto.NoticeInfo, Message: "Table density 1.025 t/m³ will be used"},
+	}
+	return tadaptor.Render(c, components.NoticeModal("Validation Waring", notices))
 }

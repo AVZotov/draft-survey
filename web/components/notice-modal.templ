@@ -1,0 +1,55 @@
+package components
+
+import "github.com/AVZotov/draft-survey/internal/types/dto"
+
+templ NoticeModal(header string, items []dto.NoticeItem) {
+	<div class="notice-modal">
+		<div class="notice-modal__header">
+			<div class="notice-modal__title">
+				@IconBell(16)
+				{ header }
+			</div>
+			<button
+				tabindex="-1"
+				class="notice-modal__close"
+				type="button"
+				x-on:click="$el.closest('dialog').close()"
+			>
+				@IconClose()
+			</button>
+		</div>
+		<div
+			class="notice-modal__body"
+		>
+			for _, item := range items {
+				<div class={ "notice-item notice-item--" + string(item.Type) }>
+					if item.Type == dto.NoticeError {
+						@IconError()
+					}
+					if item.Type == dto.NoticeWarn {
+						@IconWarn()
+					}
+					if item.Type == dto.NoticeInfo {
+						@IconInfo()
+					}
+					<div>
+						if item.Field != "" {
+							<div class="notice-item__field">{ item.Field }</div>
+						}
+						<div class="notice-item__message">{ item.Message }</div>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="notice-modal__footer">
+			<button
+				autofocus
+				class="btn btn-ghost"
+				type="button"
+				x-on:click="$el.closest('dialog').close()"
+			>
+				OK
+			</button>
+		</div>
+	</div>
+}

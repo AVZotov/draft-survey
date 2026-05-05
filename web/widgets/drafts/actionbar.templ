@@ -1,6 +1,7 @@
 package drafts
 
 import (
+	"fmt"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"strconv"
 	"time"
@@ -16,13 +17,25 @@ templ DraftActionBar(survey *types.Survey) {
 			@draftActionButtons(survey)
 		</div>
 		<div class="ab-btns">
-			// <a
-			// 	href={ fmt.Sprintf("/survey/%s/results", survey.ID) }
-			// 	class="btn btn-primary"
-			// >
-			// 	Calculate &amp; View Results
-			// 	<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-			// </a>
+			<a
+				href={ fmt.Sprintf("/survey/%s/results", survey.ID) }
+				class="btn btn-primary"
+			>
+				Calculate &amp; View Results
+				<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+			</a>
+		</div>
+		<div class="ab-btns">
+			<a
+				hx-get={ fmt.Sprintf("/survey/%s/notice-test", survey.ID) }
+				hx-target="#app-toast-content"
+				hx-swap="innerHTML"
+				hx-on::after-request="document.getElementById('app-toast').showModal()"
+				class="btn btn-primary"
+			>
+				TestModalButton
+				<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+			</a>
 		</div>
 	</div>
 }
