@@ -45,7 +45,12 @@ templ Layout(props components.LayoutProps) {
 				<div id="app-modal-content"></div>
 			</dialog>
 			<!-- Universl toast/notification -->
-			<dialog id="app-toast" hx-preserve="true">
+			<dialog
+				id="app-toast"
+				hx-preserve="true"
+				x-data
+				x-on:showToast.window="$el.showModal()"
+			>
 				<div id="app-toast-content"></div>
 			</dialog>
 			for _, js := range props.ExtraJS {

@@ -2,11 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types/dto"
-	_ "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
+	validationDTO "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
@@ -25,12 +26,6 @@ func (h *Handler) results(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
-	// validationDTO := vdto.NewSurveyDTO(survey)
-	// if fieldErrors := h.validator.Validate(validationDTO); fieldErrors != nil {
-	// 	//TODO: Add UI Dialog with errors messages wrapped
-	// 	return c.Status(422).SendString(fieldErrors.Error())
-	// }
 
 	surveyResults := calculation.CalcSurvey(*survey)
 
@@ -55,25 +50,20 @@ func (h *Handler) results(c *fiber.Ctx) error {
 	return tadaptor.Render(c, pages.Results(lp, props))
 }
 
-func (h *Handler) noticeTest(c *fiber.Ctx) error {
-	notices := []dto.NoticeItem{
-		{Type: dto.NoticeError, Field: "Initial Draft — Fwd P", Message: "Required for calculation"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeWarn, Field: "Vessel — Lightship", Message: "Default value will be used"},
-		{Type: dto.NoticeInfo, Message: "Table density 1.025 t/m³ will be used"},
+func (h *Handler) validate(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
 	}
-	return tadaptor.Render(c, components.NoticeModal("Validation Waring", notices))
+
+	vDTO := validationDTO.NewSurveyDTO(survey)
+	if fieldErrors := h.validator.Validate(vDTO); fieldErrors != nil {
+		fmt.Println(fieldErrors)
+		return c.Status(422).SendString(fieldErrors.Error())
+	}
+
+	c.Set("HX-Redirect", fmt.Sprintf("/survey/%s/results", id))
+	return c.SendStatus(204)
 }
