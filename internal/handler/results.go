@@ -60,7 +60,7 @@ func (h *Handler) validate(c *fiber.Ctx) error {
 
 	vDTO := validationDTO.NewSurveyDTO(survey)
 	if fieldErrors := h.validator.Validate(vDTO); fieldErrors != nil {
-		fmt.Println(fieldErrors)
+		//c.Set("HX-Retarget", "#app-toast-content")
 		return c.Status(422).SendString(fieldErrors.Error())
 	}
 

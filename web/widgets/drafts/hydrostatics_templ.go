@@ -680,27 +680,27 @@ func Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftRe
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "\" hx-swap=\"morph\" hx-sync=\"this:replace\"><div class=\"mtc-card\"><div class=\"mtc-hdr\">MTC +0.5 m</div><div class=\"mtc-body\"><div class=\"mtc-cell\"><label>Draft, m</label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "\" hx-swap=\"morph\" hx-sync=\"this:replace\"><div class=\"mtc-card\"><div class=\"mtc-hdr\">MTC +0.5 m</div><div class=\"mtc-body\"><div class=\"mtc-cell\"><label>Draft, m</label> <input x-bind:placeholder=\"mtcDraftP\" type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var44 string
 		templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 106, Col: 87}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 106, Col: 118}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "\" placeholder=\"0.000\" step=\"any\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "\" step=\"any\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var45 string
 		templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(draft.MTCRows[0].Draft))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 106, Col: 172}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 106, Col: 183}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
 		if templ_7745c5c3_Err != nil {
@@ -732,14 +732,14 @@ func Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftRe
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\"></div></div></div><div class=\"mtc-card\"><div class=\"mtc-hdr\">MTC -0.5 m</div><div class=\"mtc-body\"><div class=\"mtc-cell\"><label>Draft, m</label> <input type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "\"></div></div></div><div class=\"mtc-card\"><div class=\"mtc-hdr\">MTC -0.5 m</div><div class=\"mtc-body\"><div class=\"mtc-cell\"><label>Draft, m</label> <input x-bind:placeholder=\"mtcDraftN\" type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var48 string
 		templ_7745c5c3_Var48, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 119, Col: 87}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 119, Col: 118}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var48))
 		if templ_7745c5c3_Err != nil {
@@ -752,7 +752,7 @@ func Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftRe
 		var templ_7745c5c3_Var49 string
 		templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(draft.MTCRows[1].Draft))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 119, Col: 172}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/hydrostatics.templ`, Line: 119, Col: 203}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var49))
 		if templ_7745c5c3_Err != nil {

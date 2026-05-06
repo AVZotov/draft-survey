@@ -37,6 +37,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 					<input
+						x-model="fwdP"
+						x-ref="fwdP"
 						id={ fmt.Sprintf("%d-fp", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) }
@@ -55,6 +57,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 					<input
+						x-model="midP"
+						x-ref="midP"
 						id={ fmt.Sprintf("%d-mp", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) }
@@ -65,11 +69,10 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 					/>
 					<span class="dr-lbl">Mid</span>
 					<input
-						id={ fmt.Sprintf("%d-ap", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.TPCListPort, draftIndex) }
 						value={ format.FloatOrEmpty(draft.TPCListPort) }
 						type="number"
-						placeholder="TPC List P"
+						placeholder="tpc list"
 						step="any"
 					/>
 				</div>
@@ -80,6 +83,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
 					</select>
 					<input
+						x-model="aftP"
+						x-ref="aftP"
 						id={ fmt.Sprintf("%d-ap", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) }
@@ -170,6 +175,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 					<div></div>
 					<span class="dr-lbl">Fwd</span>
 					<input
+						x-model="fwdS"
+						x-ref="fwdS"
 						id={ fmt.Sprintf("%d-fs", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) }
@@ -186,7 +193,6 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 				</div>
 				<div class="dr-row dr-row--stb">
 					<input
-						id={ fmt.Sprintf("%d-ms", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.TPCListStb, draftIndex) }
 						value={ format.FloatOrEmpty(draft.TPCListStarboard) }
 						type="number"
@@ -196,6 +202,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 					/>
 					<span class="dr-lbl">Mid</span>
 					<input
+						x-model="midS"
+						x-ref="midS"
 						id={ fmt.Sprintf("%d-ms", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) }
@@ -214,6 +222,8 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 					<div></div>
 					<span class="dr-lbl">Aft</span>
 					<input
+						x-model="aftS"
+						x-ref="aftS"
 						id={ fmt.Sprintf("%d-as", draftIndex) }
 						name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) }
 						value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) }

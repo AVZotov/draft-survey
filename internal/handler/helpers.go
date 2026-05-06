@@ -527,6 +527,14 @@ func parseMarks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	if err == nil {
 		d.Marks.AftStarboard.Method = types.ReadingMethod(aftStbdMark)
 	}
+	tpcPort, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.TPCListPort, draftIndex))
+	if err == nil {
+		d.TPCListPort = tpcPort
+	}
+	tpcStb, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.TPCListStb, draftIndex))
+	if err == nil {
+		d.TPCListStarboard = tpcStb
+	}
 }
 
 func parsePPKeel(c *fiber.Ctx, d *types.Draft, draftIndex int) {
