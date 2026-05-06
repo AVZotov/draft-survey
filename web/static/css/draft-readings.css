@@ -300,12 +300,12 @@ select.sea-sel:focus {
 
 .readings-area {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 2fr 1fr 2fr;
 }
 
 .col-port,
 .col-stbd {
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-sm);
 }
 
 .col-port {
@@ -332,7 +332,7 @@ select.sea-sel:focus {
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .side-dot {
@@ -351,16 +351,24 @@ select.sea-sel:focus {
 }
 
 /* Draft input row */
-.dr-row {
+.dr-wrap {
   display: grid;
-  grid-template-columns: 44px 1fr 34px;
-  gap: var(--space-xs);
-  align-items: center;
-  margin-bottom: var(--space-md);
+  grid-template-rows: repeat(3, 1fr);
+  gap: var(--space-lg);
 }
 
-.dr-row:last-child {
-  margin-bottom: 0;
+.dr-row {
+  display: grid;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.dr-row--port {
+  grid-template-columns: 34px 1fr auto 1fr;
+}
+
+.dr-row--stb {
+  grid-template-columns: 1fr auto 1fr 34px;
 }
 
 .dr-lbl {

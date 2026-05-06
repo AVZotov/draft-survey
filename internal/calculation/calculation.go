@@ -229,9 +229,31 @@ func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp
 	return round3(50 * math.Pow(trueTrim, 2) * deltaMtc / lbp)
 }
 
+// CalcListCorrection calculates list correction.
+// Automatically selects calculation method based on available data:
+//
+//	V1: when TPCListPort and TPCListStarboard are entered manually by surveyor
+//	V2: when hydrostatic TPC values are equal — uses Summer TPC interpolation
+//	0:  when TPC values differ and no manual TPC list entered
+func CalcListCorrection(marks types.Marks, tpcListPort, tpcListStarboard *float64, hydroRows []types.HydrostaticRow, mmc float64, hydrostatics types.Hydrostatics, v types.VesselData) float64 {
+	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
+		return 0.0
+	}
+
+	if tpcListPort != nil && tpcListStarboard != nil {
+		return calcListCorrectionV1(marks, *tpcListPort, *tpcListStarboard)
+	}
+
+	if len(hydroRows) >= 2 && markVal(hydroRows[0].TPC) == markVal(hydroRows[1].TPC) {
+		return calcListCorrectionV2(marks, mmc, hydrostatics.TPC, v)
+	}
+
+	return 0
+}
+
 // List correcion Calculation based on UNECE 1992 Reference Implementation
 // without if TPC equal use Summer TPC for interpolation
-func CalcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
+func calcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
 	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
 	}
@@ -243,7 +265,7 @@ func CalcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float
 // Used when hydrostatic table TPC values are identical for upper and lower rows
 // (standard interpolation would yield zero correction).
 // UNECE Form C, line 162 — list correction
-func CalcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v types.VesselData) float64 {
+func calcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v types.VesselData) float64 {
 	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
 	}

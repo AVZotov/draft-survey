@@ -161,8 +161,8 @@ func getBeamInitialDraft() types.Draft {
 			{Draft: ptr64(iniMTCMinusDraft), MTC: ptr64(iniMTCMinusValue)},
 		},
 		Density:          ptr64(iniDockwaterDensity),
-		TPCListPort:      0,
-		TPCListStarboard: 0,
+		TPCListPort:      fp(0),
+		TPCListStarboard: fp(0),
 		Deductibles: types.Deductibles{
 			HFO:    ptr64(iniHFO),
 			MDO:    ptr64(iniMDO),

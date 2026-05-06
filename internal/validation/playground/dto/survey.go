@@ -16,8 +16,8 @@ type Draft struct {
 	Density          *float64         `validate:"gte=1.000"`
 	MTCRows          []MTCRow         `validate:"len=2,dive"`
 	HydrostaticRows  []HydrostaticRow `validate:"len=2,dive"`
-	TPCListPort      float64          `validate:"required"`
-	TPCListStarboard float64          `validate:"required"`
+	TPCListPort      *float64         `validate:"required"`
+	TPCListStarboard *float64         `validate:"required"`
 	DistancePPFwd    *float64         `validate:"required"`
 	PPFwdDirection   string           `validate:"oneof=A F"`
 	DistancePPMid    *float64         `validate:"required"`
