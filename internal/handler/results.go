@@ -60,8 +60,12 @@ func (h *Handler) validate(c *fiber.Ctx) error {
 
 	vDTO := validationDTO.NewSurveyDTO(survey)
 	if fieldErrors := h.validator.Validate(vDTO); fieldErrors != nil {
-		//c.Set("HX-Retarget", "#app-toast-content")
-		return c.Status(422).SendString(fieldErrors.Error())
+		c.Set("HX-Retarget", "#app-toast-content")
+		c.Set("HX-Reswap", "innerHTML")
+		c.Set("HX-Trigger", "showtoast")
+		return tadaptor.Render(
+			c, components.NoticeModal(
+				"Test Header", mapValidationErrors(fieldErrors)))
 	}
 
 	c.Set("HX-Redirect", fmt.Sprintf("/survey/%s/results", id))
