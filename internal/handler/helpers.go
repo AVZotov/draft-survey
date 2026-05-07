@@ -13,6 +13,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/internal/types/dto"
+	"github.com/AVZotov/draft-survey/internal/validation"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/gofiber/fiber/v2"
 )
@@ -527,6 +528,14 @@ func parseMarks(c *fiber.Ctx, d *types.Draft, draftIndex int) {
 	if err == nil {
 		d.Marks.AftStarboard.Method = types.ReadingMethod(aftStbdMark)
 	}
+	tpcPort, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.TPCListPort, draftIndex))
+	if err == nil {
+		d.TPCListPort = tpcPort
+	}
+	tpcStb, err := parseFloat(c, fmt.Sprintf("%s-%d", constants.TPCListStb, draftIndex))
+	if err == nil {
+		d.TPCListStarboard = tpcStb
+	}
 }
 
 func parsePPKeel(c *fiber.Ctx, d *types.Draft, draftIndex int) {
@@ -950,4 +959,17 @@ func getSurveyDTO(s *types.Survey) dto.SurveyDTO {
 	}
 
 	return surveyDTO
+}
+
+func mapValidationErrors(errs validation.FieldErrors) []dto.NoticeItem {
+	items := make([]dto.NoticeItem, len(errs))
+	for i, fe := range errs {
+		items[i] = dto.NoticeItem{
+			Type:    dto.NoticeError,
+			Field:   fe.Field,
+			Message: fe.Message,
+		}
+	}
+
+	return items
 }

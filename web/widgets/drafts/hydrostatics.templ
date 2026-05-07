@@ -103,7 +103,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
+						<input x-bind:placeholder="mtcDraftP" type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>
@@ -116,7 +116,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
+						<input x-bind:placeholder="mtcDraftN" type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>

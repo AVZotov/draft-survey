@@ -18,6 +18,8 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
         templ.KV("draft-block--mid", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate),
         templ.KV("draft-block--pending", dp.Survey.Drafts[draftIndex].Status == types.DraftStatusPending),
     ) }
+		x-data="draftPage()"
+		x-on:calc-updated="mmc = +$el.querySelector('.cp-cell--mmc .cp-val').textContent || 0"
 	>
 		<div class="block-header">
 			<div class="block-label">

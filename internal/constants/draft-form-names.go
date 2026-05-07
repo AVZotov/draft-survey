@@ -14,6 +14,8 @@ const (
 	MidStbdMarkRead = "mid_stbd_mr"
 	AftStbd         = "aft_stbd"
 	AftStbdMarkRead = "aft_stbd_mr"
+	TPCListPort     = "tpc_list_port"
+	TPCListStb      = "tpc_list_stb"
 
 	// PP distances
 	DFwd    = "dFwd"

@@ -89,8 +89,8 @@ type Draft struct {
 	Density           *float64         `json:"density"`
 	MTCRows           []MTCRow         `json:"mtc_rows"`
 	HydrostaticRows   []HydrostaticRow `json:"hydrostatic_rows"`
-	TPCListPort       float64          `json:"tpc_list_port"`
-	TPCListStarboard  float64          `json:"tpc_list_starboard"`
+	TPCListPort       *float64         `json:"tpc_list_port"`
+	TPCListStarboard  *float64         `json:"tpc_list_starboard"`
 	DistancePPFwd     *float64         `json:"distance_pp_fwd"`
 	PPFwdDirection    string           `json:"pp_fwd_direction"`
 	DistancePPMid     *float64         `json:"distance_pp_mid"`

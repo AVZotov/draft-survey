@@ -1,6 +1,6 @@
 // ================================================================
 // draft-readings.js
-// Only vessel indicator — all calculations are server-side
+// Only vessel indicators and helpers
 // ================================================================
 
 const CX = 80, CY = 118, LINE_R = 42;
@@ -84,3 +84,45 @@ function initVessels() {
 
 document.addEventListener('DOMContentLoaded', initVessels);
 document.addEventListener('htmx:afterSwap', initVessels);
+
+function draftPage() {
+    return {
+        fwdP: 0, midP: 0, aftP: 0,
+        fwdS: 0, midS: 0, aftS: 0,
+        mmc: 0, mtcDraftP: 0,
+        mtcDraftN: 0,
+
+        init() {
+            this.fwdP = +this.$refs.fwdP.value || 0
+            this.midP = +this.$refs.midP.value || 0
+            this.aftP = +this.$refs.aftP.value || 0
+            this.fwdS = +this.$refs.fwdS.value || 0
+            this.midS = +this.$refs.midS.value || 0
+            this.aftS = +this.$refs.aftS.value || 0
+            this.mmc = +this.$el.querySelector('.cp-cell--mmc .cp-val').textContent || 0
+            this.updtMTCDraft()
+        },
+
+        get allFilled() {
+            return this.fwdP > 0 && this.midP > 0 && this.aftP > 0 &&
+                this.fwdS > 0 && this.midS > 0 && this.aftS > 0
+        },
+
+        updtMTCDraft() {
+            if (this.allFilled && this.mmc > 0) {
+                this.mtcDraftN = (this.mmc - 0.5)
+                this.mtcDraftP = (this.mmc + 0.5)
+            }
+        }
+    }
+}
+
+document.addEventListener('htmx:oobAfterSwap', function (event) {
+    const target = event.detail.target
+    if (target.classList.contains('calc-panel')) {
+        const block = target.closest('.draft-block')
+        if (block) {
+            block.dispatchEvent(new CustomEvent('calc-updated'))
+        }
+    }
+})
