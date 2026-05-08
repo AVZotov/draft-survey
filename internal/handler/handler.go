@@ -10,6 +10,7 @@ type Handler struct {
 	surveyRepository       storage.SurveyRepository
 	dictionariesRepository storage.DictionariesRepository
 	validator              validation.Validator
+	appVersion             string
 }
 
 func New(
@@ -17,11 +18,13 @@ func New(
 	surveyRepository storage.SurveyRepository,
 	dictionariesRepository storage.DictionariesRepository,
 	validator validation.Validator,
+	version string,
 ) *Handler {
 	return &Handler{
 		userRepository:         userRepository,
 		surveyRepository:       surveyRepository,
 		dictionariesRepository: dictionariesRepository,
 		validator:              validator,
+		appVersion:             version,
 	}
 }

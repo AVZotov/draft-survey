@@ -27,7 +27,8 @@ func main() {
 
 	validator := validation.New()
 
-	h := handler.New(userStore, surveyStore, dictionariesStore, validator)
+	var version = "dev"
+	h := handler.New(userStore, surveyStore, dictionariesStore, validator, version)
 
 	handler.SetupRoutes(app, h)
 
