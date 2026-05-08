@@ -98,41 +98,14 @@ func (h *Handler) finishDraft(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
-func (h *Handler) addIntermediateDraft(c *fiber.Ctx) error {
+func (h *Handler) add(c *fiber.Ctx) error {
 	id := c.Params("id")
 	survey, err := h.surveyRepository.Get(id)
 	if err != nil {
 		return err
 	}
 
-	survey.Drafts = append(survey.Drafts, types.Draft{
-		Type:            types.DraftTypeIntermediate,
-		Status:          types.DraftStatusPending,
-		MTCRows:         make([]types.MTCRow, 2),
-		HydrostaticRows: make([]types.HydrostaticRow, 2),
-	})
-
-	if err = h.surveyRepository.Save(survey); err != nil {
-		return err
-	}
-
-	c.Set("HX-Redirect", "/survey/"+id+"/draft")
-	return c.SendStatus(http.StatusOK)
-}
-
-func (h *Handler) addFinalDraft(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return err
-	}
-
-	survey.Drafts = append(survey.Drafts, types.Draft{
-		Type:            types.DraftTypeFinal,
-		Status:          types.DraftStatusPending,
-		MTCRows:         make([]types.MTCRow, 2),
-		HydrostaticRows: make([]types.HydrostaticRow, 2),
-	})
+	addDraft(survey)
 
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
@@ -158,4 +131,19 @@ func (h *Handler) updateDraft(c *fiber.Ctx) error {
 
 	c.Status(http.StatusOK)
 	return h.calculate(p.survey, c, nil)
+}
+
+func addDraft(s *types.Survey) {
+	s.Drafts = append(s.Drafts, types.Draft{
+		Type:            types.DraftTypeFinal,
+		Status:          types.DraftStatusPending,
+		MTCRows:         make([]types.MTCRow, 2),
+		HydrostaticRows: make([]types.HydrostaticRow, 2),
+	})
+
+	if len(s.Drafts) == 2 {
+		return
+	}
+
+	s.Drafts[len(s.Drafts)-2].Type = types.DraftTypeIntermediate
 }
