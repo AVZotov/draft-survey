@@ -92,7 +92,7 @@ templ draftActionButtons(survey *types.Survey) {
 		case "finish":
 			@buttonEndDraft(survey.ID, len(survey.Drafts)-1)
 		case "add":
-			@buttonAddIntermediate(survey.ID)
+			//@buttonAddIntermediate(survey.ID)
 			@buttonAddFinal(survey.ID)
 	}
 }
