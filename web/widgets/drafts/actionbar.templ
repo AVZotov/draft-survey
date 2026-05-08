@@ -52,24 +52,13 @@ templ buttonEndDraft(surveyID string, index int) {
 	</button>
 }
 
-templ buttonAddIntermediate(surveyID string) {
-	<button
-		class="btn btn-secondary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft/add-intermediate" }
-		hx-swap="none"
-	>
-		+ Add Intermediate
-		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-	</button>
-}
-
-templ buttonAddFinal(surveyID string) {
+templ buttonAddDraft(surveyID string) {
 	<button
 		class="btn btn-primary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft/add-final" }
+		hx-post={ "/api/v1/survey/" + surveyID + "/draft/add" }
 		hx-swap="none"
 	>
-		+ Add Final
+		+ Add Draft
 		<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
 	</button>
 }
@@ -82,6 +71,7 @@ func nextDraftAction(survey *types.Survey) string {
 	if survey.Drafts[len(survey.Drafts)-1].Status == types.DraftStatusActive {
 		return "finish"
 	}
+
 	return "add"
 }
 
@@ -92,7 +82,6 @@ templ draftActionButtons(survey *types.Survey) {
 		case "finish":
 			@buttonEndDraft(survey.ID, len(survey.Drafts)-1)
 		case "add":
-			//@buttonAddIntermediate(survey.ID)
-			@buttonAddFinal(survey.ID)
+			@buttonAddDraft(survey.ID)
 	}
 }
