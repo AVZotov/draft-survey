@@ -9,6 +9,6 @@ templ SurveyList(lp components.LayoutProps, slp components.SurveyListProps) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
 		@surveylist.Form(lp, slp)
-		@widgets.Footer()
+		@widgets.Footer(lp.AppVersion)
 	}
 }

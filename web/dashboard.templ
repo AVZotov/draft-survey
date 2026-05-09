@@ -4,10 +4,10 @@ import "github.com/AVZotov/draft-survey/web/layouts"
 import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/components"
 
-templ Dashboard(props components.LayoutProps) {
-	@layouts.Layout(props) {
-		@widgets.HeaderUser(props.User)
-		@widgets.DashboardForm(props.User)
-		@widgets.Footer()
+templ Dashboard(lp components.LayoutProps) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
+		@widgets.DashboardForm(lp.User)
+		@widgets.Footer(lp.AppVersion)
 	}
 }

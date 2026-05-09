@@ -45,7 +45,7 @@ func (h *Handler) results(c *fiber.Ctx) error {
 		Lastindex: len(surveyResults.DraftTotals) - 1,
 	}
 
-	lp := web.ResultsLayoutProps(user)
+	lp := web.ResultsLayoutProps(user, h.appVersion)
 
 	return tadaptor.Render(c, pages.Results(lp, props))
 }

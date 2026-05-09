@@ -13,6 +13,7 @@ type LayoutProps struct {
 	Results         *[]types.DraftResult
 	ExtraCSS        []string
 	ExtraJS         []string
+	AppVersion      string
 }
 type TanksPageProps struct {
 	Survey     types.Survey

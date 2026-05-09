@@ -26,7 +26,7 @@ func (h *Handler) surveys(c *fiber.Ctx) error {
 		return b.CreatedAt.Compare(a.CreatedAt)
 	})
 	props := getSurveyStats(surveys)
-	lp := web.SurveyListLayoutProps(user)
+	lp := web.SurveyListLayoutProps(user, h.appVersion)
 
 	return tadaptor.Render(c, pages.SurveyList(lp, props))
 }

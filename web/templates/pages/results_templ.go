@@ -13,7 +13,7 @@ import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/web/widgets/results"
 
-func Results(props components.LayoutProps, rp components.ResultProps) templ.Component {
+func Results(lp components.LayoutProps, rp components.ResultProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -46,7 +46,7 @@ func Results(props components.LayoutProps, rp components.ResultProps) templ.Comp
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = widgets.HeaderUser(props.User).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = widgets.HeaderUser(lp.User).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -62,13 +62,13 @@ func Results(props components.LayoutProps, rp components.ResultProps) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = widgets.Footer().Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = widgets.Footer(lp.AppVersion).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.Layout(props).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.Layout(lp).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

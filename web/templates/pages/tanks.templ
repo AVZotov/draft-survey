@@ -8,11 +8,11 @@ import (
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 )
 
-templ Tanks(props components.LayoutProps, tanksProps components.TanksPageProps, results types.DraftResult) {
-	@layouts.Layout(props) {
-		@widgets.HeaderUser(props.User)
-		@tanks.Form(props, tanksProps)
+templ Tanks(lp components.LayoutProps, tanksProps components.TanksPageProps, results types.DraftResult) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
+		@tanks.Form(lp, tanksProps)
 		@tanks.TanksActionBar(tanksProps, results)
-		@widgets.Footer()
+		@widgets.Footer(lp.AppVersion)
 	}
 }

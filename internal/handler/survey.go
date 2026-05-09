@@ -30,7 +30,7 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 		return err
 	}
 
-	slp := web.SurveyLayoutProps(user)
+	slp := web.SurveyLayoutProps(user, h.appVersion)
 
 	countries, err := h.dictionariesRepository.GetCountries()
 	if err != nil {
@@ -71,7 +71,7 @@ func (h *Handler) getSurvey(c *fiber.Ctx) error {
 		return err
 	}
 
-	slp := web.SurveyLayoutProps(user)
+	slp := web.SurveyLayoutProps(user, h.appVersion)
 	countries, err := h.dictionariesRepository.GetCountries()
 	if err != nil {
 		return err
