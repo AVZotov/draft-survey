@@ -13,6 +13,6 @@ templ DraftReadings(lp components.LayoutProps, dp components.DraftPageProps, sr 
 		@widgets.HeaderUser(lp.User)
 		@drafts.DraftForm(dp, sr)
 		@drafts.DraftActionBar(&dp.Survey)
-		@widgets.Footer()
+		@widgets.Footer(lp.AppVersion)
 	}
 }

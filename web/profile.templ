@@ -8,7 +8,7 @@ templ Profile(bannerProps components.BannerProps) {
 	@layouts.Layout(ProfilePageProps) {
 		@widgets.Header()
 		@widgets.ProfileForm()
-		@widgets.Footer()
+		@widgets.Footer("")
 		if bannerProps.Header != "" {
 			@widgets.AutoShowBanner(bannerProps)
 		}

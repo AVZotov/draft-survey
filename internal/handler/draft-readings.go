@@ -38,7 +38,7 @@ func (h *Handler) draft(c *fiber.Ctx) error {
 		return err
 	}
 
-	layoutProps := web.DraftLayoutProps(p.user)
+	layoutProps := web.DraftLayoutProps(p.user, h.appVersion)
 	pageProps := web.DraftsPageProps(*p.survey)
 
 	sr := calculation.CalcSurvey(*p.survey)

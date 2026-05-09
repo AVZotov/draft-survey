@@ -5,10 +5,10 @@ import "github.com/AVZotov/draft-survey/web/widgets"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/web/widgets/results"
 
-templ Results(props components.LayoutProps, rp components.ResultProps) {
-	@layouts.Layout(props) {
-		@widgets.HeaderUser(props.User)
+templ Results(lp components.LayoutProps, rp components.ResultProps) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
 		@results.Form(rp)
-		@widgets.Footer()
+		@widgets.Footer(lp.AppVersion)
 	}
 }

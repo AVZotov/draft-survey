@@ -27,7 +27,7 @@ func (h *Handler) tanks(c *fiber.Ctx) error {
 		return err
 	}
 	results := calculation.CalcDraft(p.survey.Drafts[p.draftIndex], p.survey.VesselData)
-	tanksLayoutProps := web.TanksLayoutProps(p.user)
+	tanksLayoutProps := web.TanksLayoutProps(p.user, h.appVersion)
 	tanksProps := web.TanksPageProps(*p.survey, p.draftIndex, p.trim, p.list, p.trimDir, p.listDir)
 
 	return tadaptor.Render(c, pages.Tanks(tanksLayoutProps, tanksProps, results))

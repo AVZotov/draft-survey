@@ -10,6 +10,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var version = "dev"
+
 func main() {
 	app := fiber.New()
 
@@ -27,7 +29,6 @@ func main() {
 
 	validator := validation.New()
 
-	var version = "dev"
 	h := handler.New(userStore, surveyStore, dictionariesStore, validator, version)
 
 	handler.SetupRoutes(app, h)
