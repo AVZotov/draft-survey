@@ -55,7 +55,7 @@ templ buttonEndDraft(surveyID string, index int) {
 templ buttonAddDraft(surveyID string) {
 	<button
 		class="btn btn-primary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft/add" }
+		hx-post={ "/api/v1/survey/" + surveyID + "/draft" }
 		hx-swap="none"
 	>
 		+ Add Draft
