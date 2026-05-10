@@ -551,6 +551,14 @@ textarea {
   background: #B91C1C;
 }
 
+.btn-danger:disabled {
+  background: var(--danger-light);
+  color: var(--danger-accent);
+  border: 1px solid var(--danger-border);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .btn-pdf {
   background: var(--info-accent);
   color: #fff;
