@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"slices"
 	"strconv"
 	"time"
 
@@ -105,7 +106,14 @@ func (h *Handler) add(c *fiber.Ctx) error {
 		return err
 	}
 
-	addDraft(survey)
+	survey.Drafts = append(survey.Drafts, types.Draft{
+		Type:            types.DraftTypeFinal,
+		Status:          types.DraftStatusPending,
+		MTCRows:         make([]types.MTCRow, 2),
+		HydrostaticRows: make([]types.HydrostaticRow, 2),
+	})
+
+	updateDraftType(survey)
 
 	if err = h.surveyRepository.Save(survey); err != nil {
 		return err
@@ -133,17 +141,24 @@ func (h *Handler) updateDraft(c *fiber.Ctx) error {
 	return h.calculate(p.survey, c, nil)
 }
 
-func addDraft(s *types.Survey) {
-	s.Drafts = append(s.Drafts, types.Draft{
-		Type:            types.DraftTypeFinal,
-		Status:          types.DraftStatusPending,
-		MTCRows:         make([]types.MTCRow, 2),
-		HydrostaticRows: make([]types.HydrostaticRow, 2),
-	})
-
-	if len(s.Drafts) == 2 {
-		return
+func (h *Handler) delete(c *fiber.Ctx) error {
+	id := c.Params("id")
+	survey, err := h.surveyRepository.Get(id)
+	if err != nil {
+		return err
 	}
 
-	s.Drafts[len(s.Drafts)-2].Type = types.DraftTypeIntermediate
+	if len(survey.Drafts) > 2 {
+		drafts := survey.Drafts
+		survey.Drafts = slices.Delete(drafts, len(drafts)-1, len(drafts))
+	}
+
+	updateDraftType(survey)
+
+	if err = h.surveyRepository.Save(survey); err != nil {
+		return err
+	}
+
+	c.Set("HX-Redirect", "/survey/"+id+"/draft")
+	return c.SendStatus(http.StatusNoContent)
 }

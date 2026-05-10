@@ -973,3 +973,22 @@ func mapValidationErrors(errs validation.FieldErrors) []dto.NoticeItem {
 
 	return items
 }
+
+func updateDraftType(s *types.Survey) {
+	if len(s.Drafts) == 1 {
+		return
+	}
+
+	if len(s.Drafts) == 2 {
+		s.Drafts[1].Type = types.DraftTypeFinal
+		return
+	}
+
+	for i := len(s.Drafts) - 1; i > 0; i-- {
+		if i == len(s.Drafts)-1 {
+			s.Drafts[i].Type = types.DraftTypeFinal
+			continue
+		}
+		s.Drafts[i].Type = types.DraftTypeIntermediate
+	}
+}
