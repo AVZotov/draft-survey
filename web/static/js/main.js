@@ -1,3 +1,73 @@
+document.addEventListener('alpine:init', () => {
+    Alpine.store('toast', {
+        header: '',
+        message: '',
+        visible: false,
+
+        show(header, message) {
+            this.header = header;
+            this.message = message;
+            this.visible = true;
+            setTimeout(() => {
+                this.header = '';
+                this.message = '';
+                this.visible = false
+            }, 2000)
+        }
+    })
+
+    Alpine.store('alert', {
+        header: '',
+        message: '',
+        visible: false,
+
+        show(header, message) {
+            this.header = header;
+            this.message = message;
+            this.visible = true;
+        },
+
+        ok() {
+            this.visible = false;
+            this.header = '';
+            this.message = '';
+        }
+    })
+
+    Alpine.store('confirm', {
+        header: '',
+        message: '',
+        visible: false,
+        onConfirm: null,
+
+        show(header, message, callback) {
+            this.header = header;
+            this.message = message;
+            this.visible = true;
+            this.onConfirm = callback;
+        },
+
+        ok() {
+            if (this.onConfirm) {
+                this.onConfirm()
+            }
+            this.reset()
+        },
+
+        cancel() {
+            this.reset()
+        },
+
+        reset() {
+            this.header = '';
+            this.message = '';
+            this.visible = false;
+            this.onConfirm = null;
+        }
+    })
+})
+
+
 document.addEventListener('wheel', function () {
     if (document.activeElement.type === 'number') {
         document.activeElement.blur();
