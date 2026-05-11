@@ -55,7 +55,12 @@ templ DashboardForm(user *types.User) {
 					</div>
 				</a>
 				<!-- Settings -->
-				<a href="#" class="action-card">
+				<a
+					x-data
+					x-on:click="$store.toast.show('Settings', 'To be implemented in next release')"
+					href="#"
+					class="action-card"
+				>
 					<div class="action-card-icon">
 						<svg viewBox="0 0 24 24">
 							<circle cx="12" cy="12" r="3"></circle>
