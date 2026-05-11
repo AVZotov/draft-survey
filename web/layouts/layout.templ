@@ -41,6 +41,9 @@ templ Layout(props components.LayoutProps) {
 			</dialog>
 			<!-- Universl toast/notification -->
 			@components.Toast()
+			<dialog id="app-confirm" x-data>
+				@components.ConfirmModal()
+			</dialog>
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}

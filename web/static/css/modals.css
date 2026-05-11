@@ -190,3 +190,79 @@
   border-color: var(--info-border);
   color: var(--info-accent);
 }
+
+/* ── Confirm Modal ───────────────────────────────────────────── */
+#app-confirm {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  width: 360px;
+  height: fit-content;
+  min-height: unset;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+#app-confirm::backdrop {
+  background: rgba(15, 23, 32, 0.5);
+  backdrop-filter: blur(1px);
+}
+
+.confirm-modal {
+  background: var(--surface);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.confirm-modal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.confirm-modal__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--danger-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--danger-accent);
+}
+
+.confirm-modal__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.confirm-modal__title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.confirm-modal__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.confirm-modal__body {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.confirm-modal__message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.confirm-modal__footer {
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}

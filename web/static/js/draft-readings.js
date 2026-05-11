@@ -126,3 +126,11 @@ document.addEventListener('htmx:oobAfterSwap', function (event) {
         }
     }
 })
+
+function confirmdelete(id) {
+    Alpine.store('confirm').show(
+        'Delete Draft',
+        'Are you sure you want to delete the last draft?',
+        () => htmx.ajax('DELETE', '/api/v1/survey/' + id + '/draft', { swap: 'none' })
+    )
+}

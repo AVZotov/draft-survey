@@ -41,11 +41,12 @@ document.addEventListener('alpine:init', () => {
         onConfirm: null,
 
         show(header, message, callback) {
-            this.header = header;
-            this.message = message;
-            this.visible = true;
-            this.onConfirm = callback;
+            this.header = header
+            this.message = message
+            this.onConfirm = callback
+            document.getElementById('app-confirm').showModal()
         },
+
 
         ok() {
             if (this.onConfirm) {
@@ -59,10 +60,11 @@ document.addEventListener('alpine:init', () => {
         },
 
         reset() {
-            this.header = '';
-            this.message = '';
-            this.visible = false;
-            this.onConfirm = null;
+            this.header = ''
+            this.message = ''
+            this.visible = false
+            this.onConfirm = null
+            document.getElementById('app-confirm').close()
         }
     })
 })

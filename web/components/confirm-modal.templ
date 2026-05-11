@@ -1,0 +1,35 @@
+package components
+
+templ ConfirmModal() {
+	<div class="confirm-modal" x-data>
+		<div class="confirm-modal__header">
+			<div class="confirm-modal__icon">
+				@IconTrash(16)
+			</div>
+			<div class="confirm-modal__titles">
+				<span class="confirm-modal__title" x-text="$store.confirm.header"></span>
+				<span class="confirm-modal__subtitle">This action cannot be undone</span>
+			</div>
+		</div>
+		<div class="confirm-modal__body">
+			<p class="confirm-modal__message" x-text="$store.confirm.message"></p>
+		</div>
+		<div class="confirm-modal__footer">
+			<button
+				class="btn btn-ghost"
+				type="button"
+				x-on:click="$store.confirm.cancel()"
+			>
+				Cancel
+			</button>
+			<button
+				class="btn btn-danger"
+				type="button"
+				x-on:click="$store.confirm.ok()"
+			>
+				@IconTrash(14)
+				Delete
+			</button>
+		</div>
+	</div>
+}

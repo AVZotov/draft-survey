@@ -64,7 +64,7 @@ func (h *Handler) validate(c *fiber.Ctx) error {
 		c.Set("HX-Reswap", "innerHTML")
 		c.Set("HX-Trigger", "showtoast")
 		return tadaptor.Render(
-			c, components.NoticeModal(
+			c, components.ValidateModal(
 				"Test Header", mapValidationErrors(fieldErrors)))
 	}
 
