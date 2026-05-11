@@ -1,9 +1,6 @@
 package layouts
 
-import (
-	"github.com/AVZotov/draft-survey/web/components"
-	"github.com/AVZotov/draft-survey/web/widgets"
-)
+import "github.com/AVZotov/draft-survey/web/components"
 
 templ Layout(props components.LayoutProps) {
 	<!DOCTYPE html>
@@ -13,7 +10,6 @@ templ Layout(props components.LayoutProps) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link rel="stylesheet" href="/static/css/fonts.css"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
-			<link rel="stylesheet" href="/static/css/banner.css"/>
 			<!--Modals CSS section -->
 			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
 			for _, css := range props.ExtraCSS {
@@ -29,9 +25,6 @@ templ Layout(props components.LayoutProps) {
 		<body
 			hx-ext="morph"
 		>
-			@widgets.Banner()
-			{ children... }
-			<!-- Universl modal dialog -->
 			<dialog
 				id="app-modal"
 				hx-preserve="true"
