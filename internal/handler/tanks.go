@@ -12,7 +12,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
-	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks/corrections"
@@ -66,7 +65,7 @@ func (h *Handler) newTank(c *fiber.Ctx) error {
 	}
 
 	return tadaptor.Render(c, templ.Join(
-		components.TankItem(p.survey.ID, p.draftIndex, wt, false),
+		tanks.TankItem(p.survey.ID, p.draftIndex, wt, false),
 		tanks.AddRowForm(p.survey.ID, p.draftIndex, true)))
 }
 
@@ -128,7 +127,7 @@ func (h *Handler) updateTank(c *fiber.Ctx) error {
 	c.Locals(constants.HXDraftIndex, strconv.Itoa(p.draftIndex))
 
 	return h.calculate(p.survey, c,
-		components.TankItem(p.survey.ID, p.draftIndex, tank, false))
+		tanks.TankItem(p.survey.ID, p.draftIndex, tank, false))
 }
 
 func (h *Handler) tanksCorrections(c *fiber.Ctx) error {
@@ -174,7 +173,7 @@ func (h *Handler) updateTanks(c *fiber.Ctx) error {
 		if p.survey.Drafts[p.draftIndex].BallastWaterTanks[i].Density == nil {
 			p.survey.Drafts[p.draftIndex].BallastWaterTanks[i].Density = density
 			extraComponents =
-				append(extraComponents, components.TankItem(p.surveyID, p.draftIndex, p.survey.Drafts[p.draftIndex].BallastWaterTanks[i], true))
+				append(extraComponents, tanks.TankItem(p.surveyID, p.draftIndex, p.survey.Drafts[p.draftIndex].BallastWaterTanks[i], true))
 		}
 	}
 

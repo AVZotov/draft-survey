@@ -82,3 +82,12 @@ document.addEventListener('htmx:afterSwap', function (event) {
         Alpine.initTree(event.detail.target)
     }
 })
+
+document.addEventListener('alpine:initialized', () => {
+    const rawToast = sessionStorage.getItem('toast')
+    if (rawToast) {
+        const { header, message } = JSON.parse(rawToast)
+        sessionStorage.removeItem('toast')
+        Alpine.store('toast').show(header, message)
+    }
+})

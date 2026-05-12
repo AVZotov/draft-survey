@@ -21,7 +21,7 @@ templ DraftActionBar(survey *types.Survey) {
 			<button
 				class="btn btn-danger"
 				disabled?={ len(survey.Drafts) <= 2 }
-				x-on:click={ fmt.Sprintf("confirmdelete('%s')", survey.ID) }
+				x-on:click={ fmt.Sprintf("confirmdeldraft('%s')", survey.ID) }
 			>
 				@components.IconTrash()
 				Del last Draft
