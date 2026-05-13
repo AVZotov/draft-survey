@@ -11,6 +11,7 @@ func TanksLayoutProps(user *types.User, version string) components.LayoutProps {
 		MetaDescription: "Vessel tanks reading",
 		User:            user,
 		ExtraCSS:        []string{"/static/css/tanks.css"},
+		ExtraJS:         []string{"/static/js/tanks.js"},
 		AppVersion:      version,
 	}
 }

@@ -104,7 +104,7 @@ func DraftActionBar(survey *types.Survey) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("confirmdeldraft('%s')", survey.ID))
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("delDraftConfirm('%s')", survey.ID))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/actionbar.templ`, Line: 24, Col: 64}
 		}

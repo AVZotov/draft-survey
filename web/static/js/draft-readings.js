@@ -127,7 +127,7 @@ document.addEventListener('htmx:oobAfterSwap', function (event) {
     }
 })
 
-function confirmdeldraft(id) {
+function delDraftConfirm(id) {
     Alpine.store('confirm').show(
         'Delete Draft',
         'Are you sure you want to delete the last draft?',
