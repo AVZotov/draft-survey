@@ -1,9 +1,11 @@
-package widgets
+package profile
 
 templ ProfileForm() {
-	<form   method="post"
-	        hx-post="/api/v1/profile"
-	        hx-encoding="multipart/form-data">
+	<form
+		method="post"
+		hx-post="/api/v1/profile"
+		hx-encoding="multipart/form-data"
+	>
 		<div class="page-main">
 			<div class="setup-card">
 				<div class="setup-intro">

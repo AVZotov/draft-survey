@@ -1,0 +1,23 @@
+package components
+
+templ Toast() {
+	<div
+		id="app-toast"
+		x-data
+		x-show="$store.toast.visible"
+		x-cloak
+		x-transition.scale.80.origin.right
+	>
+		<div class="toast-content">
+			<div class="toast-header" x-text="$store.toast.header"></div>
+			<div class="toast-message" x-text="$store.toast.message"></div>
+		</div>
+		<button
+			class="toast-close"
+			type="button"
+			x-on:click="$store.toast.visible = false"
+		>
+			@IconClose()
+		</button>
+	</div>
+}

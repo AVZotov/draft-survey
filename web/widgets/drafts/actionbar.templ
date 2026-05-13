@@ -9,17 +9,19 @@ import (
 )
 
 templ DraftActionBar(survey *types.Survey) {
-	<div class="action-bar">
+	<div
+		x-data
+		class="action-bar"
+	>
 		<div class="ab-info">
 			<span class="ab-vessel">{ survey.VesselData.Name }</span>
 			<span class="ab-meta">IMO { survey.VesselData.IMO } · Loading · { survey.Country.Name } · { time.Now().Format("Mon, 02 Jan 2006") } </span>
 		</div>
 		<div class="ab-btns">
 			<button
-				hx-delete={ fmt.Sprintf("/api/v1/survey/%s/draft", survey.ID) }
-				hx-swap="none"
 				class="btn btn-danger"
 				disabled?={ len(survey.Drafts) <= 2 }
+				x-on:click={ fmt.Sprintf("delDraftConfirm('%s')", survey.ID) }
 			>
 				@components.IconTrash()
 				Del last Draft

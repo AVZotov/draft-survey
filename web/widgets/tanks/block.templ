@@ -32,11 +32,11 @@ templ Block(tp components.TanksPageProps, isBWBlock bool) {
 			>
 				if isBWBlock {
 					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
-						@components.TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
+						@TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
 					}
 				} else {
 					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks {
-						@components.TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
+						@TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
 					}
 				}
 			</tbody>

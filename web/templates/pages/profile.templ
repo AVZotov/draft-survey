@@ -1,0 +1,20 @@
+package pages
+
+import (
+	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/layouts"
+	"github.com/AVZotov/draft-survey/web/widgets"
+	"github.com/AVZotov/draft-survey/web/widgets/profile"
+)
+
+templ Profile(lp components.LayoutProps) {
+	@layouts.Layout(lp) {
+		if lp.User == nil {
+			@widgets.Header()
+		} else {
+			@widgets.HeaderUser(lp.User)
+		}
+		@profile.ProfileForm()
+		@widgets.Footer(lp.AppVersion)
+	}
+}
