@@ -82,36 +82,30 @@ func ResultsLayoutProps(user *types.User, version string) components.LayoutProps
 	}
 }
 
-// All below props in todo to split layout and needed props
-
-func DashboardProps(user *types.User, survey *types.Survey) components.LayoutProps {
+func DashboardLayoutProps(user *types.User, version string) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Dashboard",
 		MetaDescription: "Main page of Draft Survey application",
 		ExtraCSS:        []string{"/static/css/dashboard.css"},
 		User:            user,
-		Survey:          survey,
+		AppVersion:      version,
 	}
 }
 
-func ResultsPageProps(user *types.User, survey *types.Survey, results *[]types.DraftResult) components.LayoutProps {
+func ProfileLayoutProps(user *types.User, version string) components.LayoutProps {
 	return components.LayoutProps{
-		Title:           "Results",
-		MetaDescription: "Final findings assessment",
-		ExtraCSS:        []string{"/static/css/results.css"},
-		ExtraJS:         []string{"/static/js/results.js"},
+		Title:           "Surveyor Profile",
+		MetaDescription: "Surveyor profile setup page",
 		User:            user,
-		Survey:          survey,
+		AppVersion:      version,
 	}
 }
 
-var ProfilePageProps = components.LayoutProps{
-	Title:           "Surveyor Profile",
-	MetaDescription: "Set up your surveyor profile",
-}
-
-var BannerFileCorrupted = components.BannerProps{
-	Type:    components.Warn,
-	Header:  "Profile File Corrupted",
-	Message: "Your profile file could not be read. Please fill in your details again.",
+func SettingsLayoutProps(user *types.User, version string) components.LayoutProps {
+	return components.LayoutProps{
+		Title:           "Application Settings",
+		MetaDescription: "app settings setup page",
+		User:            user,
+		AppVersion:      version,
+	}
 }

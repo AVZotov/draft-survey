@@ -44,6 +44,9 @@ templ Layout(props components.LayoutProps) {
 			<dialog id="app-confirm" x-data>
 				@components.ConfirmModal()
 			</dialog>
+			<dialog id="app-alert">
+				@components.AlertModal()
+			</dialog>
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}

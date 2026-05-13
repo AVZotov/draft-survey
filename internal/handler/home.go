@@ -2,25 +2,22 @@ package handler
 
 import (
 	"errors"
+	"net/http"
 	"os"
 
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/web"
+	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (h *Handler) home(c *fiber.Ctx) error {
 	user, err := h.userRepository.Get()
-	props := web.DashboardProps(user, nil)
-	if err == nil {
-		component := web.Dashboard(props)
-		return tadaptor.Render(c, component)
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return err
 	}
 
-	if errors.Is(err, os.ErrNotExist) {
-		return h.profile(c)
-	}
-	// If file corrupted or no access show profile and banner with warning
-	c.Locals("banner", web.BannerFileCorrupted)
-	return h.profile(c)
+	props := web.DashboardLayoutProps(user, h.appVersion)
+	c.Status(http.StatusOK)
+	return tadaptor.Render(c, pages.Dashboard(props))
 }

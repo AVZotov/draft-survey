@@ -1,22 +1,30 @@
 package handler
 
 import (
+	"errors"
 	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/templates/pages"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (h *Handler) profile(c *fiber.Ctx) error {
-	BannerProps, _ := c.Locals("banner").(components.BannerProps)
-	component := web.Profile(BannerProps)
-	return tadaptor.Render(c, component)
+	var props components.LayoutProps
+	user, err := h.userRepository.Get()
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+
+	props = web.ProfileLayoutProps(user, h.appVersion)
+	return tadaptor.Render(c, pages.Profile(props))
 }
 
 func (h *Handler) createProfile(c *fiber.Ctx) error {
@@ -30,9 +38,7 @@ func (h *Handler) createProfile(c *fiber.Ctx) error {
 		Country:    c.FormValue("country"),
 		EmployeeID: c.FormValue("employee_id"),
 	}
-	//TODO: Validation of user
 	if err := h.userRepository.Save(user); err != nil {
-		//TODO. Warn Banner with general issue
 		return err
 	}
 

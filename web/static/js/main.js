@@ -19,18 +19,17 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('alert', {
         header: '',
         message: '',
-        visible: false,
 
         show(header, message) {
-            this.header = header;
-            this.message = message;
-            this.visible = true;
+            this.header = header
+            this.message = message
+            document.getElementById('app-alert').showModal()
         },
 
         ok() {
-            this.visible = false;
-            this.header = '';
-            this.message = '';
+            this.header = ''
+            this.message = ''
+            document.getElementById('app-alert').close()
         }
     })
 
@@ -89,5 +88,12 @@ document.addEventListener('alpine:initialized', () => {
         const { header, message } = JSON.parse(rawToast)
         sessionStorage.removeItem('toast')
         Alpine.store('toast').show(header, message)
+    }
+
+    const rawAlert = sessionStorage.getItem('alert')
+    if (rawAlert) {
+        const { header, message } = JSON.parse(rawAlert)
+        sessionStorage.removeItem('alert')
+        Alpine.store('alert').show(header, message)
     }
 })
