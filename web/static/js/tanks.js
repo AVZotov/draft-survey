@@ -9,6 +9,8 @@ function delTankConfirm(event, surveyID, draftIndex, tankID) {
             target: '#tank-row-' + tankID,
             swap: 'delete swap:250ms',
             headers: headers
+        }).then(() => {
+            Alpine.store('toast').show('Done', 'Tank removed successfully')
         })
     )
 }
