@@ -2,7 +2,7 @@
 
 > A professional cargo weight calculator for marine surveyors, implementing the UNECE 1992 Draft Survey Code.
 
-**Status:** 🚧 Active Development — v0.1.0-rc | Core calculations complete and verified against UNECE 1992 standard
+**Status:** 🚧 Active Development — v0.3.0-rc | Core calculations complete and verified against UNECE 1992 standard
 
 ---
 
