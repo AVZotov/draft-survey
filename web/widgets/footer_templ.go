@@ -42,7 +42,7 @@ func Footer(version string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · Open Source</span><nav class=\"app-footer-right\"><a href=\"#\" class=\"app-footer-link\">Documentation</a> <a href=\"#\" class=\"app-footer-link\">GitHub</a> <a href=\"#\" class=\"app-footer-link\">Report an Issue</a></nav></footer>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " · Open Source</span><nav class=\"app-footer-right\"><a href=\"#\" class=\"app-footer-link\">Documentation</a> <a href=\"https://github.com/AVZotov/draft-survey\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"app-footer-link\">GitHub</a> <a href=\"https://github.com/AVZotov/draft-survey/issues/new/choose\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"app-footer-link\">Report an Issue</a></nav></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
