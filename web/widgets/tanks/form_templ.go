@@ -43,89 +43,102 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		fwTitle := "Fresh Water Tanks"
 		bwTWeight := format.WeightFormatted(results.TotalBwTanksWeight)
 		fwTWeight := format.WeightFormatted(results.TotalFwTanksWeight)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"#\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg>Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s · IMO %s · %s · %s",
-			tp.Survey.VesselData.Name,
-			tp.Survey.VesselData.IMO,
-			tp.Survey.CargoOperation.Operation,
-			tp.Survey.Country.Name))
+		var templ_7745c5c3_Var2 templ.SafeURL
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(fmt.Sprintf("/survey/%s/draft", tp.Survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 30, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 24, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p></div><!-- DENSITY BAR --><div class=\"density-bar\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Draft Readings</a><h1 class=\"page-title\">BW / FW Tanks</h1><p class=\"page-meta\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s · IMO %s · %s · %s",
+			tp.Survey.VesselData.Name,
+			tp.Survey.VesselData.IMO,
+			tp.Survey.CargoOperation.Operation,
+			tp.Survey.Country.Name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 36, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 36, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div><!-- DENSITY BAR --><div class=\"density-bar\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(draft.Type)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 43, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 42, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span> <input class=\"den-in\" id=\"dockwater-density\" name=\"dockwater-density\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><span class=\"density-bar-label\">BW Density</span><div class=\"density-groups\"><div class=\"dg dg--ini\"><span class=\"dg-lbl\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(draft.Density))
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(draft.Type)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 44, Col: 118}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 49, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" type=\"number\" placeholder=\"0.000\" step=\"any\"> <span class=\"den-hint\">t/m³</span></div><button class=\"btn btn-primary\" type=\"button\" hx-include=\"previous [name='dockwater-density']\" hx-put=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span> <input class=\"den-in\" id=\"dockwater-density\" name=\"dockwater-density\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%d", tp.Survey.ID, tp.DraftIndex))
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(format.FloatOrEmpty(draft.Density))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 51, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 50, Col: 118}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-swap=\"none\">Apply Density <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect> <line x1=\"8\" y1=\"8\" x2=\"16\" y2=\"8\"></line> <line x1=\"8\" y1=\"12\" x2=\"16\" y2=\"12\"></line> <line x1=\"8\" y1=\"16\" x2=\"12\" y2=\"16\"></line></svg></button></div><span class=\"density-bar-note\">Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" type=\"number\" placeholder=\"0.000\" step=\"any\"> <span class=\"den-hint\">t/m³</span></div><button class=\"btn btn-primary\" type=\"button\" hx-include=\"previous [name='dockwater-density']\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank))
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/api/v1/survey/%s/tanks/%d", tp.Survey.ID, tp.DraftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 68, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 57, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" hx-swap=\"none\">Apply Density <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect> <line x1=\"8\" y1=\"8\" x2=\"16\" y2=\"8\"></line> <line x1=\"8\" y1=\"12\" x2=\"16\" y2=\"12\"></line> <line x1=\"8\" y1=\"16\" x2=\"12\" y2=\"16\"></line></svg></button></div><span class=\"density-bar-note\">Applied to BW tanks with empty density. Override per-tank if needed.</span></div><!-- ═══ BALLAST WATER ══════════════════════════════════════════ --><div class=\"tank-block tank-block--bw\" hx-headers=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var8 string
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 74, Col: 84}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -145,20 +158,20 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div><!-- ═══ FRESH WATER ════════════════════════════════════════════ --><div class=\"tank-block tank-block--fw\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><!-- ═══ FRESH WATER ════════════════════════════════════════════ --><div class=\"tank-block tank-block--fw\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.FWTank))
+		var templ_7745c5c3_Var9 string
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.FWTank))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 78, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 84, Col: 84}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -174,7 +187,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div></div></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div></div></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
