@@ -40,6 +40,9 @@
 
 !*.templ
 
+# Allow favicons
+!favicon*.png
+
 # Always ignore — sensitive and generated
 .env
 configs/local.yaml
