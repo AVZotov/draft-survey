@@ -39,10 +39,10 @@ type SurveyPageProps struct {
 
 type CountrySelectProps struct {
 	Countries     []types.Country
-	SelectedCode  string // country code e.g. "RU"
-	SelectedName  string // country name e.g. "Russia"
-	CountryCodeID string // hidden input name for code e.g. "country_code"
-	CountryNameID string // hidden input name for name e.g. "country_name"
+	SelectedCode  string
+	SelectedName  string
+	CountryCodeID string
+	CountryNameID string
 }
 
 type PortSelectProps struct {
@@ -65,27 +65,4 @@ type ResultProps struct {
 	Survey    types.Survey
 	Alpine    string
 	Lastindex int
-}
-
-//To be reviewed props
-
-type Version struct {
-	Version string
-}
-
-type ModalLevel string
-
-const (
-	ModalInfo    ModalLevel = "Information"
-	ModalWarning ModalLevel = "Warning"
-	ModalError   ModalLevel = "Danger"
-)
-
-type ModalProps struct {
-	Level      ModalLevel
-	DialogID   string
-	Title      string
-	Message    string
-	ConfirmBtn string
-	CancelBtn  string // Do not rendered if prop is empty
 }
