@@ -24,6 +24,9 @@ func (h *Handler) newSurvey(c *fiber.Ctx) error {
 		ID:        id,
 		CreatedAt: time.Now(),
 		Surveyor:  *user,
+		VesselData: types.VesselData{
+			IsLcfDetectionManual: true,
+		},
 	}
 
 	if err := h.surveyRepository.Save(survey); err != nil {
