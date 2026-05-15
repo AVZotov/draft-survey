@@ -142,6 +142,10 @@ func CalcMMC(draftsWKeel types.DraftsWKeel, v types.VesselData) float64 {
 }
 
 func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) float64 {
+	if upperDraft == lowerDraft {
+		return 0
+	}
+
 	result := round3(lowerValue + ((fact - lowerDraft) * (upperValue - lowerValue) / (upperDraft - lowerDraft)))
 	return result
 }
