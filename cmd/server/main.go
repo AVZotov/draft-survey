@@ -25,11 +25,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	surveyQueryStore := storage.NewSurveyQueryStub()
+
 	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
 	validator := validation.New()
 
-	h := handler.New(userStore, surveyStore, dictionariesStore, validator, version)
+	h := handler.New(userStore, surveyStore, surveyQueryStore, dictionariesStore, validator, version)
 
 	handler.SetupRoutes(app, h)
 
