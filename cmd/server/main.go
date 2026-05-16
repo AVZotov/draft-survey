@@ -12,6 +12,8 @@ import (
 
 var version = "dev"
 
+const DBPath = "./data/draft-survey.db"
+
 func main() {
 	app := fiber.New()
 
@@ -26,6 +28,8 @@ func main() {
 	}
 
 	surveyQueryStore := storage.NewSurveyQueryStub()
+
+	_, err = storage.NewDB(DBPath)
 
 	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
