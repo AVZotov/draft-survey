@@ -23,5 +23,9 @@ func NewDB(path string) (*sql.DB, error) {
 		return nil, err
 	}
 
+	if err = runMigrations(db); err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
