@@ -22,20 +22,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	surveyStore, err := storage.NewSurveyStore("./data/surveys", "./data/temp")
+	db, err := storage.NewDB(DBPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	surveyQueryStore := storage.NewSurveyQueryStub()
-
-	_, err = storage.NewDB(DBPath)
+	sqliteStore := storage.NewSQLiteSurveyStore(db)
 
 	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
 	validator := validation.New()
 
-	h := handler.New(userStore, surveyStore, surveyQueryStore, dictionariesStore, validator, version)
+	h := handler.New(userStore, sqliteStore, sqliteStore, dictionariesStore, validator, version)
 
 	handler.SetupRoutes(app, h)
 
