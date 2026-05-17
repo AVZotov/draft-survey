@@ -46,7 +46,7 @@ func updateMigrations(version *int, db *sql.DB) error {
 			}
 			defer tx.Rollback()
 
-			_, err = tx.Exec(`INSERT INTO migrations (version, applied_at) VALUES (?, ?);`, m.version, time.Now().Unix())
+			_, err = tx.Exec(`INSERT INTO migrations (version, applied_at) VALUES (?, ?);`, m.version, time.Now().Format("2006-01-02 15:04:05"))
 			if err != nil {
 				return err
 			}
