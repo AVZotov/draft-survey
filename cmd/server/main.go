@@ -17,23 +17,19 @@ const DBPath = "./data/draft-survey.db"
 func main() {
 	app := fiber.New()
 
-	userStore, err := storage.NewUserStore("./data/users")
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	db, err := storage.NewDB(DBPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	sqliteStore := storage.NewSQLiteSurveyStore(db)
+	surveyStore := storage.NewSQLiteSurveyStore(db)
+	userStore := storage.NewSQLiteUserStore(db)
 
 	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
 
 	validator := validation.New()
 
-	h := handler.New(userStore, sqliteStore, sqliteStore, dictionariesStore, validator, version)
+	h := handler.New(userStore, surveyStore, surveyStore, dictionariesStore, validator, version)
 
 	handler.SetupRoutes(app, h)
 

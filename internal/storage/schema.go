@@ -12,4 +12,8 @@ var migrations = []migration{
     	created_at TEXT NOT NULL DEFAULT (datetime('now')),
     	data TEXT NOT NULL
 	);`},
+	{2, `CREATE TABLE users (
+    id   INTEGER PRIMARY KEY CHECK (id = 1),
+    data TEXT NOT NULL
+	);`},
 }
