@@ -59,7 +59,7 @@ func (s *SQLiteSurveyStore) Get(id string) (*types.Survey, error) {
 }
 
 func (s *SQLiteSurveyStore) GetAll() ([]*types.Survey, error) {
-	return getSurveys(s.db, `SELECT data FROM surveys ORDER BY created_at DESC;`)
+	return get(s.db, `SELECT data FROM surveys ORDER BY created_at DESC;`)
 }
 
 func (s *SQLiteSurveyStore) Delete(id string) error {
@@ -90,7 +90,7 @@ func (s *SQLiteSurveyStore) Search(filter SurveyFilter) ([]*types.Survey, error)
 
 	queryBuilder.WriteString(` ORDER BY created_at DESC;`)
 
-	surveys, err := getSurveys(s.db, queryBuilder.String(), args...)
+	surveys, err := get(s.db, queryBuilder.String(), args...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (s *SQLiteSurveyStore) Search(filter SurveyFilter) ([]*types.Survey, error)
 	return surveys, nil
 }
 
-func getSurveys(db *sql.DB, query string, args ...any) ([]*types.Survey, error) {
+func get(db *sql.DB, query string, args ...any) ([]*types.Survey, error) {
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		return nil, err
