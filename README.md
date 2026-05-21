@@ -2,7 +2,7 @@
 
 > A professional cargo weight calculator for marine surveyors, implementing the UNECE 1992 Draft Survey Code.
 
-**Status:** 🚧 Active Development — v0.3.0-rc | Core calculations complete and verified against UNECE 1992 standard
+**Status:** 🚧 Active Development — v0.4.0 | Core calculations complete and verified against UNECE 1992 standard
 
 ---
 
@@ -39,7 +39,7 @@ The mathematics is fully implemented, tested against real-world golden data, and
 - Cargo on board with discrepancy from Shipper/Receiver declaration
 
 **Application**
-- Offline-first — all data stored locally as JSON files
+- Offline-first — all data stored locally in SQLite database
 - Self-contained binary — dictionaries and assets embedded at build time
 - Survey list with search by vessel name / IMO and date range filter
 - Real-time calculation panel updated as you type
@@ -48,6 +48,7 @@ The mathematics is fully implemented, tested against real-world golden data, and
 - BW and FW tank management with calibration table modal
 - Survey status alerts (constant deviation, data warnings)
 - Surveyor profile with company details
+- Graceful shutdown — safe database close on exit
 
 ---
 
@@ -60,7 +61,7 @@ The mathematics is fully implemented, tested against real-world golden data, and
 | Interactivity | [HTMX 2.0.8](https://htmx.org/) + [Alpine.js 3.15.8](https://alpinejs.dev/) |
 | DOM Morphing | [Idiomorph](https://github.com/bigskysoftware/idiomorph) |
 | Fonts | [IBM Plex Sans & Mono](https://www.ibm.com/plex/) |
-| Storage | JSON files (one file per survey) |
+| Storage | [SQLite](https://www.sqlite.org/) via [modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite) (pure Go, no CGO) |
 
 ---
 
@@ -97,10 +98,7 @@ On first run, the application creates the following directory structure:
 
 ```
 data/
-  surveys/    — survey records (one JSON file per survey)
-  users/      — surveyor profile
-  temp/       — temporary files
-  backups/    — survey backups
+  draft-survey.db    — SQLite database (surveys, user profile)
 ```
 
 Dictionaries (ports, countries) are embedded in the binary and require no external files.
@@ -114,7 +112,7 @@ cmd/server/         — application entry point
 internal/
   calculation/      — UNECE 1992 math engine
   types/            — shared domain types
-  storage/          — repository pattern (JSON + embed.FS)
+  storage/          — repository pattern (SQLite + embed.FS)
   handler/          — HTTP handlers (Fiber)
   format/           — value formatting helpers
   constants/        — form field names, header constants
@@ -135,9 +133,10 @@ embed.go            — go:embed directives (self-contained build)
 
 See [docs/ROADMAP.md](docs/ROADMAP.md) for the full development plan.
 
-**Coming next (v0.2.0):**
+**Coming next (v0.5.0):**
 - PDF report generation (UNECE-compliant format)
 - Structured logging
+- Unified error handling
 - Pre-built binaries for Windows, macOS, Linux
 
 ---
@@ -156,6 +155,7 @@ This project is built with excellent open source tools. Grateful to their author
 | [Idiomorph](https://github.com/bigskysoftware/idiomorph) | latest | BSD Zero Clause |
 | [IBM Plex](https://www.ibm.com/plex/) | — | SIL Open Font License 1.1 |
 | [Google UUID](https://github.com/google/uuid) | v1.6.0 | BSD-3-Clause |
+| [modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite) | v1.50.1 | BSD-3-Clause |
 
 All dependencies are compatible with commercial use.
 

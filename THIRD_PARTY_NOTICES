@@ -1,0 +1,78 @@
+# Third-Party Notices
+
+This project uses the following third-party software. 
+Their licenses and copyright notices are reproduced below as required.
+
+---
+
+## Go
+**License:** BSD-3-Clause  
+**Source:** https://go.dev/  
+Copyright (c) 2009 The Go Authors. All rights reserved.
+
+---
+
+## Fiber v2
+**License:** MIT  
+**Source:** https://github.com/gofiber/fiber  
+Copyright (c) 2019-present Fenny and Contributors
+
+---
+
+## Templ
+**License:** MIT  
+**Source:** https://github.com/a-h/templ  
+Copyright (c) 2022 Adrian Hesketh
+
+---
+
+## HTMX
+**License:** BSD Zero Clause License  
+**Source:** https://github.com/bigskysoftware/htmx  
+Copyright (c) 2020, Big Sky Software
+
+---
+
+## Alpine.js
+**License:** MIT  
+**Source:** https://github.com/alpinejs/alpine  
+Copyright (c) 2019-2021 Caleb Porzio and contributors
+
+---
+
+## Alpine.js Mask Plugin
+**License:** MIT  
+**Source:** https://github.com/alpinejs/alpine/tree/main/packages/mask  
+Copyright (c) 2019-2021 Caleb Porzio and contributors
+
+---
+
+## Idiomorph
+**License:** BSD Zero Clause License  
+**Source:** https://github.com/bigskysoftware/idiomorph  
+Copyright (c) 2023, Big Sky Software
+
+---
+
+## IBM Plex Sans & Mono
+**License:** SIL Open Font License 1.1  
+**Source:** https://github.com/IBM/plex  
+Copyright (c) 2017 IBM Corp.
+
+---
+
+## modernc.org/sqlite
+**License:** BSD-3-Clause  
+**Source:** https://pkg.go.dev/modernc.org/sqlite  
+Copyright (c) 2017 The Sqlite Authors. All rights reserved.
+
+---
+
+## Google UUID
+**License:** BSD-3-Clause  
+**Source:** https://github.com/google/uuid  
+Copyright (c) 2018 Google Inc. All rights reserved.
+
+---
+
+*This file is updated with each new dependency added to the project.*

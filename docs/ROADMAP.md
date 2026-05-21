@@ -1,8 +1,8 @@
 # Draft Survey Tool — Development Roadmap
 
 **Project:** https://github.com/AVZotov/draft-survey  
-**Status:** Phase 1.6 In Progress 🚧  
-**Last Updated:** 2026-05-14
+**Status:** Phase 1 In Progress 🚧  
+**Last Updated:** 2026-05-21
 
 ---
 
@@ -20,7 +20,7 @@
 - **Go Version:** 1.25 (minimum compatibility)
 - **CI Runner:** ubuntu-22.04 (LTS, reproducible builds)
 - **PDF Reports:** Generate on-demand only (no auto-save)
-- **Backup Strategy:** Each survey = separate JSON file (max 10-20/month)
+- **Storage:** SQLite via modernc.org/sqlite (pure Go, no CGO)
 - **Temp Files:** Auto-deleted after final report generated
 
 ---
@@ -52,6 +52,7 @@
   - Optional list correction for all types
 - [x] `CalcDraft` — single entry point returning complete `DraftResult`
 - [x] `CalcSurvey` — multi-draft orchestrator with cargo and constant tracking
+- [x] Guard against division by zero (LBP, interpolation, list correction)
 - [x] Rounding policy aligned with UNECE Form C reporting fields
 - [x] Golden tests against UNECE 1992 standard (BEAM IMO 9591741)
 - [x] Integration tests — POLAR_STAR (TrimNoList, TrimList scenarios)
@@ -78,7 +79,7 @@
 **Location:** `internal/storage/`
 
 - [x] Surveyor profile (name, position, company, license, country)
-- [x] Local JSON storage
+- [x] Stored in SQLite database
 - [x] Profile persistence between sessions
 
 ---
@@ -87,10 +88,13 @@
 **Location:** `internal/storage/`
 
 - [x] Survey CRUD operations
-- [x] JSON files (one file per survey)
+- [x] SQLite database (one file — `data/draft-survey.db`)
+- [x] Hybrid schema: metadata columns + JSON blob
 - [x] UUID-based survey IDs
-- [x] Survey list and search
+- [x] Survey list and search (`SurveyQueryRepository`)
 - [x] Auto-save on every change
+- [x] Schema migration mechanism with versioning
+- [x] Graceful shutdown — safe DB close on SIGTERM/SIGINT
 
 ---
 
@@ -102,7 +106,7 @@
 - [ ] Vessel data, calculations
 - [ ] Save to custom location
 
-**Target:** v0.4.0
+**Target:** v0.5.0
 
 ---
 
@@ -122,9 +126,9 @@
 - [x] Totals & Results block
 - [x] Sea condition logging
 - [x] Surveyor profile page
-- [ ] Alerts block (trim by head, list > 0.5°, constant deviation, deflection)
 - [x] Final results page (full survey summary)
-- [x] Form validation improvements
+- [ ] Alerts block (trim by head, list > 0.5°, constant deviation, deflection)
+- [ ] Unified numeric input formatting (x-mask)
 
 ---
 
@@ -133,14 +137,16 @@
 - [ ] Log to file
 - [ ] Log rotation
 
-**Target:** v0.4.0
+**Target:** v0.5.0
 
 ---
 
-### 1.8 Error Handling 🚧 IN PROGRESS
-- [x] Custom error types for handlers
-- [ ] Error messages dictionary
-- [ ] User-friendly error display improvements
+### 1.8 Error Handling 🔲 PLANNED
+- [ ] Sentinel errors (`storage.ErrNotFound`)
+- [ ] User-friendly error display via alert store
+- [ ] Unified error handling strategy
+
+**Target:** v0.5.0
 
 ---
 
@@ -149,7 +155,7 @@
 - [x] Integration tests POLAR_STAR (TrimNoList + TrimList)
 - [x] Unit tests — full calculation chain
 - [x] Tank volume calibration tests (Type 1/2/3)
-- [x] Storage layer tests
+- [ ] Storage layer tests (SQLite)
 - [ ] E2E test: create survey → calculate → generate PDF
 
 **Coverage:** >80% for `internal/calculation/`
@@ -168,17 +174,20 @@
 ### 1.11 Distribution 🔲 PLANNED
 - [ ] Cross-compilation (Windows / macOS / Linux)
 - [ ] First-run setup
-- [ ] Pre-built binaries
+- [ ] Pre-built binaries via GitHub Releases
+- [ ] Third-party license acknowledgment (THIRD_PARTY_NOTICES)
 
-**Target:** v0.4.0
+**Target:** v0.5.0
 
 ---
 
 ## Known Issues / Open Questions
 
-- [ ] List correction method when TPC upper == TPC lower — DSGear uses Summer TPC interpolation (~0.881 MT), UNECE strict gives 0. Awaiting surveyor clarification. See Issue #TBD
+- [ ] List correction method when TPC upper == TPC lower — DSGear uses Summer TPC interpolation (~0.881 MT), UNECE strict gives 0. Awaiting surveyor clarification.
 - [ ] TPC List Port / Stbd fields not yet in draft form UI — using V2 auto-calculation as interim
 - [ ] MTC draft hint fields — pre-filled vs readonly, awaiting surveyor feedback
+- [ ] `Lightship` field — currently `float64`, should be `*float64` (nil = not set)
+- [ ] User signature storage — separate table needed to avoid loading binary data on every profile fetch
 
 ---
 
@@ -188,7 +197,8 @@
 
 ### 2.1 Authentication
 - [ ] User login/password
-- [ ] Long-lived tokens (2 months offline support)
+- [ ] JWT with configurable expiry (temporary access for assistants)
+- [ ] Session management
 
 ### 2.2 Backend Server
 **Tech Stack:** Go + Fiber + PostgreSQL
@@ -218,11 +228,12 @@
 - [ ] English (current)
 
 ### 3.2 Advanced Features
-- [ ] PDF report generation
 - [ ] Historical data analysis
 - [ ] Export to Excel
-- [ ] Partial cargo calculation by hold groups (see Issue #TBD)
+- [ ] Data Import/Export (JSON, MDB/Access legacy format)
+- [ ] Partial cargo calculation by hold groups
 - [ ] IsExtrapolated flag for tank volumes outside calibration range
+- [ ] System tray / single-click shutdown for desktop mode
 
 ---
 
@@ -230,8 +241,9 @@
 
 | Version | Status | Description |
 |---------|--------|-------------|
-| v0.3.0-rc | 🚧 Current | Core math complete, web UI in progress |
-| v0.4.0 | 🔲 Planned | PDF reports, logging, pre-built binaries |
+| v0.3.0 | ✅ Released | Core math complete, web UI, modal strategy |
+| v0.4.0 | 🚧 Current | SQLite storage migration, bug fixes |
+| v0.5.0 | 🔲 Planned | PDF reports, logging, error handling, binaries |
 | v1.0.0 | 🔲 Planned | Full MVP with distribution |
 
 ---
@@ -241,6 +253,7 @@
 - `main` — stable releases only
 - `feature/*` — feature development
 - `fix/*` — bug fixes
+- `tech/*` — technical debt
 - `docs/*` — documentation updates
 - PR to `main` when ready
 - Semantic versioning (v0.1.0, v0.2.0, v1.0.0)
