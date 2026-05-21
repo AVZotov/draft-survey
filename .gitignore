@@ -25,6 +25,7 @@
 # Allow documentation
 !**/*.md
 !**/*.txt
+!THIRD_PARTY_NOTICES
 
 # Allow dictionaries
 !data/dictionaries/*.json
