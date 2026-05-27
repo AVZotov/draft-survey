@@ -1,4 +1,4 @@
-package handler
+package chi
 
 import (
 	"github.com/AVZotov/draft-survey/internal/storage"
@@ -12,7 +12,7 @@ type Logger interface {
 	Audit(msg string, surveyID string, fields ...any)
 }
 
-type HandlerChi struct {
+type Handler struct {
 	userRepository         storage.UserRepository
 	surveyRepository       storage.SurveyRepository
 	surveyQueryRepository  storage.SurveyQueryRepository
@@ -22,7 +22,7 @@ type HandlerChi struct {
 	appVersion             string
 }
 
-func NewChi(
+func New(
 	userRepository storage.UserRepository,
 	surveyRepository storage.SurveyRepository,
 	surveyQueryRepository storage.SurveyQueryRepository,
@@ -30,8 +30,8 @@ func NewChi(
 	validator validation.Validator,
 	logger Logger,
 	version string,
-) *HandlerChi {
-	return &HandlerChi{
+) *Handler {
+	return &Handler{
 		userRepository:         userRepository,
 		surveyRepository:       surveyRepository,
 		surveyQueryRepository:  surveyQueryRepository,

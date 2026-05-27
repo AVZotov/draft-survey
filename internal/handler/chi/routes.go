@@ -1,4 +1,4 @@
-package handler
+package chi
 
 import (
 	"io/fs"
@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func SetupRoutesChi(r chi.Router, h *HandlerChi) error {
+func SetupRoutes(r chi.Router, h *Handler) error {
 	staticFS, err := fs.Sub(draft_survey.StaticFiles, "web/static")
 	if err != nil {
 		return err
