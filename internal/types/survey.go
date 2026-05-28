@@ -120,7 +120,6 @@ type Survey struct {
 	CargoDeclared    *float64       `json:"cargo_declared"`
 	ConstantDeclared *float64       `json:"constant_declared"`
 	VesselData       VesselData     `json:"vessel_data"`
-	SeaCondition     SeaCondition   `json:"sea_condition"`
 	Remarks          string         `json:"remarks"`
 	Country          Country        `json:"country"`
 	Audit            AuditEvent     `json:"audit"`
