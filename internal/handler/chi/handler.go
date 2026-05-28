@@ -1,8 +1,7 @@
 package chi
 
 import (
-	"github.com/AVZotov/draft-survey/internal/storage"
-	"github.com/AVZotov/draft-survey/internal/validation"
+	"github.com/AVZotov/draft-survey/internal/service"
 )
 
 type Logger interface {
@@ -13,31 +12,15 @@ type Logger interface {
 }
 
 type Handler struct {
-	userRepository         storage.UserRepository
-	surveyRepository       storage.SurveyRepository
-	surveyQueryRepository  storage.SurveyQueryRepository
-	dictionariesRepository storage.DictionariesRepository
-	validator              validation.Validator
-	logger                 Logger
-	appVersion             string
+	services   *service.Services
+	logger     Logger
+	appVersion string
 }
 
-func New(
-	userRepository storage.UserRepository,
-	surveyRepository storage.SurveyRepository,
-	surveyQueryRepository storage.SurveyQueryRepository,
-	dictionariesRepository storage.DictionariesRepository,
-	validator validation.Validator,
-	logger Logger,
-	version string,
-) *Handler {
+func New(services *service.Services, logger Logger, version string) *Handler {
 	return &Handler{
-		userRepository:         userRepository,
-		surveyRepository:       surveyRepository,
-		surveyQueryRepository:  surveyQueryRepository,
-		dictionariesRepository: dictionariesRepository,
-		validator:              validator,
-		logger:                 logger,
-		appVersion:             version,
+		services:   services,
+		logger:     logger,
+		appVersion: version,
 	}
 }
