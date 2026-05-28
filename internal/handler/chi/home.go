@@ -9,7 +9,7 @@ import (
 
 func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	const op = "home"
-	user, err := h.userRepository.Get()
+	user, err := h.services.User.Get()
 	if err != nil {
 		h.logger.Error(op, err)
 		//TODO: Implement error handling. Avoid handling no user error

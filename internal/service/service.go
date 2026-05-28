@@ -14,6 +14,7 @@ type DictionaryService interface {
 type UserService interface {
 	Get() (*types.User, error)
 	Save(user *types.User) error
+	SaveSignature(signature []byte) error
 	Delete() error
 }
 
