@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	draft_survey "github.com/AVZotov/draft-survey"
+	draftsurvey "github.com/AVZotov/draft-survey"
 	"github.com/AVZotov/draft-survey/internal/handler"
 	chihandler "github.com/AVZotov/draft-survey/internal/handler/chi"
 	"github.com/AVZotov/draft-survey/internal/logger"
@@ -30,7 +30,7 @@ func main() {
 
 	surveyStore := storage.NewSQLiteSurveyStore(db)
 	userStore := storage.NewSQLiteUserStore(db)
-	dictionariesStore := storage.NewDictionariesStore(draft_survey.Dictionaries)
+	dictionariesStore := storage.NewDictionariesStore(draftsurvey.Dictionaries)
 
 	// --- Old Fiber server (port 3399) ---
 	app := fiber.New()
@@ -39,8 +39,9 @@ func main() {
 	handler.SetupRoutes(app, h)
 
 	// --- New Chi server (port 3400) ---
+	slog := logger.NewSlogLogger()
 	services := &service.Services{
-		User:       &service.NoopUserService{},
+		User:       service.NewUserService(userStore, slog, validator),
 		Survey:     &service.NoopSurveyService{},
 		Draft:      &service.NoopDraftService{},
 		Dictionary: &service.NoopDictionaryService{},
@@ -67,10 +68,10 @@ func main() {
 	<-quit
 	log.Println("Shutting down...")
 
-	if err := app.Shutdown(); err != nil {
+	if err = app.Shutdown(); err != nil {
 		log.Fatalf("Fiber shutdown error: %v", err)
 	}
-	if err := db.Close(); err != nil {
+	if err = db.Close(); err != nil {
 		log.Printf("Error closing database: %v", err)
 	}
 

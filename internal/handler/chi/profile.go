@@ -25,21 +25,28 @@ func (h *Handler) profile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
-	const op = "createProfile"
+	const op = "Handler.createProfile"
+
 	user, err := parse.Profile(r)
+	if err != nil {
+		h.logger.Error(op, err)
+		// TODO: respond with alert
+		return
+	}
+
 	if err = h.services.User.Save(user); err != nil {
 		h.logger.Error(op, err)
-		//TODO: Implement error handling.
+		// TODO: respond with alert
+		return
 	}
 
 	sign, err := parse.ProfileSignature(r)
-	if err != nil {
-		h.logger.Error(op, err)
-		//TODO: Implement error handling.
+	if err == nil && len(sign) > 0 {
+		if err = h.services.User.SaveSignature(sign); err != nil {
+			h.logger.Error(op, err)
+		}
 	}
 
-	if err = h.services.User.SaveSignature(sign); err != nil {
-		h.logger.Error(op, err)
-		//TODO: Implement error handling. Avoid handle no signature error
-	}
+	// TODO: respond with redirect to /
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

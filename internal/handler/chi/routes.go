@@ -49,7 +49,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 			r.Put(routes.APIDraftUpdate("{id}", "{draftIndex}"), nil)
 			r.Post(routes.APIDraftStatus("{id}", "{draftIndex}"), nil)
 
-			r.Post(routes.APIProfile(), nil)
+			r.Post(routes.APIProfile(), h.createProfile)
 
 			r.Put(routes.APITanks("{id}", "{draftIndex}"), nil)
 			r.Post(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
