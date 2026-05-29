@@ -1,45 +1,44 @@
 package parse
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 	"strings"
+
+	apperrors "github.com/AVZotov/draft-survey/internal/errors"
 )
 
-var ErrEmptyField = errors.New("empty field")
-
-func Float(r *http.Request, name string) (*float64, error) {
+func Float(r *http.Request, name string, dest **float64) error {
 	v := r.FormValue(name)
+	v = strings.ReplaceAll(v, " ", "")
 	if v == "" {
-		return nil, ErrEmptyField
+		*dest = nil
+		return nil
 	}
-	v = strings.ReplaceAll(v, " ", "") // x-mask support
 	f, err := strconv.ParseFloat(v, 64)
 	if err != nil {
-		return nil, err
+		return apperrors.ErrInvalidFormat
 	}
-	return &f, nil
+	*dest = &f
+	return nil
 }
 
-func Int(r *http.Request, name string) (*int, error) {
+func Int(r *http.Request, name string, dest **int) error {
 	v := r.FormValue(name)
 	if v == "" {
-		return nil, ErrEmptyField
+		*dest = nil
+		return nil
 	}
-	f, err := strconv.Atoi(v)
+	i, err := strconv.Atoi(v)
 	if err != nil {
-		return nil, err
+		return apperrors.ErrInvalidFormat
 	}
-	return &f, nil
+	*dest = &i
+	return nil
 }
 
-func String(r *http.Request, name string) (string, error) {
-	v := r.FormValue(name)
-	if v == "" {
-		return "", ErrEmptyField
-	}
-	return v, nil
+func String(r *http.Request, name string) string {
+	return r.FormValue(name)
 }
 
 func Bool(r *http.Request, name string) bool {
