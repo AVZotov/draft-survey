@@ -4,57 +4,59 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/AVZotov/draft-survey"
+	draftsurvey "github.com/AVZotov/draft-survey"
+	"github.com/AVZotov/draft-survey/internal/handler/chi/routes"
 	"github.com/go-chi/chi/v5"
 )
 
-func SetupRoutes(r chi.Router, h *Handler) error {
-	staticFS, err := fs.Sub(draft_survey.StaticFiles, "web/static")
+func SetupRoutesChi(r chi.Router, h *Handler) error {
+	staticFS, err := fs.Sub(draftsurvey.StaticFiles, "web/static")
 	if err != nil {
 		return err
 	}
 
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
-	//TODO: This comment as WIP route per route with handlers migrations to Chi
-	r.Get("/", nil)
-	r.Group(
-		func(r chi.Router) {
-			//TODO: Add deny all direct requests except of main page
-			r.Get("/profile", nil)
-			r.Get("/dictionary/sea-options", nil)
-			r.Get("/dictionary/ports", nil)
-			r.Get("/dictionary/countries", nil)
-			r.Get("/survey/new", nil)
-			r.Get("/survey/{id}", nil)
-			r.Get("/survey/{id}/draft", nil)
-			r.Get("/survey/{id}/tanks/{draftIndex}", nil)
-			r.Get("/survey/{id}/tanks/{draftIndex}/bw-tank/{tankID}/corrections", nil)
-			r.Get("/survey/{id}/results", nil)
-			r.Get("/survey/{id}/results/validate", nil)
-			r.Get("/survey-list", nil)
-			r.Get("/survey-list/rows", nil)
-			r.Get("/survey-list/stats", nil)
+	// Pages
+	r.Get(routes.Home(), h.home)
+	r.Get(routes.Profile(), h.profile)
+	r.Get(routes.Survey("{id}"), nil)
+	r.Get(routes.Draft("{id}"), nil)
+	r.Get(routes.Results("{id}"), nil)
+	r.Get(routes.SurveyList(), nil)
+	r.Get(routes.Tanks("{id}", "{draftIndex}"), nil)
+	r.Get(routes.TankCorrections("{id}", "{draftIndex}", "{tankID}"), nil)
 
-			r.Route(
-				"/api/v1", func(r chi.Router) {
-					r.Post("/profile", nil)
-					r.Put("/survey/{id}", nil)
-					r.Post("/survey/{id}", nil)
-					r.Post("/survey/{id}/draft/{index}/start", nil)
-					r.Post("/survey/{id}/draft/{index}/finish", nil)
-					r.Post("/survey/{id}/draft", nil)
-					r.Delete("/survey/{id}/draft", nil)
-					r.Put("/survey/{id}/draft/{draftIndex}", nil)
-					r.Put("/survey/{id}/tanks/{draftIndex}", nil)
-					//TODO: Change bw-tank to tank or w-tank as more relevant route
-					r.Post("/survey/{id}/tanks/{draftIndex}/bw-tank", nil)
-					r.Delete("/survey/{id}/tanks/{draftIndex}/bw-tank/{tankID}", nil)
-					r.Put("/survey/{id}/tanks/{draftIndex}/bw-tank/{tankID}", nil)
-					r.Delete("/survey-list/rows/{id}", nil)
-				},
-			)
+	// Dictionaries
+	r.Get(routes.DictionarySeaOptions(), nil)
+	r.Get(routes.DictionaryPorts(), nil)
+	r.Get(routes.DictionaryCountries(), nil)
+
+	// HTMX fragments
+	r.Get(routes.SurveyListRows(), nil)
+	r.Get(routes.SurveyListStats(), nil)
+	r.Get(routes.ResultsValidate("{id}"), nil)
+
+	// API v1
+	r.Route(
+		"/api/v1", func(r chi.Router) {
+			r.Post(routes.APICreateSurvey(), nil)
+			r.Put(routes.APISurvey("{id}"), nil)
+			r.Delete(routes.APIDeleteSurvey("{id}"), nil)
+
+			r.Post(routes.APIDraft("{id}"), nil)
+			r.Delete(routes.APIDraft("{id}"), nil)
+			r.Put(routes.APIDraftUpdate("{id}", "{draftIndex}"), nil)
+			r.Post(routes.APIDraftStatus("{id}", "{draftIndex}"), nil)
+
+			r.Post(routes.APIProfile(), nil)
+
+			r.Put(routes.APITanks("{id}", "{draftIndex}"), nil)
+			r.Post(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
+			r.Delete(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
+			r.Put(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
 		},
 	)
+
 	return nil
 }
