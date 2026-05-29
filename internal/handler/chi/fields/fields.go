@@ -3,9 +3,15 @@ package fields
 import "fmt"
 
 // WithIndex helper function
-// for consistent naming of fields received from HTML requests
+// for consistent naming and parsing of fields received from HTML requests
 func WithIndex(field string, index int) string {
 	return fmt.Sprintf("%s-%d", field, index)
+}
+
+// WithTankID helper function
+// for consistent tanks naming and parsing received from HTML requests
+func WithTankID(field string, tankID string) string {
+	return fmt.Sprintf("%s-%s", field, tankID)
 }
 
 // Profile form fields
@@ -137,6 +143,35 @@ const (
 	FieldBilgeWater       = "bilge_water"
 	FieldDockwaterDensity = "dockwater_density"
 	FieldOthers           = "others"
-	FieldBallastWater     = "ballast_water"
-	FieldFreshWater       = "fresh_water"
+)
+
+// Tank fields
+const (
+	FieldTankName          = "tank_name"
+	FieldTankType          = "tank_type"
+	FieldTankSounding      = "tank_sounding"
+	FieldTankVolume        = "tank_volume"
+	FieldTankDensity       = "tank_density"
+	FieldCalibType         = "calib_type"
+	FieldHasListCorrection = "has_list_correction"
+	FieldTTL               = "ttl"
+	FieldTTU               = "ttu"
+	FieldTLL               = "tll"
+	FieldTLU               = "tlu"
+	FieldTrimTSLS          = "trim_table_sounding_low"
+	FieldTrimTSLVL         = "trim_table_sounding_low_vol_low"
+	FieldTrimTSLVU         = "trim_table_sounding_low_vol_up"
+	FieldTrimTSUS          = "trim_table_sounding_up"
+	FieldTrimTSUVL         = "trim_table_sounding_up_vol_low"
+	FieldTrimTSUVU         = "trim_table_sounding_up_vol_up"
+	FieldListTSLS          = "list_table_sounding_low"
+	FieldListTSLVL         = "list_table_sounding_low_vol_low"
+	FieldListTSLVU         = "list_table_sounding_low_vol_up"
+	FieldListTSUS          = "list_table_sounding_up"
+	FieldListTSUVL         = "list_table_sounding_up_vol_low"
+	FieldListTSUVU         = "list_table_sounding_up_vol_up"
+	FieldCorrSoundingLow   = "corr_sounding_low"
+	FieldCorrVolumeLow     = "corr_volume_low"
+	FieldCorrSoundingUp    = "corr_sounding_up"
+	FieldCorrVolumeUp      = "corr_volume_up"
 )
