@@ -36,16 +36,16 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 	var totalFwTanksWeight float64
 
 	if v.VesselType == types.VesselTypeMarine {
-		lbm = CalcFullLBPLBM(draft, v.LBP)
+		lbm = CalcFullLBPLBM(draft, markVal(v.LBP))
 	} else {
-		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, v.LBP)
+		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, markVal(v.LBP))
 	}
 	meanDraft = MeanDrafts(draft.Marks)
-	if v.CorrectionMethod == types.CorrectionMethodFullLBP && v.LBP > 0 {
-		ppCorrections = CalcFullLBPPPCorrections(meanDraft, draft, v.LBP)
+	if v.CorrectionMethod == types.CorrectionMethodFullLBP && v.LBP != nil && *v.LBP > 0 {
+		ppCorrections = CalcFullLBPPPCorrections(meanDraft, draft, *v.LBP)
 	}
-	if v.CorrectionMethod == types.CorrectionMethodHalfLBP && v.LBP > 0 {
-		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, v.LBP)
+	if v.CorrectionMethod == types.CorrectionMethodHalfLBP && v.LBP != nil && *v.LBP > 0 {
+		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, *v.LBP)
 	}
 	draftsWKeel = CalcDraftsWKeel(meanDraft, ppCorrections, draft)
 	meanFwdAft = round3((draftsWKeel.FwdDraftWKeel + draftsWKeel.AftDraftWKeel) / 2)
@@ -53,14 +53,14 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 	observedTrim = round3(meanDraft.DraftAftMean - meanDraft.DraftFwdMean)
 	trueTrim = round3(draftsWKeel.AftDraftWKeel - draftsWKeel.FwdDraftWKeel)
 	listMeters = round3(markVal(draft.Marks.MidPort.Value) - markVal(draft.Marks.MidStarboard.Value))
-	listDegrees = round3(math.Atan2(listMeters, v.Breadth) * 180 / math.Pi)
+	listDegrees = round3(math.Atan2(listMeters, markVal(v.Breadth)) * 180 / math.Pi)
 	deflection = round3((draftsWKeel.MidDraftWKeel - (draftsWKeel.FwdDraftWKeel+draftsWKeel.AftDraftWKeel)/2) * 100)
-	if len(draft.HydrostaticRows) >= 2 && v.LBP > 0 {
+	if len(draft.HydrostaticRows) >= 2 && v.LBP != nil && *v.LBP > 0 {
 		hydrostatics = CalcHydrostatics(mmc, draft.HydrostaticRows, v)
-		firstTrimCorrection = CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, v.LBP)
+		firstTrimCorrection = CalcFirstTrimCorrection(draftsWKeel, hydrostatics.TPC, hydrostatics.LCF, *v.LBP)
 	}
-	if len(draft.MTCRows) >= 2 && v.LBP > 0 {
-		secondTrimCorrection = CalcSecondTrimCorrection(draftsWKeel, draft.MTCRows, v.LBP)
+	if len(draft.MTCRows) >= 2 && v.LBP != nil && *v.LBP > 0 {
+		secondTrimCorrection = CalcSecondTrimCorrection(draftsWKeel, draft.MTCRows, *v.LBP)
 		deltaMTC = CalcDeltaMTC(draft.MTCRows)
 	}
 
@@ -95,8 +95,8 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 		densityCorrection,
 		totalDeductibles,
 	)
-	constant = CalcConstant(netDisplacement, v.Lightship)
-	currentDWT = CalcCurrentDWT(displacementCorrected, v.Lightship)
+	constant = CalcConstant(netDisplacement, markVal(v.Lightship))
+	currentDWT = CalcCurrentDWT(displacementCorrected, markVal(v.Lightship))
 	totalBwTanksWeight = TotalTanksWeight(draft.BallastWaterTanks)
 	totalFwTanksWeight = TotalTanksWeight(draft.FreshWaterTanks)
 

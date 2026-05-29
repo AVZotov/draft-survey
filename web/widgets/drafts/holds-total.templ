@@ -1,12 +1,17 @@
 package drafts
 
-import "github.com/AVZotov/draft-survey/web/components"
+import (
+	"strconv"
+
+	"github.com/AVZotov/draft-survey/web/components"
+)
 
 templ HoldsBarTotal(dp components.DraftPageProps) {
-	{{ total := dp.Survey.VesselData.HoldsTotal }}
+	{{ total := 0 }}
+	{{ if dp.Survey.VesselData.HoldsTotal != nil { total = *dp.Survey.VesselData.HoldsTotal } }}
 	<div
 		class="holds-bar"
 	>
-		<span class="holds-bar__label" style="font-size: 0.7rem;">Holds to load total: { total } </span>
+		<span class="holds-bar__label" style="font-size: 0.7rem;">Holds to load total: { strconv.Itoa(total) } </span>
 	</div>
 }

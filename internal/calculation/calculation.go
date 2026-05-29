@@ -169,9 +169,9 @@ func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v types.VesselData
 
 	// Auto mode (DSGear k3): detect LCA from AP by magnitude
 	// Manual mode (UNECE): trust direction entered by surveyor
-	if !v.IsLcfDetectionManual && (upper.LCFDirection == types.LCFDirectionFromAP || markVal(upper.LCF) > v.LBP*k3) {
-		lowerLcf = (v.LBP / 2) - markVal(lower.LCF)
-		upperLcf = (v.LBP / 2) - markVal(upper.LCF)
+	if !v.IsLcfDetectionManual && (upper.LCFDirection == types.LCFDirectionFromAP || markVal(upper.LCF) > markVal(v.LBP)*k3) {
+		lowerLcf = (markVal(v.LBP) / 2) - markVal(lower.LCF)
+		upperLcf = (markVal(v.LBP) / 2) - markVal(upper.LCF)
 	} else {
 		if lower.LCFDirection == types.LCFDirectionForward {
 			lowerLcf *= -1
@@ -274,7 +274,7 @@ func calcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v ty
 		return 0.0
 	}
 
-	if v.SummerDraft <= mmc {
+	if v.SummerDraft == nil || *v.SummerDraft <= mmc {
 		return 0.0
 	}
 
@@ -283,8 +283,8 @@ func calcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v ty
 
 	// Interpolate TPC at each midship draft
 	// using (MMC, hydroTPC) as lower point and (SummerDraft, SummerTPC) as upper point
-	tpcPort := round3(hydroTPC + (midPort-mmc)*(v.SummerTPC-hydroTPC)/(v.SummerDraft-mmc))
-	tpcStbd := round3(hydroTPC + (midStbd-mmc)*(v.SummerTPC-hydroTPC)/(v.SummerDraft-mmc))
+	tpcPort := round3(hydroTPC + (midPort-mmc)*(markVal(v.SummerTPC)-hydroTPC)/(*v.SummerDraft-mmc))
+	tpcStbd := round3(hydroTPC + (midStbd-mmc)*(markVal(v.SummerTPC)-hydroTPC)/(*v.SummerDraft-mmc))
 
 	return round3(6 * math.Abs(midPort-midStbd) * math.Abs(tpcPort-tpcStbd))
 }

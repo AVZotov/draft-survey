@@ -18,6 +18,13 @@ type VesselData struct {
 	TableDensity     *float64 `validate:"gte=1.000"`
 }
 
+func derefFloat(p *float64) float64 {
+	if p == nil {
+		return 0
+	}
+	return *p
+}
+
 func NewVesselDto(v *types.VesselData) *VesselData {
 	if v == nil {
 		return nil
@@ -25,14 +32,14 @@ func NewVesselDto(v *types.VesselData) *VesselData {
 	return &VesselData{
 		Name:             v.Name,
 		IMO:              v.IMO,
-		Lightship:        v.Lightship,
-		Breadth:          v.Breadth,
-		Depth:            v.Depth,
-		LBP:              v.LBP,
-		SummerDraft:      v.SummerDraft,
-		SummerDWT:        v.SummerDWT,
-		SummerTPC:        v.SummerTPC,
-		SummerFreeboard:  v.SummerFreeboard,
+		Lightship:        derefFloat(v.Lightship),
+		Breadth:          derefFloat(v.Breadth),
+		Depth:            derefFloat(v.Depth),
+		LBP:              derefFloat(v.LBP),
+		SummerDraft:      derefFloat(v.SummerDraft),
+		SummerDWT:        derefFloat(v.SummerDWT),
+		SummerTPC:        derefFloat(v.SummerTPC),
+		SummerFreeboard:  derefFloat(v.SummerFreeboard),
 		VesselType:       string(v.VesselType),
 		CorrectionMethod: string(v.CorrectionMethod),
 		TableDensity:     v.TableDensity,

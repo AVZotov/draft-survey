@@ -24,7 +24,7 @@ type DraftsWKeel struct {
 
 type Job struct {
 	JobNumber string `json:"job_number"`
-	DSNumber  int    `json:"ds_number"`
+	DSNumber  *int   `json:"ds_number"`
 	Principal string `json:"principal"`
 }
 

@@ -108,7 +108,7 @@ func getTankProps(h *Handler, c *fiber.Ctx) (*tankProps, error) {
 		draft.Marks.AftPort.Value != nil && draft.Marks.AftPort.Method != "" &&
 		draft.Marks.MidPort.Value != nil && draft.Marks.MidPort.Method != "" &&
 		draft.DistancePPFwd != nil && draft.DistancePPMid != nil && draft.DistancePPAft != nil &&
-		survey.VesselData.LBP > 0 {
+		survey.VesselData.LBP != nil && *survey.VesselData.LBP > 0 {
 		results := calculation.CalcDraft(draft, survey.VesselData)
 		trueTrim = &results.TrueTrim
 		listDegrees = &results.ListDegrees
@@ -712,7 +712,7 @@ func parseSurveyBlock(c *fiber.Ctx, s *types.Survey) {
 
 	dsNumber, err := parseInt(c, constants.DSNumber)
 	if err == nil {
-		s.Job.DSNumber = *dsNumber
+		s.Job.DSNumber = dsNumber
 	}
 
 	operation, err := parseString(c, constants.CargoOperation)
@@ -771,7 +771,7 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 
 	builtYear, err := parseInt(c, constants.Built)
 	if err == nil {
-		s.VesselData.BuiltYear = *builtYear
+		s.VesselData.BuiltYear = builtYear
 	}
 
 	constDeclared, err := parseFloat(c, constants.ConstDeclared)
@@ -786,42 +786,42 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 
 	lightship, err := parseFloat(c, constants.Lightship)
 	if err == nil {
-		s.VesselData.Lightship = *lightship
+		s.VesselData.Lightship = lightship
 	}
 
 	lbp, err := parseFloat(c, constants.LBP)
 	if err == nil {
-		s.VesselData.LBP = *lbp
+		s.VesselData.LBP = lbp
 	}
 
 	breadth, err := parseFloat(c, constants.Breadth)
 	if err == nil {
-		s.VesselData.Breadth = *breadth
+		s.VesselData.Breadth = breadth
 	}
 
 	depth, err := parseFloat(c, constants.Depth)
 	if err == nil {
-		s.VesselData.Depth = *depth
+		s.VesselData.Depth = depth
 	}
 
 	summerDraft, err := parseFloat(c, constants.SummerDraft)
 	if err == nil {
-		s.VesselData.SummerDraft = *summerDraft
+		s.VesselData.SummerDraft = summerDraft
 	}
 
 	summerDWT, err := parseFloat(c, constants.SummerDWT)
 	if err == nil {
-		s.VesselData.SummerDWT = *summerDWT
+		s.VesselData.SummerDWT = summerDWT
 	}
 
 	summerTPC, err := parseFloat(c, constants.SummerTPC)
 	if err == nil {
-		s.VesselData.SummerTPC = *summerTPC
+		s.VesselData.SummerTPC = summerTPC
 	}
 
 	summerFreeboard, err := parseFloat(c, constants.SummerFreeboard)
 	if err == nil {
-		s.VesselData.SummerFreeboard = *summerFreeboard
+		s.VesselData.SummerFreeboard = summerFreeboard
 	}
 
 	countryCode, err := parseString(c, constants.FlagCountryCode)
@@ -836,7 +836,7 @@ func parseVesselBlock(c *fiber.Ctx, s *types.Survey) {
 
 	holdsTotal, err := parseInt(c, constants.HoldsTotal)
 	if err == nil {
-		s.VesselData.HoldsTotal = *holdsTotal
+		s.VesselData.HoldsTotal = holdsTotal
 	}
 }
 

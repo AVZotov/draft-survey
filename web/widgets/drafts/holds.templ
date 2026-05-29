@@ -9,7 +9,8 @@ import (
 
 templ HoldsBar(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
-	{{ total := dp.Survey.VesselData.HoldsTotal }}
+	{{ total := 0 }}
+	{{ if dp.Survey.VesselData.HoldsTotal != nil { total = *dp.Survey.VesselData.HoldsTotal } }}
 	<div
 		class="holds-bar"
 		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HoldsBlock) }

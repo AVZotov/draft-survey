@@ -61,7 +61,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 				</div>
 				<div class="field">
 					<label for={ constants.DSNumber }>DS No. <span class="optional">(optional)</span></label>
-					<input name={ constants.DSNumber } value={ survey.Job.DSNumber } placeholder="e.g. 1" step="any" type="number"/>
+					<input name={ constants.DSNumber } value={ format.IntOrEmpty(survey.Job.DSNumber) } placeholder="e.g. 1" step="any" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.Client }>Principal / Client <span class="optional">(optional)</span></label>
@@ -178,7 +178,7 @@ templ VesselBlock(sp components.SurveyPageProps) {
 				</div>
 				<div class="field">
 					<label for={ constants.Built }>Built Year <span class="optional">(optional)</span></label>
-					<input value={ survey.VesselData.BuiltYear } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
+					<input value={ format.IntOrEmpty(survey.VesselData.BuiltYear) } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
 				</div>
 			</div>
 			<div class="field-col-3">
@@ -193,12 +193,14 @@ templ VesselBlock(sp components.SurveyPageProps) {
 				<div class="field">
 					<label>Holds Total <span class="optional">(optional)</span></label>
 					<div class="select-wrap">
+						{{ ht := 0 }}
+						{{ if survey.VesselData.HoldsTotal != nil { ht = *survey.VesselData.HoldsTotal } }}
 						<select name={ constants.HoldsTotal }>
-							<option value="0" selected?={ survey.VesselData.HoldsTotal == 0 }>—</option>
+							<option value="0" selected?={ ht == 0 }>—</option>
 							for i := 1; i <= 10; i++ {
 								<option
 									value={ strconv.Itoa(i) }
-									selected?={ survey.VesselData.HoldsTotal == i }
+									selected?={ ht == i }
 								>{ strconv.Itoa(i) }</option>
 							}
 						</select>
@@ -210,35 +212,35 @@ templ VesselBlock(sp components.SurveyPageProps) {
 			<div class="field-col-4">
 				<div class="field">
 					<label for={ constants.Lightship }>Lightship, MT <span class="required">*</span></label>
-					<input name={ constants.Lightship } value={ survey.VesselData.Lightship } placeholder="0.000" step="any" type="number"/>
+					<input name={ constants.Lightship } value={ format.FloatOrEmpty(survey.VesselData.Lightship) } placeholder="0.000" step="any" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.LBP }>LBP, m <span class="required">*</span></label>
-					<input name={ constants.LBP } value={ survey.VesselData.LBP } placeholder="0.00" step="any" oninput="updateCalcHints()" type="number"/>
+					<input name={ constants.LBP } value={ format.FloatOrEmpty(survey.VesselData.LBP) } placeholder="0.00" step="any" oninput="updateCalcHints()" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.Breadth }>Breadth, m <span class="required">*</span></label>
-					<input name={ constants.Breadth } value={ survey.VesselData.Breadth } placeholder="0.00" step="any" type="number"/>
+					<input name={ constants.Breadth } value={ format.FloatOrEmpty(survey.VesselData.Breadth) } placeholder="0.00" step="any" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.Depth }>Depth, m <span class="optional">(optional)</span></label>
-					<input name={ constants.Depth } value={ survey.VesselData.Depth } placeholder="0.00" step="any" oninput="checkDepth()" type="number"/>
+					<input name={ constants.Depth } value={ format.FloatOrEmpty(survey.VesselData.Depth) } placeholder="0.00" step="any" oninput="checkDepth()" type="number"/>
 				</div>
 				<div class="field">
 					<label for={ constants.SummerDraft }>Summer Draft, m <span class="required">*</span></label>
-					<input type="number" name={ constants.SummerDraft } placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ survey.VesselData.SummerDraft }/>
+					<input type="number" name={ constants.SummerDraft } placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerDraft) }/>
 				</div>
 				<div class="field">
 					<label for={ constants.SummerDWT }>Summer DWT, MT <span class="required">*</span></label>
-					<input type="number" name={ constants.SummerDWT } placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerDWT }/>
+					<input type="number" name={ constants.SummerDWT } placeholder="0.000" step="any" oninput="updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerDWT) }/>
 				</div>
 				<div class="field">
 					<label for={ constants.SummerTPC }>Summer TPC, MT/cm <span class="required">*</span></label>
-					<input type="number" name={ constants.SummerTPC } placeholder="0.000" step="any" oninput="updateFWA()" value={ survey.VesselData.SummerTPC }/>
+					<input type="number" name={ constants.SummerTPC } placeholder="0.000" step="any" oninput="updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerTPC) }/>
 				</div>
 				<div class="field">
 					<label for={ constants.SummerFreeboard }>Summer Freeboard, m <span class="optional">(optional)</span></label>
-					<input type="number" name={ constants.SummerFreeboard } placeholder="0.000" step="any" oninput="checkDepth()" value={ survey.VesselData.SummerFreeboard }/>
+					<input type="number" name={ constants.SummerFreeboard } placeholder="0.000" step="any" oninput="checkDepth()" value={ format.FloatOrEmpty(survey.VesselData.SummerFreeboard) }/>
 				</div>
 			</div>
 		</div>

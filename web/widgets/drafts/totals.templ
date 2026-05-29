@@ -55,7 +55,7 @@ templ Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) {
 				</div>
 				<div class="totals-cell">
 					<span class="totals-cell-label">Summer DWT</span>
-					<span class="totals-cell-value">{ f.WeightFormatted(survey.VesselData.SummerDWT) } <span class="totals-unit">MT</span></span>
+					<span class="totals-cell-value">{ f.WeightFormattedPointer(survey.VesselData.SummerDWT) } <span class="totals-unit">MT</span></span>
 				</div>
 				<div class="totals-cell">
 					<span class="totals-cell-label">Current DWT</span>
