@@ -14,7 +14,7 @@ templ Profile(lp components.LayoutProps) {
 		} else {
 			@widgets.HeaderUser(lp.User)
 		}
-		@profile.ProfileForm()
+		@profile.Form(lp.User)
 		@widgets.Footer(lp.AppVersion)
 	}
 }
