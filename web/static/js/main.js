@@ -85,14 +85,14 @@ document.addEventListener('htmx:afterSwap', function (event) {
 document.addEventListener('alpine:initialized', () => {
     const rawToast = sessionStorage.getItem('toast')
     if (rawToast) {
-        const {header, message} = JSON.parse(rawToast)
+        const { header, message } = JSON.parse(rawToast)
         sessionStorage.removeItem('toast')
         Alpine.store('toast').show(header, message)
     }
 
     const rawAlert = sessionStorage.getItem('alert')
     if (rawAlert) {
-        const {header, message} = JSON.parse(rawAlert)
+        const { header, message } = JSON.parse(rawAlert)
         sessionStorage.removeItem('alert')
         Alpine.store('alert').show(header, message)
     }
@@ -101,7 +101,8 @@ document.addEventListener('alpine:initialized', () => {
 //Inline usage in templ components do not remove
 function requireFields(ids) {
     for (const id of ids) {
-        if (document.getElementById(id).value === '') {
+        const el = document.getElementById(id)
+        if (!el || el.value === '') {
             event.preventDefault();
             return;
         }

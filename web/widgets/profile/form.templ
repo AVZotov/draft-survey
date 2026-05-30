@@ -3,6 +3,7 @@ package profile
 import "github.com/AVZotov/draft-survey/internal/handler/chi/fields"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/internal/handler/chi/routes"
 
 templ Form(user *types.User) {
 	{{
@@ -13,7 +14,14 @@ templ Form(user *types.User) {
 			u = *user
 		}
 	}}
-	<div class="page-main">
+	<div
+		x-data="{
+			firstname: '',
+			lastname: '',
+			get isActive() { return this.firstname !== '' && this.lastname !== '' },
+		}"
+		class="page-main"
+	>
 		<div class="setup-card">
 			<div class="setup-intro">
 				if user == nil {
@@ -38,9 +46,16 @@ templ Form(user *types.User) {
 				<!-- Form footer -->
 				<div class="form-footer">
 					<span class="form-footer-hint">
-						Fields marked <span style="color:var(--accent)">*</span> are required
+						Fields marked <span class="required">*</span> are required
 					</span>
-					<button class="btn btn-primary" type="submit">
+					<button
+						class="btn"
+						x-bind:class="isActive ? 'btn-primary' : 'btn-ghost'"
+						x-bind:disabled="!isActive"
+						hx-get={ routes.Home() }
+						hx-target="body"
+						hx-push-url="true"
+					>
 						<svg viewBox="0 0 24 24">
 							<path d="M5 12h14M12 5l7 7-7 7"></path>
 						</svg>
@@ -50,7 +65,7 @@ templ Form(user *types.User) {
 			</div><!-- /form-card -->
 			<!-- Info note -->
 			<div class="info-banner">
-				@components.IconInfo(6)
+				@components.IconInfo()
 				<p class="info-banner-text">
 					All profile data is stored locally on this device only.
 					No information is transmitted to external servers.
@@ -63,7 +78,7 @@ templ Form(user *types.User) {
 templ PersonalInfo(user types.User) {
 	<div
 		class="form-section"
-		hx-post="/noop"
+		hx-post={ routes.APIProfile() }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
 	>
@@ -80,6 +95,7 @@ templ PersonalInfo(user types.User) {
 					name={ fields.FieldFirstName }
 					value={ user.FirstName }
 					placeholder="e.g. John"
+					x-model.fill="firstname"
 					required
 				/>
 			</div>
@@ -94,6 +110,7 @@ templ PersonalInfo(user types.User) {
 					name={ fields.FieldLastName }
 					value={ user.LastName }
 					placeholder="e.g. Dow"
+					x-model.fill="lastname"
 					required
 				/>
 			</div>
@@ -129,7 +146,12 @@ templ PersonalInfo(user types.User) {
 }
 
 templ CompanyInfo(user types.User) {
-	<div class="form-section">
+	<div
+		class="form-section"
+		hx-post={ routes.APIProfile() }
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+	>
 		<p class="form-section-title">Company & Certification</p>
 		<div class="field-row">
 			<div class="field">
@@ -181,11 +203,14 @@ templ CompanyInfo(user types.User) {
 }
 
 templ Signature() {
-	<div class="form-section">
-		<p class="form-section-title">
-			Signature for Reports 
-			<span style="optional">(optional)</span>
-		</p>
+	<div
+		class="form-section"
+		hx-post={ routes.APIProfile() }
+		hx-encoding="multipart/form-data"
+		hx-trigger="change changed"
+		hx-include="this"
+	>
+		<p class="form-section-title">Signature for Reports</p>
 		<label for={ fields.FieldSignature } class="signature-upload">
 			<input type="file" id={ fields.FieldSignature } name={ fields.FieldSignature } accept="image/png,image/jpeg"/>
 			<svg class="signature-upload-icon" viewBox="0 0 24 24">
