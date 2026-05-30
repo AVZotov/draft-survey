@@ -48,19 +48,17 @@ templ Form(user *types.User) {
 					<span class="form-footer-hint">
 						Fields marked <span class="required">*</span> are required
 					</span>
-					<button
+					<a
 						class="btn"
+						href={ routes.Home() }
+						x-on:click="!isActive && $event.preventDefault()"
 						x-bind:class="isActive ? 'btn-primary' : 'btn-ghost'"
-						x-bind:disabled="!isActive"
-						hx-get={ routes.Home() }
-						hx-target="body"
-						hx-push-url="true"
 					>
 						<svg viewBox="0 0 24 24">
 							<path d="M5 12h14M12 5l7 7-7 7"></path>
 						</svg>
 						Continue
-					</button>
+					</a>
 				</div>
 			</div><!-- /form-card -->
 			<!-- Info note -->

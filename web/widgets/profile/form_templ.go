@@ -91,20 +91,20 @@ func Form(user *types.User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<!-- Form footer --><div class=\"form-footer\"><span class=\"form-footer-hint\">Fields marked <span class=\"required\">*</span> are required</span> <button class=\"btn\" x-bind:class=\"isActive ? 'btn-primary' : 'btn-ghost'\" x-bind:disabled=\"!isActive\" hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<!-- Form footer --><div class=\"form-footer\"><span class=\"form-footer-hint\">Fields marked <span class=\"required\">*</span> are required</span> <a class=\"btn\" href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.Home())
+		var templ_7745c5c3_Var3 templ.SafeURL
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinURLErrs(routes.Home())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 55, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 53, Col: 26}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" hx-target=\"body\" hx-push-url=\"true\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg> Continue</button></div></div><!-- /form-card --><!-- Info note --><div class=\"info-banner\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" x-on:click=\"!isActive && $event.preventDefault()\" x-bind:class=\"isActive ? 'btn-primary' : 'btn-ghost'\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg> Continue</a></div></div><!-- /form-card --><!-- Info note --><div class=\"info-banner\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -148,7 +148,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APIProfile())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 81, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 79, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
@@ -161,7 +161,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldFirstName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 88, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 86, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
@@ -174,7 +174,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldFirstName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 94, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 92, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
@@ -187,7 +187,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldFirstName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 95, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 93, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 		if templ_7745c5c3_Err != nil {
@@ -200,7 +200,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.FirstName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 96, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 94, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
 		if templ_7745c5c3_Err != nil {
@@ -213,7 +213,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLastName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 103, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 101, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
 		if templ_7745c5c3_Err != nil {
@@ -226,7 +226,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLastName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 109, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 107, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var11)
 		if templ_7745c5c3_Err != nil {
@@ -239,7 +239,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLastName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 110, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 108, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var12)
 		if templ_7745c5c3_Err != nil {
@@ -252,7 +252,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.LastName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 111, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 109, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var13)
 		if templ_7745c5c3_Err != nil {
@@ -265,7 +265,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldPosition)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 118, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 116, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
 		if templ_7745c5c3_Err != nil {
@@ -278,7 +278,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldPosition)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 124, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 122, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
 		if templ_7745c5c3_Err != nil {
@@ -291,7 +291,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldPosition)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 125, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 123, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
 		if templ_7745c5c3_Err != nil {
@@ -304,7 +304,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.Position)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 126, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 124, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var17)
 		if templ_7745c5c3_Err != nil {
@@ -317,7 +317,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var18 string
 		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldEmail)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 131, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 129, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var18)
 		if templ_7745c5c3_Err != nil {
@@ -330,7 +330,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldEmail)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 137, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 135, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var19)
 		if templ_7745c5c3_Err != nil {
@@ -343,7 +343,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var20 string
 		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldEmail)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 138, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 136, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var20)
 		if templ_7745c5c3_Err != nil {
@@ -356,7 +356,7 @@ func PersonalInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var21 string
 		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.Email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 139, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 137, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var21)
 		if templ_7745c5c3_Err != nil {
@@ -398,7 +398,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var23 string
 		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APIProfile())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 151, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 149, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var23)
 		if templ_7745c5c3_Err != nil {
@@ -411,7 +411,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var24 string
 		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCompany)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 158, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 156, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var24)
 		if templ_7745c5c3_Err != nil {
@@ -424,7 +424,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var25 string
 		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCompany)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 164, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 162, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var25)
 		if templ_7745c5c3_Err != nil {
@@ -437,7 +437,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var26 string
 		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCompany)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 165, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 163, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var26)
 		if templ_7745c5c3_Err != nil {
@@ -450,7 +450,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var27 string
 		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.Company)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 166, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 164, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var27)
 		if templ_7745c5c3_Err != nil {
@@ -463,7 +463,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLicense)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 171, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 169, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var28)
 		if templ_7745c5c3_Err != nil {
@@ -476,7 +476,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var29 string
 		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLicense)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 174, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 172, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var29)
 		if templ_7745c5c3_Err != nil {
@@ -489,7 +489,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var30 string
 		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLicense)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 175, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 173, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var30)
 		if templ_7745c5c3_Err != nil {
@@ -502,7 +502,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var31 string
 		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.ResolveAttributeValue(user.License)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 176, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 174, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var31)
 		if templ_7745c5c3_Err != nil {
@@ -515,7 +515,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var32 string
 		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCountry)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 181, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 179, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var32)
 		if templ_7745c5c3_Err != nil {
@@ -528,7 +528,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var33 string
 		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCountry)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 187, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 185, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var33)
 		if templ_7745c5c3_Err != nil {
@@ -541,7 +541,7 @@ func CompanyInfo(user types.User) templ.Component {
 		var templ_7745c5c3_Var34 string
 		templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCountry)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 188, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 186, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var34)
 		if templ_7745c5c3_Err != nil {
@@ -583,7 +583,7 @@ func Signature() templ.Component {
 		var templ_7745c5c3_Var36 string
 		templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APIProfile())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 208, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 206, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var36)
 		if templ_7745c5c3_Err != nil {
@@ -596,7 +596,7 @@ func Signature() templ.Component {
 		var templ_7745c5c3_Var37 string
 		templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSignature)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 214, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 212, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var37)
 		if templ_7745c5c3_Err != nil {
@@ -609,7 +609,7 @@ func Signature() templ.Component {
 		var templ_7745c5c3_Var38 string
 		templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSignature)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 215, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 213, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var38)
 		if templ_7745c5c3_Err != nil {
@@ -622,7 +622,7 @@ func Signature() templ.Component {
 		var templ_7745c5c3_Var39 string
 		templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSignature)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 215, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/profile/form.templ`, Line: 213, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var39)
 		if templ_7745c5c3_Err != nil {
