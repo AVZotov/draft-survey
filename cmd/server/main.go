@@ -53,9 +53,9 @@ func main() {
 	}
 
 	// Start both servers
-	go func() {
-		log.Fatal(app.Listen(":3399"))
-	}()
+	// go func() {
+	// 	log.Fatal(app.Listen(":3399"))
+	// }()
 
 	go func() {
 		log.Println("Chi server starting on :3400")

@@ -79,6 +79,7 @@ templ PersonalInfo(user types.User) {
 		hx-post={ routes.APIProfile() }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
+		hx-swap="none"
 	>
 		<p class="form-section-title">Personal Information</p>
 		<div class="field-row">
@@ -149,6 +150,7 @@ templ CompanyInfo(user types.User) {
 		hx-post={ routes.APIProfile() }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
+		hx-swap="none"
 	>
 		<p class="form-section-title">Company & Certification</p>
 		<div class="field-row">
@@ -207,6 +209,7 @@ templ Signature() {
 		hx-encoding="multipart/form-data"
 		hx-trigger="change changed"
 		hx-include="this"
+		hx-swap="none"
 	>
 		<p class="form-section-title">Signature for Reports</p>
 		<label for={ fields.FieldSignature } class="signature-upload">

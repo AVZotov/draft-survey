@@ -45,8 +45,6 @@ func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
 		if err = h.services.User.SaveSignature(sign); err != nil {
 			h.logger.Error(op, err)
 		}
+		w.WriteHeader(http.StatusNoContent)
 	}
-
-	// TODO: respond with redirect to /
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

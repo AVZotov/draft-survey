@@ -37,8 +37,9 @@ func (pv *PlaygroundValidator) Validate(data any) FieldErrors {
 		if errors.As(err, &errs) {
 			for _, fe := range errs {
 				fieldErrors = append(fieldErrors, FieldError{
-					Field:   fe.Field(),
-					Message: fe.Namespace(),
+					Field:     fe.Field(),
+					Namespace: fe.Namespace(),
+					Message:   messageFromTag(fe.Tag()),
 				})
 			}
 		}

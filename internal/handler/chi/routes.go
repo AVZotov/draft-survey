@@ -37,26 +37,25 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.SurveyListStats(), nil)
 	r.Get(routes.ResultsValidate("{id}"), nil)
 
-	// API v1
-	r.Route(
-		"/api/v1", func(r chi.Router) {
-			r.Post(routes.APICreateSurvey(), nil)
-			r.Put(routes.APISurvey("{id}"), nil)
-			r.Delete(routes.APIDeleteSurvey("{id}"), nil)
+	// API v1 — profile
+	r.Post(routes.APIProfile(), h.createProfile)
 
-			r.Post(routes.APIDraft("{id}"), nil)
-			r.Delete(routes.APIDraft("{id}"), nil)
-			r.Put(routes.APIDraftUpdate("{id}", "{draftIndex}"), nil)
-			r.Post(routes.APIDraftStatus("{id}", "{draftIndex}"), nil)
+	// API v1 — survey
+	r.Post(routes.APICreateSurvey(), nil)
+	r.Put(routes.APISurvey("{id}"), nil)
+	r.Delete(routes.APIDeleteSurvey("{id}"), nil)
 
-			r.Post(routes.APIProfile(), h.createProfile)
+	// API v1 — draft
+	r.Post(routes.APIDraft("{id}"), nil)
+	r.Delete(routes.APIDraft("{id}"), nil)
+	r.Put(routes.APIDraftUpdate("{id}", "{draftIndex}"), nil)
+	r.Post(routes.APIDraftStatus("{id}", "{draftIndex}"), nil)
 
-			r.Put(routes.APITanks("{id}", "{draftIndex}"), nil)
-			r.Post(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
-			r.Delete(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
-			r.Put(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
-		},
-	)
+	// API v1 — tanks
+	r.Put(routes.APITanks("{id}", "{draftIndex}"), nil)
+	r.Post(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
+	r.Delete(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
+	r.Put(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
 
 	return nil
 }

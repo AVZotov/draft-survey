@@ -45,6 +45,7 @@
 !favicon*.png
 
 # Always ignore — sensitive and generated
+htmx-ref.md
 .env
 configs/local.yaml
 configs/local.toml

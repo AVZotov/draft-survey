@@ -37,7 +37,7 @@ func (u *userService) Save(user *types.User) error {
 	const op = "UserService.Save"
 
 	if errs := u.validator.Validate(user); len(errs) > 0 {
-		u.logger.Warn(op, "validation failed", "errors", errs.Error())
+		u.logger.Warn("validation failed", "caller:", op, "errors", errs.Error())
 		return errs
 	}
 
