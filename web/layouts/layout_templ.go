@@ -88,15 +88,7 @@ func Layout(props components.LayoutProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<dialog id=\"app-modal\" hx-preserve=\"true\" x-data=\"{dirty: false}\" x-on:close=\"dirty = false\" x-on:cancel.prevent=\"\n\t\t\t\tif (!dirty) {$el.close(); return }\n\t\t\t\tif (confirm('Unsaved changes. Close anyway?')) { $el.close() }\n\t\t\t\t\"><div id=\"app-modal-content\"></div></dialog><!-- Universl toast/notification -->")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.Toast().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<dialog id=\"app-confirm\" x-data>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<dialog id=\"app-modal\" hx-preserve=\"true\" x-data=\"{dirty: false}\" x-on:close=\"dirty = false\" x-on:cancel.prevent=\"\n\t\t\t\tif (!dirty) {$el.close(); return }\n\t\t\t\tif (confirm('Unsaved changes. Close anyway?')) { $el.close() }\n\t\t\t\t\"><div id=\"app-modal-content\"></div></dialog><!-- Universl toast/notification --><div id=\"toast-container\" class=\"toast-container\"></div><dialog id=\"app-confirm\" x-data>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -104,7 +96,7 @@ func Layout(props components.LayoutProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</dialog> <dialog id=\"app-alert\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</dialog> <dialog id=\"app-alert\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -112,12 +104,12 @@ func Layout(props components.LayoutProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</dialog> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</dialog> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, js := range props.ExtraJS {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<script src=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<script src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -130,12 +122,12 @@ func Layout(props components.LayoutProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<div id=\"global-spinner\" class=\"global-spinner\"><div class=\"loader\"></div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<div id=\"global-spinner\" class=\"global-spinner\"><div class=\"loader\"></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

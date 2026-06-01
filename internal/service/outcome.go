@@ -4,7 +4,7 @@ type NotificationKind string
 
 const (
 	KindSuccess NotificationKind = "success"
-	KindWarning NotificationKind = "warning"
+	KindWarning NotificationKind = "warn"
 	KindError   NotificationKind = "error"
 	KindInfo    NotificationKind = "info"
 )

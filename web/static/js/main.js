@@ -2,8 +2,7 @@
 const es = new EventSource('/events')
 
 es.addEventListener('toast', (e) => {
-    const d = JSON.parse(e.data)
-    document.getElementById('app-toast').show(d.header, d.message)
+    document.getElementById('toast-container').insertAdjacentHTML('beforeend', e.data)
 })
 
 es.addEventListener('alert', (e) => {

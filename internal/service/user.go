@@ -45,15 +45,31 @@ func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 	isNew := existing == nil
 	merged := merge(existing, incoming)
 
+	var emailWarning *Outcome
+
 	if errs := u.validator.Validate(merged); len(errs) > 0 {
-		u.logger.Warn("validation failed", "caller", op, "errors", errs.Error())
-		return &Outcome{
-			Alert: &Notification{
-				Kind:    KindError,
-				Header:  "Validation Error",
-				Message: errs.Error(),
-			},
-		}, nil
+		for _, fe := range errs {
+			if fe.Field == "Email" {
+				merged.Email = ""
+				u.logger.Warn(op, fe.Field, fe.Message)
+				emailWarning = &Outcome{
+					Toast: &Notification{
+						Kind:    KindWarning,
+						Header:  "Invalid Email",
+						Message: "Email not saved. All other data updated.",
+					},
+				}
+			}
+		}
+		if errs := u.validator.Validate(merged); len(errs) > 0 {
+			return &Outcome{
+				Alert: &Notification{
+					Kind:    KindError,
+					Header:  "Validation Error",
+					Message: errs.Error(),
+				},
+			}, nil
+		}
 	}
 
 	if err = u.repo.Save(merged); err != nil {
@@ -61,7 +77,11 @@ func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 		return nil, err
 	}
 
-	u.logger.Info(op, "user saved successfully")
+	u.logger.Info(op, "status:", "user saved successfully")
+
+	if emailWarning != nil {
+		return emailWarning, nil
+	}
 
 	if isNew {
 		return &Outcome{

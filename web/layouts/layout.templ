@@ -41,7 +41,7 @@ templ Layout(props components.LayoutProps) {
 				<div id="app-modal-content"></div>
 			</dialog>
 			<!-- Universl toast/notification -->
-			@components.Toast()
+			<div id="toast-container" class="toast-container"></div>
 			<dialog id="app-confirm" x-data>
 				@components.ConfirmModal()
 			</dialog>

@@ -1,23 +1,30 @@
 package components
 
-templ Toast() {
-	<div
-		id="app-toast"
-		x-data
-		x-show="$store.toast.visible"
-		x-cloak
-		x-transition.origin.right
-	>
-		<div class="toast-content">
-			<div class="toast-header" x-text="$store.toast.header"></div>
-			<div class="toast-message" x-text="$store.toast.message"></div>
-		</div>
-		<button
-			class="toast-close"
-			type="button"
-			x-on:click="$store.toast.visible = false"
+type ToastKind string
+
+const (
+	ToastSuccess ToastKind = "success"
+	ToastWarning ToastKind = "warn"
+	ToastError   ToastKind = "error"
+	ToastInfo    ToastKind = "info"
+)
+
+templ Toast(kind ToastKind, header, message string) {
+	<div hx-swap-oob="beforeend:#toast-container">
+		<div
+			x-init="setTimeout(() => $el.remove(), 3000)"
+			class={ "notice-item notice-item--" + string(kind) }
 		>
-			@IconClose()
-		</button>
+			<div class="notice-item-content">
+				<div class="notice-item-header">{ header }</div>
+				<div class="notice-item-message">{ message }</div>
+			</div>
+			<button
+				x-on:click="$el.closest('.notice-item').remove()"
+				class="notice-item-close"
+			>
+				@IconClose()
+			</button>
+		</div>
 	</div>
 }
