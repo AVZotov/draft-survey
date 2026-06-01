@@ -1,3 +1,23 @@
+// SSE FOUNDATION
+const es = new EventSource('/events')
+
+es.addEventListener('toast', (e) => {
+    const d = JSON.parse(e.data)
+    document.getElementById('app-toast').show(d.header, d.message)
+})
+
+es.addEventListener('alert', (e) => {
+    const d = JSON.parse(e.data)
+    document.getElementById('app-alert-header').textContent = d.header
+    document.getElementById('app-alert-message').textContent = d.message
+    document.getElementById('app-alert').showModal()
+})
+
+// NEW SSE FOUNDATION — add above
+// --------------------------------
+
+// DELETE CANDIDATES below
+
 document.addEventListener('alpine:init', () => {
     Alpine.store('toast', {
         header: '',

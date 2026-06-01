@@ -52,3 +52,7 @@ func ResultsValidate(id string) string {
 func DictionarySeaOptions() string { return "/dictionary/sea-options" }
 func DictionaryPorts() string      { return "/dictionary/ports" }
 func DictionaryCountries() string  { return "/dictionary/countries" }
+
+// SSE Routes
+
+func Events() string { return "/events" }

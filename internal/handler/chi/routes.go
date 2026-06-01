@@ -32,6 +32,9 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.DictionaryPorts(), nil)
 	r.Get(routes.DictionaryCountries(), nil)
 
+	//SSE route
+	r.Get(routes.Events(), h.Events)
+
 	// HTMX fragments
 	r.Get(routes.SurveyListRows(), nil)
 	r.Get(routes.SurveyListStats(), nil)
