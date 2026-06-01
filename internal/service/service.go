@@ -13,8 +13,8 @@ type DictionaryService interface {
 
 type UserService interface {
 	Get() (*types.User, error)
-	Save(user *types.User) error
-	SaveSignature(signature []byte) error
+	Save(user *types.User) (*Outcome, error)
+	SaveSignature(signature []byte) (*Outcome, error)
 	Delete() error
 }
 

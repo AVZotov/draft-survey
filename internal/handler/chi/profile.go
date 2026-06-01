@@ -9,18 +9,16 @@ import (
 )
 
 func (h *Handler) profile(w http.ResponseWriter, r *http.Request) {
-	const op = "profile"
+	const op = "Handler.profile"
+
 	user, err := h.services.User.Get()
 	if err != nil {
 		h.logger.Error(op, err)
-		//TODO: Implement error handling. Avoid handling no user error
 	}
 
 	props := web.ProfileLayoutProps(user, h.appVersion)
-	err = pages.Profile(props).Render(r.Context(), w)
-	if err != nil {
+	if err = pages.Profile(props).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
-		//TODO: Implement error handling.
 	}
 }
 
@@ -30,21 +28,25 @@ func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
 	user, err := parse.Profile(r)
 	if err != nil {
 		h.logger.Error(op, err)
-		// TODO: respond with alert
+		h.respond(w, nil)
 		return
 	}
 
-	if err = h.services.User.Save(user); err != nil {
+	outcome, err := h.services.User.Save(user)
+	if err != nil {
 		h.logger.Error(op, err)
-		// TODO: respond with alert
+		h.respond(w, nil)
 		return
 	}
 
-	sign, err := parse.ProfileSignature(r)
-	if err == nil && len(sign) > 0 {
-		if err = h.services.User.SaveSignature(sign); err != nil {
+	if sign, err := parse.ProfileSignature(r); err == nil && len(sign) > 0 {
+		signOutcome, err := h.services.User.SaveSignature(sign)
+		if err != nil {
 			h.logger.Error(op, err)
+		} else {
+			outcome = signOutcome
 		}
-		w.WriteHeader(http.StatusNoContent)
 	}
+
+	h.respond(w, outcome)
 }

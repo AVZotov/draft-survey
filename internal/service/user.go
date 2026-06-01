@@ -33,38 +33,70 @@ func (u *userService) Get() (*types.User, error) {
 	return user, nil
 }
 
-func (u *userService) Save(user *types.User) error {
+func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 	const op = "UserService.Save"
 
-	if errs := u.validator.Validate(user); len(errs) > 0 {
-		u.logger.Warn("validation failed", "caller:", op, "errors", errs.Error())
-		return errs
+	existing, err := u.repo.Get()
+	if err != nil {
+		u.logger.Error(op, err)
+		return nil, err
 	}
 
-	if err := u.repo.Save(user); err != nil {
+	isNew := existing == nil
+	merged := merge(existing, incoming)
+
+	if errs := u.validator.Validate(merged); len(errs) > 0 {
+		u.logger.Warn("validation failed", "caller", op, "errors", errs.Error())
+		return &Outcome{
+			Alert: &Notification{
+				Kind:    KindError,
+				Header:  "Validation Error",
+				Message: errs.Error(),
+			},
+		}, nil
+	}
+
+	if err = u.repo.Save(merged); err != nil {
 		u.logger.Error(op, err)
-		return err
+		return nil, err
 	}
 
 	u.logger.Info(op, "user saved successfully")
-	return nil
+
+	if isNew {
+		return &Outcome{
+			Toast: &Notification{
+				Kind:    KindSuccess,
+				Header:  "Profile Created",
+				Message: "You can add extra info or continue",
+			},
+		}, nil
+	}
+
+	return nil, nil
 }
 
-func (u *userService) SaveSignature(data []byte) error {
+func (u *userService) SaveSignature(data []byte) (*Outcome, error) {
 	const op = "UserService.SaveSignature"
 
 	if len(data) == 0 {
 		u.logger.Warn(op, "empty signature data")
-		return nil
+		return nil, nil
 	}
 
 	if err := u.repo.SaveSignature(data, ""); err != nil {
 		u.logger.Error(op, err)
-		return err
+		return nil, err
 	}
 
 	u.logger.Info(op, "signature saved successfully")
-	return nil
+	return &Outcome{
+		Toast: &Notification{
+			Kind:    KindSuccess,
+			Header:  "Saved",
+			Message: "Signature updated",
+		},
+	}, nil
 }
 
 func (u *userService) Delete() error {
@@ -77,4 +109,35 @@ func (u *userService) Delete() error {
 
 	u.logger.Info(op, "user deleted")
 	return nil
+}
+
+func merge(existing, incoming *types.User) *types.User {
+	if existing == nil {
+		return incoming
+	}
+	if incoming.FirstName != "" {
+		existing.FirstName = incoming.FirstName
+	}
+	if incoming.LastName != "" {
+		existing.LastName = incoming.LastName
+	}
+	if incoming.Position != "" {
+		existing.Position = incoming.Position
+	}
+	if incoming.Email != "" {
+		existing.Email = incoming.Email
+	}
+	if incoming.Company != "" {
+		existing.Company = incoming.Company
+	}
+	if incoming.License != "" {
+		existing.License = incoming.License
+	}
+	if incoming.Country != "" {
+		existing.Country = incoming.Country
+	}
+	if incoming.EmployeeID != "" {
+		existing.EmployeeID = incoming.EmployeeID
+	}
+	return existing
 }
