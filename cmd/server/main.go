@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	draftsurvey "github.com/AVZotov/draft-survey"
 	chihandler "github.com/AVZotov/draft-survey/internal/handler/chi"
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/service"
@@ -21,7 +22,7 @@ var version = "dev"
 const DBPath = "./data/draft-survey.db"
 
 func main() {
-	db, err := storage.NewDB(DBPath)
+	db, err := storage.NewDB(DBPath, draftsurvey.Dictionaries)
 	if err != nil {
 		log.Fatal(err)
 	}

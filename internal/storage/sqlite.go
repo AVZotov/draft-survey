@@ -2,13 +2,14 @@ package storage
 
 import (
 	"database/sql"
+	"embed"
 	"os"
 	"path/filepath"
 
 	_ "modernc.org/sqlite"
 )
 
-func NewDB(path string) (*sql.DB, error) {
+func NewDB(path string, fs embed.FS) (*sql.DB, error) {
 	dir := filepath.Dir(path)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
@@ -24,6 +25,10 @@ func NewDB(path string) (*sql.DB, error) {
 	}
 
 	if err = runMigrations(db); err != nil {
+		return nil, err
+	}
+
+	if err = seedDictionaries(db, fs); err != nil {
 		return nil, err
 	}
 
