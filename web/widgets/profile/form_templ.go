@@ -5,15 +5,13 @@ package profile
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import (
-	"github.com/AVZotov/draft-survey/internal/handler/fields"
-	"github.com/AVZotov/draft-survey/internal/handler/routes"
-	"github.com/a-h/templ"
-)
+import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
 
 func Form(user *types.User) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
