@@ -1,0 +1,17 @@
+package components
+
+templ CountrySelectWrapper(url, loadURL string) {
+	<div
+		hx-post={ url }
+		hx-trigger="change consume"
+		hx-include="this"
+		hx-swap="none"
+		class="field-wrap-col"
+	>
+		<div
+			hx-get={ loadURL }
+			hx-trigger="load"
+			hx-swap="outerHTML"
+		></div>
+	</div>
+}

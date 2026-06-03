@@ -7,8 +7,8 @@ import (
 )
 
 type DictionaryService interface {
-	GetPorts() (*[]types.Port, error)
 	GetCountries() (*[]types.Country, error)
+	GetPorts(countryCode string) (*[]types.Port, error)
 }
 
 type UserService interface {

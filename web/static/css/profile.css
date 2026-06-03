@@ -7,12 +7,12 @@
 /* ─── Page layout ─────────────────────────────────────────────── */
 .setup-card {
   width: 100%;
-  max-width: 560px;
+  max-width: 720px;
 }
 
 /* ─── Intro block ─────────────────────────────────────────────── */
 .setup-intro {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
 }
 
 .setup-step-label {

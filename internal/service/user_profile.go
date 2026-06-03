@@ -104,7 +104,7 @@ func (u *userService) SaveSignature(data []byte) (*Outcome, error) {
 		return nil, nil
 	}
 
-	if err := u.repo.SaveSignature(data, ""); err != nil {
+	if err := u.repo.SaveSignature(data); err != nil {
 		u.logger.Error(op, err)
 		return nil, err
 	}
@@ -153,8 +153,8 @@ func merge(existing, incoming *types.User) *types.User {
 	if incoming.License != "" {
 		existing.License = incoming.License
 	}
-	if incoming.Country != "" {
-		existing.Country = incoming.Country
+	if incoming.CountryCode != "" {
+		existing.CountryCode = incoming.CountryCode
 	}
 	if incoming.EmployeeID != "" {
 		existing.EmployeeID = incoming.EmployeeID

@@ -29,4 +29,5 @@ var migrations = []migration{
 	);
 	CREATE INDEX idx_ports_name ON ports(name);
 	CREATE INDEX idx_ports_country ON ports(country_code);`},
+	{5, `ALTER TABLE users ADD COLUMN signature BLOB;`},
 }

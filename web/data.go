@@ -96,6 +96,7 @@ func ProfileLayoutProps(user *types.User, version string) components.LayoutProps
 	return components.LayoutProps{
 		Title:           "Surveyor Profile",
 		MetaDescription: "Surveyor profile setup page",
+		ExtraCSS:        []string{"/static/css/profile.css"},
 		User:            user,
 		AppVersion:      version,
 	}

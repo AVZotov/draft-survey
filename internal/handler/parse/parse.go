@@ -6,11 +6,27 @@ import (
 	"strings"
 
 	apperrors "github.com/AVZotov/draft-survey/internal/errors"
+	"github.com/gorilla/schema"
 )
+
+var decoder = func() *schema.Decoder {
+	d := schema.NewDecoder()
+	d.SetAliasTag("schema")
+	d.IgnoreUnknownKeys(true)
+	return d
+}
+
+func Decode(r *http.Request, dst any) error {
+	if err := r.ParseForm(); err != nil {
+		return err
+	}
+	return decoder().Decode(dst, r.PostForm)
+}
 
 func Float(r *http.Request, name string, dest **float64) error {
 	v := r.FormValue(name)
 	v = strings.ReplaceAll(v, " ", "")
+	v = strings.ReplaceAll(v, ",", ".")
 	if v == "" {
 		*dest = nil
 		return nil
@@ -25,6 +41,8 @@ func Float(r *http.Request, name string, dest **float64) error {
 
 func Int(r *http.Request, name string, dest **int) error {
 	v := r.FormValue(name)
+	v = strings.ReplaceAll(v, " ", "")
+	v = strings.ReplaceAll(v, ",", ".")
 	if v == "" {
 		*dest = nil
 		return nil

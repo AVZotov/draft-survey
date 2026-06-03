@@ -1,33 +1,23 @@
 package handler
 
 import (
-	"github.com/AVZotov/draft-survey/internal/storage"
-	"github.com/AVZotov/draft-survey/internal/validation"
+	"github.com/AVZotov/draft-survey/internal/logger"
+	"github.com/AVZotov/draft-survey/internal/service"
+	"github.com/AVZotov/draft-survey/internal/sse"
 )
 
 type Handler struct {
-	userRepository         storage.UserRepository
-	surveyRepository       storage.SurveyRepository
-	surveyQueryRepository  storage.SurveyQueryRepository
-	dictionariesRepository storage.DictionariesRepository
-	validator              validation.Validator
-	appVersion             string
+	services   *service.Services
+	logger     logger.Logger
+	appVersion string
+	broker     *sse.Broker
 }
 
-func New(
-	userRepository storage.UserRepository,
-	surveyRepository storage.SurveyRepository,
-	surveyQueryRepository storage.SurveyQueryRepository,
-	dictionariesRepository storage.DictionariesRepository,
-	validator validation.Validator,
-	version string,
-) *Handler {
+func New(services *service.Services, logger logger.Logger, version string, broker *sse.Broker) *Handler {
 	return &Handler{
-		userRepository:         userRepository,
-		surveyRepository:       surveyRepository,
-		surveyQueryRepository:  surveyQueryRepository,
-		dictionariesRepository: dictionariesRepository,
-		validator:              validator,
-		appVersion:             version,
+		services:   services,
+		logger:     logger,
+		appVersion: version,
+		broker:     broker,
 	}
 }

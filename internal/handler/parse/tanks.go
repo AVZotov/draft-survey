@@ -2,8 +2,8 @@ package parse
 
 import (
 	"net/http"
-
-	"github.com/AVZotov/draft-survey/internal/handler/chi/fields"
+	
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
@@ -11,10 +11,10 @@ func Tank(r *http.Request, tank *types.Tank) error {
 	if tank == nil {
 		return nil
 	}
-
+	
 	tank.Name = String(r, fields.FieldTankName)
 	tank.Type = String(r, fields.FieldTankType)
-
+	
 	if err := Float(r, fields.WithTankID(fields.FieldTankSounding, tank.ID), &tank.Sounding); err != nil {
 		return err
 	}
@@ -26,14 +26,14 @@ func Tank(r *http.Request, tank *types.Tank) error {
 			return err
 		}
 	}
-
+	
 	tableType := String(r, fields.FieldCalibType)
 	if tableType == "" {
 		return nil
 	}
 	tank.Correction.TableType = types.CalibrationTableType(tableType)
 	tank.Correction.HasListCorrection = Bool(r, fields.FieldHasListCorrection)
-
+	
 	switch tank.Correction.TableType {
 	case types.CalibrationTypeVolumeByTrim:
 		if err := TrimRows(r, tank); err != nil {

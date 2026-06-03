@@ -1,68 +1,80 @@
 package handler
 
 import (
-	"errors"
-	"io"
-	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
-
-	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
-	"github.com/AVZotov/draft-survey/internal/types"
+	"strings"
+	
+	"github.com/AVZotov/draft-survey/internal/handler/parse"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
-	"github.com/gofiber/fiber/v2"
+	"github.com/a-h/templ"
 )
 
-func (h *Handler) profile(c *fiber.Ctx) error {
-	var props components.LayoutProps
-	user, err := h.userRepository.Get()
-	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		return err
+func (h *Handler) profile(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.profile"
+	
+	user, err := h.services.User.Get()
+	if err != nil {
+		h.logger.Error(op, err)
 	}
-
-	props = web.ProfileLayoutProps(user, h.appVersion)
-	return tadaptor.Render(c, pages.Profile(props))
+	
+	props := web.ProfileLayoutProps(user, h.appVersion)
+	if err = pages.Profile(props).Render(r.Context(), w); err != nil {
+		h.logger.Error(op, err)
+	}
 }
 
-func (h *Handler) createProfile(c *fiber.Ctx) error {
-	user := &types.User{
-		FirstName:  c.FormValue("first_name"),
-		LastName:   c.FormValue("last_name"),
-		Position:   c.FormValue("position"),
-		Email:      c.FormValue("email"),
-		Company:    c.FormValue("company"),
-		License:    c.FormValue("license_no"),
-		Country:    c.FormValue("country"),
-		EmployeeID: c.FormValue("employee_id"),
+func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.createProfile"
+	
+	user, err := parse.Profile(r)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respond(w, nil)
+		return
 	}
-	if err := h.userRepository.Save(user); err != nil {
-		return err
+	
+	outcome, err := h.services.User.Save(user)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respond(w, nil)
+		return
 	}
-
-	if file, err := c.FormFile("signature"); err == nil {
-		src, err := file.Open()
-		if err != nil {
-			return err
-		}
-		defer func(src multipart.File) {
-			cerr := src.Close()
-			if cerr != nil && err == nil {
-				err = cerr
+	if strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data") {
+		if sign, err := parse.ProfileSignature(r); err == nil && len(sign) > 0 {
+			signOutcome, err := h.services.User.SaveSignature(sign)
+			if err != nil {
+				h.logger.Error(op, err)
+			} else {
+				outcome = signOutcome
 			}
-		}(src)
-		data, err := io.ReadAll(src)
-		if err != nil {
-			return err
-		}
-		ext := filepath.Ext(file.Filename)
-		if err := h.userRepository.SaveSignature(data, ext); err != nil {
-			return err
 		}
 	}
+	h.respond(w, outcome)
+}
 
-	c.Set("HX-Redirect", "/")
-	return c.SendStatus(http.StatusOK)
+func (h *Handler) GetProfileCountrySelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetProfileCountrySelect"
+	
+	user, err := h.services.User.Get()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "")).ServeHTTP(w, r)
+		return
+	}
+	
+	countries, err := h.services.Dictionary.GetCountries()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "")).ServeHTTP(w, r)
+		return
+	}
+	
+	selected := ""
+	if user != nil {
+		selected = user.CountryCode
+	}
+	
+	templ.Handler(components.CountrySelect(*countries, selected)).ServeHTTP(w, r)
 }

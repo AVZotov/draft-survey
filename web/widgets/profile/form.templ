@@ -35,7 +35,6 @@ templ Form(user *types.User) {
 			</div>
 			<div
 				class="form-card"
-				hx-on::before-request={ templ.JSFuncCall("requireFields", []string{fields.FieldFirstName, fields.FieldLastName}) }
 			>
 				<!-- Personal Information -->
 				@PersonalInfo(u)
@@ -83,62 +82,69 @@ templ PersonalInfo(user types.User) {
 	>
 		<p class="form-section-title">Personal Information</p>
 		<div class="field-row">
-			<div class="field">
-				<label for={ fields.FieldFirstName }>
-					First Name 
-					<span class="required">*</span>
-				</label>
-				<input
-					type="text"
-					id={ fields.FieldFirstName }
-					name={ fields.FieldFirstName }
-					value={ user.FirstName }
-					placeholder="e.g. John"
-					x-model.fill="firstname"
-					required
-				/>
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ fields.FieldFirstName }>
+						First Name
+						<span class="required">*</span>
+					</label>
+					<input
+						type="text"
+						id={ fields.FieldFirstName }
+						name={ fields.FieldFirstName }
+						value={ user.FirstName }
+						placeholder="e.g. John"
+						x-model.fill="firstname"
+						required
+					/>
+				</div>
+				<div class="field">
+					<label for={ fields.FieldLastName }>
+						Last Name
+						<span class="required">*</span>
+					</label>
+					<input
+						type="text"
+						id={ fields.FieldLastName }
+						name={ fields.FieldLastName }
+						value={ user.LastName }
+						placeholder="e.g. Dow"
+						x-model.fill="lastname"
+						required
+					/>
+				</div>
 			</div>
-			<div class="field">
-				<label for={ fields.FieldLastName }>
-					Last Name 
-					<span class="required">*</span>
-				</label>
-				<input
-					type="text"
-					id={ fields.FieldLastName }
-					name={ fields.FieldLastName }
-					value={ user.LastName }
-					placeholder="e.g. Dow"
-					x-model.fill="lastname"
-					required
-				/>
-			</div>
-			<div class="field">
-				<label for={ fields.FieldPosition }>
-					Position / Title
-					<span class="optional">(optional)</span>
-				</label>
-				<input
-					type="text"
-					id={ fields.FieldPosition }
-					name={ fields.FieldPosition }
-					value={ user.Position }
-					placeholder="e.g. Senior Marine Surveyor"
-				/>
-			</div>
-			<div class="field">
-				<label for={ fields.FieldEmail }>
-					Email 
-					<span class="optional">(optional)</span>
-				</label>
-				<input
-					type="email"
-					id={ fields.FieldEmail }
-					name={ fields.FieldEmail }
-					value={ user.Email }
-					placeholder="surveyor@example.com"
-				/>
-				<p class="field-hint">Used in reports only. Stored locally, never transmitted to any server.</p>
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ fields.FieldPosition }>
+						Position / Title
+						<span class="optional">(optional)</span>
+					</label>
+					<input
+						x-bind:disabled="!isActive"
+						x-bind:style="!isActive && 'opacity: 0.4; pointer-events: none;'"
+						type="text"
+						id={ fields.FieldPosition }
+						name={ fields.FieldPosition }
+						value={ user.Position }
+						placeholder="e.g. Senior Marine Surveyor"
+					/>
+				</div>
+				<div class="field">
+					<label for={ fields.FieldEmail }>
+						Email
+						<span class="optional">(optional)</span>
+					</label>
+					<input
+						x-bind:disabled="!isActive"
+						x-bind:style="!isActive && 'opacity: 0.4; pointer-events: none;'"
+						type="email"
+						id={ fields.FieldEmail }
+						name={ fields.FieldEmail }
+						value={ user.Email }
+						placeholder="surveyor@example.com"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -146,6 +152,9 @@ templ PersonalInfo(user types.User) {
 
 templ CompanyInfo(user types.User) {
 	<div
+		x-data
+		x-bind:disabled="!isActive"
+		x-bind:style="!isActive && 'opacity: 0.4; pointer-events: none;'"
 		class="form-section"
 		hx-post={ routes.APIProfile() }
 		hx-trigger="change changed delay:500ms"
@@ -154,48 +163,51 @@ templ CompanyInfo(user types.User) {
 	>
 		<p class="form-section-title">Company & Certification</p>
 		<div class="field-row">
-			<div class="field">
-				<label for={ fields.FieldCompany }>
-					Company Name 
-					<span class="optional">(optional)</span>
-				</label>
-				<input
-					type="text"
-					id={ fields.FieldCompany }
-					name={ fields.FieldCompany }
-					value={ user.Company }
-					placeholder="e.g. Marine Survey Services Ltd."
-				/>
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ fields.FieldEmployeeID }>
+						Employee ID
+						<span class="optional">(optional)</span>
+					</label>
+					<input
+						type="text"
+						id={ fields.FieldEmployeeID }
+						name={ fields.FieldEmployeeID }
+						value={ user.EmployeeID }
+						placeholder="CR-123456"
+					/>
+				</div>
+				<div class="field">
+					<label for={ fields.FieldCompany }>
+						Company Name
+						<span class="optional">(optional)</span>
+					</label>
+					<input
+						type="text"
+						id={ fields.FieldCompany }
+						name={ fields.FieldCompany }
+						value={ user.Company }
+						placeholder="e.g. Marine Survey Services Ltd."
+					/>
+				</div>
 			</div>
-			<div class="field">
-				<label for={ fields.FieldLicense }>Licence / Certificate No. <span class="optional">(optional)</span></label>
-				<input
-					type="text"
-					id={ fields.FieldLicense }
-					name={ fields.FieldLicense }
-					value={ user.License }
-					placeholder="e.g. CRS-00421"
-				/>
-			</div>
-			<div class="field">
-				<label for={ fields.FieldCountry }>
-					Country 
-					<span class="optional">(optional)</span>
-				</label>
-				<div class="select-wrap">
-					<select
-						id={ fields.FieldCountry }
-						name={ fields.FieldCountry }
-					>
-						<option value="" disabled selected>Select country</option>
-						<option>Russia</option>
-						<option>Netherlands</option>
-						<option>Singapore</option>
-						<option>United Kingdom</option>
-						<option>Germany</option>
-						<option>Switzerland</option>
-						<option>Other</option>
-					</select>
+			<div class="field-col-2">
+				<div class="field">
+					<label for={ fields.FieldLicense }>Licence / Certificate No. <span class="optional">(optional)</span></label>
+					<input
+						type="text"
+						id={ fields.FieldLicense }
+						name={ fields.FieldLicense }
+						value={ user.License }
+						placeholder="e.g. CRS-00421"
+					/>
+				</div>
+				<div class="field">
+					<label for={ fields.FieldCountryCode }>
+						Country
+						<span class="optional">(optional)</span>
+					</label>
+					@components.CountrySelectWrapper(routes.APIProfile(), routes.APIProfileCountrySelect())
 				</div>
 			</div>
 		</div>
@@ -213,7 +225,14 @@ templ Signature() {
 	>
 		<p class="form-section-title">Signature for Reports</p>
 		<label for={ fields.FieldSignature } class="signature-upload">
-			<input type="file" id={ fields.FieldSignature } name={ fields.FieldSignature } accept="image/png,image/jpeg"/>
+			<input
+				x-bind:disabled="!isActive"
+				x-bind:style="!isActive && 'opacity: 0.4; pointer-events: none;'"
+				type="file"
+				id={ fields.FieldSignature }
+				name={ fields.FieldSignature }
+				accept="image/png,image/jpeg"
+			/>
 			<svg class="signature-upload-icon" viewBox="0 0 24 24">
 				<path d="M12 15V3M7 8l5-5 5 5"></path>
 				<path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"></path>

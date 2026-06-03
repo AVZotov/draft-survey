@@ -2,8 +2,8 @@ package parse
 
 import (
 	"net/http"
-
-	"github.com/AVZotov/draft-survey/internal/handler/chi/fields"
+	
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
@@ -16,7 +16,7 @@ func SurveyBlock(r *http.Request, s *types.Survey) error {
 	s.Remarks = String(r, fields.FieldRemarks)
 	s.Country.CountryCode = String(r, fields.FieldLoadCountryCode)
 	s.Country.Name = String(r, fields.FieldLoadCountryName)
-
+	
 	if err := Int(r, fields.FieldDSNumber, &s.Job.DSNumber); err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func VesselBlock(r *http.Request, s *types.Survey) error {
 	s.VesselData.IMO = String(r, fields.FieldIMO)
 	s.VesselData.Flag.CountryCode = String(r, fields.FieldFlagCountryCode)
 	s.VesselData.Flag.Name = String(r, fields.FieldFlagCountryName)
-
+	
 	if err := Int(r, fields.FieldBuiltYear, &s.VesselData.BuiltYear); err != nil {
 		return err
 	}

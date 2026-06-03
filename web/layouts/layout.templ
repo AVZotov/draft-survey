@@ -14,6 +14,7 @@ templ Layout(props components.LayoutProps) {
 			<link rel="stylesheet" href="/static/css/modals.css"/>
 			<!--Modals CSS section -->
 			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
+			<!-- Page specific styles -->
 			for _, css := range props.ExtraCSS {
 				<link rel="stylesheet" href={ css }/>
 			}

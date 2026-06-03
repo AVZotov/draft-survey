@@ -38,6 +38,7 @@ func APITanks(id string, draftIndex string) string {
 func APITank(id string, draftIndex string, tankID string) string {
 	return fmt.Sprintf("/api/v1/survey/%s/tanks/%s/tank/%s", id, draftIndex, tankID)
 }
+func APIProfileCountrySelect() string { return "/api/v1/profile/country-select" }
 
 // HTMX fragments
 

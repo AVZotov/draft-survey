@@ -15,14 +15,14 @@ type SurveyRepository interface {
 
 type UserRepository interface {
 	Save(user *types.User) error
-	SaveSignature(data []byte, ext string) error
+	SaveSignature(data []byte) error
 	Get() (*types.User, error)
 	Delete() error
 }
 
 type DictionariesRepository interface {
-	GetPorts() (*[]types.Port, error)
 	GetCountries() (*[]types.Country, error)
+	GetPorts(countryCode string) (*[]types.Port, error)
 }
 
 type SurveyFilter struct {

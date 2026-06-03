@@ -67,16 +67,16 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 					<label for={ constants.Client }>Principal / Client <span class="optional">(optional)</span></label>
 					<input name={ constants.Client } value={ survey.Job.Principal } placeholder="e.g. Company" type="text"/>
 				</div>
-				<div class="filed">
-					<label>Country of inspection <span class="required">*</span></label>
-					@components.CountrySelect(components.CountrySelectProps{
-						Countries:     sp.Countries,
-						SelectedCode:  sp.Survey.Country.CountryCode,
-						SelectedName:  sp.Survey.Country.Name,
-						CountryCodeID: constants.LoadCountryCode,
-						CountryNameID: constants.LoadCountryName,
-					})
-				</div>
+				// <div class="filed">
+				// 	<label>Country of inspection <span class="required">*</span></label>
+				// 	@components.CountrySelect(components.CountrySelectProps{
+				// 		Countries:     sp.Countries,
+				// 		SelectedCode:  sp.Survey.Country.CountryCode,
+				// 		SelectedName:  sp.Survey.Country.Name,
+				// 		CountryCodeID: constants.LoadCountryCode,
+				// 		CountryNameID: constants.LoadCountryName,
+				// 	})
+				// </div>
 			</div>
 			<div class="field">
 				<label>Cargo Operation <span class="required">*</span></label>
@@ -166,16 +166,16 @@ templ VesselBlock(sp components.SurveyPageProps) {
 					<label for={ constants.IMO }>IMO No. <span class="required">*</span></label>
 					<input name={ constants.IMO } value={ survey.VesselData.IMO } placeholder="e.g. 9233387" type="text"/>
 				</div>
-				<div class="filed">
-					<label>Vessel Flag <span class="optional">(optional)</span></label>
-					@components.CountrySelect(components.CountrySelectProps{
-						Countries:     sp.Countries,
-						SelectedCode:  sp.Survey.VesselData.Flag.CountryCode,
-						SelectedName:  sp.Survey.VesselData.Flag.Name,
-						CountryCodeID: constants.FlagCountryCode,
-						CountryNameID: constants.FlagCountryName,
-					})
-				</div>
+				// <div class="filed">
+				// 	<label>Vessel Flag <span class="optional">(optional)</span></label>
+				// 	@components.CountrySelect(components.CountrySelectProps{
+				// 		Countries:     sp.Countries,
+				// 		SelectedCode:  sp.Survey.VesselData.Flag.CountryCode,
+				// 		SelectedName:  sp.Survey.VesselData.Flag.Name,
+				// 		CountryCodeID: constants.FlagCountryCode,
+				// 		CountryNameID: constants.FlagCountryName,
+				// 	})
+				// </div>
 				<div class="field">
 					<label for={ constants.Built }>Built Year <span class="optional">(optional)</span></label>
 					<input value={ format.IntOrEmpty(survey.VesselData.BuiltYear) } name={ constants.Built } placeholder="e.g. 2002" step="any" type="number"/>
@@ -194,7 +194,9 @@ templ VesselBlock(sp components.SurveyPageProps) {
 					<label>Holds Total <span class="optional">(optional)</span></label>
 					<div class="select-wrap">
 						{{ ht := 0 }}
-						{{ if survey.VesselData.HoldsTotal != nil { ht = *survey.VesselData.HoldsTotal } }}
+						{{ if survey.VesselData.HoldsTotal != nil {
+	ht = *survey.VesselData.HoldsTotal
+} }}
 						<select name={ constants.HoldsTotal }>
 							<option value="0" selected?={ ht == 0 }>—</option>
 							for i := 1; i <= 10; i++ {

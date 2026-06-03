@@ -37,14 +37,6 @@ type SurveyPageProps struct {
 	Countries []types.Country
 }
 
-type CountrySelectProps struct {
-	Countries     []types.Country
-	SelectedCode  string
-	SelectedName  string
-	CountryCodeID string
-	CountryNameID string
-}
-
 type PortSelectProps struct {
 	Ports    []types.Port
 	Selected string

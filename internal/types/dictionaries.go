@@ -1,8 +1,8 @@
 package types
 
 type Country struct {
-	CountryCode string `json:"code"`
-	Name        string `json:"name"`
+	CountryCode string `json:"code" schema:"code"`
+	Name        string `json:"name" schema:"name"`
 }
 
 type Port struct {
