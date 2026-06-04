@@ -1,10 +1,6 @@
 package storage
 
-import (
-	"time"
-
-	"github.com/AVZotov/draft-survey/internal/types"
-)
+import "github.com/AVZotov/draft-survey/internal/types"
 
 type SurveyRepository interface {
 	Save(survey *types.Survey) error
@@ -23,14 +19,4 @@ type UserRepository interface {
 type DictionariesRepository interface {
 	GetCountries() (*[]types.Country, error)
 	GetPorts(countryCode string) (*[]types.Port, error)
-}
-
-type SurveyFilter struct {
-	Query string
-	From  time.Time
-	To    time.Time
-}
-
-type SurveyQueryRepository interface {
-	Search(filter SurveyFilter) ([]*types.Survey, error)
 }

@@ -6,6 +6,7 @@ import "fmt"
 
 func Home() string             { return "/" }
 func Profile() string          { return "/profile" }
+func NewSurvey() string        { return "/survey/new" }
 func Survey(id string) string  { return "/survey/" + id }
 func Draft(id string) string   { return "/survey/" + id + "/draft" }
 func Results(id string) string { return "/survey/" + id + "/results" }

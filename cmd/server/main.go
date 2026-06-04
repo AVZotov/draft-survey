@@ -32,10 +32,11 @@ func main() {
 
 	userStore := storage.NewSQLiteUserStore(db)
 	dictionaryStore := storage.NewDictionariesStore(db)
+	surveyStore := storage.NewSQLiteSurveyStore(db)
 
 	services := &service.Services{
 		User:       service.NewUserService(userStore, slog, validator),
-		Survey:     &service.NoopSurveyService{},
+		Survey:     service.NewSurveyService(surveyStore, userStore, slog),
 		Draft:      &service.NoopDraftService{},
 		Dictionary: service.NewDictionaryService(dictionaryStore),
 	}

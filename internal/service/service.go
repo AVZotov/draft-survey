@@ -6,6 +6,12 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+type SurveyPageData struct {
+	Survey  *types.Survey
+	User    *types.User
+	Outcome *Outcome
+}
+
 type DictionaryService interface {
 	GetCountries() (*[]types.Country, error)
 	GetPorts(countryCode string) (*[]types.Port, error)
@@ -25,11 +31,11 @@ type SurveyFilter struct {
 }
 
 type SurveyService interface {
-	Create(user types.User) (*types.Survey, error)
+	Create() (*types.Survey, error)
 	Get(id string) (*types.Survey, error)
+	GetPageData(id string) (*SurveyPageData, error)
 	Update(survey *types.Survey) error
 	Delete(id string) error
-	Search(filter SurveyFilter) ([]*types.Survey, error)
 }
 
 type DraftService interface {

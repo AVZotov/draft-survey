@@ -3,12 +3,10 @@ package storage
 import (
 	"database/sql"
 	"encoding/json"
-	"strings"
 
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-var _ SurveyQueryRepository = (*SQLiteSurveyStore)(nil)
 var _ SurveyRepository = (*SQLiteSurveyStore)(nil)
 
 type SQLiteSurveyStore struct {
@@ -66,36 +64,6 @@ func (s *SQLiteSurveyStore) Delete(id string) error {
 	const query = `DELETE FROM surveys WHERE id = ?;`
 	_, err := s.db.Exec(query, id)
 	return err
-}
-
-func (s *SQLiteSurveyStore) Search(filter SurveyFilter) ([]*types.Survey, error) {
-	const baseQuery = `SELECT data FROM surveys WHERE 1=1`
-	var queryBuilder strings.Builder
-	queryBuilder.WriteString(baseQuery)
-	var args []interface{}
-	if filter.Query != "" {
-		queryBuilder.WriteString(` AND imo LIKE ?`)
-		args = append(args, "%"+filter.Query+"%")
-	}
-
-	if !filter.From.IsZero() {
-		queryBuilder.WriteString(` AND created_at >= ?`)
-		args = append(args, filter.From.Format("2006-01-02 15:04:05"))
-	}
-
-	if !filter.To.IsZero() {
-		queryBuilder.WriteString(` AND created_at <= ?`)
-		args = append(args, filter.To.Format("2006-01-02 15:04:05"))
-	}
-
-	queryBuilder.WriteString(` ORDER BY created_at DESC;`)
-
-	surveys, err := get(s.db, queryBuilder.String(), args...)
-	if err != nil {
-		return nil, err
-	}
-
-	return surveys, nil
 }
 
 func get(db *sql.DB, query string, args ...any) ([]*types.Survey, error) {

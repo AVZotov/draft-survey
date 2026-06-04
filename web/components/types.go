@@ -33,8 +33,7 @@ type SeaConditionProps struct {
 }
 
 type SurveyPageProps struct {
-	Survey    types.Survey
-	Countries []types.Country
+	Survey types.Survey
 }
 
 type PortSelectProps struct {

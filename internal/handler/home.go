@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/web"
@@ -24,8 +23,8 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 			Name:     fields.CookieFlashAlert,
 			Value:    value,
 			Path:     "/",
-			Expires:  time.Now().Add(5 * time.Second),
 			HttpOnly: true,
+			MaxAge:   2,
 		}
 		http.SetCookie(w, cookie)
 		http.Redirect(w, r, "/profile", http.StatusSeeOther)
