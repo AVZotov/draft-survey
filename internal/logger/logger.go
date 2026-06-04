@@ -5,11 +5,5 @@ type Logger interface {
 	Warn(msg string, fields ...any)
 	Error(msg string, err error, fields ...any)
 	Audit(msg string, surveyID string, fields ...any)
+	Debug(msg string, fields ...any)
 }
-
-type Noop struct{}
-
-func (l *Noop) Info(msg string, fields ...any)                   {}
-func (l *Noop) Warn(msg string, fields ...any)                   {}
-func (l *Noop) Error(msg string, err error, fields ...any)       {}
-func (l *Noop) Audit(msg string, surveyID string, fields ...any) {}

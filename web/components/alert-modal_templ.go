@@ -29,15 +29,15 @@ func AlertModal() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"confirm-modal\" x-data><div class=\"confirm-modal__header\"><div class=\"confirm-modal__icon\" style=\"background: var(--info-light); color: var(--info-accent);\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<dialog id=\"app-alert\" class=\"modal\"><div class=\"confirm-modal\"><div class=\"confirm-modal__header\"><div class=\"confirm-modal__icon\" style=\"background: var(--info-light); color: var(--info-accent);\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = IconInfo(16).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = IconInfo(32).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"confirm-modal__titles\"><span class=\"confirm-modal__title\" x-text=\"$store.alert.header\"></span> <span class=\"confirm-modal__subtitle\" x-text=\"$store.alert.message\"></span></div></div><div class=\"confirm-modal__footer\"><button class=\"btn btn-primary\" type=\"button\" x-on:click=\"$store.alert.ok()\">OK</button></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"confirm-modal__titles\"><span id=\"app-alert-header\" class=\"confirm-modal__title\"></span> <span id=\"app-alert-message\" class=\"confirm-modal__subtitle\"></span></div></div><div class=\"confirm-modal__footer\"><button class=\"btn btn-primary\" type=\"button\" onclick=\"document.getElementById('app-alert').close()\">OK</button></div></div></dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

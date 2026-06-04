@@ -36,3 +36,7 @@ func (l *SlogLogger) Error(msg string, err error, fields ...any) {
 func (l *SlogLogger) Audit(msg string, surveyID string, fields ...any) {
 	l.log.Info(msg, append([]any{"audit", true, "survey_id", surveyID}, fields...)...)
 }
+
+func (l *SlogLogger) Debug(msg string, fields ...any) {
+	l.log.Debug(msg, fields...)
+}

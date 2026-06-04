@@ -7,9 +7,19 @@ es.addEventListener('toast', (e) => {
 
 es.addEventListener('alert', (e) => {
     const d = JSON.parse(e.data)
-    document.getElementById('app-alert-header').textContent = d.header
-    document.getElementById('app-alert-message').textContent = d.message
-    document.getElementById('app-alert').showModal()
+    const show = () => {
+        const header = document.getElementById('app-alert-header')
+        const message = document.getElementById('app-alert-message')
+        const dialog = document.getElementById('app-alert')
+        if (!header || !message || !dialog) {
+            requestAnimationFrame(show)
+            return
+        }
+        header.textContent = d.header
+        message.textContent = d.message
+        dialog.showModal()
+    }
+    show()
 })
 
 // NEW SSE FOUNDATION — add above

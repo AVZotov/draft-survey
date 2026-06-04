@@ -175,3 +175,6 @@ const (
 	FieldCorrSoundingUp    = "corr_sounding_up"
 	FieldCorrVolumeUp      = "corr_volume_up"
 )
+
+//Cookie Alert
+const CookieFlashAlert = "flash_alert"
