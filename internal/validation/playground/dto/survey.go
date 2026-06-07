@@ -41,7 +41,7 @@ func NewCargoOperationDTO(co *types.CargoOperation) *CargoOperation {
 		return nil
 	}
 	return &CargoOperation{
-		Operation: co.Operation,
+		Operation: string(co.Operation),
 		Cargo:     co.Cargo,
 	}
 }

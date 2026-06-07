@@ -66,9 +66,9 @@ func ActionBar(rp components.ResultProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strings.ToUpper(rp.Survey.CargoOperation.Operation))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strings.ToUpper(string(rp.Survey.CargoOperation.Operation)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/actionbar.templ`, Line: 13, Col: 113}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/actionbar.templ`, Line: 13, Col: 121}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

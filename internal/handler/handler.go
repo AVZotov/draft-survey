@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/AVZotov/draft-survey/internal/handler/parse"
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/service"
 	"github.com/AVZotov/draft-survey/internal/sse"
@@ -11,6 +12,7 @@ type Handler struct {
 	logger     logger.Logger
 	appVersion string
 	broker     *sse.Broker
+	decoder    *parse.Decoder
 }
 
 func New(services *service.Services, logger logger.Logger, version string, broker *sse.Broker) *Handler {
@@ -19,5 +21,6 @@ func New(services *service.Services, logger logger.Logger, version string, broke
 		logger:     logger,
 		appVersion: version,
 		broker:     broker,
+		decoder:    parse.NewDecoder(),
 	}
 }

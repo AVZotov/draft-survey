@@ -23,7 +23,7 @@ const (
 )
 
 type VesselData struct {
-	Name                 string           `json:"name"`
+	Name                 string           `json:"vessel_name"`
 	Flag                 Country          `json:"flag"`
 	IMO                  string           `json:"imo"`
 	BuiltYear            *int             `json:"built_year"`
@@ -36,7 +36,7 @@ type VesselData struct {
 	SummerTPC            *float64         `json:"summer_tpc"`
 	SummerFreeboard      *float64         `json:"summer_freeboard"`
 	VesselType           VesselType       `json:"vessel_type"`
-	CorrectionMethod     CorrectionMethod `json:"correction_method"`
+	CorrectionMethod     CorrectionMethod `json:"corr_method"`
 	IsLcfDetectionManual bool             `json:"is_lcf_detection_manual"`
 	TableDensity         *float64         `json:"table_density"` //oficial vessel documentation. With table corrections made on specified density
 	HoldsTotal           *int             `json:"holds_total"`

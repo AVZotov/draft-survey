@@ -25,7 +25,7 @@ type DraftsWKeel struct {
 type Job struct {
 	JobNumber string `json:"job_number"`
 	DSNumber  *int   `json:"ds_number"`
-	Principal string `json:"principal"`
+	Principal string `json:"client"`
 }
 
 // PortInfo holds full port data — country, port from UN/LOCODE dict,
@@ -47,10 +47,18 @@ func (p PortInfo) DisplayName() string {
 	return ""
 }
 
+type Operation string
+
+const (
+	OperationLoading   Operation = "loading"
+	OperationDischarge Operation = "discharge"
+)
+
 type CargoOperation struct {
-	Operation string `json:"operation"`
-	Cargo     string `json:"cargo"`
-	Packing   string `json:"packing"`
+	Operation   Operation `json:"cargo_operation"`
+	Cargo       string    `json:"cargo"`
+	Description string    `json:"description"`
+	Packing     string    `json:"packing"`
 }
 
 type SurveyStatus string
@@ -90,7 +98,7 @@ type Draft struct {
 	MTCRows           []MTCRow         `json:"mtc_rows"`
 	HydrostaticRows   []HydrostaticRow `json:"hydrostatic_rows"`
 	TPCListPort       *float64         `json:"tpc_list_port"`
-	TPCListStarboard  *float64         `json:"tpc_list_starboard"`
+	TPCListStarboard  *float64         `json:"tpc_list_stbd"`
 	DistancePPFwd     *float64         `json:"distance_pp_fwd"`
 	PPFwdDirection    string           `json:"pp_fwd_direction"`
 	DistancePPMid     *float64         `json:"distance_pp_mid"`
@@ -103,7 +111,7 @@ type Draft struct {
 	StartedAt         time.Time        `json:"started_at"`
 	FinishedAt        time.Time        `json:"finished_at"`
 	LoadingCommenced  time.Time        `json:"loading_commenced"`
-	LoadPort          Port             `json:"loading_port"`
+	LoadPort          Port             `json:"load_port"`
 	DischargePort     Port             `json:"discharge_port"`
 	ProductGrade      string           `json:"product_grade"`
 	HoldsActive       []int            `json:"holds_active"`
@@ -118,7 +126,7 @@ type Survey struct {
 	Job              Job            `json:"job"`
 	CargoOperation   CargoOperation `json:"cargo_operation"`
 	CargoDeclared    *float64       `json:"cargo_declared"`
-	ConstantDeclared *float64       `json:"constant_declared"`
+	ConstantDeclared *float64       `json:"const_declared"`
 	VesselData       VesselData     `json:"vessel_data"`
 	Remarks          string         `json:"remarks"`
 	Country          Country        `json:"country"`

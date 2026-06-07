@@ -10,7 +10,7 @@ templ ActionBar(rp components.ResultProps) {
 	<div class="action-bar action-bar--results">
 		<div class="ab-info">
 			<span class="ab-vessel">{ rp.Survey.VesselData.Name }</span>
-			<span class="ab-meta">IMO{ rp.Survey.VesselData.IMO } · { strings.ToUpper(rp.Survey.CargoOperation.Operation) }</span>
+			<span class="ab-meta">IMO{ rp.Survey.VesselData.IMO } · { strings.ToUpper(string(rp.Survey.CargoOperation.Operation)) }</span>
 		</div>
 		<div class="ab-btns">
 			<a

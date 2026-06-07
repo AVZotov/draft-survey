@@ -29,16 +29,19 @@ const (
 
 // Survey Block
 const (
-	FieldJobNumber       = "job_number"
-	FieldDSNumber        = "ds_number"
-	FieldCargoOperation  = "cargo_operation"
-	FieldCargo           = "cargo"
-	FieldPacking         = "packing"
-	FieldClient          = "client"
-	FieldCargoDeclared   = "cargo_declared"
-	FieldRemarks         = "remarks"
-	FieldLoadCountryCode = "load_country_code"
-	FieldLoadCountryName = "load_country_name"
+	FieldJobNumber          = "job_number"
+	FieldDSNumber           = "ds_number"
+	FieldCargoOperation     = "cargo_operation"
+	FieldOperationLoading   = "loading"
+	FieldOperationDischarge = "discharge"
+	FieldCargo              = "cargo"
+	FieldDescription        = "description"
+	FieldPacking            = "packing"
+	FieldClient             = "client"
+	FieldCargoDeclared      = "cargo_declared"
+	FieldRemarks            = "remarks"
+	FieldLoadCountryCode    = "load_country_code"
+	FieldLoadCountryName    = "load_country_name"
 )
 
 // Vessel Block
@@ -141,6 +144,7 @@ const (
 	FieldMDO              = "mdo"
 	FieldLubOil           = "lub_oil"
 	FieldBilgeWater       = "bilge_water"
+	FieldSewageWater      = "sewage_water"
 	FieldDockwaterDensity = "dockwater_density"
 	FieldOthers           = "others"
 )
@@ -176,5 +180,5 @@ const (
 	FieldCorrVolumeUp      = "corr_volume_up"
 )
 
-//Cookie Alert
+// Cookie Alert
 const CookieFlashAlert = "flash_alert"

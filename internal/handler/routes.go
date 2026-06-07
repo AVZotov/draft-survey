@@ -22,45 +22,16 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.Profile(), h.profile)
 	r.Get(routes.NewSurvey(), h.newSurvey)
 	r.Get(routes.Survey("{id}"), h.getSurvey)
-	r.Get(routes.Draft("{id}"), nil)
-	r.Get(routes.Results("{id}"), nil)
-	r.Get(routes.SurveyList(), nil)
-	r.Get(routes.Tanks("{id}", "{draftIndex}"), nil)
-	r.Get(routes.TankCorrections("{id}", "{draftIndex}", "{tankID}"), nil)
 
-	// Dictionaries
-	r.Get(routes.DictionarySeaOptions(), nil)
-	r.Get(routes.DictionaryPorts(), nil)
-	r.Get(routes.DictionaryCountries(), nil)
-
-	//SSE route
+	// SSE
 	r.Get(routes.Events(), h.Events)
-
-	// HTMX fragments
-	r.Get(routes.SurveyListRows(), nil)
-	r.Get(routes.SurveyListStats(), nil)
-	r.Get(routes.ResultsValidate("{id}"), nil)
 
 	// API v1 — profile
 	r.Post(routes.APIProfile(), h.createProfile)
 	r.Get(routes.APIProfileCountrySelect(), h.GetProfileCountrySelect)
 
 	// API v1 — survey
-	r.Post(routes.APICreateSurvey(), nil)
-	r.Put(routes.APISurvey("{id}"), nil)
-	r.Delete(routes.APIDeleteSurvey("{id}"), nil)
-
-	// API v1 — draft
-	r.Post(routes.APIDraft("{id}"), nil)
-	r.Delete(routes.APIDraft("{id}"), nil)
-	r.Put(routes.APIDraftUpdate("{id}", "{draftIndex}"), nil)
-	r.Post(routes.APIDraftStatus("{id}", "{draftIndex}"), nil)
-
-	// API v1 — tanks
-	r.Put(routes.APITanks("{id}", "{draftIndex}"), nil)
-	r.Post(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
-	r.Delete(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
-	r.Put(routes.APITank("{id}", "{draftIndex}", "{tankID}"), nil)
+	r.Post(routes.APISurvey("{id}"), h.saveSurvey)
 
 	return nil
 }

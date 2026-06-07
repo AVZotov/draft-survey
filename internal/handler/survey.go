@@ -45,3 +45,5 @@ func (h *Handler) getSurvey(w http.ResponseWriter, r *http.Request) {
 		h.logger.Error(op, err)
 	}
 }
+
+func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {}
