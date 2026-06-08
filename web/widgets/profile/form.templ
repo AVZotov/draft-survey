@@ -207,7 +207,7 @@ templ CompanyInfo(user types.User) {
 						Country
 						<span class="optional">(optional)</span>
 					</label>
-					@components.CountrySelectWrapper(routes.APIProfile(), routes.APIProfileCountrySelect())
+					@components.CountrySelectWrapper(routes.APIProfile(), routes.APIProfileCountrySelect(), fields.FieldCountryCode)
 				</div>
 			</div>
 		</div>

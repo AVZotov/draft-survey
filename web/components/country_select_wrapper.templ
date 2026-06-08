@@ -1,6 +1,6 @@
 package components
 
-templ CountrySelectWrapper(url, loadURL string) {
+templ CountrySelectWrapper(url, loadURL, fieldName string) {
 	<div
 		hx-post={ url }
 		hx-trigger="change consume"

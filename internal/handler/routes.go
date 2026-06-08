@@ -32,6 +32,8 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 
 	// API v1 — survey
 	r.Post(routes.APISurvey("{id}"), h.saveSurvey)
+	r.Get(routes.APISurveyCountrySelect("{id}"), h.GetSurveyCountrySelect)
+	r.Get(routes.APISurveyFlagSelect("{id}"), h.GetSurveyFlagSelect)
 
 	return nil
 }

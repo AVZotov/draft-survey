@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
@@ -71,14 +72,14 @@ func (h *Handler) GetProfileCountrySelect(w http.ResponseWriter, r *http.Request
 	user, err := h.services.User.Get()
 	if err != nil {
 		h.logger.Error(op, err)
-		templ.Handler(components.CountrySelect(nil, "")).ServeHTTP(w, r)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldCountryCode)).ServeHTTP(w, r)
 		return
 	}
 
 	countries, err := h.services.Dictionary.GetCountries()
 	if err != nil {
 		h.logger.Error(op, err)
-		templ.Handler(components.CountrySelect(nil, "")).ServeHTTP(w, r)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldCountryCode)).ServeHTTP(w, r)
 		return
 	}
 
@@ -87,5 +88,5 @@ func (h *Handler) GetProfileCountrySelect(w http.ResponseWriter, r *http.Request
 		selected = user.CountryCode
 	}
 
-	templ.Handler(components.CountrySelect(*countries, selected)).ServeHTTP(w, r)
+	templ.Handler(components.CountrySelect(*countries, selected, fields.FieldCountryCode)).ServeHTTP(w, r)
 }
