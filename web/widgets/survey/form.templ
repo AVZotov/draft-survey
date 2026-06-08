@@ -1,7 +1,6 @@
 package survey
 
 import (
-	"github.com/AVZotov/draft-survey/data/dictionaries"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
@@ -103,18 +102,11 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 			<div class="field-col-3">
 				<div class="field">
 					<label for={ fields.FieldCargo }>Cargo <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldCargo } value={ survey.CargoOperation.Cargo } type="text" placeholder="e.g. Coal"/>
+					@components.StringSelectWrapper(routes.APISurvey(survey.ID), routes.APISurveyCargoSelect(survey.ID))
 				</div>
 				<div class="field">
 					<label for={ fields.FieldPacking }>Packing <span class="optional">(optional)</span></label>
-					<div class="select-wrap">
-						<select name={ fields.FieldPacking }>
-							<option value="" selected?={ survey.CargoOperation.Packing == "" }>Select…</option>
-							for _, p := range dictionaries.Packing {
-								<option value={ p } selected?={ survey.CargoOperation.Packing == p }>{ p }</option>
-							}
-						</select>
-					</div>
+					@components.StringSelectWrapper(routes.APISurvey(survey.ID), routes.APISurveyPackingSelect(survey.ID))
 				</div>
 				<div class="field">
 					<label for={ fields.FieldCargoDeclared }>Cargo Declared, MT <span class="optional">(optional)</span></label>

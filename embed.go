@@ -4,6 +4,8 @@ import (
 	"embed"
 )
 
+//go:embed data/dictionaries/packing.json
+//go:embed data/dictionaries/cargo_types.json
 //go:embed data/dictionaries/countries.json
 //go:embed data/dictionaries/ports.json
 var Dictionaries embed.FS

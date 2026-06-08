@@ -86,8 +86,6 @@ func (s *surveyService) GetPageData(id string) (*SurveyPageData, error) {
 func (s *surveyService) Update(survey *types.Survey) (*Outcome, error) {
 	const op = "SurveyService.Update"
 
-	s.logger.Debug(op, "saving vessel name", survey.VesselData.Name)
-
 	if err := s.surveyRepo.Save(survey); err != nil {
 		s.logger.Error(op, err)
 		return nil, err

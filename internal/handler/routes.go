@@ -26,6 +26,10 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	// SSE
 	r.Get(routes.Events(), h.Events)
 
+	//API v1 - dictionaries
+	r.Get(routes.APISurveyCargoSelect("{id}"), h.GetSurveyCargoSelect)
+	r.Get(routes.APISurveyPackingSelect("{id}"), h.GetSurveyPackingSelect)
+
 	// API v1 — profile
 	r.Post(routes.APIProfile(), h.createProfile)
 	r.Get(routes.APIProfileCountrySelect(), h.GetProfileCountrySelect)

@@ -1,0 +1,71 @@
+[
+  {
+    "name": "Bauxite"
+  },
+  {
+    "name": "Cement"
+  },
+  {
+    "name": "Clinker"
+  },
+  {
+    "name": "Coal"
+  },
+  {
+    "name": "Fertilizers"
+  },
+  {
+    "name": "Grain"
+  },
+  {
+    "name": "Gypsum"
+  },
+  {
+    "name": "Iron Ore"
+  },
+  {
+    "name": "Limestone"
+  },
+  {
+    "name": "Manganese Ore"
+  },
+  {
+    "name": "Nickel Ore"
+  },
+  {
+    "name": "Petcoke"
+  },
+  {
+    "name": "Phosphate"
+  },
+  {
+    "name": "Rice"
+  },
+  {
+    "name": "Salt"
+  },
+  {
+    "name": "Scrap Metal"
+  },
+  {
+    "name": "Soybean Meal"
+  },
+  {
+    "name": "Steel"
+  },
+  {
+    "name": "Sugar"
+  },
+  {
+    "name": "Sulphur"
+  },
+  {
+    "name": "Timber"
+  },
+  {
+    "name": "Woodchips"
+  },
+  {
+    "name": "Other"
+  }
+]

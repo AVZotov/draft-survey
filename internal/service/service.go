@@ -13,6 +13,8 @@ type SurveyPageData struct {
 type DictionaryService interface {
 	GetCountries() (*[]types.Country, error)
 	GetPorts(countryCode string) (*[]types.Port, error)
+	GetCargoTypes() ([]string, error)
+	GetPacking() ([]string, error)
 }
 
 type UserService interface {

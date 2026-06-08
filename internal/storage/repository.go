@@ -19,4 +19,6 @@ type UserRepository interface {
 type DictionariesRepository interface {
 	GetCountries() (*[]types.Country, error)
 	GetPorts(countryCode string) (*[]types.Port, error)
+	GetCargoTypes() ([]string, error)
+	GetPacking() ([]string, error)
 }

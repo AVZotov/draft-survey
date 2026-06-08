@@ -51,3 +51,39 @@ func (s *DictionariesStore) GetPorts(countryCode string) (*[]types.Port, error) 
 	}
 	return &ports, nil
 }
+
+func (s *DictionariesStore) GetCargoTypes() ([]string, error) {
+	rows, err := s.db.Query(`SELECT name FROM cargo_types ORDER BY name`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var types []string
+	for rows.Next() {
+		var name string
+		if err = rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		types = append(types, name)
+	}
+	return types, nil
+}
+
+func (s *DictionariesStore) GetPacking() ([]string, error) {
+	rows, err := s.db.Query(`SELECT name FROM packing ORDER BY name`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []string
+	for rows.Next() {
+		var name string
+		if err = rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		items = append(items, name)
+	}
+	return items, nil
+}

@@ -18,11 +18,25 @@ type portJSON struct {
 	Coordinates string `json:"coordinates"`
 }
 
+type cargoTypeJSON struct {
+	Name string `json:"name"`
+}
+
+type packingJSON struct {
+	Name string `json:"name"`
+}
+
 func seedDictionaries(db *sql.DB, fs embed.FS) error {
 	if err := seedCountries(db, fs); err != nil {
 		return err
 	}
-	return seedPorts(db, fs)
+	if err := seedPorts(db, fs); err != nil {
+		return err
+	}
+	if err := seedCargoTypes(db, fs); err != nil {
+		return err
+	}
+	return seedPacking(db, fs)
 }
 
 func seedCountries(db *sql.DB, fs embed.FS) error {
@@ -98,6 +112,86 @@ func seedPorts(db *sql.DB, fs embed.FS) error {
 
 	for _, p := range ports {
 		if _, err = stmt.Exec(p.Locode, p.Name, p.CountryCode, p.Coordinates); err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
+}
+
+func seedCargoTypes(db *sql.DB, fs embed.FS) error {
+	var count int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM cargo_types`).Scan(&count); err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil
+	}
+
+	data, err := fs.ReadFile("data/dictionaries/cargo_types.json")
+	if err != nil {
+		return err
+	}
+
+	var types []cargoTypeJSON
+	if err = json.Unmarshal(data, &types); err != nil {
+		return err
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	stmt, err := tx.Prepare(`INSERT INTO cargo_types (name) VALUES (?)`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	for _, t := range types {
+		if _, err = stmt.Exec(t.Name); err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
+}
+
+func seedPacking(db *sql.DB, fs embed.FS) error {
+	var count int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM packing`).Scan(&count); err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil
+	}
+
+	data, err := fs.ReadFile("data/dictionaries/packing.json")
+	if err != nil {
+		return err
+	}
+
+	var items []packingJSON
+	if err = json.Unmarshal(data, &items); err != nil {
+		return err
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	stmt, err := tx.Prepare(`INSERT INTO packing (name) VALUES (?)`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	for _, item := range items {
+		if _, err = stmt.Exec(item.Name); err != nil {
 			return err
 		}
 	}

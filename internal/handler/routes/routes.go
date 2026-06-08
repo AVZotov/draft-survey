@@ -9,6 +9,10 @@ func Survey(id string) string { return "/survey/" + id }
 // SSE
 func Events() string { return "/events" }
 
+// API v1 - dictionaries
+func APISurveyCargoSelect(id string) string   { return "/api/v1/survey/" + id + "/cargo-select" }
+func APISurveyPackingSelect(id string) string { return "/api/v1/survey/" + id + "/packing-select" }
+
 // API v1 — profile
 func APIProfile() string              { return "/api/v1/profile" }
 func APIProfileCountrySelect() string { return "/api/v1/profile/country-select" }

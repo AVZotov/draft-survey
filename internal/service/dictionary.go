@@ -20,3 +20,11 @@ func (s *dictionaryService) GetCountries() (*[]types.Country, error) {
 func (s *dictionaryService) GetPorts(countryCode string) (*[]types.Port, error) {
 	return s.repo.GetPorts(countryCode)
 }
+
+func (s *dictionaryService) GetCargoTypes() ([]string, error) {
+	return s.repo.GetCargoTypes()
+}
+
+func (s *dictionaryService) GetPacking() ([]string, error) {
+	return s.repo.GetPacking()
+}

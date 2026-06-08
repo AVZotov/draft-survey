@@ -30,4 +30,10 @@ var migrations = []migration{
 	CREATE INDEX idx_ports_name ON ports(name);
 	CREATE INDEX idx_ports_country ON ports(country_code);`},
 	{5, `ALTER TABLE users ADD COLUMN signature BLOB;`},
+	{6, `CREATE TABLE cargo_types (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE);`},
+	{7, `CREATE TABLE packing (
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE);`},
 }
