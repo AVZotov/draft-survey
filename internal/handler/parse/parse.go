@@ -1,101 +1,104 @@
 package parse
 
 import (
-	"errors"
 	"net/http"
 	"strconv"
 	"strings"
-
-	"github.com/go-playground/form/v4"
 )
 
-type Decoder struct {
-	d *form.Decoder
-}
+type Decoder struct{}
 
 func NewDecoder() *Decoder {
-	d := form.NewDecoder()
-	d.SetTagName("json")
-	d.RegisterCustomTypeFunc(parsePFloat, new(float64))
-	d.RegisterCustomTypeFunc(parseFloat, float64(0.0))
-	d.RegisterCustomTypeFunc(parsePInt, new(int))
-	d.RegisterCustomTypeFunc(parseInt, int(0))
-	return &Decoder{
-		d: d,
-	}
+	return &Decoder{}
 }
 
-func (d *Decoder) decode(r *http.Request, dst any) (form.DecodeErrors, error) {
-	if err := r.ParseForm(); err != nil {
-		return nil, err
-	}
-	err := d.d.Decode(dst, r.PostForm)
-	if err != nil {
-		var decodeErrors form.DecodeErrors
-		if errors.As(err, &decodeErrors) {
-			return decodeErrors, nil
-		}
-		return nil, err
-	}
-	return nil, nil
+// str returns the form value for key, or an empty string if not present
+func (d *Decoder) str(r *http.Request, key string) string {
+	return r.FormValue(key)
 }
 
-func parsePFloat(str []string) (any, error) {
-	v := str[0]
-	v = strings.ReplaceAll(v, " ", "")
-	v = strings.ReplaceAll(v, ",", ".")
+// pFloat parses key as *float64.
+// bool reports whether the field was present in the request.
+// An empty value yields (nil, true); an unparsable value yields (nil, true) as well.
+func (d *Decoder) pFloat(r *http.Request, key string) (*float64, bool) {
+	if !r.PostForm.Has(key) {
+		return nil, false
+	}
+	v := normalizeNumber(r.PostForm.Get(key))
 	if v == "" {
-		return (*float64)(nil), nil
+		return nil, true
 	}
 	f, err := strconv.ParseFloat(v, 64)
 	if err != nil {
-		return (*float64)(nil), err
+		return nil, true
 	}
-	return &f, nil
+	return &f, true
 }
 
-func parseFloat(str []string) (any, error) {
-	var f float64
-	v := str[0]
-	v = strings.ReplaceAll(v, " ", "")
-	v = strings.ReplaceAll(v, ",", ".")
-	if v == "" {
-		return f, nil
+// float parses key as float64.
+// bool reports whether the field was present in the request.
+func (d *Decoder) float(r *http.Request, key string) (float64, bool) {
+	if !r.PostForm.Has(key) {
+		return 0, false
 	}
-
+	v := normalizeNumber(r.PostForm.Get(key))
+	if v == "" {
+		return 0, true
+	}
 	f, err := strconv.ParseFloat(v, 64)
 	if err != nil {
-		return f, err
+		return 0, true
 	}
-	return f, nil
+	return f, true
 }
 
-func parsePInt(str []string) (any, error) {
-	v := str[0]
-	v = strings.ReplaceAll(v, " ", "")
-	v = strings.ReplaceAll(v, ",", ".")
+// pInt parses key as *int.
+// bool reports whether the field was present in the request.
+func (d *Decoder) pInt(r *http.Request, key string) (*int, bool) {
+	if !r.PostForm.Has(key) {
+		return nil, false
+	}
+	v := normalizeNumber(r.PostForm.Get(key))
 	if v == "" {
-		return (*int)(nil), nil
+		return nil, true
 	}
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		return (*int)(nil), err
+		return nil, true
 	}
-	return &i, nil
+	return &i, true
 }
 
-func parseInt(str []string) (any, error) {
-	var i int
-	v := str[0]
-	v = strings.ReplaceAll(v, " ", "")
-	v = strings.ReplaceAll(v, ",", ".")
-	if v == "" {
-		return i, nil
+// int parses key as int.
+// bool reports whether the field was present in the request.
+func (d *Decoder) int(r *http.Request, key string) (int, bool) {
+	if !r.PostForm.Has(key) {
+		return 0, false
 	}
-
+	v := normalizeNumber(r.PostForm.Get(key))
+	if v == "" {
+		return 0, true
+	}
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		return i, err
+		return 0, true
 	}
-	return i, nil
+	return i, true
+}
+
+// boolean reports a checkbox state: absent fields are false,
+// values "on", "true" or "1" are true.
+func (d *Decoder) boolean(r *http.Request, key string) bool {
+	switch r.FormValue(key) {
+	case "on", "true", "1":
+		return true
+	default:
+		return false
+	}
+}
+
+func normalizeNumber(v string) string {
+	v = strings.ReplaceAll(v, " ", "")
+	v = strings.ReplaceAll(v, ",", ".")
+	return v
 }

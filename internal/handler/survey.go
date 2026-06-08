@@ -46,4 +46,26 @@ func (h *Handler) getSurvey(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {}
+func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.saveSurvey"
+
+	id := chi.URLParam(r, "id")
+
+	existing, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respond(w, nil)
+		return
+	}
+
+	survey := h.decoder.Survey(r, existing)
+
+	outcome, err := h.services.Survey.Update(survey)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respond(w, nil)
+		return
+	}
+
+	h.respond(w, outcome)
+}

@@ -1,77 +1,104 @@
 package parse
 
-// func SurveyBlock(r *http.Request, s *types.Survey) error {
-// 	s.Job.JobNumber = String(r, fields.FieldJobNumber)
-// 	//s.CargoOperation.Operation = String(r, fields.FieldCargoOperation)
-// 	s.CargoOperation.Cargo = String(r, fields.FieldCargo)
-// 	s.CargoOperation.Packing = String(r, fields.FieldPacking)
-// 	s.Job.Principal = String(r, fields.FieldClient)
-// 	s.Remarks = String(r, fields.FieldRemarks)
-// 	s.Country.CountryCode = String(r, fields.FieldLoadCountryCode)
-// 	s.Country.Name = String(r, fields.FieldLoadCountryName)
+import (
+	"net/http"
 
-// 	if err := Int(r, fields.FieldDSNumber, &s.Job.DSNumber); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldCargoDeclared, &s.CargoDeclared); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
-// func VesselBlock(r *http.Request, s *types.Survey) error {
-// 	s.VesselData.Name = String(r, fields.FieldVesselName)
-// 	s.VesselData.IMO = String(r, fields.FieldIMO)
-// 	s.VesselData.Flag.CountryCode = String(r, fields.FieldFlagCountryCode)
-// 	s.VesselData.Flag.Name = String(r, fields.FieldFlagCountryName)
+func (d *Decoder) Survey(r *http.Request, existing *types.Survey) *types.Survey {
+	survey := existing
+	if survey == nil {
+		survey = &types.Survey{}
+	}
 
-// 	if err := Int(r, fields.FieldBuiltYear, &s.VesselData.BuiltYear); err != nil {
-// 		return err
-// 	}
-// 	if err := Int(r, fields.FieldHoldsTotal, &s.VesselData.HoldsTotal); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldConstDeclared, &s.ConstantDeclared); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldTableDensity, &s.VesselData.TableDensity); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldLightship, &s.VesselData.Lightship); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldLBP, &s.VesselData.LBP); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldBreadth, &s.VesselData.Breadth); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldDepth, &s.VesselData.Depth); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldSummerDraft, &s.VesselData.SummerDraft); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldSummerDWT, &s.VesselData.SummerDWT); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldSummerTPC, &s.VesselData.SummerTPC); err != nil {
-// 		return err
-// 	}
-// 	if err := Float(r, fields.FieldSummerFreeboard, &s.VesselData.SummerFreeboard); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	if r.PostForm.Has(fields.FieldJobNumber) {
+		survey.Job.JobNumber = d.str(r, fields.FieldJobNumber)
+	}
+	if v, ok := d.pInt(r, fields.FieldDSNumber); ok {
+		survey.Job.DSNumber = v
+	}
+	if r.PostForm.Has(fields.FieldClient) {
+		survey.Job.Principal = d.str(r, fields.FieldClient)
+	}
+	if r.PostForm.Has(fields.FieldCargo) {
+		survey.CargoOperation.Cargo = d.str(r, fields.FieldCargo)
+	}
+	if r.PostForm.Has(fields.FieldCargoOperation) {
+		survey.CargoOperation.Operation = types.Operation(d.str(r, fields.FieldCargoOperation))
+	}
+	if r.PostForm.Has(fields.FieldDescription) {
+		survey.CargoOperation.Description = d.str(r, fields.FieldDescription)
+	}
+	if r.PostForm.Has(fields.FieldPacking) {
+		survey.CargoOperation.Packing = d.str(r, fields.FieldPacking)
+	}
+	if r.PostForm.Has(fields.FieldRemarks) {
+		survey.Remarks = d.str(r, fields.FieldRemarks)
+	}
+	if v, ok := d.pFloat(r, fields.FieldCargoDeclared); ok {
+		survey.CargoDeclared = v
+	}
+	if r.PostForm.Has(fields.FieldCountryCode) {
+		survey.Country.CountryCode = d.str(r, fields.FieldCountryCode)
+	}
 
-// func SettingsBlock(r *http.Request, s *types.Survey) {
-// 	if method := String(r, fields.FieldMMCMethod); method != "" {
-// 		s.VesselData.VesselType = types.VesselType(method)
-// 	}
-// 	if corr := String(r, fields.FieldCorrMethod); corr != "" {
-// 		s.VesselData.CorrectionMethod = types.CorrectionMethod(corr)
-// 	}
-// 	if lcf := String(r, fields.FieldLCFDetection); lcf != "" {
-// 		s.VesselData.IsLcfDetectionManual = lcf == "manual"
-// 	}
-// }
+	if r.PostForm.Has(fields.FieldVesselName) {
+		survey.VesselData.Name = d.str(r, fields.FieldVesselName)
+	}
+	if r.PostForm.Has(fields.FieldIMO) {
+		survey.VesselData.IMO = d.str(r, fields.FieldIMO)
+	}
+	if v, ok := d.pInt(r, fields.FieldBuiltYear); ok {
+		survey.VesselData.BuiltYear = v
+	}
+	if v, ok := d.pInt(r, fields.FieldHoldsTotal); ok {
+		survey.VesselData.HoldsTotal = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldConstDeclared); ok {
+		survey.ConstantDeclared = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldTableDensity); ok {
+		survey.VesselData.TableDensity = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldLightship); ok {
+		survey.VesselData.Lightship = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldLBP); ok {
+		survey.VesselData.LBP = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldBreadth); ok {
+		survey.VesselData.Breadth = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldDepth); ok {
+		survey.VesselData.Depth = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldSummerDraft); ok {
+		survey.VesselData.SummerDraft = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldSummerDWT); ok {
+		survey.VesselData.SummerDWT = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldSummerTPC); ok {
+		survey.VesselData.SummerTPC = v
+	}
+	if v, ok := d.pFloat(r, fields.FieldSummerFreeboard); ok {
+		survey.VesselData.SummerFreeboard = v
+	}
+	if r.PostForm.Has(fields.FieldFlagCountryCode) {
+		survey.VesselData.Flag.CountryCode = d.str(r, fields.FieldFlagCountryCode)
+	}
+
+	if r.PostForm.Has(fields.FieldMMCMethod) {
+		survey.VesselData.VesselType = types.VesselType(d.str(r, fields.FieldMMCMethod))
+	}
+	if r.PostForm.Has(fields.FieldCorrMethod) {
+		survey.VesselData.CorrectionMethod = types.CorrectionMethod(d.str(r, fields.FieldCorrMethod))
+	}
+	if r.PostForm.Has(fields.FieldLCFDetection) {
+		survey.VesselData.IsLcfDetectionManual = d.str(r, fields.FieldLCFDetection) == "manual"
+	}
+
+	return survey
+}

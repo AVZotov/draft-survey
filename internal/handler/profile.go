@@ -27,15 +27,24 @@ func (h *Handler) profile(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
 	const op = "Handler.createProfile"
 
-	user, decerr, err := h.decoder.Profile(r)
-	if decerr != nil {
-		h.logger.Warn(op, "decode errors", "errors", decerr.Error())
+	var err error
+	if strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data") {
+		err = r.ParseMultipartForm(32 << 20)
+	} else {
+		err = r.ParseForm()
 	}
 	if err != nil {
 		h.logger.Error(op, err)
 		h.respond(w, nil)
 		return
 	}
+
+	existing, err := h.services.User.Get()
+	if err != nil {
+		h.logger.Error(op, err)
+	}
+
+	user := h.decoder.Profile(r, existing)
 
 	outcome, err := h.services.User.Save(user)
 	if err != nil {

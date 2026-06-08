@@ -1,8 +1,6 @@
 package service
 
 import (
-	"time"
-
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
@@ -24,17 +22,11 @@ type UserService interface {
 	Delete() error
 }
 
-type SurveyFilter struct {
-	Query string
-	From  time.Time
-	To    time.Time
-}
-
 type SurveyService interface {
 	Create() (*types.Survey, error)
 	Get(id string) (*types.Survey, error)
 	GetPageData(id string) (*SurveyPageData, error)
-	Update(survey *types.Survey) error
+	Update(survey *types.Survey) (*Outcome, error)
 	Delete(id string) error
 }
 

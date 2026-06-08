@@ -83,15 +83,15 @@ func (s *surveyService) GetPageData(id string) (*SurveyPageData, error) {
 	}, nil
 }
 
-func (s *surveyService) Update(survey *types.Survey) error {
+func (s *surveyService) Update(survey *types.Survey) (*Outcome, error) {
 	const op = "SurveyService.Update"
 
 	if err := s.surveyRepo.Save(survey); err != nil {
 		s.logger.Error(op, err)
-		return err
+		return nil, err
 	}
 
-	return nil
+	return nil, nil
 }
 
 func (s *surveyService) Delete(id string) error {
