@@ -1,0 +1,14 @@
+package components
+
+import "github.com/AVZotov/draft-survey/internal/format"
+
+templ XInput(name string, value *float64) {
+	<input
+		x-data
+		x-mask:dynamic="$money($input, '.', ' ', 3)"
+		name={ name }
+		value={ format.FloatOrEmpty(value) }
+		placeholder="0.000"
+		type="text"
+	/>
+}

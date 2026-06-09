@@ -35,6 +35,11 @@
   display: none !important;
 }
 
+[x-mask] {
+  font-family: var(--font-mono), monospace;
+  text-align: right;
+}
+
 [x-mask\:dynamic] {
   font-family: var(--font-mono), monospace;
   text-align: right;

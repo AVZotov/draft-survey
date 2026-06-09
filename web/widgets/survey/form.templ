@@ -52,18 +52,9 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 		</div>
 		<div class="form-section">
 			<div class="field-col-4">
-				<div class="field">
-					<label for={ fields.FieldJobNumber }>Job No. <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldJobNumber } value={ survey.Job.JobNumber } placeholder="e.g. 345543_002" type="text"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldDSNumber }>DS No. <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldDSNumber } value={ format.IntOrEmpty(survey.Job.DSNumber) } placeholder="e.g. 1" step="any" type="number"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldClient }>Principal / Client <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldClient } value={ survey.Job.Principal } placeholder="e.g. Company" type="text"/>
-				</div>
+				@textProfileWrapper(fields.FieldJobNumber, survey.Job.JobNumber, "e.g. 345543_002", "Job No.", false)
+				@intProfileWrapper(fields.FieldDSNumber, survey.Job.DSNumber, "DS No.", false)
+				@textProfileWrapper(fields.FieldClient, survey.Job.Principal, "e.g. Company", "Principal / Client", false)
 				<div class="filed">
 					<label for={ fields.FieldCountryCode }>
 						Country
@@ -108,10 +99,7 @@ templ SurveyBlock(sp components.SurveyPageProps) {
 					<label for={ fields.FieldPacking }>Packing <span class="optional">(optional)</span></label>
 					@components.StringSelectWrapper(routes.APISurvey(survey.ID), routes.APISurveyPackingSelect(survey.ID))
 				</div>
-				<div class="field">
-					<label for={ fields.FieldCargoDeclared }>Cargo Declared, MT <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldCargoDeclared } value={ format.FloatOrEmpty(survey.CargoDeclared) } placeholder="0.000" step="any" type="number"/>
-				</div>
+				@xInputProfileWrapper(fields.FieldCargoDeclared, survey.CargoDeclared, "Cargo Declared, MT", true)
 			</div>
 			<div class="field">
 				<label for={ fields.FieldRemarks }>Remarks <span class="optional">(optional)</span></label>
@@ -144,35 +132,22 @@ templ VesselBlock(sp components.SurveyPageProps) {
 		</div>
 		<div class="form-section">
 			<div class="field-col-4">
-				<div class="field">
-					<label for={ fields.FieldVesselName }>Vessel Name <span class="required">*</span></label>
-					<input name={ fields.FieldVesselName } value={ survey.VesselData.Name } type="text" placeholder="e.g. OCEAN CHEERS"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldIMO }>IMO No. <span class="required">*</span></label>
-					<input name={ fields.FieldIMO } value={ survey.VesselData.IMO } placeholder="e.g. 9233387" type="text"/>
-				</div>
+				@textProfileWrapper(fields.FieldVesselName, survey.VesselData.Name, "e.g. OCEAN CHEERS", "Vessel Name", true)
+				@textProfileWrapper(fields.FieldIMO, survey.VesselData.IMO, "e.g. 9233387", "IMO No.", false)
 				<div class="filed">
 					<label for={ fields.FieldFlagCountryCode }>
-						Vessel Flag
-						<span class="optional">(optional)</span>
+						Vessel Flag<span class="optional">(optional)</span>
 					</label>
 					@components.CountrySelectWrapper(routes.APISurvey(survey.ID), routes.APISurveyFlagSelect(survey.ID), fields.FieldFlagCountryCode)
 				</div>
 				<div class="field">
 					<label for={ fields.FieldBuiltYear }>Built Year <span class="optional">(optional)</span></label>
-					<input value={ format.IntOrEmpty(survey.VesselData.BuiltYear) } name={ fields.FieldBuiltYear } placeholder="e.g. 2002" step="any" type="number"/>
+					<input x-data x-mask="9999" name={ fields.FieldBuiltYear } value={ format.IntOrEmpty(survey.VesselData.BuiltYear) } placeholder="e.g. 2002" type="text"/>
 				</div>
 			</div>
 			<div class="field-col-3">
-				<div class="field">
-					<label for={ fields.FieldConstDeclared }>Const declared <span class="required">*</span></label>
-					<input value={ format.FloatOrEmpty(survey.ConstantDeclared) } name={ fields.FieldConstDeclared } placeholder="0.000" step="any" type="number"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldTableDensity }>Table Density, t/m³ <span class="required">*</span></label>
-					<input name={ fields.FieldTableDensity } value={ format.FloatOrEmpty(survey.VesselData.TableDensity) } type="number" placeholder="1.025" step="any"/>
-				</div>
+				@xInputProfileWrapper(fields.FieldConstDeclared, survey.ConstantDeclared, "Const declared", true)
+				@xInputProfileWrapper(fields.FieldTableDensity, survey.VesselData.TableDensity, "Table Density, t/m³", true)
 				<div class="field">
 					<label>Holds Total <span class="optional">(optional)</span></label>
 					<div class="select-wrap">
@@ -197,45 +172,14 @@ templ VesselBlock(sp components.SurveyPageProps) {
 		</div>
 		<div class="form-section">
 			<div class="field-col-4">
-				<div class="field">
-					<label for={ fields.FieldLightship }>Lightship, MT <span class="required">*</span></label>
-					<input name={ fields.FieldLightship } value={ format.FloatOrEmpty(survey.VesselData.Lightship) } placeholder="0.000" step="any" type="number"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldLBP }>LBP, m <span class="required">*</span></label>
-					<input
-						x-data
-						x-mask:dynamic="$money($input, '.', ' ', 3)"
-						name={ fields.FieldLBP }
-						value={ format.FloatOrEmpty(survey.VesselData.LBP) }
-						placeholder="0.000"
-						type="text"
-					/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldBreadth }>Breadth, m <span class="required">*</span></label>
-					<input name={ fields.FieldBreadth } value={ format.FloatOrEmpty(survey.VesselData.Breadth) } placeholder="0.00" step="any" type="number"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldDepth }>Depth, m <span class="optional">(optional)</span></label>
-					<input name={ fields.FieldDepth } value={ format.FloatOrEmpty(survey.VesselData.Depth) } placeholder="0.00" step="any" oninput="checkDepth()" type="number"/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldSummerDraft }>Summer Draft, m <span class="required">*</span></label>
-					<input type="number" name={ fields.FieldSummerDraft } placeholder="0.000" step="any" oninput="checkDepth(); updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerDraft) }/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldSummerDWT }>Summer DWT, MT <span class="required">*</span></label>
-					<input type="number" name={ fields.FieldSummerDWT } placeholder="0.000" step="any" oninput="updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerDWT) }/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldSummerTPC }>Summer TPC, MT/cm <span class="required">*</span></label>
-					<input type="number" name={ fields.FieldSummerTPC } placeholder="0.000" step="any" oninput="updateFWA()" value={ format.FloatOrEmpty(survey.VesselData.SummerTPC) }/>
-				</div>
-				<div class="field">
-					<label for={ fields.FieldSummerFreeboard }>Summer Freeboard, m <span class="optional">(optional)</span></label>
-					<input type="number" name={ fields.FieldSummerFreeboard } placeholder="0.000" step="any" oninput="checkDepth()" value={ format.FloatOrEmpty(survey.VesselData.SummerFreeboard) }/>
-				</div>
+				@xInputProfileWrapper(fields.FieldLightship, survey.VesselData.Lightship, "Lightship, MT", true)
+				@xInputProfileWrapper(fields.FieldLBP, survey.VesselData.LBP, "LBP, m", true)
+				@xInputProfileWrapper(fields.FieldBreadth, survey.VesselData.Breadth, "Breadth, m", true)
+				@xInputProfileWrapper(fields.FieldDepth, survey.VesselData.Depth, "Depth, m", false)
+				@xInputProfileWrapper(fields.FieldSummerDraft, survey.VesselData.SummerDraft, "Summer Draft, m", true)
+				@xInputProfileWrapper(fields.FieldSummerDWT, survey.VesselData.SummerDWT, "Summer DWT, MT", true)
+				@xInputProfileWrapper(fields.FieldSummerTPC, survey.VesselData.SummerTPC, "Summer TPC, MT/cm", true)
+				@xInputProfileWrapper(fields.FieldSummerFreeboard, survey.VesselData.SummerFreeboard, "Summer Freeboard, m", true)
 			</div>
 		</div>
 	</div>
@@ -375,5 +319,49 @@ templ VesselSettingBlock(sp components.SurveyPageProps) {
 				</div>
 			</div>
 		</div>
+	</div>
+}
+
+templ xInputProfileWrapper(name string, value *float64, label string, required bool) {
+	<div class="field">
+		<label for={ name }>
+			{ label }
+			if required {
+				<span class="required">*</span>
+			} else {
+				<span class="optional">(optional)</span>
+			}
+		</label>
+		@components.XInput(name, value)
+	</div>
+}
+
+templ textProfileWrapper(name, value, placeholder, label string, required bool) {
+	<div class="field">
+		<label for={ name }>
+			{ label }
+			if required {
+				<span class="required">*</span>
+			} else {
+				<span class="optional">(optional)</span>
+			}
+		</label>
+		<input name={ name } value={ value } placeholder={ placeholder } type="text"/>
+	</div>
+}
+
+templ intProfileWrapper(name string, value *int, label string, required bool) {
+	<div class="field">
+		<label
+			for={ name }
+		>
+			{ label }
+			if required {
+				<span class="required">*</span>
+			} else {
+				<span class="optional">(optional)</span>
+			}
+		</label>
+		<input name={ name } value={ format.IntOrEmpty(value) } placeholder="e.g. 1" step="1" type="number"/>
 	</div>
 }
