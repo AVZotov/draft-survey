@@ -21,3 +21,6 @@ func APIProfileCountrySelect() string { return "/api/v1/profile/country-select" 
 func APISurvey(id string) string              { return "/api/v1/survey/" + id }
 func APISurveyCountrySelect(id string) string { return "/api/v1/survey/" + id + "/country-select" }
 func APISurveyFlagSelect(id string) string    { return "/api/v1/survey/" + id + "/flag-select" }
+
+// API v1 - draft
+func Draft(id string) string { return "/survey/" + id + "draft" }
