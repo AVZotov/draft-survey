@@ -1,15 +1,23 @@
 package surveylist
 
-import "github.com/AVZotov/draft-survey/internal/types/dto"
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/internal/service"
+	"github.com/AVZotov/draft-survey/internal/types"
+	"strings"
+	"unicode"
+)
 
-import "strings"
-import "unicode"
-import "github.com/AVZotov/draft-survey/internal/types"
-import "github.com/AVZotov/draft-survey/internal/format"
-import "github.com/AVZotov/draft-survey/internal/constants"
-import "fmt"
+templ Rows(rows []service.SurveyDTO) {
+	for _, row := range rows {
+		@Row(row)
+	}
+}
 
-templ Row(dto dto.SurveyDTO) {
+templ Row(dto service.SurveyDTO) {
 	<div
 		x-data="{ open: false}"
 		class="survey-row"
@@ -37,8 +45,8 @@ templ Row(dto dto.SurveyDTO) {
 		<span
 			class={ templ.Classes(
     "badge",
-    templ.KV("badge--load",  dto.Operation == string(constants.CargoLoading)),
-    templ.KV("badge--disch", dto.Operation == string(constants.CargoDischarge)),
+    templ.KV("badge--load",  dto.Operation == fields.FieldOperationLoading),
+    templ.KV("badge--disch", dto.Operation == fields.FieldOperationDischarge),
 ) }
 		>
 			{ dto.Operation }
@@ -79,7 +87,7 @@ templ Row(dto dto.SurveyDTO) {
 					</a>
 					<button
 						hx-confirm={ fmt.Sprintf("Warning:\n\tThis operation will permanently remove survey\n\tVessel: %s; IMO: %s", dto.Name, dto.IMO) }
-						hx-delete={ fmt.Sprintf("/api/v1/survey-list/rows/%s", dto.SurveyID) }
+						hx-delete={ routes.APIDeleteSurvey(dto.SurveyID) }
 						hx-swap="delete swap:500ms"
 						hx-target="closest .survey-row"
 						class="row-menu__item row-menu__item--danger"
@@ -112,7 +120,7 @@ func port(s string) string {
 	return p
 }
 
-func weight(dto dto.SurveyDTO) string {
+func weight(dto service.SurveyDTO) string {
 	if dto.Status == types.SurveyStatusDraft || dto.Status == types.SurveyStatusInProgress {
 		return "―"
 	}

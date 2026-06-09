@@ -62,6 +62,17 @@ func (s *surveyService) Get(id string) (*types.Survey, error) {
 	return survey, nil
 }
 
+func (s *surveyService) GetAll() ([]*types.Survey, error) {
+	const op = "SurveyService.GetAll"
+
+	surveys, err := s.surveyRepo.GetAll()
+	if err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+	return surveys, nil
+}
+
 func (s *surveyService) GetPageData(id string) (*SurveyPageData, error) {
 	const op = "SurveyService.GetPageData"
 
@@ -94,13 +105,34 @@ func (s *surveyService) Update(survey *types.Survey) (*Outcome, error) {
 	return nil, nil
 }
 
-func (s *surveyService) Delete(id string) error {
+func (s *surveyService) Delete(id string) (*Outcome, error) {
 	const op = "SurveyService.Delete"
 
 	if err := s.surveyRepo.Delete(id); err != nil {
 		s.logger.Error(op, err)
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &Outcome{
+		Toast: &Notification{
+			Kind:    KindSuccess,
+			Header:  "Deleted",
+			Message: "Survey removed successfully",
+		},
+	}, nil
+}
+
+func CalcStats(surveys []*types.Survey) SurveyStats {
+	stats := SurveyStats{Total: len(surveys)}
+	for _, s := range surveys {
+		switch s.Status {
+		case types.SurveyStatusComplete:
+			stats.Complete++
+		case types.SurveyStatusInProgress:
+			stats.InProgress++
+		case types.SurveyStatusDraft:
+			stats.Draft++
+		}
+	}
+	return stats
 }

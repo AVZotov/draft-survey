@@ -22,6 +22,8 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.Profile(), h.profile)
 	r.Get(routes.NewSurvey(), h.newSurvey)
 	r.Get(routes.Survey("{id}"), h.getSurvey)
+	r.Get(routes.Draft("{id}"), h.getDraft)
+	r.Get(routes.SurveyList(), h.getSurveyList)
 
 	// SSE
 	r.Get(routes.Events(), h.Events)
@@ -39,8 +41,9 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.APISurveyCountrySelect("{id}"), h.GetSurveyCountrySelect)
 	r.Get(routes.APISurveyFlagSelect("{id}"), h.GetSurveyFlagSelect)
 
-	// API v1 - draft
-	r.Get(routes.Draft("{id}"), h.getDraft)
+	// API v1 - survey-list
+	r.Get(routes.SurveyListRows(), h.getSurveyListRows)
+	r.Delete(routes.APIDeleteSurvey("{id}"), h.deleteSurvey)
 
 	return nil
 }

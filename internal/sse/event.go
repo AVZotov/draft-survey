@@ -3,8 +3,9 @@ package sse
 type EventType string
 
 const (
-	EventToast EventType = "toast"
-	EventAlert EventType = "alert"
+	EventToast       EventType = "toast"
+	EventAlert       EventType = "alert"
+	EventSurveyStats EventType = "survey-stats"
 )
 
 type Event struct {

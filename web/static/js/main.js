@@ -22,6 +22,11 @@ es.addEventListener('alert', (e) => {
     show()
 })
 
+es.addEventListener('survey-stats', (e) => {
+    const el = document.getElementById('survey-stats')
+    if (el) el.innerHTML = e.data
+})
+
 // NEW SSE FOUNDATION — add above
 // --------------------------------
 

@@ -39,7 +39,7 @@ func Surveys() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", constants.SurveyListLimit))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/surveys.templ`, Line: 20, Col: 89}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/surveys.templ`, Line: 20, Col: 89}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {

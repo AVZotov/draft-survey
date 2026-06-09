@@ -8,9 +8,9 @@ package surveylist
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/web/components"
+import "github.com/AVZotov/draft-survey/internal/service"
 
-func Stats(slp components.SurveyListProps) templ.Component {
+func Stats(s service.SurveyStats) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,14 +31,14 @@ func Stats(slp components.SurveyListProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div hx-get=\"/survey-list/stats\" hx-target=\"this\" hx-trigger=\"survey-deleted from:body\" hx-swap=\"morph:outerHTML\" class=\"page-top\" id=\"stats\"><div class=\"field-col-4\"><div class=\"stat-card\"><div class=\"stat-icon stat-icon--total\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg></div><div><div class=\"stat-val\" id=\"cnt-total\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"field-col-4\"><div class=\"stat-card\"><div class=\"stat-icon stat-icon--total\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline></svg></div><div><div class=\"stat-val\" id=\"cnt-total\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(slp.Total)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(s.Total)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/stats.templ`, Line: 18, Col: 53}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/stats.templ`, Line: 10, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -49,9 +49,9 @@ func Stats(slp components.SurveyListProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(slp.Complete)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(s.Complete)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/stats.templ`, Line: 25, Col: 59}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/stats.templ`, Line: 17, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -62,9 +62,9 @@ func Stats(slp components.SurveyListProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(slp.InProgress)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(s.InProgress)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/stats.templ`, Line: 32, Col: 61}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/stats.templ`, Line: 24, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -75,15 +75,15 @@ func Stats(slp components.SurveyListProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(slp.Draft)
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(s.Draft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/stats.templ`, Line: 39, Col: 53}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/stats.templ`, Line: 31, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"stat-lbl\">Draft</div></div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"stat-lbl\">Draft</div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

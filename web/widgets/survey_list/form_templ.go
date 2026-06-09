@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import "github.com/AVZotov/draft-survey/web/components"
 import "github.com/AVZotov/draft-survey/internal/constants"
 
-func Form(lp components.LayoutProps, slp components.SurveyListProps) templ.Component {
+func Form(lp components.LayoutProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -39,17 +39,13 @@ func Form(lp components.LayoutProps, slp components.SurveyListProps) templ.Compo
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(constants.Stats)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey-list/form.templ`, Line: 9, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/form.templ`, Line: 9, Col: 22}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"/\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">Surveys</h1></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = Stats(slp).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"/\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">Surveys</h1></div><div id=\"survey-stats\" class=\"page-top\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -36,7 +36,7 @@ func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		h.logger.Error(op, err)
-		h.respond(w, nil)
+		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -50,7 +50,7 @@ func (h *Handler) createProfile(w http.ResponseWriter, r *http.Request) {
 	outcome, err := h.services.User.Save(user)
 	if err != nil {
 		h.logger.Error(op, err)
-		h.respond(w, nil)
+		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 	if strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data") {

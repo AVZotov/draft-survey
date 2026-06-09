@@ -56,7 +56,7 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 
 	if err := r.ParseForm(); err != nil {
 		h.logger.Error(op, err)
-		h.respond(w, nil)
+		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -65,7 +65,7 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 	existing, err := h.services.Survey.Get(id)
 	if err != nil {
 		h.logger.Error(op, err)
-		h.respond(w, nil)
+		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -75,7 +75,7 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 	outcome, err := h.services.Survey.Update(survey)
 	if err != nil {
 		h.logger.Error(op, err)
-		h.respond(w, nil)
+		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
