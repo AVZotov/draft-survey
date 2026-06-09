@@ -53,7 +53,6 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 	const op = "Handler.saveSurvey"
 
 	id := chi.URLParam(r, "id")
-	h.logger.Debug(op, "survey id", id)
 
 	if err := r.ParseForm(); err != nil {
 		h.logger.Error(op, err)
