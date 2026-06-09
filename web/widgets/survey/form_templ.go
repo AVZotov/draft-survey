@@ -882,14 +882,14 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "\">LBP, m <span class=\"required\">*</span></label> <input name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "\">LBP, m <span class=\"required\">*</span></label> <input x-data x-mask:dynamic=\"$money($input, '.', ' ', 3)\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var55 string
 		templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLBP)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 206, Col: 34}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 209, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var55)
 		if templ_7745c5c3_Err != nil {
@@ -902,20 +902,20 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var56 string
 		templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.LBP))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 206, Col: 87}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 210, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var56)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "\" placeholder=\"0.00\" step=\"any\" oninput=\"updateCalcHints()\" type=\"number\"></div><div class=\"field\"><label for=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "\" placeholder=\"0.000\" type=\"text\"></div><div class=\"field\"><label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var57 string
 		templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldBreadth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 209, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 216, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var57)
 		if templ_7745c5c3_Err != nil {
@@ -928,7 +928,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var58 string
 		templ_7745c5c3_Var58, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldBreadth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 210, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var58)
 		if templ_7745c5c3_Err != nil {
@@ -941,7 +941,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var59 string
 		templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.Breadth))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 210, Col: 95}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 95}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var59)
 		if templ_7745c5c3_Err != nil {
@@ -954,7 +954,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var60 string
 		templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldDepth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 213, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 220, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var60)
 		if templ_7745c5c3_Err != nil {
@@ -967,7 +967,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var61 string
 		templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldDepth)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 214, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var61)
 		if templ_7745c5c3_Err != nil {
@@ -980,7 +980,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var62 string
 		templ_7745c5c3_Var62, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.Depth))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 214, Col: 91}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 91}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var62)
 		if templ_7745c5c3_Err != nil {
@@ -993,7 +993,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var63 string
 		templ_7745c5c3_Var63, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerDraft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 217, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 224, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var63)
 		if templ_7745c5c3_Err != nil {
@@ -1006,7 +1006,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var64 string
 		templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerDraft)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 218, Col: 56}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var64)
 		if templ_7745c5c3_Err != nil {
@@ -1019,7 +1019,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var65 string
 		templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.SummerDraft))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 218, Col: 184}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 184}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var65)
 		if templ_7745c5c3_Err != nil {
@@ -1032,7 +1032,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var66 string
 		templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerDWT)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 221, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 228, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var66)
 		if templ_7745c5c3_Err != nil {
@@ -1045,7 +1045,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var67 string
 		templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerDWT)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 222, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var67)
 		if templ_7745c5c3_Err != nil {
@@ -1058,7 +1058,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var68 string
 		templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.SummerDWT))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 222, Col: 166}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 166}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var68)
 		if templ_7745c5c3_Err != nil {
@@ -1071,7 +1071,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var69 string
 		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerTPC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 225, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 232, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var69)
 		if templ_7745c5c3_Err != nil {
@@ -1084,7 +1084,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var70 string
 		templ_7745c5c3_Var70, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerTPC)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 226, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 233, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var70)
 		if templ_7745c5c3_Err != nil {
@@ -1097,7 +1097,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var71 string
 		templ_7745c5c3_Var71, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.SummerTPC))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 226, Col: 166}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 233, Col: 166}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var71)
 		if templ_7745c5c3_Err != nil {
@@ -1110,7 +1110,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var72 string
 		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerFreeboard)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 229, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 236, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var72)
 		if templ_7745c5c3_Err != nil {
@@ -1123,7 +1123,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var73 string
 		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldSummerFreeboard)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 230, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var73)
 		if templ_7745c5c3_Err != nil {
@@ -1136,7 +1136,7 @@ func VesselBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var74 string
 		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(survey.VesselData.SummerFreeboard))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 230, Col: 179}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 237, Col: 179}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var74)
 		if templ_7745c5c3_Err != nil {
@@ -1179,7 +1179,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var76 string
 		templ_7745c5c3_Var76, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APISurvey(survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 242, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 249, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var76)
 		if templ_7745c5c3_Err != nil {
@@ -1192,7 +1192,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var77 string
 		templ_7745c5c3_Var77, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldMMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 262, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 269, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var77)
 		if templ_7745c5c3_Err != nil {
@@ -1215,7 +1215,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var78 string
 		templ_7745c5c3_Var78, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldMMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 276, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 283, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var78)
 		if templ_7745c5c3_Err != nil {
@@ -1238,7 +1238,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var79 string
 		templ_7745c5c3_Var79, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldMMCMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 290, Col: 35}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 297, Col: 35}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var79)
 		if templ_7745c5c3_Err != nil {
@@ -1261,7 +1261,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var80 string
 		templ_7745c5c3_Var80, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCorrMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 311, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 318, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var80)
 		if templ_7745c5c3_Err != nil {
@@ -1284,7 +1284,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var81 string
 		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldCorrMethod)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 324, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 331, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var81)
 		if templ_7745c5c3_Err != nil {
@@ -1307,7 +1307,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var82 string
 		templ_7745c5c3_Var82, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLCFDetection)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 345, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 352, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var82)
 		if templ_7745c5c3_Err != nil {
@@ -1330,7 +1330,7 @@ func VesselSettingBlock(sp components.SurveyPageProps) templ.Component {
 		var templ_7745c5c3_Var83 string
 		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldLCFDetection)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 358, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey/form.templ`, Line: 365, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var83)
 		if templ_7745c5c3_Err != nil {

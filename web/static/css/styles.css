@@ -35,6 +35,11 @@
   display: none !important;
 }
 
+[x-mask\:dynamic] {
+  font-family: var(--font-mono), monospace;
+  text-align: right;
+}
+
 /* #region 1. TOKENS ════════════════════════════════════════════ */
 
 :root {

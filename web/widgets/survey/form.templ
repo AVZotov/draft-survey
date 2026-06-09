@@ -203,7 +203,14 @@ templ VesselBlock(sp components.SurveyPageProps) {
 				</div>
 				<div class="field">
 					<label for={ fields.FieldLBP }>LBP, m <span class="required">*</span></label>
-					<input name={ fields.FieldLBP } value={ format.FloatOrEmpty(survey.VesselData.LBP) } placeholder="0.00" step="any" oninput="updateCalcHints()" type="number"/>
+					<input
+						x-data
+						x-mask:dynamic="$money($input, '.', ' ', 3)"
+						name={ fields.FieldLBP }
+						value={ format.FloatOrEmpty(survey.VesselData.LBP) }
+						placeholder="0.000"
+						type="text"
+					/>
 				</div>
 				<div class="field">
 					<label for={ fields.FieldBreadth }>Breadth, m <span class="required">*</span></label>
