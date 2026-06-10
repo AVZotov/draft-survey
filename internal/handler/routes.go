@@ -31,6 +31,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	//API v1 - dictionaries
 	r.Get(routes.APISurveyCargoSelect("{id}"), h.GetSurveyCargoSelect)
 	r.Get(routes.APISurveyPackingSelect("{id}"), h.GetSurveyPackingSelect)
+	r.Get(routes.APICargoTypesSelect(), h.GetCargoTypesSelect)
 
 	// API v1 — profile
 	r.Post(routes.APIProfile(), h.createProfile)
@@ -44,6 +45,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	// API v1 - survey-list
 	r.Get(routes.SurveyListRows(), h.getSurveyListRows)
 	r.Delete(routes.APIDeleteSurvey("{id}"), h.deleteSurvey)
+	r.Get(routes.SurveySearch(), h.searchSurveys)
 
 	return nil
 }

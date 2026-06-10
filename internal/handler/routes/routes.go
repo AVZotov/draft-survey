@@ -15,6 +15,9 @@ func Events() string { return "/events" }
 func APISurveyCargoSelect(id string) string   { return "/api/v1/survey/" + id + "/cargo-select" }
 func APISurveyPackingSelect(id string) string { return "/api/v1/survey/" + id + "/packing-select" }
 
+// API v1 - dictionariess No preselected items for filter
+func APICargoTypesSelect() string { return "/api/v1/dictionary/cargo-select" }
+
 // API v1 — profile
 func APIProfile() string              { return "/api/v1/profile" }
 func APIProfileCountrySelect() string { return "/api/v1/profile/country-select" }
@@ -27,3 +30,4 @@ func APISurveyFlagSelect(id string) string    { return "/api/v1/survey/" + id + 
 // API v1 - survey-list
 func SurveyListRows() string           { return "/survey-list/rows" }
 func APIDeleteSurvey(id string) string { return "/api/v1/survey/" + id }
+func SurveySearch() string             { return "/survey-list/search" }

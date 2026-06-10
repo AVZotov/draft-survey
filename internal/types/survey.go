@@ -4,6 +4,16 @@ import (
 	"time"
 )
 
+// SurveyFilter used as domain search struct
+type SurveyFilter struct {
+	Query     string
+	Status    string
+	Operation string
+	Cargo     string
+	From      time.Time
+	To        time.Time
+}
+
 type MeanDraft struct {
 	DraftFwdMean float64 `json:"draft_fwd_mean"`
 	DraftMidMean float64 `json:"draft_mid_mean"`

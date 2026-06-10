@@ -1,8 +1,11 @@
 package surveylist
 
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
+import "github.com/AVZotov/draft-survey/web/components"
+
 templ Search() {
 	<form
-		hx-get="/survey-list/rows"
+		hx-get={ routes.SurveySearch() }
 		hx-trigger="input changed delay:400ms, change"
 		hx-target="#survey-results"
 		hx-swap="innerHTML"
@@ -10,14 +13,7 @@ templ Search() {
 		class="survey-search"
 	>
 		<div class="survey-search__input-wrap">
-			<svg
-				class="survey-search__icon"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-			>
+			<svg class="survey-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
 				<circle cx="11" cy="11" r="8"></circle>
 				<path d="m21 21-4.35-4.35"></path>
 			</svg>
@@ -33,20 +29,111 @@ templ Search() {
 			<input class="survey-search__date" type="date" name="from"/>
 			<span class="survey-search__sep">—</span>
 			<input class="survey-search__date" type="date" name="to"/>
-		</div>
-		<div class="survey-search__quick">
-			<button class="survey-search__btn" type="button" disabled>Week</button>
-			<button class="survey-search__btn" type="button" disabled>Month</button>
 			<button
 				type="button"
 				class="survey-search__btn survey-search__btn--clear"
 				onclick="
-        document.getElementById('search-input').value='';
-        document.querySelector('[name=from]').value='';
-        document.querySelector('[name=to]').value='';
-        document.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));
-    "
+					document.getElementById('search-input').value=''; 
+					document.querySelector('[name=from]').value=''; 
+					document.querySelector('[name=to]').value=''; 
+					document.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));"
 			>✕</button>
 		</div>
+		<div class="survey-search__quick">
+			<button
+				type="button"
+				class="survey-search__btn survey-search__btn--clear"
+				onclick="
+					document.getElementById('advanced-search').showModal()"
+			>
+				Advanced
+			</button>
+		</div>
 	</form>
+	@AdvancedSearch()
+}
+
+templ AdvancedSearch() {
+	<dialog id="advanced-search" class="filter-modal">
+		<div class="filter-modal__header">
+			<span class="filter-modal__title">Filters</span>
+			<button
+				type="button"
+				class="filter-modal__close"
+				onclick="document.getElementById('advanced-search').close()"
+			>
+				@components.IconClose()
+			</button>
+		</div>
+		<form
+			hx-get={ routes.SurveySearch() }
+			hx-target="#survey-results"
+			hx-swap="innerHTML"
+			hx-sync="this:replace"
+		>
+			<div class="filter-modal__section">
+				<div class="filter-modal__section-head">
+					<span class="filter-modal__section-title">Date Range</span>
+					<button type="button" class="filter-modal__reset">Reset</button>
+				</div>
+				<div class="filter-modal__dates">
+					<div class="filter-modal__date-field">
+						<label class="filter-modal__label">From</label>
+						<input class="filter-modal__input" type="date" name="from"/>
+					</div>
+					<div class="filter-modal__date-field">
+						<label class="filter-modal__label">To</label>
+						<input class="filter-modal__input" type="date" name="to"/>
+					</div>
+				</div>
+			</div>
+			<div class="filter-modal__section">
+				<div class="filter-modal__section-head">
+					<span class="filter-modal__section-title">Cargo Type</span>
+					<button type="button" class="filter-modal__reset">Reset</button>
+				</div>
+				<div
+					hx-get={ routes.APICargoTypesSelect() }
+					hx-target="this"
+					hx-trigger="load"
+					hx-swap="outerHTML"
+				></div>
+			</div>
+			<div class="filter-modal__section">
+				<div class="filter-modal__section-head">
+					<span class="filter-modal__section-title">Status</span>
+					<button type="button" class="filter-modal__reset">Reset</button>
+				</div>
+				<div class="select-wrap">
+					<select class="filter-modal__select" name="status">
+						<option value="">All</option>
+						<option value="draft">Draft</option>
+						<option value="in_progress">In Progress</option>
+						<option value="complete">Complete</option>
+					</select>
+				</div>
+			</div>
+			<div class="filter-modal__section">
+				<div class="filter-modal__section-head">
+					<span class="filter-modal__section-title">Operation</span>
+					<button type="button" class="filter-modal__reset">Reset</button>
+				</div>
+				<div class="select-wrap">
+					<select class="filter-modal__select" name="operation">
+						<option value="">All</option>
+						<option value="loading">Loading</option>
+						<option value="discharge">Discharge</option>
+					</select>
+				</div>
+			</div>
+			<div class="filter-modal__footer">
+				<button type="button" class="btn btn-ghost" onclick="document.getElementById('advanced-search').close()">
+					Reset All
+				</button>
+				<button type="submit" class="btn btn-primary" onclick="document.getElementById('advanced-search').close()">
+					Apply Filters
+				</button>
+			</div>
+		</form>
+	</dialog>
 }

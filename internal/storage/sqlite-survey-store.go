@@ -103,3 +103,56 @@ func (s *SQLiteSurveyStore) Delete(id string) error {
 	_, err := s.db.Exec(query, id)
 	return err
 }
+
+func (s *SQLiteSurveyStore) Search(filter types.SurveyFilter) ([]*types.Survey, error) {
+	query := `SELECT data FROM surveys WHERE 1=1`
+	args := []any{}
+
+	if filter.Query != "" {
+		query += ` AND (vessel_name LIKE ? OR imo LIKE ?)`
+		q := "%" + filter.Query + "%"
+		args = append(args, q, q)
+	}
+	if filter.Status != "" {
+		query += ` AND status = ?`
+		args = append(args, filter.Status)
+	}
+	if filter.Operation != "" {
+		query += ` AND operation = ?`
+		args = append(args, filter.Operation)
+	}
+	if filter.Cargo != "" {
+		query += ` AND cargo = ?`
+		args = append(args, filter.Cargo)
+	}
+	if !filter.From.IsZero() {
+		query += ` AND created_at >= ?`
+		args = append(args, filter.From.Format(time.RFC3339))
+	}
+	if !filter.To.IsZero() {
+		query += ` AND created_at <= ?`
+		args = append(args, filter.To.Format(time.RFC3339))
+	}
+
+	query += ` ORDER BY created_at DESC`
+
+	rows, err := s.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var surveys []*types.Survey
+	for rows.Next() {
+		var data string
+		if err = rows.Scan(&data); err != nil {
+			return nil, err
+		}
+		var survey types.Survey
+		if err = json.Unmarshal([]byte(data), &survey); err != nil {
+			return nil, err
+		}
+		surveys = append(surveys, &survey)
+	}
+	return surveys, nil
+}

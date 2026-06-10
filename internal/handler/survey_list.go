@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/service"
 	"github.com/AVZotov/draft-survey/internal/sse"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
 	surveylist "github.com/AVZotov/draft-survey/web/widgets/survey_list"
@@ -96,4 +98,43 @@ func (h *Handler) deleteSurvey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.respond(w, outcome)
+}
+
+func (h *Handler) searchSurveys(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.searchSurveys"
+
+	filter := types.SurveyFilter{
+		Query:     r.URL.Query().Get("q"),
+		Status:    r.URL.Query().Get("status"),
+		Operation: r.URL.Query().Get("operation"),
+		Cargo:     r.URL.Query().Get("cargo"),
+	}
+
+	if from := r.URL.Query().Get("from"); from != "" {
+		if t, err := time.Parse("2006-01-02", from); err == nil {
+			filter.From = t
+		}
+	}
+
+	if to := r.URL.Query().Get("to"); to != "" {
+		if t, err := time.Parse("2006-01-02", to); err == nil {
+			filter.To = t
+		}
+	}
+
+	surveys, err := h.services.Survey.Search(filter)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	dtos := make([]service.SurveyDTO, len(surveys))
+	for i, s := range surveys {
+		dtos[i] = service.ToSurveyDTO(s)
+	}
+
+	if err = surveylist.Rows(dtos, 0, false).Render(r.Context(), w); err != nil {
+		h.logger.Error(op, err)
+	}
 }

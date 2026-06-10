@@ -30,6 +30,7 @@ type SurveyService interface {
 	GetPageData(id string) (*SurveyPageData, error)
 	GetPage(limit, offset int) ([]*types.Survey, error)
 	GetStats() (types.SurveyStats, error)
+	Search(filter types.SurveyFilter) ([]*types.Survey, error)
 	Update(survey *types.Survey) (*Outcome, error)
 	Delete(id string) (*Outcome, error)
 }

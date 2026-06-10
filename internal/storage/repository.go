@@ -7,6 +7,7 @@ type SurveyRepository interface {
 	Get(id string) (*types.Survey, error)
 	GetPage(limit, offset int) ([]*types.Survey, error)
 	GetStats() (types.SurveyStats, error)
+	Search(filter types.SurveyFilter) ([]*types.Survey, error)
 	Delete(id string) error
 }
 

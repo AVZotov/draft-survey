@@ -60,3 +60,16 @@ func (h *Handler) GetSurveyPackingSelect(w http.ResponseWriter, r *http.Request)
 
 	templ.Handler(components.StringSelect(items, selected, fields.FieldPacking)).ServeHTTP(w, r)
 }
+
+func (h *Handler) GetCargoTypesSelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetCargoTypesSelect"
+
+	types, err := h.services.Dictionary.GetCargoTypes()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldCargo)).ServeHTTP(w, r)
+		return
+	}
+
+	templ.Handler(components.StringSelect(types, "", fields.FieldCargo)).ServeHTTP(w, r)
+}

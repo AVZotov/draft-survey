@@ -134,3 +134,15 @@ func (s *surveyService) Delete(id string) (*Outcome, error) {
 		},
 	}, nil
 }
+
+func (s *surveyService) Search(filter types.SurveyFilter) ([]*types.Survey, error) {
+	const op = "SurveyService.Search"
+
+	surveys, err := s.surveyRepo.Search(filter)
+	if err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	return surveys, nil
+}
