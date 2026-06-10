@@ -28,7 +28,6 @@ func runMigrations(db *sql.DB) error {
 	if err = updateMigrations(version, db); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -44,9 +43,16 @@ func updateMigrations(version *int, db *sql.DB) error {
 				//TODO: Add log if error or fatal
 				return err
 			}
-			defer tx.Rollback()
+			defer func() {
+				if err != nil {
+					_ = tx.Rollback()
+				}
+			}()
 
-			_, err = tx.Exec(`INSERT INTO migrations (version, applied_at) VALUES (?, ?);`, m.version, time.Now().Format("2006-01-02 15:04:05"))
+			_, err = tx.Exec(
+				`INSERT INTO migrations (version, applied_at) VALUES (?, ?);`, m.version,
+				time.Now().Format("2006-01-02 15:04:05"),
+			)
 			if err != nil {
 				return err
 			}
@@ -62,6 +68,5 @@ func updateMigrations(version *int, db *sql.DB) error {
 		}
 
 	}
-
 	return nil
 }

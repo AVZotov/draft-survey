@@ -62,7 +62,11 @@ func seedCountries(db *sql.DB, fs embed.FS) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
 
 	stmt, err := tx.Prepare(`INSERT INTO countries (code, name) VALUES (?, ?)`)
 	if err != nil {
@@ -102,7 +106,11 @@ func seedPorts(db *sql.DB, fs embed.FS) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
 
 	stmt, err := tx.Prepare(`INSERT INTO ports (locode, name, country_code, coordinates) VALUES (?, ?, ?, ?)`)
 	if err != nil {
@@ -142,7 +150,11 @@ func seedCargoTypes(db *sql.DB, fs embed.FS) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
 
 	stmt, err := tx.Prepare(`INSERT INTO cargo_types (name) VALUES (?)`)
 	if err != nil {
@@ -182,7 +194,11 @@ func seedPacking(db *sql.DB, fs embed.FS) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+		}
+	}()
 
 	stmt, err := tx.Prepare(`INSERT INTO packing (name) VALUES (?)`)
 	if err != nil {

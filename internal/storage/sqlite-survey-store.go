@@ -3,6 +3,7 @@ package storage
 import (
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	"github.com/AVZotov/draft-survey/internal/types"
 )
@@ -20,25 +21,31 @@ func NewSQLiteSurveyStore(db *sql.DB) *SQLiteSurveyStore {
 }
 
 func (s *SQLiteSurveyStore) Save(survey *types.Survey) error {
-	const query = `INSERT INTO surveys (id, imo, data) VALUES (?, ?, ?)
-		ON CONFLICT (id) DO UPDATE SET imo = excluded.imo, data = excluded.data;`
 	data, err := json.Marshal(survey)
 	if err != nil {
 		return err
 	}
 
-	tx, err := s.db.Begin()
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()
-
-	_, err = tx.Exec(query, survey.ID, survey.VesselData.IMO, data)
-	if err != nil {
-		return err
-	}
-
-	return tx.Commit()
+	_, err = s.db.Exec(`
+		INSERT INTO surveys (id, vessel_name, imo, status, operation, cargo, created_at, data)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(id) DO UPDATE SET
+			vessel_name = excluded.vessel_name,
+			imo         = excluded.imo,
+			status      = excluded.status,
+			operation   = excluded.operation,
+			cargo       = excluded.cargo,
+			data        = excluded.data`,
+		survey.ID,
+		survey.VesselData.Name,
+		survey.VesselData.IMO,
+		string(survey.Status),
+		string(survey.CargoOperation.Operation),
+		survey.CargoOperation.Cargo,
+		survey.CreatedAt.Format(time.RFC3339),
+		string(data),
+	)
+	return err
 }
 
 func (s *SQLiteSurveyStore) Get(id string) (*types.Survey, error) {
@@ -83,9 +90,9 @@ func (s *SQLiteSurveyStore) GetStats() (types.SurveyStats, error) {
 	err := s.db.QueryRow(`
 		SELECT 
 			COUNT(*) as total,
-			COUNT(CASE WHEN json_extract(data, '$.status') = 'complete' THEN 1 END) as complete,
-			COUNT(CASE WHEN json_extract(data, '$.status') = 'in_progress' THEN 1 END) as in_progress,
-			COUNT(CASE WHEN json_extract(data, '$.status') = 'draft' THEN 1 END) as draft
+			COUNT(CASE WHEN status = 'complete' THEN 1 END) as complete,
+			COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as in_progress,
+			COUNT(CASE WHEN status = 'draft' THEN 1 END) as draft
 		FROM surveys
 	`).Scan(&stats.Total, &stats.Complete, &stats.InProgress, &stats.Draft)
 	return stats, err
@@ -95,30 +102,4 @@ func (s *SQLiteSurveyStore) Delete(id string) error {
 	const query = `DELETE FROM surveys WHERE id = ?;`
 	_, err := s.db.Exec(query, id)
 	return err
-}
-
-func get(db *sql.DB, query string, args ...any) ([]*types.Survey, error) {
-	rows, err := db.Query(query, args...)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	surveys := make([]*types.Survey, 0)
-	for rows.Next() {
-		survey := new(types.Survey)
-		var data []byte
-		if err = rows.Scan(&data); err != nil {
-			return nil, err
-		}
-		if err = json.Unmarshal(data, survey); err != nil {
-			return nil, err
-		}
-		surveys = append(surveys, survey)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return surveys, nil
 }
