@@ -96,7 +96,7 @@ templ Row(dto service.SurveyDTO) {
 					<button
 						hx-confirm={ fmt.Sprintf("Warning:\n\tThis operation will permanently remove survey\n\tVessel: %s; IMO: %s", dto.Name, dto.IMO) }
 						hx-delete={ routes.APIDeleteSurvey(dto.SurveyID) }
-						hx-swap="delete swap:500ms"
+						hx-swap="delete transition:true"
 						hx-target="closest .survey-row"
 						class="row-menu__item row-menu__item--danger"
 						type="button"
