@@ -59,15 +59,14 @@ func (h *Handler) Events(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) renderEvent(ctx context.Context, event sse.Event) string {
 	const op = "Handler.renderEvent"
 
-	var n service.Notification
-	if err := json.Unmarshal([]byte(event.Data), &n); err != nil {
-		h.logger.Error(op, err)
-		return event.Data
-	}
-
-	var buf bytes.Buffer
 	switch event.Type {
 	case sse.EventToast:
+		var n service.Notification
+		if err := json.Unmarshal([]byte(event.Data), &n); err != nil {
+			h.logger.Error(op, err)
+			return ""
+		}
+		var buf bytes.Buffer
 		if err := components.Toast(
 			components.ToastKind(n.Kind),
 			n.Header,
@@ -76,9 +75,8 @@ func (h *Handler) renderEvent(ctx context.Context, event sse.Event) string {
 			h.logger.Error(op, err)
 			return ""
 		}
-	case sse.EventAlert:
+		return buf.String()
+	default:
 		return event.Data
 	}
-
-	return buf.String()
 }
