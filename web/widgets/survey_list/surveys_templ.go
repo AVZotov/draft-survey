@@ -33,20 +33,20 @@ func Surveys() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-grid\"><div class=\"survey-grid--header\"><div class=\"survey-cell survey-cell--header\">Vessel</div><div class=\"survey-cell survey-cell--header\">Date</div><div class=\"survey-cell survey-cell--header\">Port</div><div class=\"survey-cell survey-cell--header\">Destination</div><div class=\"survey-cell survey-cell--header\">Operation</div><div class=\"survey-cell survey-cell--header\">Cargo, MT</div><div class=\"survey-cell survey-cell--header\">Status</div><div class=\"survey-cell survey-cell--header\"></div></div><div id=\"survey-results\" hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"survey-grid\" id=\"survey-grid\"><div class=\"survey-grid--header\"><div class=\"survey-cell survey-cell--header\">Vessel</div><div class=\"survey-cell survey-cell--header\">Date</div><div class=\"survey-cell survey-cell--header\">Port</div><div class=\"survey-cell survey-cell--header\">Destination</div><div class=\"survey-cell survey-cell--header\">Operation</div><div class=\"survey-cell survey-cell--header\">Cargo, MT</div><div class=\"survey-cell survey-cell--header\">Status</div><div class=\"survey-cell survey-cell--header\"></div></div><div id=\"survey-results\" class=\"survey-scroll\" hx-get=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/surveys.templ`, Line: 21, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/surveys.templ`, Line: 22, Col: 86}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"intersect once\" hx-swap=\"outerHTML\" hx-indicator=\"#global-spinner\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"intersect once threshold:0\" hx-swap=\"outerHTML\" hx-indicator=\"#global-spinner\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

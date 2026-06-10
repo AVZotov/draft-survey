@@ -18,7 +18,7 @@ templ Rows(rows []service.SurveyDTO, offset int, hasMore bool) {
 	if hasMore {
 		<div
 			hx-get={ fmt.Sprintf("/survey-list/rows?offset=%d&limit=%d", offset, fields.SurveyListLimit) }
-			hx-trigger="intersect once"
+			hx-trigger="intersect once threshold:0"
 			hx-swap="outerHTML"
 		></div>
 	}

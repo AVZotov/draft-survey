@@ -5,7 +5,7 @@ import "fmt"
 import "github.com/AVZotov/draft-survey/internal/handler/fields"
 
 templ Surveys() {
-	<div class="survey-grid">
+	<div class="survey-grid" id="survey-grid">
 		<div class="survey-grid--header">
 			<div class="survey-cell survey-cell--header">Vessel</div>
 			<div class="survey-cell survey-cell--header">Date</div>
@@ -18,8 +18,9 @@ templ Surveys() {
 		</div>
 		<div
 			id="survey-results"
+			class="survey-scroll"
 			hx-get={ fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit) }
-			hx-trigger="intersect once"
+			hx-trigger="intersect once threshold:0"
 			hx-swap="outerHTML"
 			hx-indicator="#global-spinner"
 		></div>

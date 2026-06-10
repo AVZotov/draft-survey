@@ -56,7 +56,7 @@ func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 
 	total := len(surveys)
 	end := offset + limit
-	if end > limit {
+	if end > total {
 		end = total
 	}
 
@@ -72,8 +72,7 @@ func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 	nextOffset := end
 
 	dtos := make([]service.SurveyDTO, len(page))
-	for i, s := range surveys {
-		h.logger.Debug(op, "converting survey", s.ID)
+	for i, s := range page {
 		dtos[i] = service.ToSurveyDTO(s)
 	}
 

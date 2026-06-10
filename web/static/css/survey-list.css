@@ -36,6 +36,10 @@
 
 /* #region 2. STATS ══════════════════════════════════════════════ */
 
+.stat-wrap {
+  margin-bottom: var(--space-sm);
+}
+
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -223,8 +227,9 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  overflow-y: auto;
+  overflow-y: scroll;
   min-height: 300px;
+  max-height: 40vh;
   box-shadow: var(--shadow-sm);
 }
 
