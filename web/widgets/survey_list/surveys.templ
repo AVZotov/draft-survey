@@ -1,7 +1,8 @@
 package surveylist
 
 import "fmt"
-import "github.com/AVZotov/draft-survey/internal/constants"
+
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
 
 templ Surveys() {
 	<div class="survey-grid">
@@ -17,9 +18,9 @@ templ Surveys() {
 		</div>
 		<div
 			id="survey-results"
-			hx-get={ fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", constants.SurveyListLimit) }
-			hx-trigger="load"
-			hx-swap="innerHTML"
+			hx-get={ fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit) }
+			hx-trigger="intersect once"
+			hx-swap="outerHTML"
 			hx-indicator="#global-spinner"
 		></div>
 	</div>

@@ -11,15 +11,22 @@ import (
 	"unicode"
 )
 
-templ Rows(rows []service.SurveyDTO) {
+templ Rows(rows []service.SurveyDTO, offset int, hasMore bool) {
 	for _, row := range rows {
 		@Row(row)
+	}
+	if hasMore {
+		<div
+			hx-get={ fmt.Sprintf("/survey-list/rows?offset=%d&limit=%d", offset, fields.SurveyListLimit) }
+			hx-trigger="intersect once"
+			hx-swap="outerHTML"
+		></div>
 	}
 }
 
 templ Row(dto service.SurveyDTO) {
 	<div
-		x-data="{ open: false}"
+		x-data="{ open: false }"
 		class="survey-row"
 	>
 		<!-- Vessel -->

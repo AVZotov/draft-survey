@@ -3,7 +3,9 @@ package handler
 import (
 	"bytes"
 	"net/http"
+	"strconv"
 
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/service"
 	"github.com/AVZotov/draft-survey/internal/sse"
 	"github.com/AVZotov/draft-survey/web"
@@ -32,6 +34,9 @@ func (h *Handler) getSurveyList(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 	const op = "Handler.getSurveyListRows"
 
+	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
+	limit := fields.SurveyListLimit
+
 	surveys, err := h.services.Survey.GetAll()
 	if err != nil {
 		h.logger.Error(op, err)
@@ -39,21 +44,40 @@ func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	stats := service.CalcStats(surveys)
-
-	var statsBuf bytes.Buffer
-	if err = surveylist.Stats(stats).Render(r.Context(), &statsBuf); err != nil {
-		h.logger.Error(op, err)
-	} else {
-		h.broker.Publish(sse.Event{Type: sse.EventSurveyStats, Data: statsBuf.String()})
+	if offset == 0 {
+		stats := service.CalcStats(surveys)
+		var statsBuf bytes.Buffer
+		if err = surveylist.Stats(stats).Render(r.Context(), &statsBuf); err != nil {
+			h.logger.Error(op, err)
+		} else {
+			h.broker.Publish(sse.Event{Type: sse.EventSurveyStats, Data: statsBuf.String()})
+		}
 	}
 
-	dtos := make([]service.SurveyDTO, len(surveys))
+	total := len(surveys)
+	end := offset + limit
+	if end > limit {
+		end = total
+	}
+
+	h.logger.Debug(op, "offset", offset, "total", len(surveys), "end", end)
+	if offset >= total {
+		if err := surveylist.Rows(nil, 0, false).Render(r.Context(), w); err != nil {
+			h.logger.Error(op, err)
+		}
+		return
+	}
+	page := surveys[offset:end]
+	hasMore := end < total
+	nextOffset := end
+
+	dtos := make([]service.SurveyDTO, len(page))
 	for i, s := range surveys {
+		h.logger.Debug(op, "converting survey", s.ID)
 		dtos[i] = service.ToSurveyDTO(s)
 	}
 
-	if err = surveylist.Rows(dtos).Render(r.Context(), w); err != nil {
+	if err = surveylist.Rows(dtos, nextOffset, hasMore).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
 }
