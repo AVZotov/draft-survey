@@ -4,13 +4,6 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-type SurveyStats struct {
-	Total      int
-	Complete   int
-	InProgress int
-	Draft      int
-}
-
 type SurveyPageData struct {
 	Survey  *types.Survey
 	User    *types.User
@@ -35,7 +28,8 @@ type SurveyService interface {
 	Create() (*types.Survey, error)
 	Get(id string) (*types.Survey, error)
 	GetPageData(id string) (*SurveyPageData, error)
-	GetAll() ([]*types.Survey, error)
+	GetPage(limit, offset int) ([]*types.Survey, error)
+	GetStats() (types.SurveyStats, error)
 	Update(survey *types.Survey) (*Outcome, error)
 	Delete(id string) (*Outcome, error)
 }

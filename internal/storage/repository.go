@@ -5,7 +5,8 @@ import "github.com/AVZotov/draft-survey/internal/types"
 type SurveyRepository interface {
 	Save(survey *types.Survey) error
 	Get(id string) (*types.Survey, error)
-	GetAll() ([]*types.Survey, error)
+	GetPage(limit, offset int) ([]*types.Survey, error)
+	GetStats() (types.SurveyStats, error)
 	Delete(id string) error
 }
 

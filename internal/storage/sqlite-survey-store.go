@@ -56,8 +56,39 @@ func (s *SQLiteSurveyStore) Get(id string) (*types.Survey, error) {
 	return survey, nil
 }
 
-func (s *SQLiteSurveyStore) GetAll() ([]*types.Survey, error) {
-	return get(s.db, `SELECT data FROM surveys ORDER BY created_at DESC;`)
+func (s *SQLiteSurveyStore) GetPage(limit, offset int) ([]*types.Survey, error) {
+	rows, err := s.db.Query(`SELECT data FROM surveys ORDER BY created_at DESC LIMIT ? OFFSET ?`, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var surveys []*types.Survey
+	for rows.Next() {
+		var data string
+		if err = rows.Scan(&data); err != nil {
+			return nil, err
+		}
+		var survey types.Survey
+		if err = json.Unmarshal([]byte(data), &survey); err != nil {
+			return nil, err
+		}
+		surveys = append(surveys, &survey)
+	}
+	return surveys, nil
+}
+
+func (s *SQLiteSurveyStore) GetStats() (types.SurveyStats, error) {
+	var stats types.SurveyStats
+	err := s.db.QueryRow(`
+		SELECT 
+			COUNT(*) as total,
+			COUNT(CASE WHEN json_extract(data, '$.status') = 'complete' THEN 1 END) as complete,
+			COUNT(CASE WHEN json_extract(data, '$.status') = 'in_progress' THEN 1 END) as in_progress,
+			COUNT(CASE WHEN json_extract(data, '$.status') = 'draft' THEN 1 END) as draft
+		FROM surveys
+	`).Scan(&stats.Total, &stats.Complete, &stats.InProgress, &stats.Draft)
+	return stats, err
 }
 
 func (s *SQLiteSurveyStore) Delete(id string) error {

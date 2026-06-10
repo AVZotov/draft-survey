@@ -37,7 +37,7 @@ func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
 	limit := fields.SurveyListLimit
 
-	surveys, err := h.services.Survey.GetAll()
+	surveys, err := h.services.Survey.GetPage(limit, offset)
 	if err != nil {
 		h.logger.Error(op, err)
 		h.respondError(w, http.StatusInternalServerError, err)
@@ -45,34 +45,24 @@ func (h *Handler) getSurveyListRows(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if offset == 0 {
-		stats := service.CalcStats(surveys)
-		var statsBuf bytes.Buffer
-		if err = surveylist.Stats(stats).Render(r.Context(), &statsBuf); err != nil {
+		stats, err := h.services.Survey.GetStats()
+		if err != nil {
 			h.logger.Error(op, err)
 		} else {
-			h.broker.Publish(sse.Event{Type: sse.EventSurveyStats, Data: statsBuf.String()})
+			var statsBuf bytes.Buffer
+			if err = surveylist.Stats(stats).Render(r.Context(), &statsBuf); err != nil {
+				h.logger.Error(op, err)
+			} else {
+				h.broker.Publish(sse.Event{Type: sse.EventSurveyStats, Data: statsBuf.String()})
+			}
 		}
 	}
 
-	total := len(surveys)
-	end := offset + limit
-	if end > total {
-		end = total
-	}
+	hasMore := len(surveys) == limit
+	nextOffset := offset + len(surveys)
 
-	h.logger.Debug(op, "offset", offset, "total", len(surveys), "end", end)
-	if offset >= total {
-		if err := surveylist.Rows(nil, 0, false).Render(r.Context(), w); err != nil {
-			h.logger.Error(op, err)
-		}
-		return
-	}
-	page := surveys[offset:end]
-	hasMore := end < total
-	nextOffset := end
-
-	dtos := make([]service.SurveyDTO, len(page))
-	for i, s := range page {
+	dtos := make([]service.SurveyDTO, len(surveys))
+	for i, s := range surveys {
 		dtos[i] = service.ToSurveyDTO(s)
 	}
 
@@ -93,11 +83,10 @@ func (h *Handler) deleteSurvey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	surveys, err := h.services.Survey.GetAll()
+	stats, err := h.services.Survey.GetStats()
 	if err != nil {
 		h.logger.Error(op, err)
 	} else {
-		stats := service.CalcStats(surveys)
 		var buf bytes.Buffer
 		if err = surveylist.Stats(stats).Render(r.Context(), &buf); err != nil {
 			h.logger.Error(op, err)
