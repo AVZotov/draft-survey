@@ -20,8 +20,8 @@ templ Surveys() {
 			id="survey-results"
 			class="survey-scroll"
 			hx-get={ fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit) }
-			hx-trigger="intersect once threshold:0"
-			hx-swap="outerHTML"
+			hx-trigger="load"
+			hx-swap="innerHTML"
 			hx-indicator="#global-spinner"
 		></div>
 	</div>

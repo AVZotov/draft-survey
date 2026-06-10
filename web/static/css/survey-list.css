@@ -229,7 +229,7 @@
   border-radius: var(--radius-md);
   overflow-y: scroll;
   min-height: 300px;
-  max-height: 40vh;
+  max-height: 50vh;
   box-shadow: var(--shadow-sm);
 }
 
@@ -449,7 +449,7 @@
 /* #region 6. LOAD MORE ═══════════════════════════════════════════ */
 
 .survey-load-more {
-  height: 20px;
+  height: 4px;
   grid-column: 1 / -1;
 }
 

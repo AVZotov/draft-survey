@@ -183,4 +183,4 @@ const (
 // Cookie Alert
 const CookieFlashAlert = "flash_alert"
 
-const SurveyListLimit = 2
+const SurveyListLimit = 10
