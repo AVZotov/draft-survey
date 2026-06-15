@@ -2,6 +2,8 @@ package surveylist
 
 import "github.com/AVZotov/draft-survey/internal/handler/routes"
 import "github.com/AVZotov/draft-survey/web/components"
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
 
 templ Search() {
 	<form
@@ -41,8 +43,9 @@ templ Search() {
 		</div>
 		<div class="survey-search__quick">
 			<button
+				x-bind:class="filtered ? 'survey-search__btn--filtered' : 'survey-search__btn--clear'"
 				type="button"
-				class="survey-search__btn survey-search__btn--clear"
+				class="survey-search__btn"
 				onclick="
 					document.getElementById('advanced-search').showModal()"
 			>
@@ -74,23 +77,41 @@ templ AdvancedSearch() {
 			<div class="filter-modal__section">
 				<div class="filter-modal__section-head">
 					<span class="filter-modal__section-title">Date Range</span>
-					<button type="button" class="filter-modal__reset">Reset</button>
+					<button
+						x-on:click="$refs.from.value = ''; $refs.to.value = ''"
+						type="button"
+						class="filter-modal__reset"
+					>Reset</button>
 				</div>
 				<div class="filter-modal__dates">
 					<div class="filter-modal__date-field">
 						<label class="filter-modal__label">From</label>
-						<input class="filter-modal__input" type="date" name="from"/>
+						<input
+							x-ref="from"
+							class="filter-modal__input"
+							type="date"
+							name="from"
+						/>
 					</div>
 					<div class="filter-modal__date-field">
 						<label class="filter-modal__label">To</label>
-						<input class="filter-modal__input" type="date" name="to"/>
+						<input
+							x-ref="to"
+							class="filter-modal__input"
+							type="date"
+							name="to"
+						/>
 					</div>
 				</div>
 			</div>
 			<div class="filter-modal__section">
 				<div class="filter-modal__section-head">
 					<span class="filter-modal__section-title">Cargo Type</span>
-					<button type="button" class="filter-modal__reset">Reset</button>
+					<button
+						x-on:click="document.getElementById('cargo').value = ''"
+						type="button"
+						class="filter-modal__reset"
+					>Reset</button>
 				</div>
 				<div
 					hx-get={ routes.APICargoTypesSelect() }
@@ -102,10 +123,18 @@ templ AdvancedSearch() {
 			<div class="filter-modal__section">
 				<div class="filter-modal__section-head">
 					<span class="filter-modal__section-title">Status</span>
-					<button type="button" class="filter-modal__reset">Reset</button>
+					<button
+						x-on:click="$refs.status.value = ''"
+						type="button"
+						class="filter-modal__reset"
+					>Reset</button>
 				</div>
 				<div class="select-wrap">
-					<select class="filter-modal__select" name="status">
+					<select
+						x-ref="status"
+						class="filter-modal__select"
+						name="status"
+					>
 						<option value="">All</option>
 						<option value="draft">Draft</option>
 						<option value="in_progress">In Progress</option>
@@ -116,10 +145,18 @@ templ AdvancedSearch() {
 			<div class="filter-modal__section">
 				<div class="filter-modal__section-head">
 					<span class="filter-modal__section-title">Operation</span>
-					<button type="button" class="filter-modal__reset">Reset</button>
+					<button
+						x-on:click="$refs.operation.value = ''"
+						type="button"
+						class="filter-modal__reset"
+					>Reset</button>
 				</div>
 				<div class="select-wrap">
-					<select class="filter-modal__select" name="operation">
+					<select
+						x-ref="operation"
+						class="filter-modal__select"
+						name="operation"
+					>
 						<option value="">All</option>
 						<option value="loading">Loading</option>
 						<option value="discharge">Discharge</option>
@@ -127,10 +164,23 @@ templ AdvancedSearch() {
 				</div>
 			</div>
 			<div class="filter-modal__footer">
-				<button type="button" class="btn btn-ghost" onclick="document.getElementById('advanced-search').close()">
+				<button
+					type="button"
+					class="btn btn-ghost"
+					x-on:click="filtered = false"
+					hx-get={ fmt.Sprintf("%s?offset=0&limit=%d", routes.SurveyListRows(), fields.SurveyListLimit) }
+					hx-target="#survey-results"
+					hx-swap="innerHTML"
+					onclick="document.getElementById('advanced-search').close()"
+				>
 					Reset All
 				</button>
-				<button type="submit" class="btn btn-primary" onclick="document.getElementById('advanced-search').close()">
+				<button
+					type="submit"
+					class="btn btn-primary"
+					x-on:click="filtered = true"
+					onclick="document.getElementById('advanced-search').close()"
+				>
 					Apply Filters
 				</button>
 			</div>

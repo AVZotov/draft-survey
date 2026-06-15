@@ -10,6 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/AVZotov/draft-survey/internal/handler/routes"
 import "github.com/AVZotov/draft-survey/web/components"
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
 
 func Search() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -39,13 +41,13 @@ func Search() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.SurveySearch())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 8, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 10, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"input changed delay:400ms, change\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" hx-sync=\"this:replace\" class=\"survey-search\"><div class=\"survey-search__input-wrap\"><svg class=\"survey-search__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.35-4.35\"></path></svg> <input id=\"search-input\" class=\"survey-search__input\" type=\"text\" placeholder=\"Vessel name or IMO…\" name=\"q\"></div><div class=\"survey-search__dates\"><input class=\"survey-search__date\" type=\"date\" name=\"from\"> <span class=\"survey-search__sep\">—</span> <input class=\"survey-search__date\" type=\"date\" name=\"to\"> <button type=\"button\" class=\"survey-search__btn survey-search__btn--clear\" onclick=\"\n\t\t\t\t\tdocument.getElementById('search-input').value=''; \n\t\t\t\t\tdocument.querySelector('[name=from]').value=''; \n\t\t\t\t\tdocument.querySelector('[name=to]').value=''; \n\t\t\t\t\tdocument.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));\">✕</button></div><div class=\"survey-search__quick\"><button type=\"button\" class=\"survey-search__btn survey-search__btn--clear\" onclick=\"\n\t\t\t\t\tdocument.getElementById('advanced-search').showModal()\">Advanced</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-trigger=\"input changed delay:400ms, change\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" hx-sync=\"this:replace\" class=\"survey-search\"><div class=\"survey-search__input-wrap\"><svg class=\"survey-search__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"></circle> <path d=\"m21 21-4.35-4.35\"></path></svg> <input id=\"search-input\" class=\"survey-search__input\" type=\"text\" placeholder=\"Vessel name or IMO…\" name=\"q\"></div><div class=\"survey-search__dates\"><input class=\"survey-search__date\" type=\"date\" name=\"from\"> <span class=\"survey-search__sep\">—</span> <input class=\"survey-search__date\" type=\"date\" name=\"to\"> <button type=\"button\" class=\"survey-search__btn survey-search__btn--clear\" onclick=\"\n\t\t\t\t\tdocument.getElementById('search-input').value=''; \n\t\t\t\t\tdocument.querySelector('[name=from]').value=''; \n\t\t\t\t\tdocument.querySelector('[name=to]').value=''; \n\t\t\t\t\tdocument.getElementById('search-input').dispatchEvent(new Event('input', {bubbles:true}));\">✕</button></div><div class=\"survey-search__quick\"><button x-bind:class=\"filtered ? 'survey-search__btn--filtered' : 'survey-search__btn--clear'\" type=\"button\" class=\"survey-search__btn\" onclick=\"\n\t\t\t\t\tdocument.getElementById('advanced-search').showModal()\">Advanced</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -93,26 +95,39 @@ func AdvancedSearch() templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.SurveySearch())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 69, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 72, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" hx-sync=\"this:replace\"><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Date Range</span> <button type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"filter-modal__dates\"><div class=\"filter-modal__date-field\"><label class=\"filter-modal__label\">From</label> <input class=\"filter-modal__input\" type=\"date\" name=\"from\"></div><div class=\"filter-modal__date-field\"><label class=\"filter-modal__label\">To</label> <input class=\"filter-modal__input\" type=\"date\" name=\"to\"></div></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Cargo Type</span> <button type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" hx-sync=\"this:replace\"><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Date Range</span> <button x-on:click=\"$refs.from.value = ''; $refs.to.value = ''\" type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"filter-modal__dates\"><div class=\"filter-modal__date-field\"><label class=\"filter-modal__label\">From</label> <input x-ref=\"from\" class=\"filter-modal__input\" type=\"date\" name=\"from\"></div><div class=\"filter-modal__date-field\"><label class=\"filter-modal__label\">To</label> <input x-ref=\"to\" class=\"filter-modal__input\" type=\"date\" name=\"to\"></div></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Cargo Type</span> <button x-on:click=\"document.getElementById('cargo').value = ''\" type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div hx-get=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APICargoTypesSelect())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 96, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 117, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-target=\"this\" hx-trigger=\"load\" hx-swap=\"outerHTML\"></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Status</span> <button type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"select-wrap\"><select class=\"filter-modal__select\" name=\"status\"><option value=\"\">All</option> <option value=\"draft\">Draft</option> <option value=\"in_progress\">In Progress</option> <option value=\"complete\">Complete</option></select></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Operation</span> <button type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"select-wrap\"><select class=\"filter-modal__select\" name=\"operation\"><option value=\"\">All</option> <option value=\"loading\">Loading</option> <option value=\"discharge\">Discharge</option></select></div></div><div class=\"filter-modal__footer\"><button type=\"button\" class=\"btn btn-ghost\" onclick=\"document.getElementById('advanced-search').close()\">Reset All</button> <button type=\"submit\" class=\"btn btn-primary\" onclick=\"document.getElementById('advanced-search').close()\">Apply Filters</button></div></form></dialog>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-target=\"this\" hx-trigger=\"load\" hx-swap=\"outerHTML\"></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Status</span> <button x-on:click=\"$refs.status.value = ''\" type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"select-wrap\"><select x-ref=\"status\" class=\"filter-modal__select\" name=\"status\"><option value=\"\">All</option> <option value=\"draft\">Draft</option> <option value=\"in_progress\">In Progress</option> <option value=\"complete\">Complete</option></select></div></div><div class=\"filter-modal__section\"><div class=\"filter-modal__section-head\"><span class=\"filter-modal__section-title\">Operation</span> <button x-on:click=\"$refs.operation.value = ''\" type=\"button\" class=\"filter-modal__reset\">Reset</button></div><div class=\"select-wrap\"><select x-ref=\"operation\" class=\"filter-modal__select\" name=\"operation\"><option value=\"\">All</option> <option value=\"loading\">Loading</option> <option value=\"discharge\">Discharge</option></select></div></div><div class=\"filter-modal__footer\"><button type=\"button\" class=\"btn btn-ghost\" x-on:click=\"filtered = false\" hx-get=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%s?offset=0&limit=%d", routes.SurveyListRows(), fields.SurveyListLimit))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/search.templ`, Line: 171, Col: 98}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" hx-target=\"#survey-results\" hx-swap=\"innerHTML\" onclick=\"document.getElementById('advanced-search').close()\">Reset All</button> <button type=\"submit\" class=\"btn btn-primary\" x-on:click=\"filtered = true\" onclick=\"document.getElementById('advanced-search').close()\">Apply Filters</button></div></form></dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

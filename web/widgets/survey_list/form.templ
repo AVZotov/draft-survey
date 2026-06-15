@@ -6,7 +6,10 @@ templ Form(lp components.LayoutProps) {
 	<main
 		class="page-main page-main--surveys"
 	>
-		<div class="page-wrap">
+		<div
+			x-data="{ filtered: false }"
+			class="page-wrap"
+		>
 			<div class="page-top">
 				<a
 					href="/"

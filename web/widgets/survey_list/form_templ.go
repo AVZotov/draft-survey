@@ -31,7 +31,7 @@ func Form(lp components.LayoutProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main page-main--surveys\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"/\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">Surveys</h1></div><div id=\"survey-stats\" class=\"stat-wrap\"></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main page-main--surveys\"><div x-data=\"{ filtered: false }\" class=\"page-wrap\"><div class=\"page-top\"><a href=\"/\" class=\"back-link\"><svg viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"></path></svg> Back to Dashboard</a><h1 class=\"page-title\">Surveys</h1></div><div id=\"survey-stats\" class=\"stat-wrap\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

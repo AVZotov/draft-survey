@@ -213,6 +213,15 @@
   padding: 6px 10px;
 }
 
+.survey-search__btn--filtered {
+  background: var(--accent);
+  color: #fff;
+}
+
+.survey-search__btn--filtered:hover {
+  background: var(--accent-dark);
+}
+
 .survey-search__btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
