@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -48,19 +49,19 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>MDO, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.MDO) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMDO, draftIndex), draft.Deductibles.MDO)
 		</div>
 		<div class="df">
 			<label>Lube Oil, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.LubOil) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLubOil, draftIndex), draft.Deductibles.LubOil)
 		</div>
 		<div class="df">
 			<label>Bilge Water, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldBilgeWater, draftIndex), draft.Deductibles.BilgeWater)
 		</div>
 		<div class="df">
 			<label>DockW Density</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldDockwaterDensity, draftIndex), draft.Density)
 		</div>
 		<div class="df">
 			<label>Fresh Water, MT</label>
@@ -68,11 +69,11 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>HFO, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.HFO) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldHFO, draftIndex), draft.Deductibles.HFO)
 		</div>
 		<div class="df">
 			<label>Others, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.Others) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldOthers, draftIndex), draft.Deductibles.Others)
 		</div>
 		<div class="df">
 			<label>Total Deduct, MT</label>

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -41,17 +42,17 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Upper</div>
 				<div class="hydro-grid-cell">
-					<input name={ fmt.Sprintf("%s-%d", constants.UDraft, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Draft) } type="number" placeholder="0.000" step="any"/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldUDraft, draftIndex), draft.HydrostaticRows[0].Draft)
 				</div>
 				<div class="hydro-grid-cell">
-					<input name={ fmt.Sprintf("%s-%d", constants.UDisp, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].Displacement) } type="number" placeholder="0.000" step="any"/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldUDisp, draftIndex), draft.HydrostaticRows[0].Displacement)
 				</div>
 				<div class="hydro-grid-cell">
-					<input name={ fmt.Sprintf("%s-%d", constants.UTpc, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].TPC) } type="number" placeholder="0.000" step="any"/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldUTPC, draftIndex), draft.HydrostaticRows[0].TPC)
 				</div>
 				<div class="hydro-grid-cell lcf-field">
-					<input name={ fmt.Sprintf("%s-%d", constants.ULcfLca, draftIndex) } value={ format.FloatOrEmpty(draft.HydrostaticRows[0].LCF) } type="number" placeholder="0.000" step="any"/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.ULcfDir, draftIndex) }>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldULCF, draftIndex), draft.HydrostaticRows[0].LCF)
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", fields.FieldULCFDir, draftIndex) }>
 						<option value="" selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirection("") }>—</option>
 						<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
 						<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[0].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
@@ -68,17 +69,17 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Lower</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Draft) }/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLDraft, draftIndex), draft.HydrostaticRows[1].Draft)
 				</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LDisp, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].Displacement) }/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLDisp, draftIndex), draft.HydrostaticRows[1].Displacement)
 				</div>
 				<div class="hydro-grid-cell">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LTpc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].TPC) }/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLTPC, draftIndex), draft.HydrostaticRows[1].TPC)
 				</div>
 				<div class="hydro-grid-cell lcf-field">
-					<input type="number" name={ fmt.Sprintf("%s-%d", constants.LLcfLca, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.HydrostaticRows[1].LCF) }/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.LLcfDir, draftIndex) }>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLLCF, draftIndex), draft.HydrostaticRows[1].LCF)
+					<select class="di-badge" name={ fmt.Sprintf("%s-%d", fields.FieldLLCFDir, draftIndex) }>
 						<option value="" selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirection("") }>—</option>
 						<option value={ types.LCFDirectionForward } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionForward }>{ types.LCFDirectionForward }</option>
 						<option value={ types.LCFDirectionAft } selected?={ draft.HydrostaticRows[1].LCFDirection == types.LCFDirectionAft }>{ types.LCFDirectionAft }</option>
@@ -103,11 +104,11 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input x-bind:placeholder="mtcDraftP" type="number" name={ fmt.Sprintf("%s-%d", constants.PMtcDraft, draftIndex) } step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
+						<input x-bind:placeholder="mtcDraftP" type="number" name={ fmt.Sprintf("%s-%d", fields.FieldPMTCDraft, draftIndex) } step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>
-						<input type="number" name={ fmt.Sprintf("%s-%d", constants.PMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].MTC) }/>
+						@components.XInput(fmt.Sprintf("%s-%d", fields.FieldPMTC, draftIndex), draft.MTCRows[0].MTC)
 					</div>
 				</div>
 			</div>
@@ -116,11 +117,11 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input x-bind:placeholder="mtcDraftN" type="number" name={ fmt.Sprintf("%s-%d", constants.NMtcDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
+						<input x-bind:placeholder="mtcDraftN" type="number" name={ fmt.Sprintf("%s-%d", fields.FieldNMTCDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>
-						<input type="number" name={ fmt.Sprintf("%s-%d", constants.NMtc, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].MTC) }/>
+						@components.XInput(fmt.Sprintf("%s-%d", fields.FieldNMTC, draftIndex), draft.MTCRows[1].MTC)
 					</div>
 				</div>
 				@DeltaMtc(dp.Survey, draftIndex, dr, false)

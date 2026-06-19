@@ -7,6 +7,7 @@ templ XInput(name string, value *float64) {
 		x-data
 		x-mask:dynamic="$money($input, '.', ' ', 3)"
 		name={ name }
+		id={ name }
 		value={ format.FloatOrEmpty(value) }
 		placeholder="0.000"
 		type="text"

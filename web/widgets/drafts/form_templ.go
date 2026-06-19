@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -40,9 +40,9 @@ func DraftForm(dp components.DraftPageProps, sr types.SurveyResult) templ.Compon
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 templ.SafeURL
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(fmt.Sprintf("/survey/%s", dp.Survey.ID))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(routes.Survey(dp.Survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/form.templ`, Line: 14, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/form.templ`, Line: 14, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -103,17 +103,6 @@ func DraftForm(dp components.DraftPageProps, sr types.SurveyResult) templ.Compon
 		}
 		return nil
 	})
-}
-
-// Deprecated and will be removed
-func draftPrefix(i, total int) string {
-	if i == 0 {
-		return "i"
-	}
-	if i == total-1 {
-		return "f"
-	}
-	return fmt.Sprintf("m%d", i)
 }
 
 var _ = templruntime.GeneratedTemplate

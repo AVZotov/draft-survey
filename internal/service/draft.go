@@ -8,6 +8,6 @@ func (s *NoopDraftService) Add(survey *types.Survey) error               { retur
 func (s *NoopDraftService) Start(survey *types.Survey, index int) error  { return nil }
 func (s *NoopDraftService) Finish(survey *types.Survey, index int) error { return nil }
 func (s *NoopDraftService) Delete(survey *types.Survey) error            { return nil }
-func (s *NoopDraftService) Update(survey *types.Survey, index int) (*types.SurveyResult, error) {
+func (s *NoopDraftService) CalcResults(survey *types.Survey) (*types.SurveyResult, error) {
 	return nil, nil
 }

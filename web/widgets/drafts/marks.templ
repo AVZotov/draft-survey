@@ -3,7 +3,7 @@ package drafts
 import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strconv"
@@ -30,69 +30,21 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 		>
 			<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 			<div class="dr-wrap">
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="fwdP"
-						x-ref="fwdP"
-						id={ fmt.Sprintf("%d-fp", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldFwdPortMethod, draftIndex), draft.Marks.FwdPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldFwdPort, draftIndex), draft.Marks.FwdPort.Value)
 					<span class="dr-lbl">Fwd</span>
 					<div></div>
 				</div>
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="midP"
-						x-ref="midP"
-						id={ fmt.Sprintf("%d-mp", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldMidPortMethod, draftIndex), draft.Marks.MidPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMidPort, draftIndex), draft.Marks.MidPort.Value)
 					<span class="dr-lbl">Mid</span>
-					<input
-						name={ fmt.Sprintf("%s-%d", constants.TPCListPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.TPCListPort) }
-						type="number"
-						placeholder="tpc list"
-						step="any"
-					/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldTPCListPort, draftIndex), draft.TPCListPort)
 				</div>
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="aftP"
-						x-ref="aftP"
-						id={ fmt.Sprintf("%d-ap", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldAftPortMethod, draftIndex), draft.Marks.AftPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldAftPort, draftIndex), draft.Marks.AftPort.Value)
 					<span class="dr-lbl">Aft</span>
 					<div></div>
 				</div>
@@ -105,72 +57,23 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 		>
 			<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 			<div class="dr-wrap">
-				<div class="dr-row dr-row--stb">
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
 					<div></div>
 					<span class="dr-lbl">Fwd</span>
-					<input
-						x-model="fwdS"
-						x-ref="fwdS"
-						id={ fmt.Sprintf("%d-fs", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldFwdStbd, draftIndex), draft.Marks.FwdStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldFwdStbdMethod, draftIndex), draft.Marks.FwdStarboard.Method)
 				</div>
-				<div class="dr-row dr-row--stb">
-					<input
-						name={ fmt.Sprintf("%s-%d", constants.TPCListStb, draftIndex) }
-						value={ format.FloatOrEmpty(draft.TPCListStarboard) }
-						type="number"
-						placeholder="tpc list"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldTPCListStbd, draftIndex), draft.TPCListStarboard)
 					<span class="dr-lbl">Mid</span>
-					<input
-						x-model="midS"
-						x-ref="midS"
-						id={ fmt.Sprintf("%d-ms", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMidStbd, draftIndex), draft.Marks.MidStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldMidStbdMethod, draftIndex), draft.Marks.MidStarboard.Method)
 				</div>
-				<div class="dr-row dr-row--stb">
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
 					<div></div>
 					<span class="dr-lbl">Aft</span>
-					<input
-						x-model="aftS"
-						x-ref="aftS"
-						id={ fmt.Sprintf("%d-as", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldAftStbd, draftIndex), draft.Marks.AftStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldAftStbdMethod, draftIndex), draft.Marks.AftStarboard.Method)
 				</div>
 			</div>
 		</div>
@@ -245,4 +148,15 @@ templ vesselView(draftIndex int) {
 			></circle>
 		</svg>
 	</div>
+}
+
+templ readingMethod(draft types.Draft, draftIndex int, name string, readingMethod types.ReadingMethod) {
+	<select
+		class="di-badge"
+		name={ name }
+	>
+		<option value="" selected?={ readingMethod == types.ReadingMethod("") }>—</option>
+		<option value={ types.ReadingMethodDirect } selected?={ readingMethod == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+		<option value={ types.ReadingMethodCamera } selected?={ readingMethod == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+	</select>
 }

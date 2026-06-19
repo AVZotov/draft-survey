@@ -5,7 +5,7 @@ func Home() string            { return "/" }
 func Profile() string         { return "/profile" }
 func NewSurvey() string       { return "/survey/new" }
 func Survey(id string) string { return "/survey/" + id }
-func Draft(id string) string  { return "/survey/" + id + "draft" }
+func Draft(id string) string  { return "/survey/" + id + "/draft" }
 func SurveyList() string      { return "/survey-list" }
 
 // SSE
