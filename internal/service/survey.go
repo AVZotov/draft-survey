@@ -2,7 +2,7 @@ package service
 
 import (
 	"time"
-
+	
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/storage"
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -15,7 +15,9 @@ type surveyService struct {
 	logger     logger.Logger
 }
 
-func NewSurveyService(surveyRepo storage.SurveyRepository, userRepo storage.UserRepository, log logger.Logger) SurveyService {
+func NewSurveyService(
+	surveyRepo storage.SurveyRepository, userRepo storage.UserRepository, log logger.Logger,
+) SurveyService {
 	return &surveyService{
 		surveyRepo: surveyRepo,
 		usersRepo:  userRepo,
@@ -25,13 +27,13 @@ func NewSurveyService(surveyRepo storage.SurveyRepository, userRepo storage.User
 
 func (s *surveyService) Create() (*types.Survey, error) {
 	const op = "SurveyService.Create"
-
+	
 	user, err := s.usersRepo.Get()
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	survey := &types.Survey{
 		Status:    types.SurveyStatusDraft,
 		ID:        uuid.New().String(),
@@ -41,66 +43,66 @@ func (s *surveyService) Create() (*types.Survey, error) {
 			IsLcfDetectionManual: true,
 		},
 	}
-
+	
 	if err = s.surveyRepo.Save(survey); err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return survey, nil
 }
 
 func (s *surveyService) Get(id string) (*types.Survey, error) {
 	const op = "SurveyService.Get"
-
+	
 	survey, err := s.surveyRepo.Get(id)
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return survey, nil
 }
 
 func (s *surveyService) GetPage(limit, offset int) ([]*types.Survey, error) {
 	const op = "SurveyService.GetPage"
-
+	
 	surveys, err := s.surveyRepo.GetPage(limit, offset)
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return surveys, nil
 }
 
 func (s *surveyService) GetStats() (types.SurveyStats, error) {
 	const op = "SurveyService.GetStats"
-
+	
 	stats, err := s.surveyRepo.GetStats()
 	if err != nil {
 		s.logger.Error(op, err)
 		return types.SurveyStats{}, err
 	}
-
+	
 	return stats, nil
 }
 
 func (s *surveyService) GetPageData(id string) (*SurveyPageData, error) {
 	const op = "SurveyService.GetPageData"
-
+	
 	survey, err := s.surveyRepo.Get(id)
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	user, err := s.usersRepo.Get()
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return &SurveyPageData{
 		Survey: survey,
 		User:   user,
@@ -109,23 +111,23 @@ func (s *surveyService) GetPageData(id string) (*SurveyPageData, error) {
 
 func (s *surveyService) Update(survey *types.Survey) (*Outcome, error) {
 	const op = "SurveyService.Update"
-
+	
 	if err := s.surveyRepo.Save(survey); err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return nil, nil
 }
 
 func (s *surveyService) Delete(id string) (*Outcome, error) {
 	const op = "SurveyService.Delete"
-
+	
 	if err := s.surveyRepo.Delete(id); err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return &Outcome{
 		Toast: &Notification{
 			Kind:    KindSuccess,
@@ -137,12 +139,12 @@ func (s *surveyService) Delete(id string) (*Outcome, error) {
 
 func (s *surveyService) Search(filter types.SurveyFilter) ([]*types.Survey, error) {
 	const op = "SurveyService.Search"
-
+	
 	surveys, err := s.surveyRepo.Search(filter)
 	if err != nil {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-
+	
 	return surveys, nil
 }
