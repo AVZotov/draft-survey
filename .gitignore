@@ -23,7 +23,10 @@
 !**/*.woff2
 
 # Allow documentation
-!**/*.md
+!docs/CALCULATION.md
+!docs/glossary_en.md
+!docs/glossary_ru.md
+!docs/ROADMAP.md
 !**/*.txt
 !THIRD_PARTY_NOTICES
 
@@ -38,14 +41,12 @@
 !**/.gitkeep
 
 # Allow templ files
-
 !*.templ
 
 # Allow favicons
 !favicon*.png
 
 # Always ignore — sensitive and generated
-htmx-ref.md
 .env
 configs/local.yaml
 configs/local.toml
@@ -59,7 +60,8 @@ bin/
 dist/
 .idea/
 .vscode/
+.claude/
 UI design/
 users/
 htmx-cheatsheet.md
-.claude
+htmx-ref.md
