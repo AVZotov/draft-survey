@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/web"
@@ -33,4 +35,49 @@ func (h *Handler) getDraft(w http.ResponseWriter, r *http.Request) {
 	if err = pages.DraftReadings(lp, dp, sr).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
+}
+
+func (h *Handler) updateDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.updateDraft"
+
+	id := chi.URLParam(r, "id")
+	indexStr := chi.URLParam(r, "index")
+
+	index, err := strconv.Atoi(indexStr)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if index < 0 || index >= len(survey.Drafts) {
+		err := fmt.Errorf("draft index %d out of range", index)
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	h.decoder.Draft(r, &survey.Drafts[index], index)
+
+	outcome, err := h.services.Survey.Update(survey)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
 }

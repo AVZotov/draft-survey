@@ -29,6 +29,12 @@ func APISurvey(id string) string              { return "/api/v1/survey/" + id }
 func APISurveyCountrySelect(id string) string { return "/api/v1/survey/" + id + "/country-select" }
 func APISurveyFlagSelect(id string) string    { return "/api/v1/survey/" + id + "/flag-select" }
 
+// API v1 — draft
+func APIDraftUpdate(id string, index int) string {
+	return "/api/v1/survey/" + id + "/draft/" + strconv.Itoa(index)
+}
+func APIDraftUpdatePattern(id string) string { return "/api/v1/survey/" + id + "/draft/{index}" }
+
 // API v1 - survey-list
 func SurveyListRows() string           { return "/survey-list/rows" }
 func APIDeleteSurvey(id string) string { return "/api/v1/survey/" + id }
