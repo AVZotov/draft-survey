@@ -1,8 +1,7 @@
 package surveylist
 
-import "fmt"
-
 import "github.com/AVZotov/draft-survey/internal/handler/fields"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
 
 templ Surveys() {
 	<div class="survey-grid" id="survey-grid">
@@ -19,7 +18,7 @@ templ Surveys() {
 		<div
 			id="survey-results"
 			class="survey-scroll"
-			hx-get={ fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit) }
+			hx-get={ routes.SurveyListPage(0, fields.SurveyListLimit) }
 			hx-trigger="load"
 			hx-swap="innerHTML"
 			hx-indicator="#global-spinner"

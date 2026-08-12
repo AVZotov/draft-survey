@@ -8,9 +8,8 @@ package surveylist
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "fmt"
-
 import "github.com/AVZotov/draft-survey/internal/handler/fields"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
 
 func Surveys() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -38,9 +37,9 @@ func Surveys() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/survey-list/rows?offset=0&limit=%d", fields.SurveyListLimit))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.SurveyListPage(0, fields.SurveyListLimit))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/surveys.templ`, Line: 22, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/survey_list/surveys.templ`, Line: 21, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {

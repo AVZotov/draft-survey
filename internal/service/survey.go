@@ -42,6 +42,15 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		VesselData: types.VesselData{
 			IsLcfDetectionManual: true,
 		},
+		Drafts: []types.Draft{
+			{
+				Surveyor:        *user,
+				Type:            types.DraftTypeInitial,
+				Status:          types.DraftStatusPending,
+				HydrostaticRows: make([]types.HydrostaticRow, 2),
+				MTCRows:         make([]types.MTCRow, 2),
+			},
+		},
 	}
 	
 	if err = s.surveyRepo.Save(survey); err != nil {

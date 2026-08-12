@@ -12,6 +12,7 @@ templ CountrySelectWrapper(url, loadURL, fieldName string) {
 			hx-get={ loadURL }
 			hx-trigger="load"
 			hx-swap="outerHTML"
+			hx-sync="this:replace"
 		></div>
 	</div>
 }

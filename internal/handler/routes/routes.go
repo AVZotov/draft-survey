@@ -1,5 +1,7 @@
 package routes
 
+import "strconv"
+
 // Pages
 func Home() string            { return "/" }
 func Profile() string         { return "/profile" }
@@ -31,3 +33,7 @@ func APISurveyFlagSelect(id string) string    { return "/api/v1/survey/" + id + 
 func SurveyListRows() string           { return "/survey-list/rows" }
 func APIDeleteSurvey(id string) string { return "/api/v1/survey/" + id }
 func SurveySearch() string             { return "/survey-list/search" }
+
+func SurveyListPage(offset, limit int) string {
+	return SurveyListRows() + "?offset=" + strconv.Itoa(offset) + "&limit=" + strconv.Itoa(limit)
+}
