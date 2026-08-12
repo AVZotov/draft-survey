@@ -5,6 +5,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -22,8 +23,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 		</div>
 		<div
 			class="hydro-grid"
-			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HydrostaticsBlock) }
-			hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+			hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 			hx-target={ fmt.Sprintf("#%s-%d", constants.MMCRow, draftIndex) }
 			hx-include={ fmt.Sprintf("#%s-%d, #%s-%d", constants.UHydroRow, draftIndex, constants.LHydroRow, draftIndex) }
 			hx-trigger="change changed delay:500ms"
@@ -90,9 +90,8 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 		</div>
 		<div
 			class="mtc-grid"
-			hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.HydrostaticsBlock) }
 			hx-trigger="change changed delay:500ms"
-			hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+			hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 			hx-include="this"
 			hx-target={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }
 			hx-select={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }

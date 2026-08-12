@@ -3,8 +3,8 @@ package drafts
 import (
 	"fmt"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -33,8 +33,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
             templ.KV("block-header-fields--2col", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeInitial),
             templ.KV("block-header-fields--3col", dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial),
         ) }
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.DraftInfoBlock) }
-				hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+				hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 				hx-trigger="change changed delay:500ms"
 				hx-sync="this:replace"
 				hx-swap="none"

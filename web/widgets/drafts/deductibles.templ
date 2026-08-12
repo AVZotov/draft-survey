@@ -5,6 +5,7 @@ import (
 	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -32,8 +33,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 	<div
 		class="deduct-grid"
 		id={ fmt.Sprintf("%s-%d", constants.Deductibles, draftIndex) }
-		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.DeductiblesBlock) }
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", survey.ID, draftIndex) }
+		hx-put={ routes.APIDraftUpdate(survey.ID, draftIndex) }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
 		hx-target="this"

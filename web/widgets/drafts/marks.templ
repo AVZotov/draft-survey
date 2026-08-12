@@ -2,8 +2,8 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strconv"
@@ -17,10 +17,9 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div
 		class="readings-area"
-		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.MarksBlock) }
 		hx-include={ fmt.Sprintf("#col-port-%d, #col-stbd-%d", draftIndex, draftIndex) }
 		hx-trigger="change changed target:(input, select) delay:500ms"
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 		hx-swap="none"
 		hx-sync="this:replace"
 	>
