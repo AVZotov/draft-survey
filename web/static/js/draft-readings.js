@@ -29,8 +29,8 @@ function g(id) {
 }
 
 function calc(p) {
-    const fp = g(p + '-fp'), mp = g(p + '-mp'), ap = g(p + '-ap');
-    const fs = g(p + '-fs'), ms = g(p + '-ms'), as_ = g(p + '-as');
+    const fp = g('fwd_port-' + p), mp = g('mid_port-' + p), ap = g('aft_port-' + p);
+    const fs = g('fwd_stbd-' + p), ms = g('mid_stbd-' + p), as_ = g('aft_stbd-' + p);
 
     // Trim — visual only, Aft mean minus Fwd mean
     const mF = fp !== null && fs !== null ? (fp + fs) / 2 : null;
@@ -69,15 +69,15 @@ function updateVessel(p, listDeg, trim) {
 }
 //Trigger vessel trim list updates on frontend on page load
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
-        const idx = el.id.replace('-fp', '');
+    document.querySelectorAll('[id^="fwd_port-"]').forEach(function (el) {
+        const idx = el.id.replace('fwd_port-', '');
         calc(idx);
     });
 });
 //Trigger vessel trim list updates on frontend on page load for HTMX swap support
 function initVessels() {
-    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
-        const idx = el.id.replace('-fp', '');
+    document.querySelectorAll('[id^="fwd_port-"]').forEach(function (el) {
+        const idx = el.id.replace('fwd_port-', '');
         calc(idx);
     });
 }
@@ -85,7 +85,7 @@ function initVessels() {
 document.addEventListener('DOMContentLoaded', initVessels);
 document.addEventListener('htmx:afterSwap', initVessels);
 
-function draftPage() {
+function draftPage(idx) {
     return {
         fwdP: 0, midP: 0, aftP: 0,
         fwdS: 0, midS: 0, aftS: 0,
@@ -93,12 +93,12 @@ function draftPage() {
         mtcDraftN: 0,
 
         init() {
-            this.fwdP = +this.$refs.fwdP.value || 0
-            this.midP = +this.$refs.midP.value || 0
-            this.aftP = +this.$refs.aftP.value || 0
-            this.fwdS = +this.$refs.fwdS.value || 0
-            this.midS = +this.$refs.midS.value || 0
-            this.aftS = +this.$refs.aftS.value || 0
+            this.fwdP = g('fwd_port-' + idx) || 0
+            this.midP = g('mid_port-' + idx) || 0
+            this.aftP = g('aft_port-' + idx) || 0
+            this.fwdS = g('fwd_stbd-' + idx) || 0
+            this.midS = g('mid_stbd-' + idx) || 0
+            this.aftS = g('aft_stbd-' + idx) || 0
             this.mmc = +this.$el.querySelector('.cp-cell--mmc .cp-val').textContent || 0
             this.updtMTCDraft()
         },

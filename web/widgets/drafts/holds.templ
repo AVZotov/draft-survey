@@ -29,10 +29,7 @@ templ HoldsBar(dp components.DraftPageProps, draftIndex int) {
 						value={ strconv.Itoa(i) }
 						checked?={ active }
 					/>
-					<span
-						class="holds-bar__dot"
-						:class="{ 'holds-bar__dot--active': checked }"
-					>{ strconv.Itoa(i) }</span>
+					<span class="holds-bar__dot">{ strconv.Itoa(i) }</span>
 				</label>
 			}
 		</div>
