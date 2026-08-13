@@ -44,6 +44,10 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 
 	// API v1 — draft
 	r.Put(routes.APIDraftUpdatePattern("{id}"), h.updateDraft)
+	r.Post(routes.APIDraftStartPattern("{id}"), h.startDraft)
+	r.Post(routes.APIDraftFinishPattern("{id}"), h.finishDraft)
+	r.Post(routes.APIDraftAdd("{id}"), h.addDraft)
+	r.Delete(routes.APIDraftDelete("{id}"), h.deleteDraft)
 
 	// API v1 - survey-list
 	r.Get(routes.SurveyListRows(), h.getSurveyListRows)

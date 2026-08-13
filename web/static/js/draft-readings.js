@@ -132,11 +132,5 @@ function delDraftConfirm(id) {
         'Delete Draft',
         'Are you sure you want to delete the last draft?',
         () => htmx.ajax('DELETE', '/api/v1/survey/' + id + '/draft', { swap: 'none' })
-            .then(() => {
-                sessionStorage.setItem('toast', JSON.stringify({
-                    header: 'Done',
-                    message: 'Draft deleted successfully'
-                }))
-            })
     )
 }

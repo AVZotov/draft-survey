@@ -183,4 +183,7 @@ const (
 // Cookie Alert
 const CookieFlashAlert = "flash_alert"
 
+// Cookie Toast — redirect-then-notify for Toast, mirrors CookieFlashAlert
+const CookieFlashToast = "flash_toast"
+
 const SurveyListLimit = 10

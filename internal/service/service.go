@@ -36,11 +36,10 @@ type SurveyService interface {
 }
 
 type DraftService interface {
-	Add(survey *types.Survey) error
-	Start(survey *types.Survey, index int) error
-	Finish(survey *types.Survey, index int) error
-	Delete(survey *types.Survey) error
-	CalcResults(survey *types.Survey) (*types.SurveyResult, error)
+	Add(survey *types.Survey) (*Outcome, error)
+	Start(survey *types.Survey, index int) (*Outcome, error)
+	Finish(survey *types.Survey, index int) (*Outcome, error)
+	Delete(survey *types.Survey) (*Outcome, error)
 }
 
 type Services struct {

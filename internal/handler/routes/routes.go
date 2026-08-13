@@ -34,6 +34,16 @@ func APIDraftUpdate(id string, index int) string {
 	return "/api/v1/survey/" + id + "/draft/" + strconv.Itoa(index)
 }
 func APIDraftUpdatePattern(id string) string { return "/api/v1/survey/" + id + "/draft/{index}" }
+func APIDraftStart(id string, index int) string {
+	return "/api/v1/survey/" + id + "/draft/" + strconv.Itoa(index) + "/start"
+}
+func APIDraftStartPattern(id string) string { return "/api/v1/survey/" + id + "/draft/{index}/start" }
+func APIDraftFinish(id string, index int) string {
+	return "/api/v1/survey/" + id + "/draft/" + strconv.Itoa(index) + "/finish"
+}
+func APIDraftFinishPattern(id string) string { return "/api/v1/survey/" + id + "/draft/{index}/finish" }
+func APIDraftAdd(id string) string           { return "/api/v1/survey/" + id + "/draft" }
+func APIDraftDelete(id string) string        { return "/api/v1/survey/" + id + "/draft" }
 
 // API v1 - survey-list
 func SurveyListRows() string           { return "/survey-list/rows" }

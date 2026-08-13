@@ -116,22 +116,6 @@ document.addEventListener('htmx:afterSwap', function (event) {
     }
 })
 
-document.addEventListener('alpine:initialized', () => {
-    const rawToast = sessionStorage.getItem('toast')
-    if (rawToast) {
-        const { header, message } = JSON.parse(rawToast)
-        sessionStorage.removeItem('toast')
-        Alpine.store('toast').show(header, message)
-    }
-
-    const rawAlert = sessionStorage.getItem('alert')
-    if (rawAlert) {
-        const { header, message } = JSON.parse(rawAlert)
-        sessionStorage.removeItem('alert')
-        Alpine.store('alert').show(header, message)
-    }
-})
-
 //Inline usage in templ components do not remove
 function requireFields(ids) {
     for (const id of ids) {

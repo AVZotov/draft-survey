@@ -44,6 +44,20 @@ func (h *Handler) Events(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if cookie, err := r.Cookie(fields.CookieFlashToast); err == nil {
+		h.logger.Debug("flash toast cookie found", "value", cookie.Value)
+		decoded, err := url.QueryUnescape(cookie.Value)
+		if err != nil {
+			h.logger.Error(op, err)
+		} else {
+			h.logger.Debug("publishing toast", "data", decoded)
+			h.broker.Publish(sse.Event{
+				Type: sse.EventToast,
+				Data: decoded,
+			})
+		}
+	}
+
 	for {
 		select {
 		case event := <-ch:

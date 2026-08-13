@@ -1,13 +1,126 @@
 package service
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"time"
 
-type NoopDraftService struct{}
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/internal/logger"
+	"github.com/AVZotov/draft-survey/internal/storage"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
 
-func (s *NoopDraftService) Add(survey *types.Survey) error               { return nil }
-func (s *NoopDraftService) Start(survey *types.Survey, index int) error  { return nil }
-func (s *NoopDraftService) Finish(survey *types.Survey, index int) error { return nil }
-func (s *NoopDraftService) Delete(survey *types.Survey) error            { return nil }
-func (s *NoopDraftService) CalcResults(survey *types.Survey) (*types.SurveyResult, error) {
-	return nil, nil
+type draftService struct {
+	surveyRepo storage.SurveyRepository
+	usersRepo  storage.UserRepository
+	logger     logger.Logger
+}
+
+func NewDraftService(
+	surveyRepo storage.SurveyRepository, userRepo storage.UserRepository, log logger.Logger,
+) DraftService {
+	return &draftService{
+		surveyRepo: surveyRepo,
+		usersRepo:  userRepo,
+		logger:     log,
+	}
+}
+
+func (s *draftService) Add(survey *types.Survey) (*Outcome, error) {
+	const op = "DraftService.Add"
+
+	survey.Drafts = append(survey.Drafts, types.Draft{
+		Type:            types.DraftTypeFinal,
+		Status:          types.DraftStatusPending,
+		MTCRows:         make([]types.MTCRow, 2),
+		HydrostaticRows: make([]types.HydrostaticRow, 2),
+	})
+
+	updateDraftType(survey)
+
+	if err := s.surveyRepo.Save(survey); err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
+}
+
+func (s *draftService) Start(survey *types.Survey, index int) (*Outcome, error) {
+	const op = "DraftService.Start"
+
+	user, err := s.usersRepo.Get()
+	if err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	survey.Drafts[index].Status = types.DraftStatusActive
+	survey.Drafts[index].StartedAt = time.Now()
+	survey.Drafts[index].Surveyor = *user
+
+	if err = s.surveyRepo.Save(survey); err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
+}
+
+func (s *draftService) Finish(survey *types.Survey, index int) (*Outcome, error) {
+	const op = "DraftService.Finish"
+
+	survey.Drafts[index].Status = types.DraftStatusComplete
+	survey.Drafts[index].FinishedAt = time.Now()
+
+	if err := s.surveyRepo.Save(survey); err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
+}
+
+func (s *draftService) Delete(survey *types.Survey) (*Outcome, error) {
+	const op = "DraftService.Delete"
+
+	if len(survey.Drafts) > 2 {
+		survey.Drafts = survey.Drafts[:len(survey.Drafts)-1]
+	}
+
+	updateDraftType(survey)
+
+	if err := s.surveyRepo.Save(survey); err != nil {
+		s.logger.Error(op, err)
+		return nil, err
+	}
+
+	return &Outcome{
+		Redirect: routes.Draft(survey.ID),
+		Toast: &Notification{
+			Kind:    KindSuccess,
+			Header:  "Deleted",
+			Message: "Draft removed successfully",
+		},
+	}, nil
+}
+
+// updateDraftType re-derives Type for every draft based on its position in the
+// slice. Ported as-is from v0.4.0 — pure domain logic, index-only, no side effects.
+func updateDraftType(s *types.Survey) {
+	if len(s.Drafts) == 1 {
+		return
+	}
+
+	if len(s.Drafts) == 2 {
+		s.Drafts[1].Type = types.DraftTypeFinal
+		return
+	}
+
+	for i := len(s.Drafts) - 1; i > 0; i-- {
+		if i == len(s.Drafts)-1 {
+			s.Drafts[i].Type = types.DraftTypeFinal
+			continue
+		}
+		s.Drafts[i].Type = types.DraftTypeIntermediate
+	}
 }

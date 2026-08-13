@@ -10,9 +10,9 @@ const (
 )
 
 type Notification struct {
-	Kind    NotificationKind
-	Header  string
-	Message string
+	Kind    NotificationKind `json:"kind"`
+	Header  string           `json:"header"`
+	Message string           `json:"message"`
 }
 
 type Outcome struct {

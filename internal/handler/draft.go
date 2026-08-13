@@ -81,3 +81,117 @@ func (h *Handler) updateDraft(w http.ResponseWriter, r *http.Request) {
 
 	h.respond(w, outcome)
 }
+
+func (h *Handler) startDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.startDraft"
+
+	id := chi.URLParam(r, "id")
+	index, err := strconv.Atoi(chi.URLParam(r, "index"))
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if index < 0 || index >= len(survey.Drafts) {
+		err := fmt.Errorf("draft index %d out of range", index)
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	outcome, err := h.services.Draft.Start(survey, index)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
+}
+
+func (h *Handler) finishDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.finishDraft"
+
+	id := chi.URLParam(r, "id")
+	index, err := strconv.Atoi(chi.URLParam(r, "index"))
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if index < 0 || index >= len(survey.Drafts) {
+		err := fmt.Errorf("draft index %d out of range", index)
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	outcome, err := h.services.Draft.Finish(survey, index)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
+}
+
+func (h *Handler) addDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.addDraft"
+
+	id := chi.URLParam(r, "id")
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	outcome, err := h.services.Draft.Add(survey)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
+}
+
+func (h *Handler) deleteDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.deleteDraft"
+
+	id := chi.URLParam(r, "id")
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	outcome, err := h.services.Draft.Delete(survey)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
+}
