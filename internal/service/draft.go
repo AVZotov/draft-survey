@@ -7,21 +7,25 @@ import (
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/storage"
 	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/validation"
 )
 
 type draftService struct {
 	surveyRepo storage.SurveyRepository
 	usersRepo  storage.UserRepository
 	logger     logger.Logger
+	validator  validation.DraftValidator
 }
 
 func NewDraftService(
 	surveyRepo storage.SurveyRepository, userRepo storage.UserRepository, log logger.Logger,
+	validator validation.DraftValidator,
 ) DraftService {
 	return &draftService{
 		surveyRepo: surveyRepo,
 		usersRepo:  userRepo,
 		logger:     log,
+		validator:  validator,
 	}
 }
 

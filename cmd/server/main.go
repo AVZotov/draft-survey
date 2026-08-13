@@ -37,7 +37,7 @@ func main() {
 	services := &service.Services{
 		User:       service.NewUserService(userStore, slog, validator),
 		Survey:     service.NewSurveyService(surveyStore, userStore, slog),
-		Draft:      service.NewDraftService(surveyStore, userStore, slog),
+		Draft:      service.NewDraftService(surveyStore, userStore, slog, validation.NewDraftValidator()),
 		Dictionary: service.NewDictionaryService(dictionaryStore),
 	}
 

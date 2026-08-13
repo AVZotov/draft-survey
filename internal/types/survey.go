@@ -140,6 +140,6 @@ type Survey struct {
 	VesselData       VesselData     `json:"vessel_data"`
 	Remarks          string         `json:"remarks"`
 	Country          Country        `json:"country"`
-	Audit            AuditEvent     `json:"audit"`
+	Audit            []AuditEvent   `json:"audit"`
 	MetaData         MetaData       `json:"metadata"`
 }
