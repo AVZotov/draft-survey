@@ -1,7 +1,8 @@
 package components
 
 import "fmt"
-import "github.com/AVZotov/draft-survey/internal/constants"
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
 import "github.com/AVZotov/draft-survey/internal/types"
 import "github.com/AVZotov/draft-survey/data/dictionaries"
 import "github.com/AVZotov/draft-survey/internal/format"
@@ -9,27 +10,19 @@ import "github.com/AVZotov/draft-survey/internal/format"
 templ SeaCondition(scp SeaConditionProps) {
 	<div
 		class="sea-bar"
-		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.SeaConditionBlock) }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
 		hx-sync="this:replace"
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", scp.SurveyID, *scp.DraftIndex) }
+		hx-put={ routes.APIDraftUpdate(scp.SurveyID, *scp.DraftIndex) }
 	>
-		<label
-			class="sea-option"
-			if scp.DraftIndex == nil {
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSeaType, types.SeaConditionTypeWave) }
-			} else {
-				hx-headers={ fmt.Sprintf(`{"%s": "%s", "%s": "%d"}`, constants.HXSeaType, types.SeaConditionTypeWave, constants.HXDraftIndex, *scp.DraftIndex) }
-			}
-		>
+		<label class="sea-option">
 			<input
-				hx-get={ fmt.Sprintf("/dictionary/sea-options") }
+				hx-get={ routes.APIDictionarySeaOptions() + "?type=wave&index=" + format.IntOrEmpty(scp.DraftIndex) }
 				hx-target="next select"
 				hx-swap="outerHTML"
 				hx-trigger="change"
 				type="radio"
-				name={ fmt.Sprintf("%s-%s", constants.SeaType, format.IntOrEmpty(scp.DraftIndex)) }
+				name={ fmt.Sprintf("%s-%s", fields.FieldSeaType, format.IntOrEmpty(scp.DraftIndex)) }
 				value={ types.SeaConditionTypeWave }
 				checked?={ scp.SeaCondition.Type == types.SeaConditionTypeWave }
 			/>
@@ -38,21 +31,14 @@ templ SeaCondition(scp SeaConditionProps) {
 		<div class="sea-select-wrap">
 			@SeaSelect(scp)
 		</div>
-		<label
-			class="sea-option"
-			if scp.DraftIndex == nil {
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXSeaType, types.SeaConditionTypeIce) }
-			} else {
-				hx-headers={ fmt.Sprintf(`{"%s": "%s", "%s": "%d"}`, constants.HXSeaType, types.SeaConditionTypeIce, constants.HXDraftIndex, *scp.DraftIndex) }
-			}
-		>
+		<label class="sea-option">
 			<input
-				hx-get={ fmt.Sprintf("/dictionary/sea-options") }
+				hx-get={ routes.APIDictionarySeaOptions() + "?type=ice&index=" + format.IntOrEmpty(scp.DraftIndex) }
 				hx-target="previous select"
 				hx-swap="outerHTML"
 				hx-trigger="change"
 				type="radio"
-				name={ fmt.Sprintf("%s-%s", constants.SeaType, format.IntOrEmpty(scp.DraftIndex)) }
+				name={ fmt.Sprintf("%s-%s", fields.FieldSeaType, format.IntOrEmpty(scp.DraftIndex)) }
 				value={ types.SeaConditionTypeIce }
 				checked?={ scp.SeaCondition.Type == types.SeaConditionTypeIce }
 			/>
@@ -71,7 +57,7 @@ templ SeaSelect(scp SeaConditionProps) {
 			conditions = dictionaries.IceConditions
 		}
 	}}
-	<select name={ fmt.Sprintf("%s-%s", constants.SeaCondition, format.IntOrEmpty(scp.DraftIndex)) }>
+	<select name={ fmt.Sprintf("%s-%s", fields.FieldSeaCondition, format.IntOrEmpty(scp.DraftIndex)) }>
 		if len(conditions) == 0 {
 			<option value="">-       </option>
 		} else {

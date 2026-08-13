@@ -18,7 +18,8 @@ func APISurveyCargoSelect(id string) string   { return "/api/v1/survey/" + id + 
 func APISurveyPackingSelect(id string) string { return "/api/v1/survey/" + id + "/packing-select" }
 
 // API v1 - dictionariess No preselected items for filter
-func APICargoTypesSelect() string { return "/api/v1/dictionary/cargo-select" }
+func APICargoTypesSelect() string     { return "/api/v1/dictionary/cargo-select" }
+func APIDictionarySeaOptions() string { return "/api/v1/dictionary/sea-options" }
 
 // API v1 — profile
 func APIProfile() string              { return "/api/v1/profile" }

@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
@@ -72,4 +75,34 @@ func (h *Handler) GetCargoTypesSelect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templ.Handler(components.StringSelect(types, "", fields.FieldCargo)).ServeHTTP(w, r)
+}
+
+func (h *Handler) GetSeaOptions(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSeaOptions"
+
+	seaType := r.URL.Query().Get("type")
+
+	var scp components.SeaConditionProps
+	if indexStr := r.URL.Query().Get("index"); indexStr != "" {
+		index, err := strconv.Atoi(indexStr)
+		if err != nil {
+			h.logger.Error(op, err)
+			h.respondError(w, http.StatusBadRequest, err)
+			return
+		}
+		scp.DraftIndex = &index
+	}
+
+	switch types.SeaConditionType(seaType) {
+	case types.SeaConditionTypeWave:
+		scp.SeaCondition.Type = types.SeaConditionTypeWave
+	case types.SeaConditionTypeIce:
+		scp.SeaCondition.Type = types.SeaConditionTypeIce
+	default:
+		h.logger.Error(op, fmt.Errorf("invalid sea type %q", seaType))
+		h.respondError(w, http.StatusBadRequest, fmt.Errorf("invalid sea type %q", seaType))
+		return
+	}
+
+	templ.Handler(components.SeaSelect(scp)).ServeHTTP(w, r)
 }

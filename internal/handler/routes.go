@@ -32,6 +32,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.APISurveyCargoSelect("{id}"), h.GetSurveyCargoSelect)
 	r.Get(routes.APISurveyPackingSelect("{id}"), h.GetSurveyPackingSelect)
 	r.Get(routes.APICargoTypesSelect(), h.GetCargoTypesSelect)
+	r.Get(routes.APIDictionarySeaOptions(), h.GetSeaOptions)
 
 	// API v1 — profile
 	r.Post(routes.APIProfile(), h.createProfile)
