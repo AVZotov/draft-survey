@@ -24,9 +24,9 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 		<div
 			class="hydro-grid"
 			hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
-			hx-target={ fmt.Sprintf("#%s-%d", constants.MMCRow, draftIndex) }
 			hx-include={ fmt.Sprintf("#%s-%d, #%s-%d", constants.UHydroRow, draftIndex, constants.LHydroRow, draftIndex) }
 			hx-trigger="change changed delay:500ms"
+			hx-swap="none"
 			hx-sync="this:replace"
 		>
 			<!-- Header row -->
@@ -93,9 +93,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			hx-trigger="change changed delay:500ms"
 			hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 			hx-include="this"
-			hx-target={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }
-			hx-select={ fmt.Sprintf("#%s-%d", constants.DelataMtc, draftIndex) }
-			hx-swap="morph"
+			hx-swap="none"
 			hx-sync="this:replace"
 		>
 			<div class="mtc-card">

@@ -117,14 +117,26 @@ function draftPage(idx) {
     }
 }
 
-document.addEventListener('htmx:oobAfterSwap', function (event) {
-    const target = event.detail.target
-    if (target.classList.contains('calc-panel')) {
-        const block = target.closest('.draft-block')
-        if (block) {
-            block.dispatchEvent(new CustomEvent('calc-updated'))
-        }
-    }
+// EventDraftCalc — payload is a concatenation of result fragments (calc
+// panel, MMC row, LBM, delta MTC, totals) for every draft, each carrying its
+// real DOM id. Not routed through htmx's swap engine (this app's SSE
+// listeners never are — see 'toast'/'survey-stats' in main.js), so apply
+// each fragment by id manually.
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof es === 'undefined') return
+    es.addEventListener('draft-calc', function (e) {
+        const template = document.createElement('template')
+        template.innerHTML = e.data
+        template.content.querySelectorAll('[id]').forEach(function (fragment) {
+            const target = document.getElementById(fragment.id)
+            if (!target) return
+            target.replaceWith(fragment)
+            if (fragment.classList.contains('calc-panel')) {
+                const block = fragment.closest('.draft-block')
+                if (block) block.dispatchEvent(new CustomEvent('calc-updated'))
+            }
+        })
+    })
 })
 
 function delDraftConfirm(id) {

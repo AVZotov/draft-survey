@@ -40,6 +40,12 @@ type DraftService interface {
 	Start(survey *types.Survey, index int) (*Outcome, error)
 	Finish(survey *types.Survey, index int) (*Outcome, error)
 	Delete(survey *types.Survey) (*Outcome, error)
+	// Update recalculates the survey after an autosave, appends any
+	// validator-produced audit events, and persists the result. The
+	// returned SurveyResult is calculation data only (never persisted) —
+	// the handler uses it to render the EventDraftCalc SSE payload, since
+	// the service layer never touches templ/HTML.
+	Update(survey *types.Survey, index int) (*types.SurveyResult, *Outcome, error)
 }
 
 type Services struct {

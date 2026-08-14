@@ -36,8 +36,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		hx-put={ routes.APIDraftUpdate(survey.ID, draftIndex) }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
-		hx-target="this"
-		hx-swap="morph"
+		hx-swap="none"
 	>
 		<div class="df">
 			<label>Tbl Density</label>

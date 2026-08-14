@@ -1,13 +1,18 @@
 package handler
 
 import (
+	"bytes"
+	"context"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
+	"github.com/AVZotov/draft-survey/internal/sse"
+	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
+	"github.com/AVZotov/draft-survey/web/widgets/drafts"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -72,14 +77,53 @@ func (h *Handler) updateDraft(w http.ResponseWriter, r *http.Request) {
 
 	h.decoder.Draft(r, &survey.Drafts[index], index)
 
-	outcome, err := h.services.Survey.Update(survey)
+	sr, outcome, err := h.services.Draft.Update(survey, index)
 	if err != nil {
 		h.logger.Error(op, err)
 		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
+	h.publishDraftCalc(r.Context(), *survey, *sr)
+
 	h.respond(w, outcome)
+}
+
+// publishDraftCalc renders the calc-panel/hydrostatics-result/totals
+// fragments for every draft (SurveyResult.DraftTotals covers all drafts,
+// since a single draft's change can shift cumulative cargo/constant figures
+// on later drafts) and publishes them as one EventDraftCalc SSE event.
+// Mirrors how getSurveyListRows/deleteSurvey render+publish EventSurveyStats
+// directly in the handler, bypassing Outcome (which is reserved for
+// Toast/Alert notifications).
+func (h *Handler) publishDraftCalc(ctx context.Context, survey types.Survey, sr types.SurveyResult) {
+	const op = "Handler.publishDraftCalc"
+
+	var buf bytes.Buffer
+	for i, dt := range sr.DraftTotals {
+		if err := drafts.CalcPanel(survey, i, dt.DraftResult, true).Render(ctx, &buf); err != nil {
+			h.logger.Error(op, err)
+			return
+		}
+		if err := drafts.MMCRow(survey, i, dt.DraftResult, true).Render(ctx, &buf); err != nil {
+			h.logger.Error(op, err)
+			return
+		}
+		if err := drafts.LBM(dt.DraftResult, i, true).Render(ctx, &buf); err != nil {
+			h.logger.Error(op, err)
+			return
+		}
+		if err := drafts.DeltaMtc(survey, i, dt.DraftResult, true).Render(ctx, &buf); err != nil {
+			h.logger.Error(op, err)
+			return
+		}
+		if err := drafts.Totals(survey, i, sr).Render(ctx, &buf); err != nil {
+			h.logger.Error(op, err)
+			return
+		}
+	}
+
+	h.broker.Publish(sse.Event{Type: sse.EventDraftCalc, Data: buf.String()})
 }
 
 func (h *Handler) startDraft(w http.ResponseWriter, r *http.Request) {

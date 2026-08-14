@@ -3,6 +3,7 @@ package service
 import (
 	"time"
 
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/storage"
@@ -106,6 +107,25 @@ func (s *draftService) Delete(survey *types.Survey) (*Outcome, error) {
 			Message: "Draft removed successfully",
 		},
 	}, nil
+}
+
+func (s *draftService) Update(survey *types.Survey, index int) (*types.SurveyResult, *Outcome, error) {
+	const op = "DraftService.Update"
+
+	sr := calculation.CalcSurvey(*survey)
+
+	if index >= 0 && index < len(survey.Drafts) && index < len(sr.DraftTotals) {
+		if events := s.validator.Validate(survey.Drafts[index], sr.DraftTotals[index].DraftResult); len(events) > 0 {
+			survey.Audit = append(survey.Audit, events...)
+		}
+	}
+
+	if err := s.surveyRepo.Save(survey); err != nil {
+		s.logger.Error(op, err)
+		return nil, nil, err
+	}
+
+	return &sr, nil, nil
 }
 
 // updateDraftType re-derives Type for every draft based on its position in the

@@ -39,6 +39,7 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		ID:        uuid.New().String(),
 		CreatedAt: time.Now(),
 		Surveyor:  *user,
+		Audit:     []types.AuditEvent{},
 		VesselData: types.VesselData{
 			IsLcfDetectionManual: true,
 		},
