@@ -38,6 +38,7 @@ func main() {
 		User:       service.NewUserService(userStore, slog, validator),
 		Survey:     service.NewSurveyService(surveyStore, userStore, slog),
 		Draft:      service.NewDraftService(surveyStore, userStore, slog, validation.NewDraftValidator()),
+		Tank:       service.NewTankService(surveyStore, slog),
 		Dictionary: service.NewDictionaryService(dictionaryStore),
 	}
 

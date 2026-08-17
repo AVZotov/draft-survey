@@ -30,6 +30,15 @@ func (h *Handler) Events(w http.ResponseWriter, r *http.Request) {
 	ch := h.broker.Subscribe()
 	defer h.broker.Unsubscribe(ch)
 
+	// Flush headers immediately once subscribed, rather than lazily on the
+	// first published event. Without this, a client has no way to know the
+	// broker has actually registered it — EventSource's readyState only
+	// flips to OPEN when headers arrive, and (more importantly for tests)
+	// a publish fired the instant before headers land would otherwise race
+	// Subscribe() and be silently dropped by the non-blocking broker.
+	w.WriteHeader(http.StatusOK)
+	flusher.Flush()
+
 	if cookie, err := r.Cookie(fields.CookieFlashAlert); err == nil {
 		h.logger.Debug("flash cookie found", "value", cookie.Value)
 		decoded, err := url.QueryUnescape(cookie.Value)

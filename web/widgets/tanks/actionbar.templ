@@ -2,19 +2,31 @@ package tanks
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/format"
-	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
-templ TanksActionBar(props components.TanksPageProps, results types.DraftResult) {
+// ABTotalsID returns the DOM id ABTotals renders under, scoped per draft
+// index so an EventTankCalc SSE fragment for one draft's Tanks page never
+// clobbers another draft's identically-shaped totals block in another tab.
+func ABTotalsID(draftIndex int) string {
+	return fmt.Sprintf("ab-totals-%d", draftIndex)
+}
+
+templ TanksActionBar(tp components.TanksPageProps) {
+	{{
+		draft := tp.Survey.Drafts[tp.DraftIndex]
+		results := calculation.CalcDraft(draft, tp.Survey.VesselData)
+	}}
 	<div class="action-bar">
 		<div class="ab-info">
-			<span class="ab-vessel">OCEAN CHEERS</span><span class="ab-meta">IMO 9233387 · Loading · Vanino, Russia</span>
+			<span class="ab-vessel">{ tp.Survey.VesselData.Name }</span><span class="ab-meta">{ fmt.Sprintf("IMO %s · %s · %s", tp.Survey.VesselData.IMO, tp.Survey.CargoOperation.Operation, tp.Survey.Country.Name) }</span>
 		</div>
-		@ABTotals(format.WeightFormatted(results.TotalBwTanksWeight), format.WeightFormatted(results.TotalFwTanksWeight), false)
+		@ABTotals(format.WeightFormatted(results.TotalBwTanksWeight), format.WeightFormatted(results.TotalFwTanksWeight), tp.DraftIndex, false)
 		<a
-			href={ fmt.Sprintf("/survey/%s/draft", props.Survey.ID) }
+			href={ routes.Draft(tp.Survey.ID) }
 			class="btn btn-primary"
 		>
 			Back to DRAFT
@@ -23,9 +35,9 @@ templ TanksActionBar(props components.TanksPageProps, results types.DraftResult)
 	</div>
 }
 
-templ ABTotals(totalBW, totalFW string, isOOB bool) {
+templ ABTotals(totalBW, totalFW string, draftIndex int, isOOB bool) {
 	<div
-		id="ab-totals"
+		id={ ABTotalsID(draftIndex) }
 		class="blk-totals"
 		if isOOB {
 			hx-swap-oob="morph"

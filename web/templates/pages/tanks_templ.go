@@ -9,14 +9,13 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/layouts"
 	"github.com/AVZotov/draft-survey/web/widgets"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 )
 
-func Tanks(lp components.LayoutProps, tanksProps components.TanksPageProps, results types.DraftResult) templ.Component {
+func Tanks(lp components.LayoutProps, tp components.TanksPageProps) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -57,7 +56,7 @@ func Tanks(lp components.LayoutProps, tanksProps components.TanksPageProps, resu
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = tanks.Form(lp, tanksProps).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tanks.Form(lp, tp).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,7 +64,7 @@ func Tanks(lp components.LayoutProps, tanksProps components.TanksPageProps, resu
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = tanks.TanksActionBar(tanksProps, results).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tanks.TanksActionBar(tp).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

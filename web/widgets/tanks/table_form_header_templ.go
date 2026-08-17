@@ -8,7 +8,17 @@ package tanks
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"fmt"
+
+	"github.com/AVZotov/draft-survey/internal/types"
+)
+
+// BWTableHeaderID and FWTableHeaderID scope the block-header DOM id per draft
+// index, so an EventTankCalc SSE fragment for one draft's Tanks page never
+// clobbers another draft's identically-shaped header in another tab.
+func BWTableHeaderID(draftIndex int) string { return fmt.Sprintf("bw-table-header-%d", draftIndex) }
+func FWTableHeaderID(draftIndex int) string { return fmt.Sprintf("fw-table-header-%d", draftIndex) }
 
 func TableFormHeader(id, title, totalWeight string, draftType types.DraftType, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -38,7 +48,7 @@ func TableFormHeader(id, title, totalWeight string, draftType types.DraftType, i
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(id)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 7, Col: 9}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 17, Col: 9}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -61,7 +71,7 @@ func TableFormHeader(id, title, totalWeight string, draftType types.DraftType, i
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 14, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 24, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -101,7 +111,7 @@ func TableFormHeader(id, title, totalWeight string, draftType types.DraftType, i
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(draftType)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 25, Col: 44}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 35, Col: 44}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -114,7 +124,7 @@ func TableFormHeader(id, title, totalWeight string, draftType types.DraftType, i
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(totalWeight)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 29, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/table_form_header.templ`, Line: 39, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {

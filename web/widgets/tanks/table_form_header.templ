@@ -1,6 +1,16 @@
 package tanks
 
-import "github.com/AVZotov/draft-survey/internal/types"
+import (
+	"fmt"
+
+	"github.com/AVZotov/draft-survey/internal/types"
+)
+
+// BWTableHeaderID and FWTableHeaderID scope the block-header DOM id per draft
+// index, so an EventTankCalc SSE fragment for one draft's Tanks page never
+// clobbers another draft's identically-shaped header in another tab.
+func BWTableHeaderID(draftIndex int) string { return fmt.Sprintf("bw-table-header-%d", draftIndex) }
+func FWTableHeaderID(draftIndex int) string { return fmt.Sprintf("fw-table-header-%d", draftIndex) }
 
 templ TableFormHeader(id, title, totalWeight string, draftType types.DraftType, isOOB bool) {
 	<div

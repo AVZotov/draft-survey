@@ -23,6 +23,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.NewSurvey(), h.newSurvey)
 	r.Get(routes.Survey("{id}"), h.getSurvey)
 	r.Get(routes.Draft("{id}"), h.getDraft)
+	r.Get(routes.TanksPattern("{id}"), h.getTanks)
 	r.Get(routes.SurveyList(), h.getSurveyList)
 
 	// SSE
@@ -49,6 +50,16 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Post(routes.APIDraftFinishPattern("{id}"), h.finishDraft)
 	r.Post(routes.APIDraftAdd("{id}"), h.addDraft)
 	r.Delete(routes.APIDraftDelete("{id}"), h.deleteDraft)
+
+	// API v1 — tanks
+	r.Get(routes.APITankBWCorrectionsPattern("{id}"), h.getTankCorrections)
+	r.Post(routes.APITankBWPattern("{id}"), h.addBWTank)
+	r.Put(routes.APITankBWIDPattern("{id}"), h.updateBWTank)
+	r.Delete(routes.APITankBWIDPattern("{id}"), h.deleteBWTank)
+	r.Post(routes.APITankFWPattern("{id}"), h.addFWTank)
+	r.Put(routes.APITankFWIDPattern("{id}"), h.updateFWTank)
+	r.Delete(routes.APITankFWIDPattern("{id}"), h.deleteFWTank)
+	r.Put(routes.APITankApplyDensityPattern("{id}"), h.applyDensity)
 
 	// API v1 - survey-list
 	r.Get(routes.SurveyListRows(), h.getSurveyListRows)

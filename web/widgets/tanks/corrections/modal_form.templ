@@ -3,8 +3,9 @@ package corrections
 import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/data/dictionaries"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -15,7 +16,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 		if tank.Correction.HasListCorrection {
 			list_corr = true
 		}
-		corrType := constants.VolumeCalibrationType1
+		corrType := string(types.CalibrationTypeVolumeByTrim)
 		if tank.Correction.TableType != "" {
 			corrType = string(tank.Correction.TableType)
 		}
@@ -70,7 +71,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 					<div class="field-wrap-col">
 						<label class="label">Type</label>
 						<div class="select-wrap">
-							<select class="tcm-select" name={ constants.TankType }>
+							<select class="tcm-select" name={ fields.FieldTankType }>
 								for _, bwtType := range dictionaries.BallastWaterTankTypes {
 									if bwtType == tank.Type {
 										<option value={ bwtType } selected>{ bwtType }</option>
@@ -86,7 +87,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 					</div>
 					<div class="field-wrap-col">
 						<label>Name</label>
-						<input type="text" name={ constants.TankName } value={ tank.Name } placeholder="e.g. 1S, Centre…"/>
+						<input type="text" name={ fields.FieldTankName } value={ tank.Name } placeholder="e.g. 1S, Centre…"/>
 					</div>
 				</div>
 			</div>
@@ -96,15 +97,15 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-3">
 					<div class="field-wrap-col">
 						<label>Sounding <span class="tcm-label-unit">m</span></label>
-						<input type="number" name={ format.TankNameID(constants.TankSounding, tank) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
+						<input type="number" name={ fields.WithTankID(fields.FieldTankSounding, tank.ID) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>Volume <span class="tcm-label-unit">m³</span></label>
-						<input type="number" name={ format.TankNameID(constants.TankVolume, tank) } value={ format.FloatOrEmpty(tank.Volume) } readonly placeholder="calculated" tabindex="-1"/>
+						<input type="number" name={ fields.WithTankID(fields.FieldTankVolume, tank.ID) } value={ format.FloatOrEmpty(tank.EffectiveVolume()) } readonly placeholder="calculated" tabindex="-1"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>Density <span class="tcm-label-unit">t/m³</span></label>
-						<input type="number" name={ format.TankNameID(constants.TankDensity, tank) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+						<input type="number" name={ fields.WithTankID(fields.FieldTankDensity, tank.ID) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
 					</div>
 				</div>
 			</div>
@@ -113,15 +114,15 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="tcm-section-title">Calibration Tables Type</div>
 				<div class="field-col-3">
 					<label>
-						<input x-model="corr_type" type="radio" name="calib_type" value={ constants.VolumeCalibrationType1 }/>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeVolumeByTrim) }/>
 						Standard (Volume by Trim)
 					</label>
 					<label>
-						<input x-model="corr_type" type="radio" name="calib_type" value={ constants.VolumeCalibrationType2 }/>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeSoundingCorrection) }/>
 						Sounding Correction
 					</label>
 					<label>
-						<input x-model="corr_type" type="radio" name="calib_type" value={ constants.VolumeCalibrationType3 }/>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeVolumeCorrection) }/>
 						Volume Correction
 					</label>
 				</div>
@@ -132,11 +133,11 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-2">
 					<div class="field-wrap-col">
 						<label>TTL — Lower trim <span class="tcm-label-unit">m</span></label>
-						<input name={ constants.TTL } value={ format.FloatOrEmpty(tank.Correction.TableTrimLow) } placeholder="e.g. -1.000" step="any" type="number"/>
+						<input name={ fields.FieldTTL } value={ format.FloatOrEmpty(tank.Correction.TableTrimLow) } placeholder="e.g. -1.000" step="any" type="number"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>TTU — Upper trim <span class="tcm-label-unit">m</span></label>
-						<input name={ constants.TTU } value={ format.FloatOrEmpty(tank.Correction.TableTrimUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
+						<input name={ fields.FieldTTU } value={ format.FloatOrEmpty(tank.Correction.TableTrimUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
 					</div>
 				</div>
 			</div>
@@ -149,33 +150,33 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<th style="text-align:left;">Row</th>
 								<th style="text-align:left;">Sounding</th>
-								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTL, m³' : corr_type === '%s' ? 'CORR @ TTL, mm' : 'CORR @ TTL, m³'", constants.VolumeCalibrationType1, constants.VolumeCalibrationType2) }></th>
-								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTU, m³' : corr_type === '%s' ? 'CORR @ TTU, mm' : 'CORR @ TTU, m³'", constants.VolumeCalibrationType1, constants.VolumeCalibrationType2) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTL, m³' : corr_type === '%s' ? 'CORR @ TTL, mm' : 'CORR @ TTL, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTU, m³' : corr_type === '%s' ? 'CORR @ TTU, mm' : 'CORR @ TTU, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ constants.TrimTableTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.TrimTableTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.TrimTableTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ constants.TrimTableTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].Sounding) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].Sounding) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.TrimTableTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeLow) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.TrimTableTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldTrimTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeUp) } placeholder="0.000" step="any" type="number"/>
 								</td>
 							</tr>
 						</tbody>
@@ -183,7 +184,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				</div>
 			</div>
 			<!-- ── CORRECTION ROWS — Type 2 & 3 only! -->
-			<div class="tcm-section" x-show={ fmt.Sprintf("corr_type === '%s' || corr_type === '%s'", constants.VolumeCalibrationType2, constants.VolumeCalibrationType3) }>
+			<div class="tcm-section" x-show={ fmt.Sprintf("corr_type === '%s' || corr_type === '%s'", string(types.CalibrationTypeSoundingCorrection), string(types.CalibrationTypeVolumeCorrection)) }>
 				<div class="tcm-section-title">Capacity Table</div>
 				<div class="tcm-calib-block">
 					<table class="tcm-calib-table">
@@ -198,19 +199,19 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ constants.CorrTableSL } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableSounding) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldCorrSoundingLow } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableSounding) } type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input name={ constants.CorrTableVL } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableVolume) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldCorrVolumeLow } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableVolume) } type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ constants.CorrTableSU } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableSounding) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldCorrSoundingUp } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableSounding) } type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input name={ constants.CorrTableVU } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableVolume) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldCorrVolumeUp } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableVolume) } type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 						</tbody>
@@ -220,7 +221,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 			<!-- ── Toggle for list corrections if any -->
 			<div class="tcm-toggle-row">
 				<label class="tcm-toggle">
-					<input type="checkbox" x-bind:checked="list_corr" name={ constants.HasListCorrection } x-on:change="list_corr = ! list_corr"/>
+					<input type="checkbox" x-bind:checked="list_corr" name={ fields.FieldHasListCorrection } x-on:change="list_corr = ! list_corr"/>
 					<span class="tcm-toggle-slider"></span>
 				</label>
 				<span class="tcm-toggle-label">Has list correction table</span>
@@ -231,11 +232,11 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-2">
 					<div class="field-wrap-col">
 						<label>TLL — Lower list <span class="tcm-label-unit">°</span></label>
-						<input name={ constants.TLL } value={ format.FloatOrEmpty(tank.Correction.TableListLow) } placeholder="e.g. -1.000" step="any" type="number"/>
+						<input name={ fields.FieldTLL } value={ format.FloatOrEmpty(tank.Correction.TableListLow) } placeholder="e.g. -1.000" step="any" type="number"/>
 					</div>
 					<div class="field-wrap-col">
 						<label>TLU — Upper list <span class="tcm-label-unit">°</span></label>
-						<input name={ constants.TLU } value={ format.FloatOrEmpty(tank.Correction.TableListUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
+						<input name={ fields.FieldTLU } value={ format.FloatOrEmpty(tank.Correction.TableListUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
 					</div>
 				</div>
 			</div>
@@ -248,33 +249,33 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<th style="text-align:left;">Row</th>
 								<th style="text-align:left;">Sounding, m</th>
-								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLL, m³' : corr_type === '%s' ? 'CORR @ TLL, mm' : 'CORR @ TLL, m³'", constants.VolumeCalibrationType1, constants.VolumeCalibrationType2) }></th>
-								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLU, m³' : corr_type === '%s' ? 'CORR @ TLU, mm' : 'CORR @ TLU, m³'", constants.VolumeCalibrationType1, constants.VolumeCalibrationType2) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLL, m³' : corr_type === '%s' ? 'CORR @ TLL, mm' : 'CORR @ TLL, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLU, m³' : corr_type === '%s' ? 'CORR @ TLU, mm' : 'CORR @ TLU, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ constants.ListTableTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldListTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.ListTableTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldListTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
 								</td>
 								<td>
-									<input name={ constants.ListTableTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									<input name={ fields.FieldListTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ constants.ListTableTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].Sounding) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldListTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].Sounding) } type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input name={ constants.ListTableTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeLow) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldListTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeLow) } type="number" placeholder="0.000" step="any"/>
 								</td>
 								<td>
-									<input name={ constants.ListTableTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeUp) } type="number" placeholder="0.000" step="any"/>
+									<input name={ fields.FieldListTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeUp) } type="number" placeholder="0.000" step="any"/>
 								</td>
 							</tr>
 						</tbody>
@@ -302,8 +303,8 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 						class="btn btn-primary"
 						value="ok"
 						type="button"
-						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", tp.Survey.ID, tp.DraftIndex, tank.ID) }
-						hx-target={ fmt.Sprintf("#tank-row-%s", tank.ID) }
+						hx-put={ routes.APITankBWUpdate(tp.Survey.ID, tp.DraftIndex, tank.ID) }
+						hx-target={ "#" + fields.WithTankID("tank-row", tank.ID) }
 						hx-swap="morph:outerHTML"
 						hx-include="#modal-form-body"
 						hx-on::after-request="document.getElementById('app-modal').close();"

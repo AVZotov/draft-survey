@@ -7,6 +7,7 @@ const (
 	EventAlert       EventType = "alert"
 	EventSurveyStats EventType = "survey-stats"
 	EventDraftCalc   EventType = "draft-calc"
+	EventTankCalc    EventType = "tank-calc"
 )
 
 type Event struct {

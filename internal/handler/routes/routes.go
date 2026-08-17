@@ -46,6 +46,60 @@ func APIDraftFinishPattern(id string) string { return "/api/v1/survey/" + id + "
 func APIDraftAdd(id string) string           { return "/api/v1/survey/" + id + "/draft" }
 func APIDraftDelete(id string) string        { return "/api/v1/survey/" + id + "/draft" }
 
+// Tanks page
+func Tanks(id string, draftIndex int) string {
+	return "/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex)
+}
+func TanksPattern(id string) string { return "/survey/" + id + "/tanks/{draftIndex}" }
+
+// API v1 — tanks: ballast water
+func APITankBWAdd(id string, draftIndex int) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/bw"
+}
+func APITankBWPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/bw"
+}
+func APITankBWUpdate(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/bw/" + tankID
+}
+func APITankBWDelete(id string, draftIndex int, tankID string) string {
+	return APITankBWUpdate(id, draftIndex, tankID)
+}
+func APITankBWIDPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/bw/{tankID}"
+}
+func APITankBWCorrections(id string, draftIndex int, tankID string) string {
+	return "/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/bw/" + tankID + "/corrections"
+}
+func APITankBWCorrectionsPattern(id string) string {
+	return "/survey/" + id + "/tanks/{draftIndex}/bw/{tankID}/corrections"
+}
+
+// API v1 — tanks: fresh water
+func APITankFWAdd(id string, draftIndex int) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/fw"
+}
+func APITankFWPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/fw"
+}
+func APITankFWUpdate(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/fw/" + tankID
+}
+func APITankFWDelete(id string, draftIndex int, tankID string) string {
+	return APITankFWUpdate(id, draftIndex, tankID)
+}
+func APITankFWIDPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/fw/{tankID}"
+}
+
+// API v1 — tanks: bulk density apply
+func APITankApplyDensity(id string, draftIndex int) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/density"
+}
+func APITankApplyDensityPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/density"
+}
+
 // API v1 - survey-list
 func SurveyListRows() string           { return "/survey-list/rows" }
 func APIDeleteSurvey(id string) string { return "/api/v1/survey/" + id }

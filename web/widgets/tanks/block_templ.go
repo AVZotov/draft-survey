@@ -52,14 +52,14 @@ func Block(tp components.TanksPageProps, isBWBlock bool) templ.Component {
 		}
 		if isBWBlock {
 			for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
-				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, false).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, true, false).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 		} else {
 			for _, tank := range tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks {
-				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, false).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, false, false).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

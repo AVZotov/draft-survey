@@ -48,9 +48,24 @@ type DraftService interface {
 	Update(survey *types.Survey, index int) (*types.SurveyResult, *Outcome, error)
 }
 
+// TankService mirrors DraftService.Update's (*SurveyResult, *Outcome, error)
+// signature across every method: every mutation shifts the draft's BW/FW
+// totals, and the handler needs SurveyResult to render the EventTankCalc SSE
+// payload, same rationale as internal/CLAUDE.md documents for DraftService.Update.
+type TankService interface {
+	AddBW(survey *types.Survey, draftIndex int, tank types.Tank) (*types.SurveyResult, *Outcome, error)
+	AddFW(survey *types.Survey, draftIndex int, tank types.Tank) (*types.SurveyResult, *Outcome, error)
+	UpdateBW(survey *types.Survey, draftIndex int, tank types.Tank) (*types.SurveyResult, *Outcome, error)
+	UpdateFW(survey *types.Survey, draftIndex int, tank types.Tank) (*types.SurveyResult, *Outcome, error)
+	DeleteBW(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	DeleteFW(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	ApplyDensity(survey *types.Survey, draftIndex int, density float64) (*types.SurveyResult, *Outcome, error)
+}
+
 type Services struct {
 	User       UserService
 	Survey     SurveyService
 	Draft      DraftService
+	Tank       TankService
 	Dictionary DictionaryService
 }

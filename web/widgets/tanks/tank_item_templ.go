@@ -9,13 +9,15 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
+	"strconv"
+
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-func TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) templ.Component {
+func TankItem(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -41,7 +43,7 @@ func TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) temp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = tankItemInner(surveyID, draftIndex, tank, true).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tankItemInner(surveyID, draftIndex, tank, isBW, true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -50,7 +52,7 @@ func TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) temp
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = tankItemInner(surveyID, draftIndex, tank, false).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = tankItemInner(surveyID, draftIndex, tank, isBW, false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -59,7 +61,7 @@ func TankItem(surveyID string, draftIndex int, tank types.Tank, isOOB bool) temp
 	})
 }
 
-func tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool) templ.Component {
+func tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -80,14 +82,18 @@ func tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool)
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		updateURL := routes.APITankFWUpdate(surveyID, draftIndex, tank.ID)
+		if isBW {
+			updateURL = routes.APITankBWUpdate(surveyID, draftIndex, tank.ID)
+		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr x-data id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID("tank-row", tank))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID("tank-row", tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 23, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 31, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 		if templ_7745c5c3_Err != nil {
@@ -108,243 +114,248 @@ func tankItemInner(surveyID string, draftIndex int, tank types.Tank, isOOB bool)
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/api/v1/survey/%s/tanks/%d/bw-tank/%s", surveyID, draftIndex, tank.ID))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(updateURL)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 31, Col: 94}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 39, Col: 20}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"><td class=\"td-act\"><button hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"><td class=\"td-act\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/survey/%s/tanks/%d/bw-tank/%s/corrections", surveyID, draftIndex, tank.ID))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 35, Col: 101}
+		if isBW {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<button hx-get=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APITankBWCorrections(surveyID, draftIndex, tank.ID))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 44, Col: 72}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" hx-target=\"#app-modal-content\" hx-on::after-request=\"document.getElementById('app-modal').showModal()\" class=\"rbtn calc\" type=\"button\" title=\"Calculate volume\"><svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect> <line x1=\"8\" y1=\"8\" x2=\"16\" y2=\"8\"></line> <line x1=\"8\" y1=\"12\" x2=\"16\" y2=\"12\"></line> <line x1=\"8\" y1=\"16\" x2=\"12\" y2=\"16\"></line></svg></button>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" hx-target=\"#app-modal-content\" hx-on::after-request=\"document.getElementById('app-modal').showModal()\" class=\"rbtn calc\" type=\"button\" title=\"Calculate volume\"><svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\"></rect> <line x1=\"8\" y1=\"8\" x2=\"16\" y2=\"8\"></line> <line x1=\"8\" y1=\"12\" x2=\"16\" y2=\"12\"></line> <line x1=\"8\" y1=\"16\" x2=\"12\" y2=\"16\"></line></svg></button></td><td class=\"td-name\"><span class=\"t-name-label\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</td><td class=\"td-name\"><span class=\"t-name-label\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(tank.Type)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 51, Col: 41}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 61, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, " ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(tank.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 51, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 61, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</span></td><td class=\"td-div\"></td><td><input id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</span></td><td class=\"td-div\"></td><td><input id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankSounding, tank))
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankSounding, tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 55, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 65, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" class=\"ti\" type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" class=\"ti\" type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankSounding, tank))
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankSounding, tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 55, Col: 144}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 65, Col: 154}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(tank.Sounding))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 55, Col: 189}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 65, Col: 199}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" placeholder=\"0.000\" step=\"any\"></td><td><input id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" placeholder=\"0.000\" step=\"any\"></td><td><input id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var11 string
-		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankVolume, tank))
+		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankVolume, tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 58, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 65}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var11)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"ti\" type=\"number\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\" class=\"ti\" type=\"number\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var12 string
-		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankVolume, tank))
+		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankVolume, tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 58, Col: 140}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 150}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var12)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(tank.Volume))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 58, Col: 183}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 193}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var13)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\" placeholder=\"Calculated\" step=\"any\"></td><td>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" placeholder=\"Calculated\" step=\"any\"></td><td>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if tank.IsFWTTank {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<input class=\"ti\" type=\"number\" readonly value=\"1.000\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<input class=\"ti\" type=\"number\" readonly value=\"1.000\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<input id=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<input id=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var14 string
-			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankDensity, tank))
+			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankDensity, tank.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 64, Col: 62}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 74, Col: 67}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\" class=\"ti\" type=\"number\" name=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" class=\"ti\" type=\"number\" name=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var15 string
-			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankDensity, tank))
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID(fields.FieldTankDensity, tank.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 64, Col: 143}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 74, Col: 153}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var16 string
 			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(tank.Density))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 64, Col: 187}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 74, Col: 197}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" placeholder=\"0.000\" step=\"any\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" placeholder=\"0.000\" step=\"any\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</td><td><input id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</td><td><input id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
-		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankWeight, tank))
+		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.WithTankID("tank_weight", tank.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 78, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var17)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" class=\"ti\" type=\"text\" readonly name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\" class=\"ti\" type=\"text\" readonly value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var18 string
-		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.TankNameID(constants.TankWeight, tank))
+		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.WeightFormatted(tank.CalcWeight()))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 147}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 78, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var18)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\" placeholder=\"Calculated\"></td><td class=\"td-div\"></td><td class=\"td-act\"><button x-on:click=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
-		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.WeightFormatted(tank.CalcWeight()))
+		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.ResolveAttributeValue(delTankConfirmCall(surveyID, draftIndex, tank.ID, isBW))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 68, Col: 199}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 83, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var19)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\" placeholder=\"Calculated\"></td><td class=\"td-div\"></td><td class=\"td-act\"><button x-on:click=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var20 string
-		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("delTankConfirm($event, '%s', '%d', '%s')", surveyID, draftIndex, tank.ID))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/tank_item.templ`, Line: 73, Col: 103}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var20)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\" class=\"rbtn remove\" type=\"button\" title=\"Remove\">-</button></td></tr>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" class=\"rbtn remove\" type=\"button\" title=\"Remove\">-</button></td></tr>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return nil
 	})
+}
+
+func delTankConfirmCall(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	kind := "fw"
+	if isBW {
+		kind = "bw"
+	}
+	return "delTankConfirm($event, '" + surveyID + "', '" + strconv.Itoa(draftIndex) + "', '" + tankID + "', '" + kind + "')"
 }
 
 var _ = templruntime.GeneratedTemplate
