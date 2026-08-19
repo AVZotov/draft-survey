@@ -62,7 +62,9 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-	
+
+	s.logger.Info("survey created", "survey_id", survey.ID)
+
 	return survey, nil
 }
 
@@ -130,7 +132,9 @@ func (s *surveyService) Update(survey *types.Survey) (*Outcome, error) {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-	
+
+	s.logger.Info("survey updated", "survey_id", survey.ID)
+
 	return nil, nil
 }
 
@@ -141,7 +145,9 @@ func (s *surveyService) Delete(id string) (*Outcome, error) {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-	
+
+	s.logger.Info("survey deleted", "survey_id", id)
+
 	return &Outcome{
 		Toast: &Notification{
 			Kind:    KindSuccess,

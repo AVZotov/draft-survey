@@ -52,6 +52,8 @@ func (s *draftService) Add(survey *types.Survey) (*Outcome, error) {
 		return nil, err
 	}
 
+	s.logger.Info("draft added", "survey_id", survey.ID, "draft_count", len(survey.Drafts))
+
 	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
 }
 
@@ -73,6 +75,8 @@ func (s *draftService) Start(survey *types.Survey, index int) (*Outcome, error) 
 		return nil, err
 	}
 
+	s.logger.Info("draft started", "survey_id", survey.ID, "draft_index", index)
+
 	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
 }
 
@@ -86,6 +90,8 @@ func (s *draftService) Finish(survey *types.Survey, index int) (*Outcome, error)
 		s.logger.Error(op, err)
 		return nil, err
 	}
+
+	s.logger.Info("draft finished", "survey_id", survey.ID, "draft_index", index)
 
 	return &Outcome{Redirect: routes.Draft(survey.ID)}, nil
 }

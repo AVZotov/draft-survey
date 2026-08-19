@@ -60,8 +60,6 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.logger.Debug(op, "form values", r.PostForm)
-
 	existing, err := h.services.Survey.Get(id)
 	if err != nil {
 		h.logger.Error(op, err)
@@ -70,7 +68,6 @@ func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
 	}
 
 	survey := h.decoder.Survey(r, existing)
-	h.logger.Debug(op, "vessel name after parse", survey.VesselData.Name)
 
 	outcome, err := h.services.Survey.Update(survey)
 	if err != nil {

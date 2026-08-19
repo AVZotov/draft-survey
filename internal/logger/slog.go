@@ -9,15 +9,28 @@ type SlogLogger struct {
 	log *slog.Logger
 }
 
-func NewSlogLogger() *SlogLogger {
+func NewSlogLogger(level Level) *SlogLogger {
 	return &SlogLogger{
 		log: slog.New(
 			slog.NewTextHandler(
 				os.Stdout, &slog.HandlerOptions{
-					Level: slog.LevelDebug,
+					Level: toSlogLevel(level),
 				},
 			),
 		),
+	}
+}
+
+func toSlogLevel(level Level) slog.Level {
+	switch level {
+	case LevelDebug:
+		return slog.LevelDebug
+	case LevelWarn:
+		return slog.LevelWarn
+	case LevelError:
+		return slog.LevelError
+	default:
+		return slog.LevelInfo
 	}
 }
 

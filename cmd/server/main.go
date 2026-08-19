@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	draftsurvey "github.com/AVZotov/draft-survey"
+	"github.com/AVZotov/draft-survey/internal/config"
 	"github.com/AVZotov/draft-survey/internal/handler"
 	"github.com/AVZotov/draft-survey/internal/logger"
 	"github.com/AVZotov/draft-survey/internal/service"
@@ -17,17 +18,15 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-var version = "dev"
-
-const DBPath = "./data/draft-survey.db"
-
 func main() {
-	db, err := storage.NewDB(DBPath, draftsurvey.Dictionaries)
+	cfg := config.Load()
+
+	db, err := storage.NewDB(cfg.DBPath, draftsurvey.Dictionaries)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	slog := logger.NewSlogLogger()
+	slog := logger.NewSlogLogger(cfg.LogLevel)
 	validator := validation.New()
 
 	userStore := storage.NewSQLiteUserStore(db)
@@ -43,7 +42,7 @@ func main() {
 	}
 
 	broker := sse.NewBroker()
-	chiH := handler.New(services, slog, version, broker)
+	chiH := handler.New(services, slog, cfg.Version, broker)
 
 	r := chi.NewRouter()
 	if err := handler.SetupRoutesChi(r, chiH); err != nil {
@@ -51,8 +50,8 @@ func main() {
 	}
 
 	go func() {
-		log.Println("Server starting on :3399")
-		log.Fatal(http.ListenAndServe(":3399", r))
+		log.Printf("Server starting on %s", cfg.Port)
+		log.Fatal(http.ListenAndServe(cfg.Port, r))
 	}()
 
 	quit := make(chan os.Signal, 1)

@@ -7,9 +7,13 @@ import (
 	draftsurvey "github.com/AVZotov/draft-survey"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func SetupRoutesChi(r chi.Router, h *Handler) error {
+	r.Use(middleware.RequestID)
+	r.Use(h.requestLogger)
+
 	staticFS, err := fs.Sub(draftsurvey.StaticFiles, "web/static")
 	if err != nil {
 		return err

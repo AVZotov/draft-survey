@@ -1,5 +1,14 @@
 package logger
 
+type Level int
+
+const (
+	LevelDebug Level = iota
+	LevelInfo
+	LevelWarn
+	LevelError
+)
+
 type Logger interface {
 	Info(msg string, fields ...any)
 	Warn(msg string, fields ...any)
