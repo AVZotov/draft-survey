@@ -24,6 +24,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Get(routes.Survey("{id}"), h.getSurvey)
 	r.Get(routes.Draft("{id}"), h.getDraft)
 	r.Get(routes.TanksPattern("{id}"), h.getTanks)
+	r.Get(routes.Results("{id}"), h.getResults)
 	r.Get(routes.SurveyList(), h.getSurveyList)
 
 	// SSE
@@ -60,6 +61,13 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Put(routes.APITankFWIDPattern("{id}"), h.updateFWTank)
 	r.Delete(routes.APITankFWIDPattern("{id}"), h.deleteFWTank)
 	r.Put(routes.APITankApplyDensityPattern("{id}"), h.applyDensity)
+	r.Put(routes.APITankBWMoveUpPattern("{id}"), h.moveBWTankUp)
+	r.Put(routes.APITankBWMoveDownPattern("{id}"), h.moveBWTankDown)
+	r.Put(routes.APITankFWMoveUpPattern("{id}"), h.moveFWTankUp)
+	r.Put(routes.APITankFWMoveDownPattern("{id}"), h.moveFWTankDown)
+
+	// API v1 — results
+	r.Get(routes.APIResultsDraft("{id}"), h.getResultsDraft)
 
 	// API v1 - survey-list
 	r.Get(routes.SurveyListRows(), h.getSurveyListRows)

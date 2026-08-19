@@ -60,6 +60,10 @@ type TankService interface {
 	DeleteBW(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
 	DeleteFW(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
 	ApplyDensity(survey *types.Survey, draftIndex int, density float64) (*types.SurveyResult, *Outcome, error)
+	MoveBWTankUp(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	MoveBWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	MoveFWTankUp(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	MoveFWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
 }
 
 type Services struct {

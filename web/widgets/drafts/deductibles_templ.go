@@ -134,9 +134,9 @@ func DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult) 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(dr.TotalBwTanksWeight)
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.Weight(dr.TotalBwTanksWeight))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 47, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 47, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
@@ -179,9 +179,9 @@ func DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult) 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(dr.TotalFwTanksWeight)
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.Weight(dr.TotalFwTanksWeight))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 67, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 67, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 		if templ_7745c5c3_Err != nil {
@@ -208,9 +208,9 @@ func DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult) 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(dr.TotalDeductibles)
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.Weight(dr.TotalDeductibles))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 79, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 79, Col: 61}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
 		if templ_7745c5c3_Err != nil {

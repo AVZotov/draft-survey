@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strings"
 )
@@ -79,9 +79,9 @@ func ActionBar(rp components.ResultProps) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 templ.SafeURL
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(fmt.Sprintf("/survey/%s/draft", rp.Survey.ID))
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(routes.Draft(rp.Survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/actionbar.templ`, Line: 17, Col: 56}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/results/actionbar.templ`, Line: 17, Col: 37}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

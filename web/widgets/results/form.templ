@@ -1,28 +1,24 @@
 package results
 
 import (
-	"fmt"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
 templ Form(rp components.ResultProps) {
-	<main
-		x-data={ fmt.Sprintf(`resultsPage('%s', %d)`, rp.Alpine, rp.Lastindex) }
-	>
+	<main>
 		<!-- ── SURVEY SELECTOR BAR ─────────────────────────────────────── -->
-		@Selector()
+		@Selector(rp)
 		<!-- ── MAIN ────────────────────────────────────────────────────── -->
 		<div class="page-main page-main--results">
 			<!-- Side-by-side columns -->
 			<div class="results-grid">
-				@Block("firstIndex", rp)
-				@Block("secondIndex", rp)
+				@Block(rp, rp.FirstIndex, true)
+				@Block(rp, rp.LastIndex, false)
 			</div>
 			<!-- ── CARGO RESULT ─────────────────────────────────────────── -->
 			<div class="cargo-section">
 				<div class="cargo-main">
-					@CargoData()
-					@CargoAlerts()
+					@CargoData(rp)
 				</div>
 			</div>
 		</div>

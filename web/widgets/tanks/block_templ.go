@@ -31,41 +31,22 @@ func Block(tp components.TanksPageProps, isBWBlock bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ttbl-wrap\"><div id=\"density-warning\"></div><table class=\"ttbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th colspan=\"4\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num\">Sound, m</th><th class=\"th-num\">Vol, m³</th><th class=\"th-num\">Density</th><th class=\"th-num\">MT</th></tr></thead> <tbody")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ttbl-wrap\"><div id=\"density-warning\"></div><table class=\"ttbl\"><thead><tr class=\"tr-grp\"><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th><th class=\"th-div\" rowspan=\"2\"></th><th colspan=\"4\"></th><th class=\"th-div\" rowspan=\"2\"></th><th class=\"th-ph\" rowspan=\"2\"></th></tr><tr class=\"tr-sub\"><th class=\"th-num\">Sound, m</th><th class=\"th-num\">Vol, m³</th><th class=\"th-num\">Density</th><th class=\"th-num\">MT</th></tr></thead> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if isBWBlock {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " id=\"bw-tanks-items\"")
+			templ_7745c5c3_Err = TankRows(tp.Survey.ID, tp.DraftIndex, tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks, true, false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " id=\"fw-tanks-items\"")
+			templ_7745c5c3_Err = TankRows(tp.Survey.ID, tp.DraftIndex, tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks, false, false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " class=\"t-row\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if isBWBlock {
-			for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
-				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, true, false).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-		} else {
-			for _, tank := range tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks {
-				templ_7745c5c3_Err = TankItem(tp.Survey.ID, tp.DraftIndex, tank, false, false).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</tbody></table></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</table></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

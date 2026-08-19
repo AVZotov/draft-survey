@@ -33,12 +33,23 @@ func NewDraftService(
 func (s *draftService) Add(survey *types.Survey) (*Outcome, error) {
 	const op = "DraftService.Add"
 
-	survey.Drafts = append(survey.Drafts, types.Draft{
+	newDraft := types.Draft{
 		Type:            types.DraftTypeFinal,
 		Status:          types.DraftStatusPending,
 		MTCRows:         make([]types.MTCRow, 2),
 		HydrostaticRows: make([]types.HydrostaticRow, 2),
-	})
+		PPFwdDirection:  "A",
+		PPMidDirection:  "A",
+		PPAftDirection:  "F",
+	}
+
+	if len(survey.Drafts) > 0 {
+		prev := survey.Drafts[len(survey.Drafts)-1]
+		newDraft.BallastWaterTanks = copyTanksWithoutMeasurements(prev.BallastWaterTanks)
+		newDraft.FreshWaterTanks = copyTanksWithoutMeasurements(prev.FreshWaterTanks)
+	}
+
+	survey.Drafts = append(survey.Drafts, newDraft)
 
 	updateDraftType(survey)
 
@@ -112,6 +123,11 @@ func (s *draftService) Delete(survey *types.Survey) (*Outcome, error) {
 func (s *draftService) Update(survey *types.Survey, index int) (*types.SurveyResult, *Outcome, error) {
 	const op = "DraftService.Update"
 
+	if index >= 0 && index < len(survey.Drafts) {
+		mmc := calculation.CalcDraft(survey.Drafts[index], survey.VesselData).MMC
+		autoPopulateMTCDrafts(&survey.Drafts[index], mmc)
+	}
+
 	sr := calculation.CalcSurvey(*survey)
 
 	if index >= 0 && index < len(survey.Drafts) && index < len(sr.DraftTotals) {
@@ -126,6 +142,64 @@ func (s *draftService) Update(survey *types.Survey, index int) (*types.SurveyRes
 	}
 
 	return &sr, nil, nil
+}
+
+// copyTanksWithoutMeasurements carries a draft's tank structure (identity,
+// naming, calibration table) into the next draft while resetting per-draft
+// measurements — the surveyor re-enters soundings on each draft, but the
+// tank list itself does not change between drafts. FW density is always 1.0
+// (handled by Tank.CalcWeight), so Density is only reset for BW tanks.
+func copyTanksWithoutMeasurements(src []types.Tank) []types.Tank {
+	if len(src) == 0 {
+		return nil
+	}
+
+	dst := make([]types.Tank, len(src))
+	for i, t := range src {
+		dst[i] = types.Tank{
+			ID:         t.ID,
+			Type:       t.Type,
+			Name:       t.Name,
+			IsFWTTank:  t.IsFWTTank,
+			Correction: t.Correction,
+		}
+	}
+	return dst
+}
+
+// autoPopulateMTCDrafts fills MTCRows[0] (MTC+) and MTCRows[1] (MTC-) from the
+// Upper/Lower hydrostatic rows and the current MMC, using the surveyor's
+// formula, whenever MTC+ has not been manually entered.
+func autoPopulateMTCDrafts(draft *types.Draft, mmc float64) {
+	if len(draft.MTCRows) < 2 || len(draft.HydrostaticRows) < 2 {
+		return
+	}
+	if draft.MTCRows[0].Draft != nil {
+		return
+	}
+
+	upper := draft.HydrostaticRows[0].Draft
+	lower := draft.HydrostaticRows[1].Draft
+	if upper == nil || lower == nil {
+		return
+	}
+	draftUpper := *upper
+	draftLower := *lower
+
+	var mtcPlus, mtcMinus float64
+	if ((draftLower+0.5)+(draftUpper+0.5))/2 <= mmc+0.5 {
+		mtcPlus = draftLower + 0.5
+	} else {
+		mtcPlus = draftUpper + 0.5
+	}
+	if ((draftLower-0.5)+(draftUpper-0.5))/2 <= mmc-0.5 {
+		mtcMinus = draftLower - 0.5
+	} else {
+		mtcMinus = draftUpper - 0.5
+	}
+
+	draft.MTCRows[0].Draft = &mtcPlus
+	draft.MTCRows[1].Draft = &mtcMinus
 }
 
 // updateDraftType re-derives Type for every draft based on its position in the

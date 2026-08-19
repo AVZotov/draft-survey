@@ -1,18 +1,32 @@
 package results
 
-templ Selector() {
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ Selector(rp components.ResultProps) {
 	<div class="selector-bar">
 		<span class="selector-label">Compare</span>
 		<div class="selector-group">
 			<span class="phase-badge phase-badge--ini">Initial</span>
 			<div class="sel-wrap">
-				<select x-model="firstIndex">
-					<template x-for="item in firstSelector" :key="item.index">
-						<option
-							:value="item.index"
-							x-text="item.label + ' - MMC ' + results[item.index].draft_result.mmc"
-						></option>
-					</template>
+				<select
+					name="index"
+					hx-get={ routes.APIResultsDraft(rp.Survey.ID) }
+					hx-vals={ `{"position":"first"}` }
+					hx-target="#results-block-first"
+					hx-swap="outerHTML"
+					hx-trigger="change"
+				>
+					for i, dt := range rp.SurveyResult.DraftTotals {
+						if i < len(rp.SurveyResult.DraftTotals)-1 {
+							<option value={ fmt.Sprintf("%d", i) } selected?={ i == rp.FirstIndex }>
+								{ fmt.Sprintf("%s - MMC %.3f", draftLabel(rp.Survey.Drafts[i].Type, i), dt.DraftResult.MMC) }
+							</option>
+						}
+					}
 				</select>
 			</div>
 		</div>
@@ -20,13 +34,21 @@ templ Selector() {
 		<div class="selector-group">
 			<span class="phase-badge phase-badge--fin">Final</span>
 			<div class="sel-wrap">
-				<select x-model="secondIndex">
-					<template x-for="item in secondSelector" :key="item.index">
-						<option
-							:value="item.index"
-							x-text="item.label + ' - MMC ' + results[item.index].draft_result.mmc"
-						></option>
-					</template>
+				<select
+					name="index"
+					hx-get={ routes.APIResultsDraft(rp.Survey.ID) }
+					hx-vals={ `{"position":"last"}` }
+					hx-target="#results-block-last"
+					hx-swap="outerHTML"
+					hx-trigger="change"
+				>
+					for i, dt := range rp.SurveyResult.DraftTotals {
+						if i > rp.FirstIndex {
+							<option value={ fmt.Sprintf("%d", i) } selected?={ i == rp.LastIndex }>
+								{ fmt.Sprintf("%s - MMC %.3f", draftLabel(rp.Survey.Drafts[i].Type, i), dt.DraftResult.MMC) }
+							</option>
+						}
+					}
 				</select>
 			</div>
 		</div>

@@ -11,6 +11,7 @@ import (
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/service"
 	"github.com/AVZotov/draft-survey/internal/sse"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web"
@@ -156,11 +157,12 @@ func (h *Handler) addBWTank(w http.ResponseWriter, r *http.Request) {
 		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
-	added := survey.Drafts[draftIndex].BallastWaterTanks[len(survey.Drafts[draftIndex].BallastWaterTanks)-1]
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	added := bwTanks[len(bwTanks)-1]
 
 	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
 
-	if err = tanks.TankItem(id, draftIndex, added, true, false).Render(r.Context(), w); err != nil {
+	if err = tanks.TankItem(id, draftIndex, added, true, false, len(bwTanks) == 1, true).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
 }
@@ -205,11 +207,12 @@ func (h *Handler) addFWTank(w http.ResponseWriter, r *http.Request) {
 		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
-	added := survey.Drafts[draftIndex].FreshWaterTanks[len(survey.Drafts[draftIndex].FreshWaterTanks)-1]
+	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
+	added := fwTanks[len(fwTanks)-1]
 
 	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
 
-	if err = tanks.TankItem(id, draftIndex, added, false, false).Render(r.Context(), w); err != nil {
+	if err = tanks.TankItem(id, draftIndex, added, false, false, len(fwTanks) == 1, true).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
 }
@@ -269,11 +272,12 @@ func (h *Handler) updateBWTank(w http.ResponseWriter, r *http.Request) {
 		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
-	updated := survey.Drafts[draftIndex].BallastWaterTanks[idx]
+	bwTanks := survey.Drafts[draftIndex].BallastWaterTanks
+	updated := bwTanks[idx]
 
 	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
 
-	if err = tanks.TankItem(id, draftIndex, updated, true, false).Render(r.Context(), w); err != nil {
+	if err = tanks.TankItem(id, draftIndex, updated, true, false, idx == 0, idx == len(bwTanks)-1).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
 }
@@ -329,11 +333,12 @@ func (h *Handler) updateFWTank(w http.ResponseWriter, r *http.Request) {
 		h.respondError(w, http.StatusInternalServerError, err)
 		return
 	}
-	updated := survey.Drafts[draftIndex].FreshWaterTanks[idx]
+	fwTanks := survey.Drafts[draftIndex].FreshWaterTanks
+	updated := fwTanks[idx]
 
 	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
 
-	if err = tanks.TankItem(id, draftIndex, updated, false, false).Render(r.Context(), w); err != nil {
+	if err = tanks.TankItem(id, draftIndex, updated, false, false, idx == 0, idx == len(fwTanks)-1).Render(r.Context(), w); err != nil {
 		h.logger.Error(op, err)
 	}
 }
@@ -465,11 +470,12 @@ func (h *Handler) applyDensity(w http.ResponseWriter, r *http.Request) {
 	h.respond(w, outcome)
 }
 
-// publishTankCalc renders the BW/FW block-header totals and the action-bar
-// totals for the given draft and publishes them as one EventTankCalc SSE
-// event. Mirrors publishDraftCalc in draft.go — bypasses Outcome (reserved
-// for Toast/Alert) since these are pre-rendered read-only display fragments,
-// not notifications.
+// publishTankCalc renders the BW/FW block-header totals, the action-bar
+// totals, and the full BW/FW tank rows (order + move-button disabled state
+// can change on any mutation) for the given draft, and publishes them as one
+// EventTankCalc SSE event. Mirrors publishDraftCalc in draft.go — bypasses
+// Outcome (reserved for Toast/Alert) since these are pre-rendered read-only
+// display fragments, not notifications.
 func (h *Handler) publishTankCalc(ctx context.Context, survey types.Survey, sr types.SurveyResult, draftIndex int) {
 	const op = "Handler.publishTankCalc"
 
@@ -494,6 +500,71 @@ func (h *Handler) publishTankCalc(ctx context.Context, survey types.Survey, sr t
 		h.logger.Error(op, err)
 		return
 	}
+	if err := tanks.TankRows(survey.ID, draftIndex, survey.Drafts[draftIndex].BallastWaterTanks, true, true).Render(ctx, &buf); err != nil {
+		h.logger.Error(op, err)
+		return
+	}
+	if err := tanks.TankRows(survey.ID, draftIndex, survey.Drafts[draftIndex].FreshWaterTanks, false, true).Render(ctx, &buf); err != nil {
+		h.logger.Error(op, err)
+		return
+	}
 
 	h.broker.Publish(sse.Event{Type: sse.EventTankCalc, Data: buf.String()})
+}
+
+func (h *Handler) moveBWTankUp(w http.ResponseWriter, r *http.Request) {
+	h.moveTank(w, r, "Handler.moveBWTankUp", h.services.Tank.MoveBWTankUp)
+}
+
+func (h *Handler) moveBWTankDown(w http.ResponseWriter, r *http.Request) {
+	h.moveTank(w, r, "Handler.moveBWTankDown", h.services.Tank.MoveBWTankDown)
+}
+
+func (h *Handler) moveFWTankUp(w http.ResponseWriter, r *http.Request) {
+	h.moveTank(w, r, "Handler.moveFWTankUp", h.services.Tank.MoveFWTankUp)
+}
+
+func (h *Handler) moveFWTankDown(w http.ResponseWriter, r *http.Request) {
+	h.moveTank(w, r, "Handler.moveFWTankDown", h.services.Tank.MoveFWTankDown)
+}
+
+// moveTank is the shared body for the four move handlers above — they only
+// differ in which TankService method swaps the tank.
+func (h *Handler) moveTank(
+	w http.ResponseWriter, r *http.Request, op string,
+	move func(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *service.Outcome, error),
+) {
+	id := chi.URLParam(r, "id")
+	tankID := chi.URLParam(r, "tankID")
+	draftIndex, err := strconv.Atoi(chi.URLParam(r, "draftIndex"))
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if draftIndex < 0 || draftIndex >= len(survey.Drafts) {
+		err := fmt.Errorf("draft index %d out of range", draftIndex)
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	sr, outcome, err := move(survey, draftIndex, tankID)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
+
+	h.respond(w, outcome)
 }

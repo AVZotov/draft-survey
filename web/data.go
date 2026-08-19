@@ -70,13 +70,21 @@ func SurveyListLayoutProps(user *types.User, version string) components.LayoutPr
 	}
 }
 
+func ResultsPageProps(survey types.Survey, sr types.SurveyResult, firstIndex, lastIndex int) components.ResultProps {
+	return components.ResultProps{
+		Survey:       survey,
+		SurveyResult: sr,
+		FirstIndex:   firstIndex,
+		LastIndex:    lastIndex,
+	}
+}
+
 func ResultsLayoutProps(user *types.User, version string) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Survey Results",
 		MetaDescription: "Cummulative information about finilized survey",
 		User:            user,
 		ExtraCSS:        []string{"/static/css/results.css"},
-		ExtraJS:         []string{"/static/js/results.js"},
 		AppVersion:      version,
 	}
 }

@@ -23,6 +23,23 @@ func markVal(p *float64) float64 {
 	return *p
 }
 
+// vesselTypeOrDefault treats an unset VesselType as marine — the same
+// fallback web/widgets/survey/form.templ's MMC-Method radio group already
+// displays (`checked?={ VesselType != "river" && VesselType != "barge" }`
+// pre-selects "Standard/marine" for the Go zero value too). A radio that's
+// already visually checked on page load never fires htmx's change trigger
+// unless the surveyor picks a different option, so VesselType can reach here
+// as "" on a fully-entered survey. Without this, CalcMMC's exact-match
+// switch falls through to its 0 fallback, and CalcDraft's LBM gate (which
+// also checks VesselType == marine) skips assignment entirely — both read
+// as "nothing was calculated" even though every input was entered.
+func vesselTypeOrDefault(v types.VesselType) types.VesselType {
+	if v != types.VesselTypeRiver && v != types.VesselTypeBarge {
+		return types.VesselTypeMarine
+	}
+	return v
+}
+
 func MeanDrafts(m types.Marks) types.MeanDraft {
 	return types.MeanDraft{
 		DraftFwdMean: round3((markVal(m.FwdPort.Value) + markVal(m.FwdStarboard.Value)) / 2),
@@ -126,19 +143,16 @@ func CalcDraftsWKeel(
 }
 
 func CalcMMC(draftsWKeel types.DraftsWKeel, v types.VesselData) float64 {
-	if v.VesselType == types.VesselTypeMarine {
+	switch vesselTypeOrDefault(v.VesselType) {
+	case types.VesselTypeMarine:
 		return round3((draftsWKeel.FwdDraftWKeel + round3(6*draftsWKeel.MidDraftWKeel) + draftsWKeel.AftDraftWKeel) / 8)
-	}
-
-	if v.VesselType == types.VesselTypeRiver {
+	case types.VesselTypeRiver:
 		return round3((draftsWKeel.FwdDraftWKeel + round3(4*draftsWKeel.MidDraftWKeel) + draftsWKeel.AftDraftWKeel) / 6)
-	}
-
-	if v.VesselType == types.VesselTypeBarge {
+	case types.VesselTypeBarge:
 		return round3((round3(3*draftsWKeel.FwdDraftWKeel) + round3(14*draftsWKeel.MidDraftWKeel) + round3(3*draftsWKeel.AftDraftWKeel)) / 20)
+	default:
+		return 0
 	}
-
-	return 0
 }
 
 func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) float64 {

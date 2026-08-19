@@ -74,6 +74,18 @@ func APITankBWCorrections(id string, draftIndex int, tankID string) string {
 func APITankBWCorrectionsPattern(id string) string {
 	return "/survey/" + id + "/tanks/{draftIndex}/bw/{tankID}/corrections"
 }
+func APITankBWMoveUp(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/bw/" + tankID + "/move-up"
+}
+func APITankBWMoveUpPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/bw/{tankID}/move-up"
+}
+func APITankBWMoveDown(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/bw/" + tankID + "/move-down"
+}
+func APITankBWMoveDownPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/bw/{tankID}/move-down"
+}
 
 // API v1 — tanks: fresh water
 func APITankFWAdd(id string, draftIndex int) string {
@@ -91,6 +103,18 @@ func APITankFWDelete(id string, draftIndex int, tankID string) string {
 func APITankFWIDPattern(id string) string {
 	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/fw/{tankID}"
 }
+func APITankFWMoveUp(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/fw/" + tankID + "/move-up"
+}
+func APITankFWMoveUpPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/fw/{tankID}/move-up"
+}
+func APITankFWMoveDown(id string, draftIndex int, tankID string) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/fw/" + tankID + "/move-down"
+}
+func APITankFWMoveDownPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/fw/{tankID}/move-down"
+}
 
 // API v1 — tanks: bulk density apply
 func APITankApplyDensity(id string, draftIndex int) string {
@@ -99,6 +123,12 @@ func APITankApplyDensity(id string, draftIndex int) string {
 func APITankApplyDensityPattern(id string) string {
 	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/density"
 }
+
+// Results page
+func Results(id string) string { return "/survey/" + id + "/results" }
+
+// API v1 — results
+func APIResultsDraft(id string) string { return "/api/v1/survey/" + id + "/results/draft" }
 
 // API v1 - survey-list
 func SurveyListRows() string           { return "/survey-list/rows" }

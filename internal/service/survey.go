@@ -42,6 +42,13 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		Audit:     []types.AuditEvent{},
 		VesselData: types.VesselData{
 			IsLcfDetectionManual: true,
+			// Matches the MMC-Method radio group's own default: form.templ
+			// pre-checks "Standard/marine" whenever VesselType isn't
+			// river/barge, so a surveyor who never touches that radio should
+			// persist the same value the UI already shows as selected —
+			// see calculation.vesselTypeOrDefault for the calc-layer half
+			// of this fix (covers surveys created before this change).
+			VesselType: types.VesselTypeMarine,
 		},
 		Drafts: []types.Draft{
 			{
@@ -50,6 +57,9 @@ func (s *surveyService) Create() (*types.Survey, error) {
 				Status:          types.DraftStatusPending,
 				HydrostaticRows: make([]types.HydrostaticRow, 2),
 				MTCRows:         make([]types.MTCRow, 2),
+				PPFwdDirection:  "A",
+				PPMidDirection:  "A",
+				PPAftDirection:  "F",
 			},
 		},
 	}

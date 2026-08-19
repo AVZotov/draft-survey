@@ -44,7 +44,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>Ballast Water, MT</label>
-			<input readonly value={ dr.TotalBwTanksWeight } placeholder="0.000" step="any" type="number"/>
+			<input readonly value={ format.Weight(dr.TotalBwTanksWeight) } placeholder="0.000" step="any" type="number"/>
 		</div>
 		<div class="df">
 			<label>MDO, MT</label>
@@ -64,7 +64,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>Fresh Water, MT</label>
-			<input readonly value={ dr.TotalFwTanksWeight } placeholder="0.000" step="any" type="number"/>
+			<input readonly value={ format.Weight(dr.TotalFwTanksWeight) } placeholder="0.000" step="any" type="number"/>
 		</div>
 		<div class="df">
 			<label>HFO, MT</label>
@@ -76,7 +76,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>Total Deduct, MT</label>
-			<input readonly value={ dr.TotalDeductibles } type="number" placeholder="0.000" step="any"/>
+			<input readonly value={ format.Weight(dr.TotalDeductibles) } type="number" placeholder="0.000" step="any"/>
 		</div>
 	</div>
 }

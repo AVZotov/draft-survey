@@ -550,6 +550,21 @@ input.ti::placeholder {
   border-color: var(--fin-accent, #15803D);
 }
 
+.row-act-grp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rbtn.move {
+  font-size: 10px;
+}
+
+.rbtn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
 /* Footer total row */
 tfoot.ttbl-foot tr td {
   border-top: 2px solid var(--border) !important;

@@ -41,7 +41,8 @@ type PortSelectProps struct {
 	Name     string
 }
 type ResultProps struct {
-	Survey    types.Survey
-	Alpine    string
-	Lastindex int
+	Survey       types.Survey
+	SurveyResult types.SurveyResult
+	FirstIndex   int
+	LastIndex    int
 }

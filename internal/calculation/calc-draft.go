@@ -35,7 +35,7 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 	var totalBwTanksWeight float64
 	var totalFwTanksWeight float64
 
-	if v.VesselType == types.VesselTypeMarine {
+	if vesselTypeOrDefault(v.VesselType) == types.VesselTypeMarine {
 		lbm = CalcFullLBPLBM(draft, markVal(v.LBP))
 	} else {
 		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, markVal(v.LBP))

@@ -54,22 +54,22 @@ func Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) templ.Co
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.DisplacementCorrected))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 23, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 23, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " MT</span> <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" class=\"totals-chevron\" :class=\"{ 'totals-chevron--open': open }\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></div></div><!-- Body — shown when open --><div class=\"totals-body\" x-show=\"open\"><!-- Primary result --><div class=\"totals-primary\"><span class=\"totals-primary-label\">Displacement corr'd</span> <span class=\"totals-primary-value\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " MT</span> <svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" class=\"totals-chevron\" :class=\"{ 'totals-chevron--open': open }\"><polyline points=\"6 9 12 15 18 9\"></polyline></svg></div></div><!-- Body — shown when open --><div class=\"totals-body\" x-show=\"open\"><!-- Primary result --><div class=\"totals-primary\"><span class=\"totals-primary-label\">Net Displacement</span> <span class=\"totals-primary-value\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.DisplacementCorrected))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(f.WeightFormatted(dr.NetDisplacement))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 44, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/totals.templ`, Line: 44, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

@@ -9,17 +9,51 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-templ TankItem(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool) {
+// BWTanksBodyID and FWTanksBodyID name the tbody elements whose full contents
+// are refreshed by EventTankCalc after any mutation that can reorder or
+// resize the tank list (add, delete, move up/down) — the JS listener in
+// tanks.js replaces DOM nodes by id, so re-rendering the whole body here is
+// what keeps isFirst/isLast (and therefore the move-button disabled state)
+// correct after the underlying slice changes.
+const BWTanksBodyID = "bw-tanks-items"
+const FWTanksBodyID = "fw-tanks-items"
+
+templ TankItem(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool, isFirst bool, isLast bool) {
 	if isOOB {
 		<template>
-			@tankItemInner(surveyID, draftIndex, tank, isBW, true)
+			@tankItemInner(surveyID, draftIndex, tank, isBW, true, isFirst, isLast)
 		</template>
 	} else {
-		@tankItemInner(surveyID, draftIndex, tank, isBW, false)
+		@tankItemInner(surveyID, draftIndex, tank, isBW, false, isFirst, isLast)
 	}
 }
 
-templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool) {
+// TankRows renders the full tbody for one tank list (BW or FW), computing
+// isFirst/isLast per row from position. Used both for the initial page
+// render (Block) and for the EventTankCalc full-refresh fragment
+// (publishTankCalc), so the move up/down buttons are always consistent with
+// the current list order.
+templ TankRows(surveyID string, draftIndex int, list []types.Tank, isBW bool, isOOB bool) {
+	{{
+		id := FWTanksBodyID
+		if isBW {
+			id = BWTanksBodyID
+		}
+	}}
+	<tbody
+		id={ id }
+		class="t-row"
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>
+		for i, tank := range list {
+			@tankItemInner(surveyID, draftIndex, tank, isBW, false, i == 0, i == len(list)-1)
+		}
+	</tbody>
+}
+
+templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool, isFirst bool, isLast bool) {
 	{{
 		updateURL := routes.APITankFWUpdate(surveyID, draftIndex, tank.ID)
 		if isBW {
@@ -79,14 +113,48 @@ templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool,
 		</td>
 		<td class="td-div"></td>
 		<td class="td-act">
-			<button
-				x-on:click={ delTankConfirmCall(surveyID, draftIndex, tank.ID, isBW) }
-				class="rbtn remove"
-				type="button"
-				title="Remove"
-			>-</button>
+			<div class="row-act-grp">
+				<button
+					hx-put={ moveUpURL(surveyID, draftIndex, tank.ID, isBW) }
+					hx-swap="none"
+					hx-trigger="click"
+					class="rbtn move"
+					type="button"
+					title="Move up"
+					disabled?={ isFirst }
+				>▲</button>
+				<button
+					hx-put={ moveDownURL(surveyID, draftIndex, tank.ID, isBW) }
+					hx-swap="none"
+					hx-trigger="click"
+					class="rbtn move"
+					type="button"
+					title="Move down"
+					disabled?={ isLast }
+				>▼</button>
+				<button
+					x-on:click={ delTankConfirmCall(surveyID, draftIndex, tank.ID, isBW) }
+					class="rbtn remove"
+					type="button"
+					title="Remove"
+				>-</button>
+			</div>
 		</td>
 	</tr>
+}
+
+func moveUpURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	if isBW {
+		return routes.APITankBWMoveUp(surveyID, draftIndex, tankID)
+	}
+	return routes.APITankFWMoveUp(surveyID, draftIndex, tankID)
+}
+
+func moveDownURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	if isBW {
+		return routes.APITankBWMoveDown(surveyID, draftIndex, tankID)
+	}
+	return routes.APITankFWMoveDown(surveyID, draftIndex, tankID)
 }
 
 func delTankConfirmCall(surveyID string, draftIndex int, tankID string, isBW bool) string {

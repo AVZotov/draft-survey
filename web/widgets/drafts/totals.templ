@@ -20,7 +20,7 @@ templ Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) {
 			<span class="sec-title" style="margin: 0;">Totals &amp; Results</span>
 			<div class="totals-header-right">
 				<!-- Key value always visible when collapsed -->
-				<span class="totals-preview">{ f.WeightFormatted(dr.DisplacementCorrected) } MT</span>
+				<span class="totals-preview">{ f.WeightFormatted(dr.NetDisplacement) } MT</span>
 				<svg
 					viewBox="0 0 24 24"
 					width="13"
@@ -40,8 +40,8 @@ templ Totals(survey types.Survey, draftIndex int, sr types.SurveyResult) {
 		<div class="totals-body" x-show="open">
 			<!-- Primary result -->
 			<div class="totals-primary">
-				<span class="totals-primary-label">Displacement corr'd</span>
-				<span class="totals-primary-value">{ f.WeightFormatted(dr.DisplacementCorrected) } <span class="totals-unit">MT</span></span>
+				<span class="totals-primary-label">Net Displacement</span>
+				<span class="totals-primary-value">{ f.WeightFormatted(dr.NetDisplacement) } <span class="totals-unit">MT</span></span>
 			</div>
 			<!-- Secondary grid -->
 			<div class="totals-grid">

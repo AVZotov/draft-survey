@@ -155,6 +155,70 @@ func (s *tankService) ApplyDensity(survey *types.Survey, draftIndex int, density
 	return sr, nil, nil
 }
 
+// MoveBWTankUp swaps the tank with its predecessor in the list. A no-op
+// (still saved/recalculated) if the tank is already first.
+func (s *tankService) MoveBWTankUp(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error) {
+	const op = "TankService.MoveBWTankUp"
+	return s.moveTank(op, survey, draftIndex, tankID, true, true)
+}
+
+// MoveBWTankDown swaps the tank with its successor in the list. A no-op
+// (still saved/recalculated) if the tank is already last.
+func (s *tankService) MoveBWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error) {
+	const op = "TankService.MoveBWTankDown"
+	return s.moveTank(op, survey, draftIndex, tankID, true, false)
+}
+
+// MoveFWTankUp swaps the tank with its predecessor in the list. A no-op
+// (still saved/recalculated) if the tank is already first.
+func (s *tankService) MoveFWTankUp(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error) {
+	const op = "TankService.MoveFWTankUp"
+	return s.moveTank(op, survey, draftIndex, tankID, false, true)
+}
+
+// MoveFWTankDown swaps the tank with its successor in the list. A no-op
+// (still saved/recalculated) if the tank is already last.
+func (s *tankService) MoveFWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error) {
+	const op = "TankService.MoveFWTankDown"
+	return s.moveTank(op, survey, draftIndex, tankID, false, false)
+}
+
+// moveTank finds tankID in the BW or FW list of the given draft and swaps it
+// with the adjacent tank in the requested direction. Bounds are respected:
+// the first tank cannot move up, the last cannot move down — both are silent
+// no-ops rather than errors, since the button is expected to be disabled in
+// that state and this is purely a display-order operation.
+func (s *tankService) moveTank(op string, survey *types.Survey, draftIndex int, tankID string, isBW, up bool) (*types.SurveyResult, *Outcome, error) {
+	var list *[]types.Tank
+	if isBW {
+		list = &survey.Drafts[draftIndex].BallastWaterTanks
+	} else {
+		list = &survey.Drafts[draftIndex].FreshWaterTanks
+	}
+
+	idx := slices.IndexFunc(*list, func(t types.Tank) bool {
+		return t.ID == tankID
+	})
+	if idx == -1 {
+		s.logger.Error(op, ErrTankNotFound)
+		return nil, nil, ErrTankNotFound
+	}
+
+	other := idx - 1
+	if !up {
+		other = idx + 1
+	}
+	if other >= 0 && other < len(*list) {
+		(*list)[idx], (*list)[other] = (*list)[other], (*list)[idx]
+	}
+
+	sr, err := s.saveAndCalc(op, survey)
+	if err != nil {
+		return nil, nil, err
+	}
+	return sr, nil, nil
+}
+
 // recalcVolume recomputes tank.VolumeCalc from the current calibration data,
 // applied only when the calibration table is complete enough to trust
 // (Correction.IsValid()). Never called for FW tanks — they have no
