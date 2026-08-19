@@ -12,11 +12,13 @@ templ AddRowForm(surveyID string, draftIndex int, isBW bool, isOOB bool) {
 		addURL := routes.APITankFWAdd(surveyID, draftIndex)
 		tankTypes := dictionaries.FreshWaterTankTypes
 		label := "Add FW tank"
+		bodyID := FWTanksBodyID
 		if isBW {
 			rowID = "add-bw-row"
 			addURL = routes.APITankBWAdd(surveyID, draftIndex)
 			tankTypes = dictionaries.BallastWaterTankTypes
 			label = "Add BW tank"
+			bodyID = BWTanksBodyID
 		}
 	}}
 	<div
@@ -56,6 +58,7 @@ templ AddRowForm(surveyID string, draftIndex int, isBW bool, isOOB bool) {
 			type="button"
 			hx-post={ addURL }
 			hx-include="closest .add-row"
+			hx-target={ "#" + bodyID }
 			hx-swap="beforeend"
 		>
 			<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>

@@ -759,3 +759,8 @@ tr.htmx-swapping td {
   border: 1px solid var(--fw-border);
   color: var(--fw-accent);
 }
+
+/* Copy tanks from previous draft */
+.copy-tanks-btn {
+  margin: var(--space-sm) 0;
+}

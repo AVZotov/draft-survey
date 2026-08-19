@@ -69,6 +69,7 @@ func SetupRoutesChi(r chi.Router, h *Handler) error {
 	r.Put(routes.APITankBWMoveDownPattern("{id}"), h.moveBWTankDown)
 	r.Put(routes.APITankFWMoveUpPattern("{id}"), h.moveFWTankUp)
 	r.Put(routes.APITankFWMoveDownPattern("{id}"), h.moveFWTankDown)
+	r.Post(routes.APITankCopyFromPreviousPattern("{id}"), h.copyTanksFromPrevious)
 
 	// API v1 — results
 	r.Get(routes.APIResultsDraft("{id}"), h.getResultsDraft)

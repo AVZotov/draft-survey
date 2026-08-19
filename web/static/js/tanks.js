@@ -13,17 +13,21 @@ function delTankConfirm(event) {
     )
 }
 
-// EventTankCalc — payload is a concatenation of the BW/FW block-header totals
-// and the action-bar totals for the draft that changed, each carrying its
-// real DOM id. Not routed through htmx's swap engine (this app's SSE
-// listeners never are — see 'toast'/'survey-stats' in main.js and 'draft-calc'
-// in draft-readings.js), so apply each fragment by id manually.
+// EventTankCalc — payload is a concatenation of the BW/FW block-header totals,
+// the action-bar totals, and the full BW/FW <tbody> rows for the draft that
+// changed, each carrying its real DOM id. Not routed through htmx's swap
+// engine (this app's SSE listeners never are — see 'toast'/'survey-stats' in
+// main.js and 'draft-calc' in draft-readings.js), so apply each fragment by
+// id manually. The payload must be parsed inside a <table> wrapper — the
+// HTML parser silently drops <tbody>/<tr> tags outside a table ancestor
+// (including inside a bare <template>), which otherwise makes the tank rows
+// vanish while the plain <div> fragments (headers, totals) still apply.
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof es === 'undefined') return
     es.addEventListener('tank-calc', function (e) {
-        const template = document.createElement('template')
-        template.innerHTML = e.data
-        template.content.querySelectorAll('[id]').forEach(function (fragment) {
+        const container = document.createElement('div')
+        container.innerHTML = '<table>' + e.data + '</table>'
+        container.querySelectorAll('[id]').forEach(function (fragment) {
             const target = document.getElementById(fragment.id)
             if (!target) return
             target.replaceWith(fragment)

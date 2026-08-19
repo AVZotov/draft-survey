@@ -219,6 +219,30 @@ func (s *tankService) moveTank(op string, survey *types.Survey, draftIndex int, 
 	return sr, nil, nil
 }
 
+// CopyFromPrevious replaces draftIndex's BW/FW tanks with structural copies
+// (identity, naming, calibration table) of draftIndex-1's tanks, resetting
+// per-draft measurements — same reset shape as DraftService.Add uses when a
+// new draft is created from the previous one.
+func (s *tankService) CopyFromPrevious(survey *types.Survey, draftIndex int) (*types.SurveyResult, *Outcome, error) {
+	const op = "TankService.CopyFromPrevious"
+
+	prev := survey.Drafts[draftIndex-1]
+	survey.Drafts[draftIndex].BallastWaterTanks = copyTanksWithoutMeasurements(prev.BallastWaterTanks)
+	survey.Drafts[draftIndex].FreshWaterTanks = copyTanksWithoutMeasurements(prev.FreshWaterTanks)
+
+	sr, err := s.saveAndCalc(op, survey)
+	if err != nil {
+		return nil, nil, err
+	}
+	return sr, &Outcome{
+		Toast: &Notification{
+			Kind:    KindSuccess,
+			Header:  "Copied",
+			Message: "Tanks copied from previous draft",
+		},
+	}, nil
+}
+
 // recalcVolume recomputes tank.VolumeCalc from the current calibration data,
 // applied only when the calibration table is complete enough to trust
 // (Correction.IsValid()). Never called for FW tanks — they have no

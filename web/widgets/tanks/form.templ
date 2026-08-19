@@ -17,6 +17,11 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 		fwTitle := "Fresh Water Tanks"
 		bwTWeight := format.WeightFormatted(results.TotalBwTanksWeight)
 		fwTWeight := format.WeightFormatted(results.TotalFwTanksWeight)
+		showCopyTanks := false
+		if tp.DraftIndex > 0 {
+			prev := tp.Survey.Drafts[tp.DraftIndex-1]
+			showCopyTanks = len(prev.BallastWaterTanks) > 0 || len(prev.FreshWaterTanks) > 0
+		}
 	}}
 	<main class="page-main">
 		<div class="page-wrap">
@@ -79,12 +84,18 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 			<div class="tank-block tank-block--bw">
 				@TrimListAlert(tp)
 				@TableFormHeader(BWTableHeaderID(tp.DraftIndex), bwTitle, bwTWeight, draft.Type, false)
+				if showCopyTanks {
+					@CopyTanksButton(tp.Survey.ID, tp.DraftIndex)
+				}
 				@Block(tp, true)
 				@AddRowForm(tp.Survey.ID, tp.DraftIndex, true, false)
 			</div>
 			<!-- ═══ FRESH WATER ════════════════════════════════════════════ -->
 			<div class="tank-block tank-block--fw">
 				@TableFormHeader(FWTableHeaderID(tp.DraftIndex), fwTitle, fwTWeight, draft.Type, false)
+				if showCopyTanks {
+					@CopyTanksButton(tp.Survey.ID, tp.DraftIndex)
+				}
 				@Block(tp, false)
 				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false, false)
 			</div>

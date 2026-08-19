@@ -64,6 +64,7 @@ type TankService interface {
 	MoveBWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
 	MoveFWTankUp(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
 	MoveFWTankDown(survey *types.Survey, draftIndex int, tankID string) (*types.SurveyResult, *Outcome, error)
+	CopyFromPrevious(survey *types.Survey, draftIndex int) (*types.SurveyResult, *Outcome, error)
 }
 
 type Services struct {

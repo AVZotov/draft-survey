@@ -471,6 +471,43 @@ func (h *Handler) applyDensity(w http.ResponseWriter, r *http.Request) {
 	h.respond(w, outcome)
 }
 
+func (h *Handler) copyTanksFromPrevious(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.copyTanksFromPrevious"
+
+	id := chi.URLParam(r, "id")
+	draftIndex, err := strconv.Atoi(chi.URLParam(r, "draftIndex"))
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if draftIndex <= 0 || draftIndex >= len(survey.Drafts) {
+		err := fmt.Errorf("draft index %d out of range", draftIndex)
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	sr, outcome, err := h.services.Tank.CopyFromPrevious(survey, draftIndex)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.publishTankCalc(r.Context(), *survey, *sr, draftIndex)
+
+	h.respond(w, outcome)
+}
+
 // publishTankCalc renders the BW/FW block-header totals, the action-bar
 // totals, and the full BW/FW tank rows (order + move-button disabled state
 // can change on any mutation) for the given draft, and publishes them as one

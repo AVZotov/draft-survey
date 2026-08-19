@@ -44,6 +44,11 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		fwTitle := "Fresh Water Tanks"
 		bwTWeight := format.WeightFormatted(results.TotalBwTanksWeight)
 		fwTWeight := format.WeightFormatted(results.TotalFwTanksWeight)
+		showCopyTanks := false
+		if tp.DraftIndex > 0 {
+			prev := tp.Survey.Drafts[tp.DraftIndex-1]
+			showCopyTanks = len(prev.BallastWaterTanks) > 0 || len(prev.FreshWaterTanks) > 0
+		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"page-main\"><div class=\"page-wrap\"><div class=\"page-top\"><a href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -51,7 +56,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var2 templ.SafeURL
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(routes.Draft(tp.Survey.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 25, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 30, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -68,7 +73,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 			tp.Survey.CargoOperation.Operation,
 			tp.Survey.Country.Name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 37, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 42, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -81,7 +86,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(draft.Type)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 47, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 52, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -94,7 +99,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldDockwaterDensity)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 53, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 58, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
@@ -107,7 +112,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(draft.Density))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 54, Col: 49}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 59, Col: 49}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
@@ -120,7 +125,7 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APITankApplyDensity(tp.Survey.ID, tp.DraftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 64, Col: 70}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 69, Col: 70}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
@@ -138,6 +143,12 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		if showCopyTanks {
+			templ_7745c5c3_Err = CopyTanksButton(tp.Survey.ID, tp.DraftIndex).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
 		templ_7745c5c3_Err = Block(tp, true).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -153,6 +164,12 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		templ_7745c5c3_Err = TableFormHeader(FWTableHeaderID(tp.DraftIndex), fwTitle, fwTWeight, draft.Type, false).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
+		}
+		if showCopyTanks {
+			templ_7745c5c3_Err = CopyTanksButton(tp.Survey.ID, tp.DraftIndex).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		templ_7745c5c3_Err = Block(tp, false).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {

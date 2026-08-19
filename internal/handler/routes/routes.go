@@ -124,6 +124,14 @@ func APITankApplyDensityPattern(id string) string {
 	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/density"
 }
 
+// API v1 — tanks: copy from previous draft
+func APITankCopyFromPrevious(id string, draftIndex int) string {
+	return "/api/v1/survey/" + id + "/tanks/" + strconv.Itoa(draftIndex) + "/copy-from-previous"
+}
+func APITankCopyFromPreviousPattern(id string) string {
+	return "/api/v1/survey/" + id + "/tanks/{draftIndex}/copy-from-previous"
+}
+
 // Results page
 func Results(id string) string { return "/survey/" + id + "/results" }
 

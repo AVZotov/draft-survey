@@ -1,0 +1,15 @@
+package tanks
+
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
+
+templ CopyTanksButton(surveyID string, draftIndex int) {
+	<button
+		class="btn btn-primary copy-tanks-btn"
+		type="button"
+		hx-post={ routes.APITankCopyFromPrevious(surveyID, draftIndex) }
+		hx-confirm="Warning: this will replace all existing tank records for this draft with empty copies from the previous draft. Tank names and types will be preserved, measurements will be cleared. Continue?"
+		hx-swap="none"
+	>
+		Copy tanks from Initial Draft
+	</button>
+}
