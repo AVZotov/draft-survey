@@ -33,15 +33,9 @@ func NewDraftService(
 func (s *draftService) Add(survey *types.Survey) (*Outcome, error) {
 	const op = "DraftService.Add"
 
-	newDraft := types.Draft{
-		Type:            types.DraftTypeFinal,
-		Status:          types.DraftStatusPending,
-		MTCRows:         make([]types.MTCRow, 2),
-		HydrostaticRows: make([]types.HydrostaticRow, 2),
-		PPFwdDirection:  "A",
-		PPMidDirection:  "A",
-		PPAftDirection:  "F",
-	}
+	newDraft := types.NewDraft()
+	newDraft.Type = types.DraftTypeFinal
+	newDraft.Status = types.DraftStatusPending
 
 	if len(survey.Drafts) > 0 {
 		prev := survey.Drafts[len(survey.Drafts)-1]

@@ -33,7 +33,12 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		s.logger.Error(op, err)
 		return nil, err
 	}
-	
+
+	initialDraft := types.NewDraft()
+	initialDraft.Surveyor = *user
+	initialDraft.Type = types.DraftTypeInitial
+	initialDraft.Status = types.DraftStatusPending
+
 	survey := &types.Survey{
 		Status:    types.SurveyStatusDraft,
 		ID:        uuid.New().String(),
@@ -50,18 +55,7 @@ func (s *surveyService) Create() (*types.Survey, error) {
 			// of this fix (covers surveys created before this change).
 			VesselType: types.VesselTypeMarine,
 		},
-		Drafts: []types.Draft{
-			{
-				Surveyor:        *user,
-				Type:            types.DraftTypeInitial,
-				Status:          types.DraftStatusPending,
-				HydrostaticRows: make([]types.HydrostaticRow, 2),
-				MTCRows:         make([]types.MTCRow, 2),
-				PPFwdDirection:  "A",
-				PPMidDirection:  "A",
-				PPAftDirection:  "F",
-			},
-		},
+		Drafts: []types.Draft{initialDraft},
 	}
 	
 	if err = s.surveyRepo.Save(survey); err != nil {

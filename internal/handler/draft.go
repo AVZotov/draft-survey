@@ -90,13 +90,22 @@ func (h *Handler) updateDraft(w http.ResponseWriter, r *http.Request) {
 	h.respond(w, outcome)
 }
 
-// publishDraftCalc renders the calc-panel/hydrostatics-result/totals
-// fragments for every draft (SurveyResult.DraftTotals covers all drafts,
-// since a single draft's change can shift cumulative cargo/constant figures
-// on later drafts) and publishes them as one EventDraftCalc SSE event.
-// Mirrors how getSurveyListRows/deleteSurvey render+publish EventSurveyStats
-// directly in the handler, bypassing Outcome (which is reserved for
-// Toast/Alert notifications).
+// publishDraftCalc renders all calc-panel components for SSE delivery.
+// Components rendered: CalcPanel, MMCRow, LBM, DeltaMtc, Totals (per draft).
+// If new displayable calc results are added, extend this list here.
+//
+// The list is explicit rather than a registry because at this scale (5
+// fixed components, one handler) a registry pattern is overengineering —
+// see issue #89. Revisit only if the number of OOB fragments grows enough
+// that this function becomes unwieldy to read top to bottom.
+//
+// Renders the calc-panel/hydrostatics-result/totals fragments for every
+// draft (SurveyResult.DraftTotals covers all drafts, since a single draft's
+// change can shift cumulative cargo/constant figures on later drafts) and
+// publishes them as one EventDraftCalc SSE event. Mirrors how
+// getSurveyListRows/deleteSurvey render+publish EventSurveyStats directly
+// in the handler, bypassing Outcome (which is reserved for Toast/Alert
+// notifications).
 func (h *Handler) publishDraftCalc(ctx context.Context, survey types.Survey, sr types.SurveyResult) {
 	const op = "Handler.publishDraftCalc"
 
