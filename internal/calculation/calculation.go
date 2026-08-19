@@ -4,7 +4,6 @@ import (
 	"errors"
 	"math"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
@@ -510,9 +509,9 @@ func CalcBwTankVolume(trim, listDegrees float64, tank types.Tank) (float64, erro
 	}
 
 	switch tank.Correction.TableType {
-	case constants.VolumeCalibrationType2:
+	case types.CalibrationTypeSoundingCorrection:
 		return calcVolumeType2(*tank.Sounding, trim, listDegrees, tank.Correction), nil
-	case constants.VolumeCalibrationType3:
+	case types.CalibrationTypeVolumeCorrection:
 		return calcVolumeType3(*tank.Sounding, trim, listDegrees, tank.Correction), nil
 	default:
 		return calcVolumeType1(*tank.Sounding, trim, listDegrees, tank.Correction), nil

@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"time"
 )
@@ -42,7 +43,7 @@ func DashboardForm(user *types.User) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(user.FirstName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 14, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 15, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -55,13 +56,39 @@ func DashboardForm(user *types.User) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(time.Now().Format("Monday, 02 January 2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 15, Col: 94}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 16, Col: 94}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div><!-- Quick Actions --><p class=\"section-label\">Quick Actions</p><div class=\"action-grid\"><!-- New Survey --><a href=\"/survey/new\" class=\"action-card action-card--primary\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">New Survey</p><p class=\"action-card-desc\">Start a new draft survey for a vessel</p></div><div class=\"action-card-arrow\">Start <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a><!-- All Surveys --><a href=\"/survey-list\" class=\"action-card\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"></rect> <path d=\"M3 9h18M9 21V9\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">All Surveys</p><p class=\"action-card-desc\">Browse and manage your saved surveys</p></div><div class=\"action-card-arrow\">Open <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a><!-- Settings --><a x-data x-on:click=\"$store.toast.show('Settings', 'Not implemented')\" href=\"#\" class=\"action-card\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3\"></circle> <path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">Settings</p><p class=\"action-card-desc\">Edit your profile and application preferences</p></div><div class=\"action-card-arrow\">Open <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a></div><!-- /action-grid --></div><!-- /dashboard --></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div><!-- Quick Actions --><p class=\"section-label\">Quick Actions</p><div class=\"action-grid\"><!-- New Survey --><a href=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 templ.SafeURL
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinURLErrs(routes.NewSurvey())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 22, Col: 32}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"action-card action-card--primary\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">New Survey</p><p class=\"action-card-desc\">Start a new draft survey for a vessel</p></div><div class=\"action-card-arrow\">Start <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a><!-- All Surveys --><a href=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 templ.SafeURL
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(routes.SurveyList())
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/dashboard/dashboard_form.templ`, Line: 40, Col: 33}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"action-card\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"></rect> <path d=\"M3 9h18M9 21V9\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">All Surveys</p><p class=\"action-card-desc\">Browse and manage your saved surveys</p></div><div class=\"action-card-arrow\">Open <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a><!-- Settings --><a x-data x-on:click=\"$store.toast.show('Settings', 'Not implemented')\" href=\"#\" class=\"action-card\"><div class=\"action-card-icon\"><svg viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3\"></circle> <path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"></path></svg></div><div class=\"action-card-body\"><p class=\"action-card-title\">Settings</p><p class=\"action-card-desc\">Edit your profile and application preferences</p></div><div class=\"action-card-arrow\">Open <svg viewBox=\"0 0 24 24\"><path d=\"M5 12h14M12 5l7 7-7 7\"></path></svg></div></a></div><!-- /action-grid --></div><!-- /dashboard --></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

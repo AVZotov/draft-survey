@@ -139,10 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 })
 
-function delDraftConfirm(id) {
+function delDraftConfirm(event) {
+    const url = event.currentTarget.dataset.deleteUrl
     Alpine.store('confirm').show(
         'Delete Draft',
         'Are you sure you want to delete the last draft?',
-        () => htmx.ajax('DELETE', '/api/v1/survey/' + id + '/draft', { swap: 'none' })
+        () => htmx.ajax('DELETE', url, { swap: 'none' })
     )
 }

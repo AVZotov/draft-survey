@@ -2,12 +2,12 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/ids"
 )
 
 templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
@@ -32,7 +32,7 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 	{{ draft := survey.Drafts[draftIndex] }}
 	<div
 		class="deduct-grid"
-		id={ fmt.Sprintf("%s-%d", constants.Deductibles, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.Deductibles, draftIndex) }
 		hx-put={ routes.APIDraftUpdate(survey.ID, draftIndex) }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"

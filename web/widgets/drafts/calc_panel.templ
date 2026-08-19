@@ -1,14 +1,14 @@
 package drafts
 
 import "fmt"
-import "github.com/AVZotov/draft-survey/internal/constants"
 import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/web/ids"
 
 templ CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="calc-panel"
-		id={ fmt.Sprintf("%s-%d", constants.CalcPanel, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.CalcPanel, draftIndex) }
 		if isOOB {
 			hx-swap-oob="morph"
 		}

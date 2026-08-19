@@ -10,12 +10,12 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/ids"
 )
 
 func Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) templ.Component {
@@ -95,9 +95,9 @@ func DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult) 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%s-%d", constants.Deductibles, draftIndex))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%s-%d", ids.Deductibles, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 35, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/deductibles.templ`, Line: 35, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {

@@ -97,7 +97,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-3">
 					<div class="field-wrap-col">
 						<label>Sounding <span class="tcm-label-unit">m</span></label>
-						<input type="number" name={ fields.WithTankID(fields.FieldTankSounding, tank.ID) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
+						@components.XInput(fields.WithTankID(fields.FieldTankSounding, tank.ID), tank.Sounding)
 					</div>
 					<div class="field-wrap-col">
 						<label>Volume <span class="tcm-label-unit">m³</span></label>
@@ -105,7 +105,7 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 					</div>
 					<div class="field-wrap-col">
 						<label>Density <span class="tcm-label-unit">t/m³</span></label>
-						<input type="number" name={ fields.WithTankID(fields.FieldTankDensity, tank.ID) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+						@components.XInput(fields.WithTankID(fields.FieldTankDensity, tank.ID), tank.Density)
 					</div>
 				</div>
 			</div>
@@ -133,11 +133,11 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-2">
 					<div class="field-wrap-col">
 						<label>TTL — Lower trim <span class="tcm-label-unit">m</span></label>
-						<input name={ fields.FieldTTL } value={ format.FloatOrEmpty(tank.Correction.TableTrimLow) } placeholder="e.g. -1.000" step="any" type="number"/>
+						@components.XInput(fields.FieldTTL, tank.Correction.TableTrimLow)
 					</div>
 					<div class="field-wrap-col">
 						<label>TTU — Upper trim <span class="tcm-label-unit">m</span></label>
-						<input name={ fields.FieldTTU } value={ format.FloatOrEmpty(tank.Correction.TableTrimUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
+						@components.XInput(fields.FieldTTU, tank.Correction.TableTrimUpper)
 					</div>
 				</div>
 			</div>
@@ -158,25 +158,25 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ fields.FieldTrimTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSLS, tank.Correction.SafeTrimRows()[0].Sounding)
 								</td>
 								<td>
-									<input name={ fields.FieldTrimTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSLVL, tank.Correction.SafeTrimRows()[0].VolumeLow)
 								</td>
 								<td>
-									<input name={ fields.FieldTrimTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSLVU, tank.Correction.SafeTrimRows()[0].VolumeUp)
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ fields.FieldTrimTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].Sounding) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSUS, tank.Correction.SafeTrimRows()[1].Sounding)
 								</td>
 								<td>
-									<input name={ fields.FieldTrimTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSUVL, tank.Correction.SafeTrimRows()[1].VolumeLow)
 								</td>
 								<td>
-									<input name={ fields.FieldTrimTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeTrimRows()[1].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldTrimTSUVU, tank.Correction.SafeTrimRows()[1].VolumeUp)
 								</td>
 							</tr>
 						</tbody>
@@ -199,19 +199,19 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ fields.FieldCorrSoundingLow } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableSounding) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldCorrSoundingLow, tank.Correction.SafeCorrectionRows()[0].TableSounding)
 								</td>
 								<td>
-									<input name={ fields.FieldCorrVolumeLow } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[0].TableVolume) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldCorrVolumeLow, tank.Correction.SafeCorrectionRows()[0].TableVolume)
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ fields.FieldCorrSoundingUp } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableSounding) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldCorrSoundingUp, tank.Correction.SafeCorrectionRows()[1].TableSounding)
 								</td>
 								<td>
-									<input name={ fields.FieldCorrVolumeUp } value={ format.FloatOrEmpty(tank.Correction.SafeCorrectionRows()[1].TableVolume) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldCorrVolumeUp, tank.Correction.SafeCorrectionRows()[1].TableVolume)
 								</td>
 							</tr>
 						</tbody>
@@ -232,11 +232,11 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 				<div class="field-col-2">
 					<div class="field-wrap-col">
 						<label>TLL — Lower list <span class="tcm-label-unit">°</span></label>
-						<input name={ fields.FieldTLL } value={ format.FloatOrEmpty(tank.Correction.TableListLow) } placeholder="e.g. -1.000" step="any" type="number"/>
+						@components.XInput(fields.FieldTLL, tank.Correction.TableListLow)
 					</div>
 					<div class="field-wrap-col">
 						<label>TLU — Upper list <span class="tcm-label-unit">°</span></label>
-						<input name={ fields.FieldTLU } value={ format.FloatOrEmpty(tank.Correction.TableListUpper) } placeholder="e.g. +3.000" step="any" type="number"/>
+						@components.XInput(fields.FieldTLU, tank.Correction.TableListUpper)
 					</div>
 				</div>
 			</div>
@@ -257,25 +257,25 @@ templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
 							<tr>
 								<td><span class="tcm-row-label">TSL</span></td>
 								<td>
-									<input name={ fields.FieldListTSLS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].Sounding) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldListTSLS, tank.Correction.SafeListRows()[0].Sounding)
 								</td>
 								<td>
-									<input name={ fields.FieldListTSLVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeLow) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldListTSLVL, tank.Correction.SafeListRows()[0].VolumeLow)
 								</td>
 								<td>
-									<input name={ fields.FieldListTSLVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[0].VolumeUp) } placeholder="0.000" step="any" type="number"/>
+									@components.XInput(fields.FieldListTSLVU, tank.Correction.SafeListRows()[0].VolumeUp)
 								</td>
 							</tr>
 							<tr>
 								<td><span class="tcm-row-label">TSU</span></td>
 								<td>
-									<input name={ fields.FieldListTSUS } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].Sounding) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldListTSUS, tank.Correction.SafeListRows()[1].Sounding)
 								</td>
 								<td>
-									<input name={ fields.FieldListTSUVL } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeLow) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldListTSUVL, tank.Correction.SafeListRows()[1].VolumeLow)
 								</td>
 								<td>
-									<input name={ fields.FieldListTSUVU } value={ format.FloatOrEmpty(tank.Correction.SafeListRows()[1].VolumeUp) } type="number" placeholder="0.000" step="any"/>
+									@components.XInput(fields.FieldListTSUVU, tank.Correction.SafeListRows()[1].VolumeUp)
 								</td>
 							</tr>
 						</tbody>

@@ -362,6 +362,6 @@ templ intProfileWrapper(name string, value *int, label string, required bool) {
 				<span class="optional">(optional)</span>
 			}
 		</label>
-		<input name={ name } value={ format.IntOrEmpty(value) } placeholder="e.g. 1" step="1" type="number"/>
+		<input x-data x-mask="999999" name={ name } value={ format.IntOrEmpty(value) } placeholder="e.g. 1" type="text"/>
 	</div>
 }

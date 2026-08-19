@@ -1,7 +1,6 @@
 package drafts
 
 import (
-	"fmt"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
@@ -21,7 +20,8 @@ templ DraftActionBar(survey *types.Survey) {
 			<button
 				class="btn btn-danger"
 				disabled?={ len(survey.Drafts) <= 2 }
-				x-on:click={ fmt.Sprintf("delDraftConfirm('%s')", survey.ID) }
+				x-on:click="delDraftConfirm($event)"
+				data-delete-url={ routes.APIDraftDelete(survey.ID) }
 			>
 				@components.IconTrash()
 				Del last Draft
@@ -32,7 +32,7 @@ templ DraftActionBar(survey *types.Survey) {
 		</div>
 		<div class="ab-btns">
 			<a
-				hx-get={ fmt.Sprintf("/survey/%s/results/validate", survey.ID) }
+				href={ routes.Results(survey.ID) }
 				class="btn btn-primary"
 			>
 				Calculate &amp; View Results

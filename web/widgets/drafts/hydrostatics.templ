@@ -2,12 +2,12 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/ids"
 )
 
 templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
@@ -24,7 +24,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 		<div
 			class="hydro-grid"
 			hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
-			hx-include={ fmt.Sprintf("#%s-%d, #%s-%d", constants.UHydroRow, draftIndex, constants.LHydroRow, draftIndex) }
+			hx-include={ fmt.Sprintf("#%s-%d, #%s-%d", ids.UHydroRow, draftIndex, ids.LHydroRow, draftIndex) }
 			hx-trigger="change changed delay:500ms"
 			hx-swap="none"
 			hx-sync="this:replace"
@@ -38,7 +38,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			<!-- Upper row -->
 			<div
 				class="hydro-row"
-				id={ fmt.Sprintf("%s-%d", constants.UHydroRow, draftIndex) }
+				id={ fmt.Sprintf("%s-%d", ids.UHydroRow, draftIndex) }
 			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Upper</div>
 				<div class="hydro-grid-cell">
@@ -65,7 +65,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 			<!-- Lower row -->
 			<div
 				class="hydro-row"
-				id={ fmt.Sprintf("%s-%d", constants.LHydroRow, draftIndex) }
+				id={ fmt.Sprintf("%s-%d", ids.LHydroRow, draftIndex) }
 			>
 				<div class="hydro-grid-cell hydro-grid-cell--label">Lower</div>
 				<div class="hydro-grid-cell">
@@ -101,7 +101,14 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input x-bind:placeholder="mtcDraftP" type="number" name={ fmt.Sprintf("%s-%d", fields.FieldPMTCDraft, draftIndex) } step="any" value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }/>
+						<input
+							x-data
+							x-mask:dynamic="$money($input, '.', ' ', 3)"
+							x-bind:placeholder="mtcDraftP"
+							type="text"
+							name={ fmt.Sprintf("%s-%d", fields.FieldPMTCDraft, draftIndex) }
+							value={ format.FloatOrEmpty(draft.MTCRows[0].Draft) }
+						/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>
@@ -114,7 +121,14 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 				<div class="mtc-body">
 					<div class="mtc-cell">
 						<label>Draft, m</label>
-						<input x-bind:placeholder="mtcDraftN" type="number" name={ fmt.Sprintf("%s-%d", fields.FieldNMTCDraft, draftIndex) } placeholder="0.000" step="any" value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }/>
+						<input
+							x-data
+							x-mask:dynamic="$money($input, '.', ' ', 3)"
+							x-bind:placeholder="mtcDraftN"
+							type="text"
+							name={ fmt.Sprintf("%s-%d", fields.FieldNMTCDraft, draftIndex) }
+							value={ format.FloatOrEmpty(draft.MTCRows[1].Draft) }
+						/>
 					</div>
 					<div class="mtc-cell">
 						<label>MTC, MT/m</label>
@@ -130,7 +144,7 @@ templ Hydrostatics(dp components.DraftPageProps, draftIndex int, dr types.DraftR
 templ LBM(dr types.DraftResult, draftIndex int, isOOB bool) {
 	<span
 		class="sec-title-mmc"
-		id={ fmt.Sprintf("%s-%d", constants.LBM, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.LBM, draftIndex) }
 		if isOOB {
 			hx-swap-oob="true"
 		}
@@ -142,7 +156,7 @@ templ LBM(dr types.DraftResult, draftIndex int, isOOB bool) {
 templ MMCRow(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="hydro-row"
-		id={ fmt.Sprintf("%s-%d", constants.MMCRow, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.MMCRow, draftIndex) }
 		if isOOB {
 			hx-swap-oob="true"
 		}
@@ -158,7 +172,7 @@ templ MMCRow(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bo
 templ DeltaMtc(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
 	<div
 		class="mtc-delta"
-		id={ fmt.Sprintf("%s-%d", constants.DelataMtc, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.DeltaMtc, draftIndex) }
 		if isOOB {
 			hx-swap-oob="true"
 		}

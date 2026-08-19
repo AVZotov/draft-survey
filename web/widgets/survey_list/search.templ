@@ -2,7 +2,6 @@ package surveylist
 
 import "github.com/AVZotov/draft-survey/internal/handler/routes"
 import "github.com/AVZotov/draft-survey/web/components"
-import "fmt"
 import "github.com/AVZotov/draft-survey/internal/handler/fields"
 
 templ Search() {
@@ -168,7 +167,7 @@ templ AdvancedSearch() {
 					type="button"
 					class="btn btn-ghost"
 					x-on:click="filtered = false"
-					hx-get={ fmt.Sprintf("%s?offset=0&limit=%d", routes.SurveyListRows(), fields.SurveyListLimit) }
+					hx-get={ routes.SurveyListPage(0, fields.SurveyListLimit) }
 					hx-target="#survey-results"
 					hx-swap="innerHTML"
 					onclick="document.getElementById('advanced-search').close()"

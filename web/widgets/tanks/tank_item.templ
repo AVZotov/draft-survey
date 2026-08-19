@@ -1,8 +1,6 @@
 package tanks
 
 import (
-	"strconv"
-
 	"github.com/AVZotov/draft-survey/internal/format"
 	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/handler/routes"
@@ -96,16 +94,43 @@ templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool,
 		</td>
 		<td class="td-div"></td>
 		<td>
-			<input id={ fields.WithTankID(fields.FieldTankSounding, tank.ID) } class="ti" type="number" name={ fields.WithTankID(fields.FieldTankSounding, tank.ID) } value={ format.FloatOrEmpty(tank.Sounding) } placeholder="0.000" step="any"/>
+			<input
+				id={ fields.WithTankID(fields.FieldTankSounding, tank.ID) }
+				class="ti"
+				x-data
+				x-mask:dynamic="$money($input, '.', ' ', 3)"
+				type="text"
+				name={ fields.WithTankID(fields.FieldTankSounding, tank.ID) }
+				value={ format.FloatOrEmpty(tank.Sounding) }
+				placeholder="0.000"
+			/>
 		</td>
 		<td>
-			<input id={ fields.WithTankID(fields.FieldTankVolume, tank.ID) } class="ti" type="number" name={ fields.WithTankID(fields.FieldTankVolume, tank.ID) } value={ format.FloatOrEmpty(tank.Volume) } placeholder="Calculated" step="any"/>
+			<input
+				id={ fields.WithTankID(fields.FieldTankVolume, tank.ID) }
+				class="ti"
+				x-data
+				x-mask:dynamic="$money($input, '.', ' ', 3)"
+				type="text"
+				name={ fields.WithTankID(fields.FieldTankVolume, tank.ID) }
+				value={ format.FloatOrEmpty(tank.Volume) }
+				placeholder="Calculated"
+			/>
 		</td>
 		<td>
 			if tank.IsFWTTank {
-				<input class="ti" type="number" readonly value="1.000"/>
+				<input class="ti" type="text" readonly value="1.000"/>
 			} else {
-				<input id={ fields.WithTankID(fields.FieldTankDensity, tank.ID) } class="ti" type="number" name={ fields.WithTankID(fields.FieldTankDensity, tank.ID) } value={ format.FloatOrEmpty(tank.Density) } placeholder="0.000" step="any"/>
+				<input
+					id={ fields.WithTankID(fields.FieldTankDensity, tank.ID) }
+					class="ti"
+					x-data
+					x-mask:dynamic="$money($input, '.', ' ', 3)"
+					type="text"
+					name={ fields.WithTankID(fields.FieldTankDensity, tank.ID) }
+					value={ format.FloatOrEmpty(tank.Density) }
+					placeholder="0.000"
+				/>
 			}
 		</td>
 		<td>
@@ -133,7 +158,9 @@ templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool,
 					disabled?={ isLast }
 				>▼</button>
 				<button
-					x-on:click={ delTankConfirmCall(surveyID, draftIndex, tank.ID, isBW) }
+					x-on:click="delTankConfirm($event)"
+					data-delete-url={ tankDeleteURL(surveyID, draftIndex, tank.ID, isBW) }
+					data-tank-id={ tank.ID }
 					class="rbtn remove"
 					type="button"
 					title="Remove"
@@ -157,10 +184,9 @@ func moveDownURL(surveyID string, draftIndex int, tankID string, isBW bool) stri
 	return routes.APITankFWMoveDown(surveyID, draftIndex, tankID)
 }
 
-func delTankConfirmCall(surveyID string, draftIndex int, tankID string, isBW bool) string {
-	kind := "fw"
+func tankDeleteURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
 	if isBW {
-		kind = "bw"
+		return routes.APITankBWDelete(surveyID, draftIndex, tankID)
 	}
-	return "delTankConfirm($event, '" + surveyID + "', '" + strconv.Itoa(draftIndex) + "', '" + tankID + "', '" + kind + "')"
+	return routes.APITankFWDelete(surveyID, draftIndex, tankID)
 }

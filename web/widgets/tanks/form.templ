@@ -45,7 +45,16 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				>
 					<div class="dg dg--ini">
 						<span class="dg-lbl">{ draft.Type }</span>
-						<input class="den-in" id="dockwater-density" name={ fields.FieldDockwaterDensity } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
+						<input
+							class="den-in"
+							id="dockwater-density"
+							x-data
+							x-mask:dynamic="$money($input, '.', ' ', 3)"
+							name={ fields.FieldDockwaterDensity }
+							value={ format.FloatOrEmpty(draft.Density) }
+							type="text"
+							placeholder="0.000"
+						/>
 						<span class="den-hint">t/m³</span>
 					</div>
 					<button

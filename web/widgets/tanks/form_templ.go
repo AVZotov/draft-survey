@@ -87,14 +87,14 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span> <input class=\"den-in\" id=\"dockwater-density\" name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span> <input class=\"den-in\" id=\"dockwater-density\" x-data x-mask:dynamic=\"$money($input, '.', ' ', 3)\" name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.ResolveAttributeValue(fields.FieldDockwaterDensity)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 48, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 53, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
@@ -107,20 +107,20 @@ func Form(lp components.LayoutProps, tp components.TanksPageProps) templ.Compone
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.ResolveAttributeValue(format.FloatOrEmpty(draft.Density))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 48, Col: 131}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 54, Col: 49}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" type=\"number\" placeholder=\"0.000\" step=\"any\"> <span class=\"den-hint\">t/m³</span></div><button class=\"btn btn-primary\" type=\"button\" hx-include=\"previous [name='dockwater_density']\" hx-put=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" type=\"text\" placeholder=\"0.000\"> <span class=\"den-hint\">t/m³</span></div><button class=\"btn btn-primary\" type=\"button\" hx-include=\"previous [name='dockwater_density']\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.ResolveAttributeValue(routes.APITankApplyDensity(tp.Survey.ID, tp.DraftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 55, Col: 70}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/tanks/form.templ`, Line: 64, Col: 70}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {

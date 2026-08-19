@@ -4,7 +4,12 @@ templ Footer(version string) {
 	<footer class="app-footer">
 		<span class="app-footer-left">Draft Survey App Version: { version } · Open Source</span>
 		<nav class="app-footer-right">
-			<a href="#" class="app-footer-link">Documentation</a>
+			<a
+				x-data
+				x-on:click="$store.toast.show('Documentation', 'Not implemented')"
+				href="#"
+				class="app-footer-link"
+			>Documentation</a>
 			<a
 				href="https://github.com/AVZotov/draft-survey"
 				target="_blank"

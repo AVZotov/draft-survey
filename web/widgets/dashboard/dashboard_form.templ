@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"time"
 )
@@ -18,7 +19,7 @@ templ DashboardForm(user *types.User) {
 			<p class="section-label">Quick Actions</p>
 			<div class="action-grid">
 				<!-- New Survey -->
-				<a href="/survey/new" class="action-card action-card--primary">
+				<a href={ routes.NewSurvey() } class="action-card action-card--primary">
 					<div class="action-card-icon">
 						<svg viewBox="0 0 24 24">
 							<path d="M12 5v14M5 12h14"></path>
@@ -36,7 +37,7 @@ templ DashboardForm(user *types.User) {
 					</div>
 				</a>
 				<!-- All Surveys -->
-				<a href="/survey-list" class="action-card">
+				<a href={ routes.SurveyList() } class="action-card">
 					<div class="action-card-icon">
 						<svg viewBox="0 0 24 24">
 							<rect x="3" y="3" width="18" height="18" rx="2"></rect>

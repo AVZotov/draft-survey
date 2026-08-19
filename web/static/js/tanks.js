@@ -1,10 +1,12 @@
-function delTankConfirm(event, surveyID, draftIndex, tankID, kind) {
+function delTankConfirm(event) {
+    const url = event.currentTarget.dataset.deleteUrl
+    const tankID = event.currentTarget.dataset.tankId
     // The success toast comes from the server via SSE (TankService.DeleteBW/DeleteFW's
     // Outcome.Toast) — do not also trigger one here, that would show it twice.
     Alpine.store('confirm').show(
         'Delete Tank',
         'Are you sure you want to delete the tank?',
-        () => htmx.ajax('DELETE', '/api/v1/survey/' + surveyID + '/tanks/' + draftIndex + '/' + kind + '/' + tankID, {
+        () => htmx.ajax('DELETE', url, {
             target: '#tank-row-' + tankID,
             swap: 'delete swap:250ms'
         })

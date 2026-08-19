@@ -9,9 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import "fmt"
-import "github.com/AVZotov/draft-survey/internal/constants"
 import "github.com/AVZotov/draft-survey/internal/format"
 import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/web/ids"
 
 func CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -39,9 +39,9 @@ func CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB 
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%s-%d", constants.CalcPanel, draftIndex))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("%s-%d", ids.CalcPanel, draftIndex))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc_panel.templ`, Line: 11, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/drafts/calc_panel.templ`, Line: 11, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
