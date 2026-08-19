@@ -35,7 +35,6 @@ func (s *surveyService) Create() (*types.Survey, error) {
 	}
 
 	initialDraft := types.NewDraft()
-	initialDraft.Surveyor = *user
 	initialDraft.Type = types.DraftTypeInitial
 	initialDraft.Status = types.DraftStatusPending
 
@@ -43,7 +42,6 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		Status:    types.SurveyStatusDraft,
 		ID:        uuid.New().String(),
 		CreatedAt: time.Now(),
-		Surveyor:  *user,
 		Audit:     []types.AuditEvent{},
 		VesselData: types.VesselData{
 			IsLcfDetectionManual: true,
@@ -57,7 +55,14 @@ func (s *surveyService) Create() (*types.Survey, error) {
 		},
 		Drafts: []types.Draft{initialDraft},
 	}
-	
+
+	// user is nil when no profile has been set up yet — the survey can
+	// still be created, with Surveyor left as its zero value.
+	if user != nil {
+		survey.Surveyor = *user
+		survey.Drafts[0].Surveyor = *user
+	}
+
 	if err = s.surveyRepo.Save(survey); err != nil {
 		s.logger.Error(op, err)
 		return nil, err

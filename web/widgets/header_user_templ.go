@@ -37,18 +37,18 @@ func HeaderUser(user *types.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(firstLetter(user.FirstName))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(firstLetter(userFirstName(user)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 26, Col: 65}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 26, Col: 70}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(firstLetter(user.LastName))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(firstLetter(userLastName(user)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 26, Col: 95}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 26, Col: 105}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -59,9 +59,9 @@ func HeaderUser(user *types.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(user.FirstName)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(userFirstName(user))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 28, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 28, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -72,9 +72,9 @@ func HeaderUser(user *types.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(user.LastName)
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(userLastName(user))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 28, Col: 70}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 28, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -85,9 +85,9 @@ func HeaderUser(user *types.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(user.Position)
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(userPosition(user))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 29, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/widgets/header_user.templ`, Line: 29, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -106,6 +106,29 @@ func firstLetter(s string) string {
 		return "?"
 	}
 	return strings.ToUpper(string([]rune(s)[0]))
+}
+
+// userFirstName, userLastName, userPosition guard against user being nil —
+// no profile has been set up yet is a valid state (e.g. right after first launch).
+func userFirstName(user *types.User) string {
+	if user == nil {
+		return ""
+	}
+	return user.FirstName
+}
+
+func userLastName(user *types.User) string {
+	if user == nil {
+		return ""
+	}
+	return user.LastName
+}
+
+func userPosition(user *types.User) string {
+	if user == nil {
+		return "Guest"
+	}
+	return user.Position
 }
 
 var _ = templruntime.GeneratedTemplate

@@ -23,10 +23,10 @@ templ HeaderUser(user *types.User) {
 		<div class="app-header-right">
 			<!-- User info -->
 			<div class="header-user">
-				<div class="header-user-avatar">{ firstLetter(user.FirstName) }{ firstLetter(user.LastName) }</div>
+				<div class="header-user-avatar">{ firstLetter(userFirstName(user)) }{ firstLetter(userLastName(user)) }</div>
 				<div class="header-user-info">
-					<span class="header-user-name">{ user.FirstName } { user.LastName }</span>
-					<span class="header-user-role">{ user.Position }</span>
+					<span class="header-user-name">{ userFirstName(user) } { userLastName(user) }</span>
+					<span class="header-user-role">{ userPosition(user) }</span>
 				</div>
 			</div>
 		</div>
@@ -38,4 +38,27 @@ func firstLetter(s string) string {
 		return "?"
 	}
 	return strings.ToUpper(string([]rune(s)[0]))
+}
+
+// userFirstName, userLastName, userPosition guard against user being nil —
+// no profile has been set up yet is a valid state (e.g. right after first launch).
+func userFirstName(user *types.User) string {
+	if user == nil {
+		return ""
+	}
+	return user.FirstName
+}
+
+func userLastName(user *types.User) string {
+	if user == nil {
+		return ""
+	}
+	return user.LastName
+}
+
+func userPosition(user *types.User) string {
+	if user == nil {
+		return "Guest"
+	}
+	return user.Position
 }
