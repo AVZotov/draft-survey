@@ -45,14 +45,14 @@ func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 	isNew := existing == nil
 	merged := merge(existing, incoming)
 
-	var emailWarning *Outcome
+	var outcome *Outcome
 
 	if errs := u.validator.Validate(merged); len(errs) > 0 {
 		for _, fe := range errs {
 			if fe.Field == "Email" {
 				merged.Email = ""
 				u.logger.Warn(op, fe.Field, fe.Message)
-				emailWarning = &Outcome{
+				outcome = &Outcome{
 					Toast: &Notification{
 						Kind:    KindWarning,
 						Header:  "Invalid Email",
@@ -61,14 +61,18 @@ func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 				}
 			}
 		}
-		if errs := u.validator.Validate(merged); len(errs) > 0 {
-			return &Outcome{
-				Alert: &Notification{
-					Kind:    KindError,
-					Header:  "Validation Error",
-					Message: errs.Error(),
-				},
-			}, nil
+	}
+
+	// Soft warning only — autosave-first principle: the profile still saves
+	// with whatever was entered, it just isn't complete yet. Only surfaced
+	// when there's no other warning already competing for the one Toast slot.
+	if outcome == nil && merged.FirstName == "" && merged.LastName == "" {
+		outcome = &Outcome{
+			Toast: &Notification{
+				Kind:    KindWarning,
+				Header:  "Profile incomplete",
+				Message: "Please add your name to complete your profile.",
+			},
 		}
 	}
 
@@ -79,8 +83,8 @@ func (u *userService) Save(incoming *types.User) (*Outcome, error) {
 
 	u.logger.Info(op, "status:", "user saved successfully")
 
-	if emailWarning != nil {
-		return emailWarning, nil
+	if outcome != nil {
+		return outcome, nil
 	}
 
 	if isNew {

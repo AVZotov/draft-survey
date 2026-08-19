@@ -1,8 +1,8 @@
 package types
 
 type User struct {
-	FirstName   string `json:"first_name" validate:"required"`
-	LastName    string `json:"last_name" validate:"required"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
 	Position    string `json:"position"`
 	Email       string `json:"email" validate:"omitempty,email"`
 	Company     string `json:"company"`
