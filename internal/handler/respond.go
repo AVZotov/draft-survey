@@ -72,6 +72,23 @@ func (h *Handler) setFlashCookie(w http.ResponseWriter, name string, n *service.
 	})
 }
 
+// respondPageError is the page-handler equivalent of respondError. Page
+// handlers render a full HTML document — they are not autosave/API calls —
+// so when GetPageData fails, the page (and its /events SSE connection) never
+// gets established. A direct broker.Publish (what respondError does) would
+// be published to no listener. Instead this stages the alert as a flash
+// cookie and issues a real HTTP redirect, so the fallback page's own
+// /events connection publishes the alert once it connects — the same
+// mechanism respond() already uses for the Redirect+notification race.
+func (h *Handler) respondPageError(w http.ResponseWriter, r *http.Request, redirectTo string) {
+	h.setFlashCookie(w, fields.CookieFlashAlert, &service.Notification{
+		Kind:    service.KindError,
+		Header:  "Error",
+		Message: "Something went wrong. Please try again.",
+	})
+	http.Redirect(w, r, redirectTo, http.StatusSeeOther)
+}
+
 func (h *Handler) respondError(w http.ResponseWriter, status int, err error) {
 	message := "Something went wrong. Please try again."
 	if status == http.StatusBadRequest && err != nil {

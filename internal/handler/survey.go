@@ -33,7 +33,7 @@ func (h *Handler) getSurvey(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Survey.GetPageData(id)
 	if err != nil {
 		h.logger.Error(op, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		h.respondPageError(w, r, routes.SurveyList())
 		return
 	}
 

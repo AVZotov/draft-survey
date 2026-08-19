@@ -11,6 +11,7 @@ import (
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/service"
 	"github.com/AVZotov/draft-survey/internal/sse"
 	"github.com/AVZotov/draft-survey/internal/types"
@@ -37,7 +38,7 @@ func (h *Handler) getTanks(w http.ResponseWriter, r *http.Request) {
 	data, err := h.services.Survey.GetPageData(id)
 	if err != nil {
 		h.logger.Error(op, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		h.respondPageError(w, r, routes.SurveyList())
 		return
 	}
 

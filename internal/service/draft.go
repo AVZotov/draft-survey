@@ -99,9 +99,17 @@ func (s *draftService) Finish(survey *types.Survey, index int) (*Outcome, error)
 func (s *draftService) Delete(survey *types.Survey) (*Outcome, error) {
 	const op = "DraftService.Delete"
 
-	if len(survey.Drafts) > 2 {
-		survey.Drafts = survey.Drafts[:len(survey.Drafts)-1]
+	if len(survey.Drafts) <= 2 {
+		return &Outcome{
+			Toast: &Notification{
+				Kind:    KindInfo,
+				Header:  "Cannot delete",
+				Message: "Survey must have at least one intermediate draft to delete.",
+			},
+		}, nil
 	}
+
+	survey.Drafts = survey.Drafts[:len(survey.Drafts)-1]
 
 	updateDraftType(survey)
 
