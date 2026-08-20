@@ -122,6 +122,14 @@ function draftPage(idx) {
 // real DOM id. Not routed through htmx's swap engine (this app's SSE
 // listeners never are — see 'toast'/'survey-stats' in main.js), so apply
 // each fragment by id manually.
+//
+// htmx.process() after replaceWith(): none of these fragments currently
+// carry an hx-get/hx-put/hx-trigger of their own (CalcPanel's hx-swap-oob is
+// inert here since it's never passed through htmx's swap engine), so there's
+// no live bug today — but the replace happens outside htmx's request cycle
+// same as tank-calc in tanks.js, so any hx-* added to these fragments later
+// would silently stop working after the first SSE update. Calling it
+// unconditionally keeps this listener safe by construction.
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof es === 'undefined') return
     es.addEventListener('draft-calc', function (e) {
@@ -131,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const target = document.getElementById(fragment.id)
             if (!target) return
             target.replaceWith(fragment)
+            htmx.process(fragment)
             if (fragment.classList.contains('calc-panel')) {
                 const block = fragment.closest('.draft-block')
                 if (block) block.dispatchEvent(new CustomEvent('calc-updated'))

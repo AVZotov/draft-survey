@@ -22,6 +22,15 @@ function delTankConfirm(event) {
 // HTML parser silently drops <tbody>/<tr> tags outside a table ancestor
 // (including inside a bare <template>), which otherwise makes the tank rows
 // vanish while the plain <div> fragments (headers, totals) still apply.
+//
+// htmx.process() is required after each replaceWith(): replacing a node with
+// raw parsed HTML happens outside htmx's own request/swap cycle, so htmx
+// never binds hx-put/hx-get/hx-trigger on the new elements — the row's
+// move-up/down buttons, autosave, and corrections-modal trigger would only
+// work once (on the original server-rendered row) and go dead on every
+// subsequent SSE-driven replace. See htmx docs: "Processes new content,
+// enabling htmx behavior. Useful when content is added to the DOM outside of
+// the normal htmx request cycle."
 document.addEventListener('DOMContentLoaded', function () {
     if (typeof es === 'undefined') return
     es.addEventListener('tank-calc', function (e) {
@@ -31,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const target = document.getElementById(fragment.id)
             if (!target) return
             target.replaceWith(fragment)
+            htmx.process(fragment)
         })
     })
 })
