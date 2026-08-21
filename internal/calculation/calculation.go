@@ -268,8 +268,9 @@ func CalcListCorrection(marks types.Marks, tpcListPort, tpcListStarboard *float6
 	return 0
 }
 
-// List correcion Calculation based on UNECE 1992 Reference Implementation
-// without if TPC equal use Summer TPC for interpolation
+// Industry-standard list correction formula (not part of UNECE 1992 Code).
+// UNECE 1992 contains no list correction formula.
+// This is an app-specific addition following common survey practice.
 func calcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float64) float64 {
 	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
@@ -281,7 +282,9 @@ func calcListCorrectionV1(marks types.Marks, tpcListPort, tpcListStarboard float
 // between MMC hydrostatic TPC and Summer TPC as the upper reference point.
 // Used when hydrostatic table TPC values are identical for upper and lower rows
 // (standard interpolation would yield zero correction).
-// UNECE Form C, line 162 — list correction
+// Industry-standard list correction formula (not part of UNECE 1992 Code).
+// UNECE 1992 contains no list correction formula.
+// This is an app-specific addition following common survey practice.
 func calcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v types.VesselData) float64 {
 	if markVal(marks.MidPort.Value) == markVal(marks.MidStarboard.Value) {
 		return 0.0
