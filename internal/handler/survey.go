@@ -1,104 +1,132 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
-	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/web"
+	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
-	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
+	"github.com/a-h/templ"
+	"github.com/go-chi/chi/v5"
 )
 
-func (h *Handler) newSurvey(c *fiber.Ctx) error {
-	id := uuid.New().String()
-	user, err := h.userRepository.Get()
+func (h *Handler) newSurvey(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.newSurvey"
+
+	survey, err := h.services.Survey.Create()
 	if err != nil {
-		return err
-	}
-	survey := &types.Survey{
-		Status:    types.SurveyStatusDraft,
-		ID:        id,
-		CreatedAt: time.Now(),
-		Surveyor:  *user,
-		VesselData: types.VesselData{
-			IsLcfDetectionManual: true,
-		},
+		h.logger.Error(op, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	if err := h.surveyRepository.Save(survey); err != nil {
-		return err
-	}
-
-	slp := web.SurveyLayoutProps(user, h.appVersion)
-
-	countries, err := h.dictionariesRepository.GetCountries()
-	if err != nil {
-		return err
-	}
-	spp := web.SurveyPageProps(*survey, *countries)
-
-	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
+	http.Redirect(w, r, routes.Survey(survey.ID), http.StatusSeeOther)
 }
 
-func (h *Handler) saveSurvey(c *fiber.Ctx) error {
-	p, err := getSurveyProps(h, c)
+func (h *Handler) getSurvey(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.getSurvey"
+
+	id := chi.URLParam(r, "id")
+
+	data, err := h.services.Survey.GetPageData(id)
 	if err != nil {
-		return err
+		h.logger.Error(op, err)
+		h.respondPageError(w, r, routes.SurveyList())
+		return
 	}
 
-	parseSurveyPage(c, p.survey)
-
-	if err = h.surveyRepository.Save(p.survey); err != nil {
-		return err
+	if data.Outcome != nil && data.Outcome.Redirect != "" {
+		return
 	}
 
-	url := fmt.Sprintf("/survey/%s", p.surveyID)
-	c.Set("HX-Replace-Url", url)
+	lp := web.SurveyLayoutProps(data.User, h.appVersion)
+	sp := web.SurveyPageProps(*data.Survey)
 
-	return c.SendStatus(http.StatusOK)
+	if err = pages.NewSurvey(lp, sp).Render(r.Context(), w); err != nil {
+		h.logger.Error(op, err)
+	}
 }
 
-func (h *Handler) getSurvey(c *fiber.Ctx) error {
-	id := c.Params("id")
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return err
+func (h *Handler) saveSurvey(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.saveSurvey"
+
+	id := chi.URLParam(r, "id")
+
+	if err := r.ParseForm(); err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
 	}
 
-	user, err := h.userRepository.Get()
+	existing, err := h.services.Survey.Get(id)
 	if err != nil {
-		return err
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
 	}
 
-	slp := web.SurveyLayoutProps(user, h.appVersion)
-	countries, err := h.dictionariesRepository.GetCountries()
-	if err != nil {
-		return err
-	}
-	spp := web.SurveyPageProps(*survey, *countries)
+	survey := h.decoder.Survey(r, existing)
 
-	return tadaptor.Render(c, pages.NewSurvey(slp, spp))
+	outcome, err := h.services.Survey.Update(survey)
+	if err != nil {
+		h.logger.Error(op, err)
+		h.respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	h.respond(w, outcome)
 }
 
-func (h *Handler) saveSurveyAndNavigate(c *fiber.Ctx) error {
-	p, err := getSurveyProps(h, c)
+func (h *Handler) GetSurveyCountrySelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSurveyCountrySelect"
+
+	id := chi.URLParam(r, "id")
+	survey, err := h.services.Survey.Get(id)
 	if err != nil {
-		return err
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldCountryCode)).ServeHTTP(w, r)
+		return
 	}
 
-	parseSurveyBlock(c, p.survey)
-	parseVesselBlock(c, p.survey)
-	parseSettingBlock(c, p.survey)
-
-	if err = h.surveyRepository.Save(p.survey); err != nil {
-		return err
+	countries, err := h.services.Dictionary.GetCountries()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldCountryCode)).ServeHTTP(w, r)
+		return
 	}
 
-	redirect := c.Query("redirect")
-	c.Set("HX-Redirect", redirect)
-	return c.SendStatus(http.StatusOK)
+	selected := ""
+	if survey != nil {
+		selected = survey.Country.CountryCode
+	}
+
+	templ.Handler(components.CountrySelect(*countries, selected, fields.FieldCountryCode)).ServeHTTP(w, r)
+}
+
+func (h *Handler) GetSurveyFlagSelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSurveyFlagSelect"
+
+	id := chi.URLParam(r, "id")
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldFlagCountryCode)).ServeHTTP(w, r)
+		return
+	}
+
+	countries, err := h.services.Dictionary.GetCountries()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.CountrySelect(nil, "", fields.FieldFlagCountryCode)).ServeHTTP(w, r)
+		return
+	}
+
+	selected := ""
+	if survey != nil {
+		selected = survey.VesselData.Flag.CountryCode
+	}
+
+	templ.Handler(components.CountrySelect(*countries, selected, fields.FieldFlagCountryCode)).ServeHTTP(w, r)
 }

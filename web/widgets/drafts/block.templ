@@ -3,7 +3,8 @@ package drafts
 import (
 	"fmt"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -18,7 +19,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
         templ.KV("draft-block--mid", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeIntermediate),
         templ.KV("draft-block--pending", dp.Survey.Drafts[draftIndex].Status == types.DraftStatusPending),
     ) }
-		x-data="draftPage()"
+		x-data={ fmt.Sprintf("draftPage(%d)", draftIndex) }
 		x-on:calc-updated="mmc = +$el.querySelector('.cp-cell--mmc .cp-val').textContent || 0"
 	>
 		<div class="block-header">
@@ -32,8 +33,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
             templ.KV("block-header-fields--2col", dp.Survey.Drafts[draftIndex].Type == types.DraftTypeInitial),
             templ.KV("block-header-fields--3col", dp.Survey.Drafts[draftIndex].Type != types.DraftTypeInitial),
         ) }
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.DraftInfoBlock) }
-				hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+				hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 				hx-trigger="change changed delay:500ms"
 				hx-sync="this:replace"
 				hx-swap="none"
@@ -42,7 +42,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 				<input
 					class="block-header-input"
 					type="text"
-					name={ fmt.Sprintf("%s-%d", constants.LoadPort, draftIndex) }
+					name={ fmt.Sprintf("%s-%d", fields.FieldLoadPort, draftIndex) }
 					value={ draftLoadPort(dp.Survey.Drafts, draftIndex) }
 					placeholder="Load port…"
 				/>
@@ -50,7 +50,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 					<input
 						class="block-header-input"
 						type="text"
-						name={ fmt.Sprintf("%s-%d", constants.DischargePort, draftIndex) }
+						name={ fmt.Sprintf("%s-%d", fields.FieldDischargePort, draftIndex) }
 						value={ draftDischargePort(dp.Survey.Drafts, draftIndex) }
 						placeholder="Discharge port…"
 					/>
@@ -58,7 +58,7 @@ templ DraftBlock(dp components.DraftPageProps, draftIndex int, sr types.SurveyRe
 				<input
 					class="block-header-input"
 					type="text"
-					name={ fmt.Sprintf("%s-%d", constants.ProductGrade, draftIndex) }
+					name={ fmt.Sprintf("%s-%d", fields.FieldProductGrade, draftIndex) }
 					value={ draftGrade(dp.Survey.Drafts, draftIndex) }
 					placeholder="Grade…"
 				/>

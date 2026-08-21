@@ -1,10 +1,9 @@
 package drafts
 
 import (
-	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
-	"strconv"
 	"time"
 )
 
@@ -21,7 +20,8 @@ templ DraftActionBar(survey *types.Survey) {
 			<button
 				class="btn btn-danger"
 				disabled?={ len(survey.Drafts) <= 2 }
-				x-on:click={ fmt.Sprintf("delDraftConfirm('%s')", survey.ID) }
+				x-on:click="delDraftConfirm($event)"
+				data-delete-url={ routes.APIDraftDelete(survey.ID) }
 			>
 				@components.IconTrash()
 				Del last Draft
@@ -32,7 +32,7 @@ templ DraftActionBar(survey *types.Survey) {
 		</div>
 		<div class="ab-btns">
 			<a
-				hx-get={ fmt.Sprintf("/survey/%s/results/validate", survey.ID) }
+				href={ routes.Results(survey.ID) }
 				class="btn btn-primary"
 			>
 				Calculate &amp; View Results
@@ -45,8 +45,7 @@ templ DraftActionBar(survey *types.Survey) {
 templ buttonStartDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/start" }
-		hx-include="#draft-form"
+		hx-post={ routes.APIDraftStart(surveyID, index) }
 		hx-swap="none"
 	>
 		▶ Start DS
@@ -57,8 +56,7 @@ templ buttonStartDraft(surveyID string, index int) {
 templ buttonEndDraft(surveyID string, index int) {
 	<button
 		class="btn btn-primary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft/" + strconv.Itoa(index) + "/finish" }
-		hx-include="#draft-form"
+		hx-post={ routes.APIDraftFinish(surveyID, index) }
 		hx-swap="none"
 	>
 		⏹ Finish DS
@@ -69,7 +67,7 @@ templ buttonEndDraft(surveyID string, index int) {
 templ buttonAddDraft(surveyID string) {
 	<button
 		class="btn btn-primary"
-		hx-post={ "/api/v1/survey/" + surveyID + "/draft" }
+		hx-post={ routes.APIDraftAdd(surveyID) }
 		hx-swap="none"
 	>
 		+ Add Draft

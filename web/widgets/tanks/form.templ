@@ -3,8 +3,9 @@ package tanks
 import (
 	"fmt"
 	"github.com/AVZotov/draft-survey/internal/calculation"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/web/components"
 )
 
@@ -16,12 +17,17 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 		fwTitle := "Fresh Water Tanks"
 		bwTWeight := format.WeightFormatted(results.TotalBwTanksWeight)
 		fwTWeight := format.WeightFormatted(results.TotalFwTanksWeight)
+		showCopyTanks := false
+		if tp.DraftIndex > 0 {
+			prev := tp.Survey.Drafts[tp.DraftIndex-1]
+			showCopyTanks = len(prev.BallastWaterTanks) > 0 || len(prev.FreshWaterTanks) > 0
+		}
 	}}
 	<main class="page-main">
 		<div class="page-wrap">
 			<div class="page-top">
 				<a
-					href={ fmt.Sprintf("/survey/%s/draft", tp.Survey.ID) }
+					href={ routes.Draft(tp.Survey.ID) }
 					class="back-link"
 				>
 					<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
@@ -29,32 +35,38 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				</a>
 				<h1 class="page-title">BW / FW Tanks</h1>
 				<p class="page-meta">
-					{ fmt.Sprintf("%s · IMO %s · %s · %s", 
-						tp.Survey.VesselData.Name, 
-						tp.Survey.VesselData.IMO, 
-						tp.Survey.CargoOperation.Operation, 
+					{ fmt.Sprintf("%s · IMO %s · %s · %s",
+						tp.Survey.VesselData.Name,
+						tp.Survey.VesselData.IMO,
+						tp.Survey.CargoOperation.Operation,
 						tp.Survey.Country.Name) }
 				</p>
 			</div>
 			<!-- DENSITY BAR -->
-			<div
-				class="density-bar"
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank) }
-			>
+			<div class="density-bar">
 				<span class="density-bar-label">BW Density</span>
 				<div
 					class="density-groups"
 				>
 					<div class="dg dg--ini">
 						<span class="dg-lbl">{ draft.Type }</span>
-						<input class="den-in" id="dockwater-density" name="dockwater-density" value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
+						<input
+							class="den-in"
+							id="dockwater-density"
+							x-data
+							x-mask:dynamic="$money($input, '.', ' ', 3)"
+							name={ fields.FieldDockwaterDensity }
+							value={ format.FloatOrEmpty(draft.Density) }
+							type="text"
+							placeholder="0.000"
+						/>
 						<span class="den-hint">t/m³</span>
 					</div>
 					<button
 						class="btn btn-primary"
 						type="button"
-						hx-include="previous [name='dockwater-density']"
-						hx-put={ fmt.Sprintf("/api/v1/survey/%s/tanks/%d", tp.Survey.ID, tp.DraftIndex) }
+						hx-include="previous [name='dockwater_density']"
+						hx-put={ routes.APITankApplyDensity(tp.Survey.ID, tp.DraftIndex) }
 						hx-swap="none"
 					>
 						Apply Density
@@ -69,23 +81,23 @@ templ Form(lp components.LayoutProps, tp components.TanksPageProps) {
 				<span class="density-bar-note">Applied to BW tanks with empty density. Override per-tank if needed.</span>
 			</div>
 			<!-- ═══ BALLAST WATER ══════════════════════════════════════════ -->
-			<div
-				class="tank-block tank-block--bw"
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.BWTank) }
-			>
+			<div class="tank-block tank-block--bw">
 				@TrimListAlert(tp)
-				@TableFormHeader(constants.BwTableHeaderID, bwTitle, bwTWeight, draft.Type, false)
+				@TableFormHeader(BWTableHeaderID(tp.DraftIndex), bwTitle, bwTWeight, draft.Type, false)
+				if showCopyTanks {
+					@CopyTanksButton(tp.Survey.ID, tp.DraftIndex)
+				}
 				@Block(tp, true)
-				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false)
+				@AddRowForm(tp.Survey.ID, tp.DraftIndex, true, false)
 			</div>
 			<!-- ═══ FRESH WATER ════════════════════════════════════════════ -->
-			<div
-				class="tank-block tank-block--fw"
-				hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXTankType, constants.FWTank) }
-			>
-				@TableFormHeader(constants.FwTableHeaderID, fwTitle, fwTWeight, draft.Type, false)
+			<div class="tank-block tank-block--fw">
+				@TableFormHeader(FWTableHeaderID(tp.DraftIndex), fwTitle, fwTWeight, draft.Type, false)
+				if showCopyTanks {
+					@CopyTanksButton(tp.Survey.ID, tp.DraftIndex)
+				}
 				@Block(tp, false)
-				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false)
+				@AddRowForm(tp.Survey.ID, tp.DraftIndex, false, false)
 			</div>
 		</div>
 	</main>

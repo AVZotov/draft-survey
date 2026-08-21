@@ -1,36 +1,26 @@
 package storage
 
-import (
-	"time"
-
-	"github.com/AVZotov/draft-survey/internal/types"
-)
+import "github.com/AVZotov/draft-survey/internal/types"
 
 type SurveyRepository interface {
 	Save(survey *types.Survey) error
 	Get(id string) (*types.Survey, error)
-	GetAll() ([]*types.Survey, error)
+	GetPage(limit, offset int) ([]*types.Survey, error)
+	GetStats() (types.SurveyStats, error)
+	Search(filter types.SurveyFilter) ([]*types.Survey, error)
 	Delete(id string) error
 }
 
 type UserRepository interface {
 	Save(user *types.User) error
-	SaveSignature(data []byte, ext string) error
+	SaveSignature(data []byte) error
 	Get() (*types.User, error)
 	Delete() error
 }
 
 type DictionariesRepository interface {
-	GetPorts() (*[]types.Port, error)
 	GetCountries() (*[]types.Country, error)
-}
-
-type SurveyFilter struct {
-	Query string
-	From  time.Time
-	To    time.Time
-}
-
-type SurveyQueryRepository interface {
-	Search(filter SurveyFilter) ([]*types.Survey, error)
+	GetPorts(countryCode string) (*[]types.Port, error)
+	GetCargoTypes() ([]string, error)
+	GetPacking() ([]string, error)
 }

@@ -23,30 +23,21 @@ const (
 )
 
 type VesselData struct {
-	Name                 string           `json:"name"`
+	Name                 string           `json:"vessel_name"`
 	Flag                 Country          `json:"flag"`
 	IMO                  string           `json:"imo"`
-	BuiltYear            int              `json:"built_year"`
-	Lightship            float64          `json:"lightship"` // вес порожнем, MT
-	Breadth              float64          `json:"breadth"`   // ширина корпуса, м
-	Depth                float64          `json:"depth"`     // высота корпуса, м
-	LBP                  float64          `json:"lbp"`       // длина между перпендикулярами, м
-	SummerDraft          float64          `json:"summer_draft"`
-	SummerDWT            float64          `json:"summer_dwt"`
-	SummerTPC            float64          `json:"summer_tpc"`
-	SummerFreeboard      float64          `json:"summer_freeboard"`
-	DistancePPFwd        float64          `json:"distance_pp_fwd"`
-	PPFwdDirection       PPDirection      `json:"pp_fwd_direction"`
-	DistancePPMid        float64          `json:"distance_pp_mid"`
-	PPMidDirection       PPDirection      `json:"pp_mid_direction"`
-	DistancePPAft        float64          `json:"distance_pp_aft"`
-	PPAftDirection       PPDirection      `json:"pp_aft_direction"`
-	KeelFwd              float64          `json:"keel_fwd"`
-	KeelMid              float64          `json:"keel_mid"`
-	KeelAft              float64          `json:"keel_aft"`
+	BuiltYear            *int             `json:"built_year"`
+	Lightship            *float64         `json:"lightship"`
+	Breadth              *float64         `json:"breadth"`
+	Depth                *float64         `json:"depth"`
+	LBP                  *float64         `json:"lbp"`
+	SummerDraft          *float64         `json:"summer_draft"`
+	SummerDWT            *float64         `json:"summer_dwt"`
+	SummerTPC            *float64         `json:"summer_tpc"`
+	SummerFreeboard      *float64         `json:"summer_freeboard"`
 	VesselType           VesselType       `json:"vessel_type"`
-	CorrectionMethod     CorrectionMethod `json:"correction_method"`
+	CorrectionMethod     CorrectionMethod `json:"corr_method"`
 	IsLcfDetectionManual bool             `json:"is_lcf_detection_manual"`
 	TableDensity         *float64         `json:"table_density"` //oficial vessel documentation. With table corrections made on specified density
-	HoldsTotal           int              `json:"holds_total"`
+	HoldsTotal           *int             `json:"holds_total"`
 }

@@ -2,8 +2,8 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"strconv"
@@ -17,10 +17,9 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 	{{ draft := dp.Survey.Drafts[draftIndex] }}
 	<div
 		class="readings-area"
-		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.MarksBlock) }
 		hx-include={ fmt.Sprintf("#col-port-%d, #col-stbd-%d", draftIndex, draftIndex) }
 		hx-trigger="change changed target:(input, select) delay:500ms"
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", dp.Survey.ID, draftIndex) }
+		hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
 		hx-swap="none"
 		hx-sync="this:replace"
 	>
@@ -30,215 +29,133 @@ templ Marks(dp components.DraftPageProps, draftIndex int) {
 		>
 			<div class="side-label"><span class="side-dot port-dot"></span>Port (P)</div>
 			<div class="dr-wrap">
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="fwdP"
-						x-ref="fwdP"
-						id={ fmt.Sprintf("%d-fp", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.FwdPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.FwdPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldFwdPortMethod, draftIndex), draft.Marks.FwdPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldFwdPort, draftIndex), draft.Marks.FwdPort.Value)
 					<span class="dr-lbl">Fwd</span>
 					<div></div>
 				</div>
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="midP"
-						x-ref="midP"
-						id={ fmt.Sprintf("%d-mp", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.MidPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.MidPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldMidPortMethod, draftIndex), draft.Marks.MidPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMidPort, draftIndex), draft.Marks.MidPort.Value)
 					<span class="dr-lbl">Mid</span>
-					<input
-						name={ fmt.Sprintf("%s-%d", constants.TPCListPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.TPCListPort) }
-						type="number"
-						placeholder="tpc list"
-						step="any"
-					/>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldTPCListPort, draftIndex), draft.TPCListPort)
 				</div>
-				<div class="dr-row dr-row--port">
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftPortMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftPort.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftPort.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
-					<input
-						x-model="aftP"
-						x-ref="aftP"
-						id={ fmt.Sprintf("%d-ap", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.AftPort, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.AftPort.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--port" oninput={ calcMarks(draftIndex) }>
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldAftPortMethod, draftIndex), draft.Marks.AftPort.Method)
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldAftPort, draftIndex), draft.Marks.AftPort.Value)
 					<span class="dr-lbl">Aft</span>
 					<div></div>
 				</div>
 			</div>
 		</div>
-		<div class="col-vessel">
-			<svg class="vessel-svg" viewBox="0 0 160 225" xmlns="http://www.w3.org/2000/svg">
-				<!-- Hull body -->
-				<path
-					d="M55,50 L105,50 L108,55 L110,80 L110,185 L105,200 L55,200 L50,185 L50,80 L52,55 Z"
-					fill="none"
-					stroke="#3D5159"
-					stroke-width="1.5"
-					opacity="0.5"
-				></path>
-				<!-- Bow -->
-				<path
-					d="M55,50 L80,20 L105,50"
-					fill="none"
-					stroke="#3D5159"
-					stroke-width="1.5"
-					opacity="0.5"
-				></path>
-				<!-- Stern -->
-				<path
-					d="M50,185 L55,205 L105,205 L110,185"
-					fill="none"
-					stroke="#3D5159"
-					stroke-width="1.5"
-					opacity="0.5"
-				></path>
-				<!-- Superstructure -->
-				<rect x="60" y="150" width="40" height="30" rx="2" fill="none" stroke="#3D5159" stroke-width="1" opacity="0.3"></rect>
-				<!-- Hatch covers -->
-				<rect x="58" y="75" width="44" height="28" rx="2" fill="none" stroke="#3D5159" stroke-width="0.8" opacity="0.2"></rect>
-				<rect x="58" y="110" width="44" height="28" rx="2" fill="none" stroke="#3D5159" stroke-width="0.8" opacity="0.2"></rect>
-				<!-- Reference axes -->
-				<line x1="80" y1="22" x2="80" y2="218" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"></line>
-				<line x1="30" y1="118" x2="130" y2="118" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"></line>
-				<!-- Indicator circle -->
-				<circle cx="80" cy="118" r="44" fill="rgba(232,99,10,0.04)" stroke="#E8630A" stroke-width="1" opacity="0.5"></circle>
-				<!-- Tick marks -->
-				<line x1="80" y1="75" x2="80" y2="81" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
-				<line x1="80" y1="155" x2="80" y2="161" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
-				<line x1="37" y1="118" x2="43" y2="118" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
-				<line x1="117" y1="118" x2="123" y2="118" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
-				<!-- Labels -->
-				<text x="80" y="13" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD</text>
-				<text x="80" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">AFT</text>
-				<text x="16" y="121" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">P</text>
-				<text x="144" y="121" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">S</text>
-				<!-- LIST line — dynamic, updated by JS -->
-				<line
-					id={ strconv.Itoa(draftIndex) + "-list-line" }
-					x1="38"
-					y1="118"
-					x2="122"
-					y2="118"
-					stroke="#E8630A"
-					stroke-width="2"
-					stroke-linecap="round"
-				></line>
-				<!-- TRIM dot — dynamic, updated by JS -->
-				<circle
-					id={ strconv.Itoa(draftIndex) + "-trim-dot" }
-					cx="80"
-					cy="118"
-					r="4"
-					fill="#E8630A"
-				></circle>
-			</svg>
-		</div>
+		@vesselView(draftIndex)
 		<div
 			class="col-stbd"
 			id={ fmt.Sprintf("col-stbd-%d", draftIndex) }
 		>
 			<div class="side-label"><span class="side-dot stbd-dot"></span>Starboard (S)</div>
 			<div class="dr-wrap">
-				<div class="dr-row dr-row--stb">
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
 					<div></div>
 					<span class="dr-lbl">Fwd</span>
-					<input
-						x-model="fwdS"
-						x-ref="fwdS"
-						id={ fmt.Sprintf("%d-fs", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.FwdStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.FwdStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.FwdStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.FwdStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldFwdStbd, draftIndex), draft.Marks.FwdStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldFwdStbdMethod, draftIndex), draft.Marks.FwdStarboard.Method)
 				</div>
-				<div class="dr-row dr-row--stb">
-					<input
-						name={ fmt.Sprintf("%s-%d", constants.TPCListStb, draftIndex) }
-						value={ format.FloatOrEmpty(draft.TPCListStarboard) }
-						type="number"
-						placeholder="tpc list"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldTPCListStbd, draftIndex), draft.TPCListStarboard)
 					<span class="dr-lbl">Mid</span>
-					<input
-						x-model="midS"
-						x-ref="midS"
-						id={ fmt.Sprintf("%d-ms", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.MidStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.MidStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.MidStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.MidStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMidStbd, draftIndex), draft.Marks.MidStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldMidStbdMethod, draftIndex), draft.Marks.MidStarboard.Method)
 				</div>
-				<div class="dr-row dr-row--stb">
+				<div class="dr-row dr-row--stb" oninput={ calcMarks(draftIndex) }>
 					<div></div>
 					<span class="dr-lbl">Aft</span>
-					<input
-						x-model="aftS"
-						x-ref="aftS"
-						id={ fmt.Sprintf("%d-as", draftIndex) }
-						name={ fmt.Sprintf("%s-%d", constants.AftStbd, draftIndex) }
-						value={ format.FloatOrEmpty(draft.Marks.AftStarboard.Value) }
-						type="number"
-						placeholder="0.000"
-						step="any"
-						oninput={ calcMarks(draftIndex) }
-					/>
-					<select class="di-badge" name={ fmt.Sprintf("%s-%d", constants.AftStbdMarkRead, draftIndex) }>
-						<option value="" selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethod("") }>—</option>
-						<option value={ types.ReadingMethodDirect } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
-						<option value={ types.ReadingMethodCamera } selected?={ draft.Marks.AftStarboard.Method == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
-					</select>
+					@components.XInput(fmt.Sprintf("%s-%d", fields.FieldAftStbd, draftIndex), draft.Marks.AftStarboard.Value)
+					@readingMethod(draft, draftIndex, fmt.Sprintf("%s-%d", fields.FieldAftStbdMethod, draftIndex), draft.Marks.AftStarboard.Method)
 				</div>
 			</div>
 		</div>
 	</div><!-- /readings-area -->
+}
+
+templ vesselView(draftIndex int) {
+	<div class="col-vessel">
+		<svg class="vessel-svg" viewBox="0 0 160 225" xmlns="http://www.w3.org/2000/svg">
+			<!-- Hull body -->
+			<path
+				d="M55,50 L105,50 L108,55 L110,80 L110,185 L105,200 L55,200 L50,185 L50,80 L52,55 Z"
+				fill="none"
+				stroke="#3D5159"
+				stroke-width="1.5"
+				opacity="0.5"
+			></path>
+			<!-- Bow -->
+			<path
+				d="M55,50 L80,20 L105,50"
+				fill="none"
+				stroke="#3D5159"
+				stroke-width="1.5"
+				opacity="0.5"
+			></path>
+			<!-- Stern -->
+			<path
+				d="M50,185 L55,205 L105,205 L110,185"
+				fill="none"
+				stroke="#3D5159"
+				stroke-width="1.5"
+				opacity="0.5"
+			></path>
+			<!-- Superstructure -->
+			<rect x="60" y="150" width="40" height="30" rx="2" fill="none" stroke="#3D5159" stroke-width="1" opacity="0.3"></rect>
+			<!-- Hatch covers -->
+			<rect x="58" y="75" width="44" height="28" rx="2" fill="none" stroke="#3D5159" stroke-width="0.8" opacity="0.2"></rect>
+			<rect x="58" y="110" width="44" height="28" rx="2" fill="none" stroke="#3D5159" stroke-width="0.8" opacity="0.2"></rect>
+			<!-- Reference axes -->
+			<line x1="80" y1="22" x2="80" y2="218" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"></line>
+			<line x1="30" y1="118" x2="130" y2="118" stroke="#9CA3AF" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"></line>
+			<!-- Indicator circle -->
+			<circle cx="80" cy="118" r="44" fill="rgba(232,99,10,0.04)" stroke="#E8630A" stroke-width="1" opacity="0.5"></circle>
+			<!-- Tick marks -->
+			<line x1="80" y1="75" x2="80" y2="81" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
+			<line x1="80" y1="155" x2="80" y2="161" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
+			<line x1="37" y1="118" x2="43" y2="118" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
+			<line x1="117" y1="118" x2="123" y2="118" stroke="#E8630A" stroke-width="1" opacity="0.4"></line>
+			<!-- Labels -->
+			<text x="80" y="13" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">FWD</text>
+			<text x="80" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">AFT</text>
+			<text x="16" y="121" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">P</text>
+			<text x="144" y="121" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#9CA3AF">S</text>
+			<!-- LIST line — dynamic, updated by JS -->
+			<line
+				id={ strconv.Itoa(draftIndex) + "-list-line" }
+				x1="38"
+				y1="118"
+				x2="122"
+				y2="118"
+				stroke="#E8630A"
+				stroke-width="2"
+				stroke-linecap="round"
+			></line>
+			<!-- TRIM dot — dynamic, updated by JS -->
+			<circle
+				id={ strconv.Itoa(draftIndex) + "-trim-dot" }
+				cx="80"
+				cy="118"
+				r="4"
+				fill="#E8630A"
+			></circle>
+		</svg>
+	</div>
+}
+
+templ readingMethod(draft types.Draft, draftIndex int, name string, readingMethod types.ReadingMethod) {
+	<select
+		class="di-badge"
+		name={ name }
+	>
+		<option value="" selected?={ readingMethod == types.ReadingMethod("") }>—</option>
+		<option value={ types.ReadingMethodDirect } selected?={ readingMethod == types.ReadingMethodDirect }>{ types.ReadingMethodDirect.Short() }</option>
+		<option value={ types.ReadingMethodCamera } selected?={ readingMethod == types.ReadingMethodCamera }>{ types.ReadingMethodCamera.Short() }</option>
+	</select>
 }

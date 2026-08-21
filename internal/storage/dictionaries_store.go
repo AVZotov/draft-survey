@@ -1,8 +1,7 @@
 package storage
 
 import (
-	"embed"
-	"encoding/json"
+	"database/sql"
 
 	"github.com/AVZotov/draft-survey/internal/types"
 )
@@ -10,37 +9,81 @@ import (
 var _ DictionariesRepository = (*DictionariesStore)(nil)
 
 type DictionariesStore struct {
-	fs embed.FS
+	db *sql.DB
 }
 
-func NewDictionariesStore(fs embed.FS) *DictionariesStore {
-	return &DictionariesStore{fs: fs}
+func NewDictionariesStore(db *sql.DB) *DictionariesStore {
+	return &DictionariesStore{db: db}
 }
 
-func (j *DictionariesStore) GetPorts() (*[]types.Port, error) {
-	data, err := j.fs.ReadFile("data/dictionaries/ports.json")
+func (s *DictionariesStore) GetCountries() (*[]types.Country, error) {
+	rows, err := s.db.Query(`SELECT code, name FROM countries ORDER BY name`)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	ports := &[]types.Port{}
-	if err = json.Unmarshal(data, ports); err != nil {
-		return nil, err
+	var countries []types.Country
+	for rows.Next() {
+		var c types.Country
+		if err = rows.Scan(&c.CountryCode, &c.Name); err != nil {
+			return nil, err
+		}
+		countries = append(countries, c)
 	}
-
-	return ports, nil
+	return &countries, nil
 }
 
-func (j *DictionariesStore) GetCountries() (*[]types.Country, error) {
-	data, err := j.fs.ReadFile("data/dictionaries/countries.json")
+func (s *DictionariesStore) GetPorts(countryCode string) (*[]types.Port, error) {
+	rows, err := s.db.Query(`SELECT locode, name, country_code, coordinates FROM ports WHERE country_code = ? ORDER BY name`, countryCode)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	countries := &[]types.Country{}
-	if err = json.Unmarshal(data, countries); err != nil {
+	var ports []types.Port
+	for rows.Next() {
+		var p types.Port
+		if err = rows.Scan(&p.Locode, &p.Name, &p.CountryCode, &p.Coordinates); err != nil {
+			return nil, err
+		}
+		ports = append(ports, p)
+	}
+	return &ports, nil
+}
+
+func (s *DictionariesStore) GetCargoTypes() ([]string, error) {
+	rows, err := s.db.Query(`SELECT name FROM cargo_types ORDER BY name`)
+	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	return countries, nil
+	var types []string
+	for rows.Next() {
+		var name string
+		if err = rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		types = append(types, name)
+	}
+	return types, nil
+}
+
+func (s *DictionariesStore) GetPacking() ([]string, error) {
+	rows, err := s.db.Query(`SELECT name FROM packing ORDER BY name`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []string
+	for rows.Next() {
+		var name string
+		if err = rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		items = append(items, name)
+	}
+	return items, nil
 }

@@ -1,13 +1,14 @@
 package types
 
-import "github.com/AVZotov/draft-survey/internal/constants"
-
 type CalibrationTableType string
 
 const (
-	CalibrationTypeVolumeByTrim       CalibrationTableType = constants.VolumeCalibrationType1
-	CalibrationTypeSoundingCorrection CalibrationTableType = constants.VolumeCalibrationType2
-	CalibrationTypeVolumeCorrection   CalibrationTableType = constants.VolumeCalibrationType3
+	// CalibrationTypeVolumeByTrim — most common type of calibration tables at marine vessels
+	CalibrationTypeVolumeByTrim CalibrationTableType = "standard_volume_by_trim"
+	// CalibrationTypeSoundingCorrection — 1D volume at corrected soundings
+	CalibrationTypeSoundingCorrection CalibrationTableType = "sounding_correction"
+	// CalibrationTypeVolumeCorrection — volume at zero trim (1D, no trim columns)
+	CalibrationTypeVolumeCorrection CalibrationTableType = "volume_correction"
 )
 
 type CalibrationRow struct {

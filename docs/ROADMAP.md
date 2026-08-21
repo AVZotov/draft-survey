@@ -1,8 +1,8 @@
 # Draft Survey Tool — Development Roadmap
 
 **Project:** https://github.com/AVZotov/draft-survey  
-**Status:** Phase 1 In Progress 🚧  
-**Last Updated:** 2026-05-21
+**Status:** v0.5.0 — Chi migration complete; core math and web UI verified against UNECE 1992 and cross-checked against independent commercial software (7 integration tests, 5 vessels) 🚧  
+**Last Updated:** 2026-08-21
 
 ---
 
@@ -54,9 +54,9 @@
 - [x] `CalcSurvey` — multi-draft orchestrator with cargo and constant tracking
 - [x] Guard against division by zero (LBP, interpolation, list correction)
 - [x] Rounding policy aligned with UNECE Form C reporting fields
-- [x] Golden tests against UNECE 1992 standard (BEAM IMO 9591741)
-- [x] Integration tests — POLAR_STAR (TrimNoList, TrimList scenarios)
-- [x] Unit tests — DSGear reference data
+- [x] Golden tests against UNECE 1992 standard
+- [x] Integration tests — 7 tests across 5 vessels (AGGELOS B, HUA YOU 2, NEWSUN VISION against UNECE 1992 golden data; POLAR STAR, BEAM against DSGear commercial-software reference data), zero discrepancies found (±0.001 tolerance)
+- [x] Standalone `cmd/verify/` CLI tool — runs CalcDraft/CalcSurvey against raw JSON survey data for cross-checking outside the HTTP stack
 
 ---
 
@@ -98,23 +98,39 @@
 
 ---
 
-### 1.5 Report Generation 🔲 PLANNED
-**Location:** `internal/report/` *(not yet created)*
+### 1.5 Chi Migration (v0.5.0) ✅ COMPLETE
+**Location:** `internal/handler/`, `internal/sse/`, `internal/service/`
 
-- [ ] PDF library selection (gofpdf / unidoc)
-- [ ] UNECE-compliant report template
-- [ ] Vessel data, calculations
-- [ ] Save to custom location
+Full architectural rewrite, not just a router swap — see `docs/ARCHITECTURE.md` for the full design record.
 
-**Target:** v0.5.0
+- [x] Chi replaces Fiber entirely (Fiber fully removed from go.mod)
+- [x] Single unified SSE broker for every server→client notification (Toast/Alert/live calc-panel updates) — no `HX-Trigger` headers, no parallel mechanisms
+- [x] Handler/Service/Repository layering enforced project-wide — handler as "low-paid secretary," zero business logic outside the service layer
+- [x] `internal/handler/fields/` — form field constants; `web/ids/` — DOM id constants for OOB swaps/hx-include (both replace `internal/constants/`, now deleted)
+- [x] `internal/handler/routes/` — URL builder functions (no inline `fmt.Sprintf`)
+- [x] `internal/handler/parse/` — hand-written Decoder for true partial-update autosave (not `go-playground/form`, not `gorilla/schema`)
+- [x] `Outcome` DTO — every service method returns `(*Outcome, error)`, including Update/Delete
+- [x] Draft Readings, Tanks, Results pages — all wired and working
+- [x] `internal/validation/playground/`, `internal/types/dto/` — still pending deletion once verified zero references (see `docs/ARCHITECTURE.md` Wave 4)
 
 ---
 
-### 1.6 Web Interface (HTMX) 🚧 IN PROGRESS
+### 1.6 Report Generation 🔲 PLANNED
+**Location:** `internal/report/` *(scaffolded, not yet implemented)*
+
+- [ ] PDF library selection (gofpdf / unidoc)
+- [ ] UNECE Form C compliant report template
+- [ ] Vessel data, calculations
+- [ ] Save to custom location
+
+**Target:** v0.7.0 — see [#146](https://github.com/AVZotov/draft-survey/issues/146)
+
+---
+
+### 1.7 Web Interface (HTMX) ✅ COMPLETE
 **Location:** `web/`, `internal/handler/`
 
-- [x] Fiber server
-- [x] Templ templates
+- [x] Chi router + templ templates
 - [x] Survey list with search and date filter
 - [x] New survey form
 - [x] Draft readings input with real-time calculation panel
@@ -127,34 +143,33 @@
 - [x] Sea condition logging
 - [x] Surveyor profile page
 - [x] Final results page (full survey summary)
-- [ ] Alerts block (trim by head, list > 0.5°, constant deviation, deflection)
-- [ ] Unified numeric input formatting (x-mask)
+- [x] Unified numeric input formatting (`XInput` component, `x-mask`)
+- [ ] Alerts block (trim by head, list > 0.5°, constant deviation, deflection) — moved to v0.7.0 soft validation, see [#148](https://github.com/AVZotov/draft-survey/issues/148) and the DSGear-derived validation rules [#149](https://github.com/AVZotov/draft-survey/issues/149)–[#156](https://github.com/AVZotov/draft-survey/issues/156)
 
 ---
 
-### 1.7 Logging 🔲 PLANNED
-- [ ] Structured logging (slog)
+### 1.8 Logging ✅ COMPLETE
+- [x] Structured logging (slog), configurable via `LOG_LEVEL` env var
+- [x] slog-based HTTP request middleware
 - [ ] Log to file
 - [ ] Log rotation
 
-**Target:** v0.5.0
+---
+
+### 1.9 Error Handling 🚧 IN PROGRESS
+- [x] `internal/errors/` sentinel errors (`ErrEmptyField`, `ErrInvalidFormat`)
+- [x] User-friendly error display via Toast/Alert (SSE-delivered, not a separate mechanism)
+- [ ] Broader sentinel error coverage (`storage.ErrNotFound` and similar)
+- [ ] Unified error handling strategy across all handlers
 
 ---
 
-### 1.8 Error Handling 🔲 PLANNED
-- [ ] Sentinel errors (`storage.ErrNotFound`)
-- [ ] User-friendly error display via alert store
-- [ ] Unified error handling strategy
-
-**Target:** v0.5.0
-
----
-
-### 1.9 Testing ✅ SUBSTANTIALLY COMPLETE
-- [x] Golden tests against UNECE 1992 (BEAM initial draft — 27 tests)
-- [x] Integration tests POLAR_STAR (TrimNoList + TrimList)
+### 1.10 Testing ✅ SUBSTANTIALLY COMPLETE
+- [x] Golden tests against UNECE 1992 standard
+- [x] Integration tests — 7 tests across 5 vessels (AGGELOS B, HUA YOU 2, NEWSUN VISION, POLAR STAR, BEAM), zero discrepancies vs. UNECE 1992 and DSGear reference data (±0.001 tolerance)
 - [x] Unit tests — full calculation chain
 - [x] Tank volume calibration tests (Type 1/2/3)
+- [x] Standalone `cmd/verify/` CLI tool for cross-checking raw survey data outside the HTTP stack
 - [ ] Storage layer tests (SQLite)
 - [ ] E2E test: create survey → calculate → generate PDF
 
@@ -162,7 +177,7 @@
 
 ---
 
-### 1.10 Dictionaries ✅ COMPLETE
+### 1.11 Dictionaries ✅ COMPLETE
 - [x] Ports list (JSON, embedded)
 - [x] Country flags (JSON, embedded)
 - [x] Sea conditions (wave / ice)
@@ -171,23 +186,45 @@
 
 ---
 
-### 1.11 Distribution 🔲 PLANNED
+### 1.12 Distribution 🔲 PLANNED
 - [ ] Cross-compilation (Windows / macOS / Linux)
 - [ ] First-run setup
 - [ ] Pre-built binaries via GitHub Releases
 - [ ] Third-party license acknowledgment (THIRD_PARTY_NOTICES)
 
-**Target:** v0.5.0
+**Target:** relates to v0.6.0's one-click desktop launch, see [#145](https://github.com/AVZotov/draft-survey/issues/145)
 
 ---
 
 ## Known Issues / Open Questions
 
-- [ ] List correction method when TPC upper == TPC lower — DSGear uses Summer TPC interpolation (~0.881 MT), UNECE strict gives 0. Awaiting surveyor clarification.
-- [ ] TPC List Port / Stbd fields not yet in draft form UI — using V2 auto-calculation as interim
+- [x] ~~List correction method when TPC upper == TPC lower~~ — resolved: `calcListCorrectionV2` implements Summer TPC interpolation for this case, matching DSGear's approach.
+- [x] ~~TPC List Port / Stbd fields not yet in draft form UI~~ — resolved: wired into `web/widgets/drafts/marks.templ`.
+- [x] ~~`Lightship` field — currently `float64`, should be `*float64`~~ — resolved: `types.VesselData.Lightship` is `*float64`.
 - [ ] MTC draft hint fields — pre-filled vs readonly, awaiting surveyor feedback
-- [ ] `Lightship` field — currently `float64`, should be `*float64` (nil = not set)
 - [ ] User signature storage — separate table needed to avoid loading binary data on every profile fetch
+
+---
+
+## PHASE 1.6: v0.6.0 — Frontend Redesign 🔲 PLANNED
+
+**Goal:** Theming, localization, and desktop-friendly distribution for the surveyor audience.
+
+- [ ] Dark/light theme toggle — CSS variables already use design tokens, add the toggle ([#143](https://github.com/AVZotov/draft-survey/issues/143))
+- [ ] Russian/English UI locale — currently English-only ([#144](https://github.com/AVZotov/draft-survey/issues/144))
+- [ ] One-click desktop launch (systray/icon) — launch by clicking an icon, not a terminal command ([#145](https://github.com/AVZotov/draft-survey/issues/145))
+
+---
+
+## PHASE 1.7: v0.7.0 — Advanced Math & Surveyor UX 🔲 PLANNED
+
+**Goal:** Close the gap with commercial draft-survey software — reporting, soft validation, and hold-level cargo math.
+
+- [ ] PDF report generation — UNECE Form C compliant ([#146](https://github.com/AVZotov/draft-survey/issues/146))
+- [ ] In-app user-facing documentation page — Footer Documentation link currently shows a toast stub ([#147](https://github.com/AVZotov/draft-survey/issues/147))
+- [ ] Soft validation of surveyor input — `DraftValidator` stub already exists ([#148](https://github.com/AVZotov/draft-survey/issues/148)), informed by 8 validation rules extracted from a surveyor's DSGear XLSM files ([#149](https://github.com/AVZotov/draft-survey/issues/149)–[#156](https://github.com/AVZotov/draft-survey/issues/156)): list angle > 0.5° requiring LOP, trim-by-head, Current DWT exceeding Summer DWT, hull-twist cross-check, Depth/Draft/Freeboard consistency, missing draft readings, instrument calibration expiry, tank listing consistency
+- [ ] Partial cargo calculation by hold groups (see Phase 3.2)
+- [ ] AI surveyor agent — surveyor UX automation, exact scope TBD
 
 ---
 
@@ -201,7 +238,7 @@
 - [ ] Session management
 
 ### 2.2 Backend Server
-**Tech Stack:** Go + Fiber + PostgreSQL
+**Tech Stack:** Go + Chi + PostgreSQL
 - [ ] REST API
 - [ ] Database schema
 - [ ] UUID-based IDs
@@ -242,8 +279,10 @@
 | Version | Status | Description |
 |---------|--------|-------------|
 | v0.3.0 | ✅ Released | Core math complete, web UI, modal strategy |
-| v0.4.0 | 🚧 Current | SQLite storage migration, bug fixes |
-| v0.5.0 | 🔲 Planned | PDF reports, logging, error handling, binaries |
+| v0.4.0 | ✅ Released | SQLite storage migration, bug fixes |
+| v0.5.0 | 🚧 Current | Chi migration (Fiber removed), unified SSE broker, structured logging, Draft Readings/Tanks/Results pages complete, 7 integration tests across 5 vessels |
+| v0.6.0 | 🔲 Planned | Dark/light theme, RU/EN locale, one-click desktop launch |
+| v0.7.0 | 🔲 Planned | PDF reports, soft validation, hold-group calculations, AI surveyor agent |
 | v1.0.0 | 🔲 Planned | Full MVP with distribution |
 
 ---

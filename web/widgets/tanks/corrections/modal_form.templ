@@ -1,0 +1,321 @@
+package corrections
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/data/dictionaries"
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/internal/types"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ ModalForm(tank types.Tank, tp components.TanksPageProps) {
+	{{
+		list_corr := false
+		if tank.Correction.HasListCorrection {
+			list_corr = true
+		}
+		corrType := string(types.CalibrationTypeVolumeByTrim)
+		if tank.Correction.TableType != "" {
+			corrType = string(tank.Correction.TableType)
+		}
+	}}
+	<div
+		class="app-modal"
+		id="app-modal-content"
+		x-on:change="dirty = true"
+	>
+		<!-- ── Header ─────────────────────────────────────────── -->
+		<header>
+			<div class="tcm-header">
+				<div class="tcm-header-left">
+					<div class="tcm-icon">
+						<svg viewBox="0 0 24 24">
+							<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+							<line x1="8" y1="8" x2="16" y2="8"></line>
+							<line x1="8" y1="12" x2="16" y2="12"></line>
+							<line x1="8" y1="16" x2="12" y2="16"></line>
+						</svg>
+					</div>
+					<div>
+						<div class="tcm-title">Volume Calculation</div>
+						<div class="tcm-tank-id">{ tank.Type } { tank.Name }</div>
+					</div>
+				</div>
+				<div class="tcm-context">
+					<div class="tcm-ctx-item">
+						<span class="tcm-ctx-label">Trim</span>
+						<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.Trim) }m { tp.TrimDir }</span>
+					</div>
+					<div class="tcm-ctx-item">
+						<span class="tcm-ctx-label">List</span>
+						<span class="tcm-ctx-val">{ format.FloatOrEmpty(tp.List) }° { tp.ListDir }</span>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- ── Body ───────────────────────────────────────────── -->
+		<main
+			class="tcm-body"
+			id="modal-form-body"
+			x-data={ fmt.Sprintf(`{
+    		    list_corr: %t,
+    		    corr_type: '%s'
+			}`, list_corr, corrType) }
+		>
+			<!-- Tank info -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Tank</div>
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label class="label">Type</label>
+						<div class="select-wrap">
+							<select class="tcm-select" name={ fields.FieldTankType }>
+								for _, bwtType := range dictionaries.BallastWaterTankTypes {
+									if bwtType == tank.Type {
+										<option value={ bwtType } selected>{ bwtType }</option>
+									} else {
+										<option value={ bwtType }>{ bwtType }</option>
+									}
+								}
+							</select>
+							<svg class="select-arrow" viewBox="0 0 24 24">
+								<path d="M6 9l6 6 6-6"></path>
+							</svg>
+						</div>
+					</div>
+					<div class="field-wrap-col">
+						<label>Name</label>
+						<input type="text" name={ fields.FieldTankName } value={ tank.Name } placeholder="e.g. 1S, Centre…"/>
+					</div>
+				</div>
+			</div>
+			<!-- Measurements -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Measurements</div>
+				<div class="field-col-3">
+					<div class="field-wrap-col">
+						<label>Sounding <span class="tcm-label-unit">m</span></label>
+						@components.XInput(fields.WithTankID(fields.FieldTankSounding, tank.ID), tank.Sounding)
+					</div>
+					<div class="field-wrap-col">
+						<label>Volume <span class="tcm-label-unit">m³</span></label>
+						<input type="number" name={ fields.WithTankID(fields.FieldTankVolume, tank.ID) } value={ format.FloatOrEmpty(tank.EffectiveVolume()) } readonly placeholder="calculated" tabindex="-1"/>
+					</div>
+					<div class="field-wrap-col">
+						<label>Density <span class="tcm-label-unit">t/m³</span></label>
+						@components.XInput(fields.WithTankID(fields.FieldTankDensity, tank.ID), tank.Density)
+					</div>
+				</div>
+			</div>
+			<!-- Calibration table type -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Calibration Tables Type</div>
+				<div class="field-col-3">
+					<label>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeVolumeByTrim) }/>
+						Standard (Volume by Trim)
+					</label>
+					<label>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeSoundingCorrection) }/>
+						Sounding Correction
+					</label>
+					<label>
+						<input x-model="corr_type" type="radio" name={ fields.FieldCalibType } value={ string(types.CalibrationTypeVolumeCorrection) }/>
+						Volume Correction
+					</label>
+				</div>
+			</div>
+			<!-- Trim bounds -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Trim Boundaries</div>
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label>TTL — Lower trim <span class="tcm-label-unit">m</span></label>
+						@components.XInput(fields.FieldTTL, tank.Correction.TableTrimLow)
+					</div>
+					<div class="field-wrap-col">
+						<label>TTU — Upper trim <span class="tcm-label-unit">m</span></label>
+						@components.XInput(fields.FieldTTU, tank.Correction.TableTrimUpper)
+					</div>
+				</div>
+			</div>
+			<!-- ── TRIM ROWS — всегда видимы, метка зависит от типа -->
+			<div class="tcm-section">
+				<div class="tcm-section-title">Trim Correction</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding</th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTL, m³' : corr_type === '%s' ? 'CORR @ TTL, mm' : 'CORR @ TTL, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TTU, m³' : corr_type === '%s' ? 'CORR @ TTU, mm' : 'CORR @ TTU, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									@components.XInput(fields.FieldTrimTSLS, tank.Correction.SafeTrimRows()[0].Sounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldTrimTSLVL, tank.Correction.SafeTrimRows()[0].VolumeLow)
+								</td>
+								<td>
+									@components.XInput(fields.FieldTrimTSLVU, tank.Correction.SafeTrimRows()[0].VolumeUp)
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									@components.XInput(fields.FieldTrimTSUS, tank.Correction.SafeTrimRows()[1].Sounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldTrimTSUVL, tank.Correction.SafeTrimRows()[1].VolumeLow)
+								</td>
+								<td>
+									@components.XInput(fields.FieldTrimTSUVU, tank.Correction.SafeTrimRows()[1].VolumeUp)
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── CORRECTION ROWS — Type 2 & 3 only! -->
+			<div class="tcm-section" x-show={ fmt.Sprintf("corr_type === '%s' || corr_type === '%s'", string(types.CalibrationTypeSoundingCorrection), string(types.CalibrationTypeVolumeCorrection)) }>
+				<div class="tcm-section-title">Capacity Table</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th>Volume, m³</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									@components.XInput(fields.FieldCorrSoundingLow, tank.Correction.SafeCorrectionRows()[0].TableSounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldCorrVolumeLow, tank.Correction.SafeCorrectionRows()[0].TableVolume)
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									@components.XInput(fields.FieldCorrSoundingUp, tank.Correction.SafeCorrectionRows()[1].TableSounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldCorrVolumeUp, tank.Correction.SafeCorrectionRows()[1].TableVolume)
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- ── Toggle for list corrections if any -->
+			<div class="tcm-toggle-row">
+				<label class="tcm-toggle">
+					<input type="checkbox" x-bind:checked="list_corr" name={ fields.FieldHasListCorrection } x-on:change="list_corr = ! list_corr"/>
+					<span class="tcm-toggle-slider"></span>
+				</label>
+				<span class="tcm-toggle-label">Has list correction table</span>
+			</div>
+			<!-- List bounds -->
+			<div class="tcm-section" x-cloak x-show="list_corr">
+				<div class="tcm-section-title">List Boundaries</div>
+				<div class="field-col-2">
+					<div class="field-wrap-col">
+						<label>TLL — Lower list <span class="tcm-label-unit">°</span></label>
+						@components.XInput(fields.FieldTLL, tank.Correction.TableListLow)
+					</div>
+					<div class="field-wrap-col">
+						<label>TLU — Upper list <span class="tcm-label-unit">°</span></label>
+						@components.XInput(fields.FieldTLU, tank.Correction.TableListUpper)
+					</div>
+				</div>
+			</div>
+			<!-- ── LIST ROWS -->
+			<div class="tcm-section" x-cloak x-show="list_corr">
+				<div class="tcm-section-title">List Rows</div>
+				<div class="tcm-calib-block">
+					<table class="tcm-calib-table">
+						<thead>
+							<tr>
+								<th style="text-align:left;">Row</th>
+								<th style="text-align:left;">Sounding, m</th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLL, m³' : corr_type === '%s' ? 'CORR @ TLL, mm' : 'CORR @ TLL, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+								<th x-text={ fmt.Sprintf("corr_type === '%s' ? 'VOL @ TLU, m³' : corr_type === '%s' ? 'CORR @ TLU, mm' : 'CORR @ TLU, m³'", string(types.CalibrationTypeVolumeByTrim), string(types.CalibrationTypeSoundingCorrection)) }></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="tcm-row-label">TSL</span></td>
+								<td>
+									@components.XInput(fields.FieldListTSLS, tank.Correction.SafeListRows()[0].Sounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldListTSLVL, tank.Correction.SafeListRows()[0].VolumeLow)
+								</td>
+								<td>
+									@components.XInput(fields.FieldListTSLVU, tank.Correction.SafeListRows()[0].VolumeUp)
+								</td>
+							</tr>
+							<tr>
+								<td><span class="tcm-row-label">TSU</span></td>
+								<td>
+									@components.XInput(fields.FieldListTSUS, tank.Correction.SafeListRows()[1].Sounding)
+								</td>
+								<td>
+									@components.XInput(fields.FieldListTSUVL, tank.Correction.SafeListRows()[1].VolumeLow)
+								</td>
+								<td>
+									@components.XInput(fields.FieldListTSUVU, tank.Correction.SafeListRows()[1].VolumeUp)
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+		<!-- ── Footer ─────────────────────────────────────────── -->
+		<footer>
+			<div class="tcm-footer">
+				<span class="tcm-footer-hint">Trim and List applied from draft readings</span>
+				<div class="btn-wrapper">
+					<button
+						class="btn btn-ghost"
+						type="button"
+						x-on:click="
+					if (!dirty) {$el.closest('dialog').close(); return }
+					if (confirm('Unsaved changes. Close anyway?')) {$el.closest('dialog').close() }
+					"
+						value="cancel"
+					>
+						Cancel
+					</button>
+					<button
+						class="btn btn-primary"
+						value="ok"
+						type="button"
+						hx-put={ routes.APITankBWUpdate(tp.Survey.ID, tp.DraftIndex, tank.ID) }
+						hx-target={ "#" + fields.WithTankID("tank-row", tank.ID) }
+						hx-swap="morph:outerHTML"
+						hx-include="#modal-form-body"
+						hx-on::after-request="document.getElementById('app-modal').close();"
+					>
+						<svg viewBox="0 0 24 24">
+							<path d="M20 6L9 17l-5-5"></path>
+						</svg>
+						Apply
+					</button>
+				</div>
+			</div>
+		</footer>
+	</div>
+}

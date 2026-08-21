@@ -3,12 +3,11 @@ package storage
 import (
 	"database/sql"
 	"encoding/json"
-	"strings"
+	"time"
 
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
-var _ SurveyQueryRepository = (*SQLiteSurveyStore)(nil)
 var _ SurveyRepository = (*SQLiteSurveyStore)(nil)
 
 type SQLiteSurveyStore struct {
@@ -22,25 +21,31 @@ func NewSQLiteSurveyStore(db *sql.DB) *SQLiteSurveyStore {
 }
 
 func (s *SQLiteSurveyStore) Save(survey *types.Survey) error {
-	const query = `INSERT INTO surveys (id, imo, data) VALUES (?, ?, ?)
-		ON CONFLICT (id) DO UPDATE SET imo = excluded.imo, data = excluded.data;`
 	data, err := json.Marshal(survey)
 	if err != nil {
 		return err
 	}
 
-	tx, err := s.db.Begin()
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()
-
-	_, err = tx.Exec(query, survey.ID, survey.VesselData.IMO, data)
-	if err != nil {
-		return err
-	}
-
-	return tx.Commit()
+	_, err = s.db.Exec(`
+		INSERT INTO surveys (id, vessel_name, imo, status, operation, cargo, created_at, data)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(id) DO UPDATE SET
+			vessel_name = excluded.vessel_name,
+			imo         = excluded.imo,
+			status      = excluded.status,
+			operation   = excluded.operation,
+			cargo       = excluded.cargo,
+			data        = excluded.data`,
+		survey.ID,
+		survey.VesselData.Name,
+		survey.VesselData.IMO,
+		string(survey.Status),
+		string(survey.CargoOperation.Operation),
+		survey.CargoOperation.Cargo,
+		survey.CreatedAt.Format(time.RFC3339),
+		string(data),
+	)
+	return err
 }
 
 func (s *SQLiteSurveyStore) Get(id string) (*types.Survey, error) {
@@ -58,8 +63,39 @@ func (s *SQLiteSurveyStore) Get(id string) (*types.Survey, error) {
 	return survey, nil
 }
 
-func (s *SQLiteSurveyStore) GetAll() ([]*types.Survey, error) {
-	return get(s.db, `SELECT data FROM surveys ORDER BY created_at DESC;`)
+func (s *SQLiteSurveyStore) GetPage(limit, offset int) ([]*types.Survey, error) {
+	rows, err := s.db.Query(`SELECT data FROM surveys ORDER BY created_at DESC LIMIT ? OFFSET ?`, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var surveys []*types.Survey
+	for rows.Next() {
+		var data string
+		if err = rows.Scan(&data); err != nil {
+			return nil, err
+		}
+		var survey types.Survey
+		if err = json.Unmarshal([]byte(data), &survey); err != nil {
+			return nil, err
+		}
+		surveys = append(surveys, &survey)
+	}
+	return surveys, nil
+}
+
+func (s *SQLiteSurveyStore) GetStats() (types.SurveyStats, error) {
+	var stats types.SurveyStats
+	err := s.db.QueryRow(`
+		SELECT 
+			COUNT(*) as total,
+			COUNT(CASE WHEN status = 'complete' THEN 1 END) as complete,
+			COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as in_progress,
+			COUNT(CASE WHEN status = 'draft' THEN 1 END) as draft
+		FROM surveys
+	`).Scan(&stats.Total, &stats.Complete, &stats.InProgress, &stats.Draft)
+	return stats, err
 }
 
 func (s *SQLiteSurveyStore) Delete(id string) error {
@@ -68,58 +104,55 @@ func (s *SQLiteSurveyStore) Delete(id string) error {
 	return err
 }
 
-func (s *SQLiteSurveyStore) Search(filter SurveyFilter) ([]*types.Survey, error) {
-	const baseQuery = `SELECT data FROM surveys WHERE 1=1`
-	var queryBuilder strings.Builder
-	queryBuilder.WriteString(baseQuery)
-	var args []interface{}
+func (s *SQLiteSurveyStore) Search(filter types.SurveyFilter) ([]*types.Survey, error) {
+	query := `SELECT data FROM surveys WHERE 1=1`
+	args := []any{}
+
 	if filter.Query != "" {
-		queryBuilder.WriteString(` AND imo LIKE ?`)
-		args = append(args, "%"+filter.Query+"%")
+		query += ` AND (vessel_name LIKE ? OR imo LIKE ?)`
+		q := "%" + filter.Query + "%"
+		args = append(args, q, q)
 	}
-
+	if filter.Status != "" {
+		query += ` AND status = ?`
+		args = append(args, filter.Status)
+	}
+	if filter.Operation != "" {
+		query += ` AND operation = ?`
+		args = append(args, filter.Operation)
+	}
+	if filter.Cargo != "" {
+		query += ` AND cargo = ?`
+		args = append(args, filter.Cargo)
+	}
 	if !filter.From.IsZero() {
-		queryBuilder.WriteString(` AND created_at >= ?`)
-		args = append(args, filter.From.Format("2006-01-02 15:04:05"))
+		query += ` AND created_at >= ?`
+		args = append(args, filter.From.Format(time.RFC3339))
 	}
-
 	if !filter.To.IsZero() {
-		queryBuilder.WriteString(` AND created_at <= ?`)
-		args = append(args, filter.To.Format("2006-01-02 15:04:05"))
+		query += ` AND created_at <= ?`
+		args = append(args, filter.To.Format(time.RFC3339))
 	}
 
-	queryBuilder.WriteString(` ORDER BY created_at DESC;`)
+	query += ` ORDER BY created_at DESC`
 
-	surveys, err := get(s.db, queryBuilder.String(), args...)
-	if err != nil {
-		return nil, err
-	}
-
-	return surveys, nil
-}
-
-func get(db *sql.DB, query string, args ...any) ([]*types.Survey, error) {
-	rows, err := db.Query(query, args...)
+	rows, err := s.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	surveys := make([]*types.Survey, 0)
+
+	var surveys []*types.Survey
 	for rows.Next() {
-		survey := new(types.Survey)
-		var data []byte
+		var data string
 		if err = rows.Scan(&data); err != nil {
 			return nil, err
 		}
-		if err = json.Unmarshal(data, survey); err != nil {
+		var survey types.Survey
+		if err = json.Unmarshal([]byte(data), &survey); err != nil {
 			return nil, err
 		}
-		surveys = append(surveys, survey)
+		surveys = append(surveys, &survey)
 	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-
 	return surveys, nil
 }

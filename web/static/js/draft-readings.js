@@ -29,8 +29,8 @@ function g(id) {
 }
 
 function calc(p) {
-    const fp = g(p + '-fp'), mp = g(p + '-mp'), ap = g(p + '-ap');
-    const fs = g(p + '-fs'), ms = g(p + '-ms'), as_ = g(p + '-as');
+    const fp = g('fwd_port-' + p), mp = g('mid_port-' + p), ap = g('aft_port-' + p);
+    const fs = g('fwd_stbd-' + p), ms = g('mid_stbd-' + p), as_ = g('aft_stbd-' + p);
 
     // Trim — visual only, Aft mean minus Fwd mean
     const mF = fp !== null && fs !== null ? (fp + fs) / 2 : null;
@@ -69,15 +69,15 @@ function updateVessel(p, listDeg, trim) {
 }
 //Trigger vessel trim list updates on frontend on page load
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
-        const idx = el.id.replace('-fp', '');
+    document.querySelectorAll('[id^="fwd_port-"]').forEach(function (el) {
+        const idx = el.id.replace('fwd_port-', '');
         calc(idx);
     });
 });
 //Trigger vessel trim list updates on frontend on page load for HTMX swap support
 function initVessels() {
-    document.querySelectorAll('[id$="-fp"]').forEach(function (el) {
-        const idx = el.id.replace('-fp', '');
+    document.querySelectorAll('[id^="fwd_port-"]').forEach(function (el) {
+        const idx = el.id.replace('fwd_port-', '');
         calc(idx);
     });
 }
@@ -85,7 +85,7 @@ function initVessels() {
 document.addEventListener('DOMContentLoaded', initVessels);
 document.addEventListener('htmx:afterSwap', initVessels);
 
-function draftPage() {
+function draftPage(idx) {
     return {
         fwdP: 0, midP: 0, aftP: 0,
         fwdS: 0, midS: 0, aftS: 0,
@@ -93,12 +93,12 @@ function draftPage() {
         mtcDraftN: 0,
 
         init() {
-            this.fwdP = +this.$refs.fwdP.value || 0
-            this.midP = +this.$refs.midP.value || 0
-            this.aftP = +this.$refs.aftP.value || 0
-            this.fwdS = +this.$refs.fwdS.value || 0
-            this.midS = +this.$refs.midS.value || 0
-            this.aftS = +this.$refs.aftS.value || 0
+            this.fwdP = g('fwd_port-' + idx) || 0
+            this.midP = g('mid_port-' + idx) || 0
+            this.aftP = g('aft_port-' + idx) || 0
+            this.fwdS = g('fwd_stbd-' + idx) || 0
+            this.midS = g('mid_stbd-' + idx) || 0
+            this.aftS = g('aft_stbd-' + idx) || 0
             this.mmc = +this.$el.querySelector('.cp-cell--mmc .cp-val').textContent || 0
             this.updtMTCDraft()
         },
@@ -117,26 +117,42 @@ function draftPage() {
     }
 }
 
-document.addEventListener('htmx:oobAfterSwap', function (event) {
-    const target = event.detail.target
-    if (target.classList.contains('calc-panel')) {
-        const block = target.closest('.draft-block')
-        if (block) {
-            block.dispatchEvent(new CustomEvent('calc-updated'))
-        }
-    }
+// EventDraftCalc — payload is a concatenation of result fragments (calc
+// panel, MMC row, LBM, delta MTC, totals) for every draft, each carrying its
+// real DOM id. Not routed through htmx's swap engine (this app's SSE
+// listeners never are — see 'toast'/'survey-stats' in main.js), so apply
+// each fragment by id manually.
+//
+// htmx.process() after replaceWith(): none of these fragments currently
+// carry an hx-get/hx-put/hx-trigger of their own (CalcPanel's hx-swap-oob is
+// inert here since it's never passed through htmx's swap engine), so there's
+// no live bug today — but the replace happens outside htmx's request cycle
+// same as tank-calc in tanks.js, so any hx-* added to these fragments later
+// would silently stop working after the first SSE update. Calling it
+// unconditionally keeps this listener safe by construction.
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof es === 'undefined') return
+    es.addEventListener('draft-calc', function (e) {
+        const template = document.createElement('template')
+        template.innerHTML = e.data
+        template.content.querySelectorAll('[id]').forEach(function (fragment) {
+            const target = document.getElementById(fragment.id)
+            if (!target) return
+            target.replaceWith(fragment)
+            htmx.process(fragment)
+            if (fragment.classList.contains('calc-panel')) {
+                const block = fragment.closest('.draft-block')
+                if (block) block.dispatchEvent(new CustomEvent('calc-updated'))
+            }
+        })
+    })
 })
 
-function delDraftConfirm(id) {
+function delDraftConfirm(event) {
+    const url = event.currentTarget.dataset.deleteUrl
     Alpine.store('confirm').show(
         'Delete Draft',
         'Are you sure you want to delete the last draft?',
-        () => htmx.ajax('DELETE', '/api/v1/survey/' + id + '/draft', { swap: 'none' })
-            .then(() => {
-                sessionStorage.setItem('toast', JSON.stringify({
-                    header: 'Done',
-                    message: 'Draft deleted successfully'
-                }))
-            })
+        () => htmx.ajax('DELETE', url, { swap: 'none' })
     )
 }

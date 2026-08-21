@@ -4,6 +4,13 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+// CalcSurvey recalculates every draft in the survey via CalcDraft and derives
+// the survey-level totals: cumulative cargo moved between consecutive drafts,
+// true constant per draft, cargo on board (last draft minus first draft), and
+// the discrepancy against the surveyor-declared cargo figure, if any.
+// The returned SurveyResult.DraftTotals always has one entry per survey.Drafts
+// entry, in the same order. Results are never persisted — always recomputed
+// on the fly from stored survey data.
 func CalcSurvey(s types.Survey) types.SurveyResult {
 	draftTotals := make([]types.DraftTotal, 0, len(s.Drafts))
 	var previousDR types.DraftResult

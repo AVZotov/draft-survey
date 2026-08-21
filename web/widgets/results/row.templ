@@ -1,11 +1,11 @@
 package results
 
 // Вычисленное — яркое
-templ Row(label string, xText string, unit string) {
+templ Row(label string, value string, unit string) {
 	<div class="result-row result-row--calc">
 		<span class="result-row__label">{ label }</span>
 		<span class="result-row__value">
-			<span x-text={ xText }></span>
+			<span>{ value }</span>
 			if unit != "" {
 				<span class="result-row__unit">{ unit }</span>
 			}
@@ -14,28 +14,13 @@ templ Row(label string, xText string, unit string) {
 }
 
 // Два введённых значения — блеклые
-templ RowPair(label string, xText1 string, xText2 string, unit string) {
+templ RowPair(label string, value1 string, value2 string, unit string) {
 	<div class="result-row result-row--sub">
 		<span class="result-row__label">{ label }</span>
 		<span class="result-row__value">
-			<span x-text={ xText1 }></span>
+			<span>{ value1 }</span>
 			<span class="result-row__sep">/</span>
-			<span x-text={ xText2 }></span>
-			if unit != "" {
-				<span class="result-row__unit">{ unit }</span>
-			}
-		</span>
-	</div>
-}
-
-// Два введённых значения — блеклые
-templ RowPairOneStatic(label string, text string, xText1 string, unit string) {
-	<div class="result-row result-row--sub">
-		<span class="result-row__label">{ label }</span>
-		<span class="result-row__value">
-			<span>{ text }</span>
-			<span class="result-row__sep">/</span>
-			<span x-text={ xText1 }></span>
+			<span>{ value2 }</span>
 			if unit != "" {
 				<span class="result-row__unit">{ unit }</span>
 			}
@@ -44,15 +29,15 @@ templ RowPairOneStatic(label string, text string, xText1 string, unit string) {
 }
 
 // 3 field in row
-templ RowTriple(label string, xText1 string, xText2 string, xText3 string, unit string) {
+templ RowTriple(label string, value1 string, value2 string, value3 string, unit string) {
 	<div class="result-row result-row--sub">
 		<span class="result-row__label">{ label }</span>
 		<span class="result-row__value">
-			<span x-text={ xText1 }></span>
+			<span>{ value1 }</span>
 			<span class="result-row__sep">/</span>
-			<span x-text={ xText2 }></span>
+			<span>{ value2 }</span>
 			<span class="result-row__sep">/</span>
-			<span x-text={ xText3 }></span>
+			<span>{ value3 }</span>
 			if unit != "" {
 				<span class="result-row__unit">{ unit }</span>
 			}

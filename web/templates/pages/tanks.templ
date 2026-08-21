@@ -1,18 +1,17 @@
 package pages
 
 import (
-	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/layouts"
 	"github.com/AVZotov/draft-survey/web/widgets"
 	"github.com/AVZotov/draft-survey/web/widgets/tanks"
 )
 
-templ Tanks(lp components.LayoutProps, tanksProps components.TanksPageProps, results types.DraftResult) {
+templ Tanks(lp components.LayoutProps, tp components.TanksPageProps) {
 	@layouts.Layout(lp) {
 		@widgets.HeaderUser(lp.User)
-		@tanks.Form(lp, tanksProps)
-		@tanks.TanksActionBar(tanksProps, results)
+		@tanks.Form(lp, tp)
+		@tanks.TanksActionBar(tp)
 		@widgets.Footer(lp.AppVersion)
 	}
 }

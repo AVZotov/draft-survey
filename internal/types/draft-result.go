@@ -1,5 +1,10 @@
 package types
 
+// DraftResult is the full set of calculated values for a single draft
+// reading, produced by calculation.CalcDraft. Every field here is a
+// calculated result (always present, never nil) — contrast with Draft,
+// whose *float64/*int fields are surveyor-entered and may be nil. Never
+// persisted; always recomputed on the fly from the source Draft.
 type DraftResult struct {
 	LBM                   float64       `json:"lbm"`
 	LBMAftMid             float64       `json:"lbm_aft_mid"`

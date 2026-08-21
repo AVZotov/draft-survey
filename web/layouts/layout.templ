@@ -8,18 +8,20 @@ templ Layout(props components.LayoutProps) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="icon" type="image/png" sizes="32x32" href="static/favicon-32x32.png"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png"/>
 			<link rel="stylesheet" href="/static/css/fonts.css"/>
 			<link rel="stylesheet" href="/static/css/styles.css"/>
 			<link rel="stylesheet" href="/static/css/modals.css"/>
 			<!--Modals CSS section -->
 			<link rel="stylesheet" href="/static/css/tank-calc-modal.css"/>
+			<!-- Page specific styles -->
 			for _, css := range props.ExtraCSS {
 				<link rel="stylesheet" href={ css }/>
 			}
 			<script src="/static/js/main.js"></script>
 			<script src="/static/js/htmx.min.js"></script>
 			<script src="/static/js/idiomorph-ext.js"></script>
+			<script defer src="/static/js/alpine-mask.min.js"></script>
 			<script defer src="/static/js/alpine.min.js"></script>
 			<title>{ props.Title }</title>
 			<meta name="Draft-Survey calculator" content={ props.MetaDescription }/>
@@ -41,13 +43,11 @@ templ Layout(props components.LayoutProps) {
 				<div id="app-modal-content"></div>
 			</dialog>
 			<!-- Universl toast/notification -->
-			@components.Toast()
+			<div id="toast-container" class="toast-container"></div>
 			<dialog id="app-confirm" x-data>
 				@components.ConfirmModal()
 			</dialog>
-			<dialog id="app-alert">
-				@components.AlertModal()
-			</dialog>
+			@components.AlertModal()
 			for _, js := range props.ExtraJS {
 				<script src={ js }></script>
 			}

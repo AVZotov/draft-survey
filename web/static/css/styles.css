@@ -35,6 +35,16 @@
   display: none !important;
 }
 
+[x-mask] {
+  font-family: var(--font-mono), monospace;
+  text-align: right;
+}
+
+[x-mask\:dynamic] {
+  font-family: var(--font-mono), monospace;
+  text-align: right;
+}
+
 /* #region 1. TOKENS ════════════════════════════════════════════ */
 
 :root {
@@ -464,7 +474,7 @@ textarea {
   font-family: var(--font-sans), sans-serif;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  padding: 9px var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;

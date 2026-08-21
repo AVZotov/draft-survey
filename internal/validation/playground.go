@@ -2,7 +2,6 @@ package validation
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -37,8 +36,9 @@ func (pv *PlaygroundValidator) Validate(data any) FieldErrors {
 		if errors.As(err, &errs) {
 			for _, fe := range errs {
 				fieldErrors = append(fieldErrors, FieldError{
-					Field:   fe.Field(),
-					Message: fe.Namespace(),
+					Field:     fe.Field(),
+					Namespace: fe.Namespace(),
+					Message:   messageFromTag(fe.Tag()),
 				})
 			}
 		}
@@ -49,8 +49,10 @@ func (pv *PlaygroundValidator) Validate(data any) FieldErrors {
 func messageFromTag(tag string) string {
 	switch tag {
 	case "required":
-		return fmt.Sprintf("%s: required field is empty", tag)
+		return "This field is required"
+	case "email":
+		return "Please enter a valid email address"
 	default:
-		return fmt.Sprintf("%s: invalid field value", tag)
+		return "Invalid value"
 	}
 }

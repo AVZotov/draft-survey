@@ -22,24 +22,11 @@ templ Block(tp components.TanksPageProps, isBWBlock bool) {
 					<th class="th-num">MT</th>
 				</tr>
 			</thead>
-			<tbody
-				if isBWBlock {
-					id="bw-tanks-items"
-				} else {
-					id="fw-tanks-items"
-				}
-				class="t-row"
-			>
-				if isBWBlock {
-					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks {
-						@TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
-					}
-				} else {
-					for _, tank := range tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks {
-						@TankItem(tp.Survey.ID, tp.DraftIndex, tank, false)
-					}
-				}
-			</tbody>
+			if isBWBlock {
+				@TankRows(tp.Survey.ID, tp.DraftIndex, tp.Survey.Drafts[tp.DraftIndex].BallastWaterTanks, true, false)
+			} else {
+				@TankRows(tp.Survey.ID, tp.DraftIndex, tp.Survey.Drafts[tp.DraftIndex].FreshWaterTanks, false, false)
+			}
 		</table>
 	</div>
 }

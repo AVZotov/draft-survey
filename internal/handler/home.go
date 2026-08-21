@@ -1,23 +1,41 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
-	"os"
+	"net/url"
 
-	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/web"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
-	"github.com/gofiber/fiber/v2"
 )
 
-func (h *Handler) home(c *fiber.Ctx) error {
-	user, err := h.userRepository.Get()
-	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		return err
+func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
+	const op = "Hadler.home"
+	user, err := h.services.User.Get()
+	if err != nil {
+		h.logger.Error(op, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if user == nil {
+		value := url.QueryEscape(`{"header":"Profile Required","message":"Please set up your profile to continue"}`)
+		cookie := &http.Cookie{
+			Name:     fields.CookieFlashAlert,
+			Value:    value,
+			Path:     "/",
+			HttpOnly: true,
+			MaxAge:   2,
+		}
+		http.SetCookie(w, cookie)
+		http.Redirect(w, r, "/profile", http.StatusSeeOther)
+		return
 	}
 
 	props := web.DashboardLayoutProps(user, h.appVersion)
-	c.Status(http.StatusOK)
-	return tadaptor.Render(c, pages.Dashboard(props))
+	err = pages.Dashboard(props).Render(r.Context(), w)
+	if err != nil {
+		h.logger.Error(op, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }

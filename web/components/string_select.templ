@@ -1,0 +1,20 @@
+package components
+
+templ StringSelect(items []string, selected string, fieldName string) {
+	<div class="select-wrap">
+		<select
+			name={ fieldName }
+			id={ fieldName }
+		>
+			<option value="">Select { fieldName }…</option>
+			for _, item := range items {
+				<option
+					value={ item }
+					selected?={ item == selected }
+				>
+					{ item }
+				</option>
+			}
+		</select>
+	</div>
+}

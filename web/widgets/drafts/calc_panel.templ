@@ -1,0 +1,41 @@
+package drafts
+
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/format"
+import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/web/ids"
+
+templ CalcPanel(survey types.Survey, draftIndex int, dr types.DraftResult, isOOB bool) {
+	<div
+		class="calc-panel"
+		id={ fmt.Sprintf("%s-%d", ids.CalcPanel, draftIndex) }
+		if isOOB {
+			hx-swap-oob="morph"
+		}
+	>
+		<div class="cp-cell">
+			<span class="cp-lbl">mean F&amp;A m</span>
+			<span class="cp-val">{ dr.MeanFwdAft }</span>
+		</div>
+		<div class="cp-cell">
+			<span class="cp-lbl">Obs. Trim m</span>
+			<span class="cp-val">{ dr.ObservedTrim } { format.TrimDirection(dr.ObservedTrim) }</span>
+		</div>
+		<div class="cp-cell">
+			<span class="cp-lbl">True Trim m</span>
+			<span class="cp-val">{ dr.TrueTrim } { format.TrimDirection(dr.ObservedTrim) }</span>
+		</div>
+		<div class="cp-cell">
+			<span class="cp-lbl">List °</span>
+			<span class="cp-val">{ dr.ListDegrees } { format.ListDirection(dr.ListMeters) }</span>
+		</div>
+		<div class="cp-cell">
+			<span class="cp-lbl">Defl. cm</span>
+			<span class="cp-val">{ format.DeflectionFormatted(dr.Deflection) }</span>
+		</div>
+		<div class="cp-cell cp-cell--mmc">
+			<span class="cp-lbl">MMC</span>
+			<span class="cp-val">{ dr.MMC }</span>
+		</div>
+	</div>
+}

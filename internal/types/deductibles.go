@@ -8,21 +8,32 @@ type Tank struct {
 	Sounding   *float64              `json:"tank_sounding"`
 	Density    *float64              `json:"tank_density"`
 	Volume     *float64              `json:"tank_volume"`
+	VolumeCalc *float64              `json:"volume_calc"`
 	Correction VolumeCalibrationData `json:"correction"`
 }
 
+// EffectiveVolume returns the surveyor's manual override (Volume) when present,
+// otherwise the calibration-calculated volume (VolumeCalc).
+func (t Tank) EffectiveVolume() *float64 {
+	if t.Volume != nil {
+		return t.Volume
+	}
+	return t.VolumeCalc
+}
+
 func (t Tank) CalcWeight() float64 {
-	if t.Volume == nil {
+	vol := t.EffectiveVolume()
+	if vol == nil {
 		return 0.000
 	}
 	if t.IsFWTTank {
-		return *t.Volume
+		return *vol
 	}
 
 	if t.Density == nil {
 		return 0.000
 	}
-	return *t.Volume * *t.Density
+	return *vol * *t.Density
 }
 
 type Deductibles struct {

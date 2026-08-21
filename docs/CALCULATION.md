@@ -2,7 +2,7 @@
 
 **Location:** `internal/calculation/`  
 **Standard:** UNECE 1992 Code for the Uniform Application of the Rules for the Measurement of Bulk Cargoes  
-**Last Updated:** 2026-05-14
+**Last Updated:** 2026-08-21
 
 ---
 
@@ -116,15 +116,12 @@ DraftsWKeel ◄── keel corrections (mm→m)
 CalcMMC ─────────────────────────────── round3
 (Quarter Mean: 6M/8, 4M/6, or 3/10f)
     │
-    ├──── MTCPlusDraft = MMC + 0.5 ──── (hint for surveyor)
-    ├──── MTCMinusDraft = MMC - 0.5 ─── (hint for surveyor)
-    │
     ▼
 CalcHydrostatics ◄── HydrostaticRows (2 rows)
 (Displacement, TPC, LCF) ──────────── round3 via Interpolate
     │
     ├──── CalcFirstTrimCorrection ────── round3
-    ├──── CalcDeltaMTC ──────────────── round3
+    ├──── CalcDeltaMTC ◄── MTCRows (2 rows) ─ round3
     ├──── CalcSecondTrimCorrection ───── round3
     ├──── CalcListCorrection ─────────── round3
     │
@@ -163,7 +160,7 @@ meanA = (AFT_port + AFT_starboard) / 2
 - Direction `F` (Forward of perpendicular) → **positive**
 - Direction `A` (Aft of perpendicular) → **negative**
 
-**Full LBP method** *(marine vessels, default)*:
+**Full LBP method** *(marine vessels; shown pre-selected in the New Survey form, but — unlike `VesselType`, which has a `vesselTypeOrDefault()` fallback — `VesselData.CorrectionMethod` has no such fallback in `CalcDraft`. A survey whose radio was never touched persists `CorrectionMethod == ""`, which matches neither `CalcDraft`'s `"Full LBP"` nor `"Half LBP"` check, so `PPCorrections` silently stays zero rather than defaulting to Full LBP as the pre-checked radio implies — flagged here as a probable bug, not fixed as part of this doc pass)*:
 ```
 LBM = LBP - dAft_signed + dFwd_signed
 
@@ -244,11 +241,31 @@ River:   MMC = (FWD + 4 × MID + AFT) / 6     (4M/6)
 Barge:   MMC = (3×FWD + 14×MID + 3×AFT) / 20 (3/10f)
 ```
 
-**MTC Draft Hints** (shown to surveyor when all marks entered):
+**MTC row auto-fill** (not part of `internal/calculation/` — implemented in
+`internal/service/draft.go`'s `autoPopulateMTCDrafts`, called from
+`DraftService.Update`, not by `CalcDraft`/`CalcMMC`):
+
+The surveyor enters two MTC table rows (draft + MTC value) used by
+`CalcSecondTrimCorrection`/`CalcDeltaMTC`. If `MTCRows[0].Draft` has not been
+entered yet, the two draft values are pre-filled from the entered
+`HydrostaticRows`, bounded so the resulting drafts stay within the
+upper/lower hydrostatic row range rather than always landing exactly on
+`MMC ± 0.5`:
+
 ```
-MTCPlusDraft  = round3(MMC + 0.5)
-MTCMinusDraft = round3(MMC - 0.5)
+upper, lower = HydrostaticRows[0].Draft, HydrostaticRows[1].Draft
+
+IF (lower+0.5 + upper+0.5)/2 <= MMC+0.5 THEN MTCRows[0].Draft = lower + 0.5
+ELSE                                          MTCRows[0].Draft = upper + 0.5
+
+IF (lower-0.5 + upper-0.5)/2 <= MMC-0.5 THEN MTCRows[1].Draft = lower - 0.5
+ELSE                                          MTCRows[1].Draft = upper - 0.5
 ```
+
+This only pre-fills the row — the surveyor can still overwrite it — and it
+is skipped entirely once `MTCRows[0].Draft` has any value. There is no
+`MTCPlusDraft`/`MTCMinusDraft` field on `DraftResult`; the values live on
+the (surveyor-editable) `Draft.MTCRows` themselves.
 
 ---
 
@@ -262,20 +279,34 @@ value = lowerValue + (fact - lowerX) × (upperValue - lowerValue) / (upperX - lo
 
 ### 4.9 Hydrostatics — LCF Detection Modes
 
-**Auto mode** (`IsLcfDetectionManual = false`, default):
+**Manual mode is the default** for every new survey (`IsLcfDetectionManual =
+true`, set in `SurveyService.Create()`) — not auto mode. The surveyor
+toggles to auto mode explicitly via the MMC-Method radio group.
+
+**Manual mode** (`IsLcfDetectionManual = true`, default, UNECE standard):
+- Trust the direction entered by the surveyor on each hydrostatic row
+- `F` (Forward) → negative
+- `A` (Aft) and `AP` (From AP) → left as entered (positive), **not**
+  converted from AP — see note below
+
+**Auto mode** (`IsLcfDetectionManual = false`):
 ```
 k3 = 0.045
-IF upper.LCF > LBP × k3 THEN
-    LCF is from AP → xf = (LBP/2) - LCF
+IF upper.LCFDirection == "AP" OR upper.LCF > LBP × k3 THEN
+    LCF is from AP → xf = (LBP/2) - LCF   (applied to both rows)
 ELSE
-    Direction F → negative, Direction A → positive
+    Direction F → negative, Direction A (or AP) → positive
 ```
 
-**Manual mode** (`IsLcfDetectionManual = true`, UNECE standard):
-- Trust direction entered by surveyor
-- `F` → negative, `A` → positive, `AP` → convert from AP
+> **Note — `AP` direction in manual mode:** the AP→midship conversion
+> (`(LBP/2) - LCF`) only runs inside the `!IsLcfDetectionManual` (auto)
+> branch. If a row is marked `LCFDirection = "AP"` while manual mode is
+> selected — the default for new surveys — it is *not* converted; it falls
+> through the same as `A` (left positive, unconverted). This is how the
+> code currently behaves, not necessarily the intended UNECE reading;
+> flagged here rather than silently documented as if it were correct.
 
-*Manual mode used in golden tests for strict UNECE compliance.*
+*Manual mode is used in the golden tests for strict UNECE compliance.*
 
 ---
 
@@ -315,6 +346,13 @@ STC = 50 × TrueTrim² × ΔMTC / LBP
 ---
 
 ### 4.13 List Correction
+
+> **Not part of UNECE 1992.** UNECE 1992 contains no list correction
+> formula at all. Both V1 and V2 below are app-specific/industry-standard
+> additions following common survey practice, not a UNECE citation (an
+> earlier version of the code comments incorrectly cited "UNECE 1992
+> Reference Implementation" / "UNECE Form C, line 162" for these — fixed in
+> commit `72c395e`).
 
 ```
 ListCorr = 6 × |MID_port - MID_starboard| × |TPC_port - TPC_starboard|
@@ -426,7 +464,6 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult
 | `LBM` | Length between marks |
 | `MeanDraft` | FWD/MID/AFT mean drafts |
 | `MMC` | Quarter mean draft |
-| `MTCPlusDraft` / `MTCMinusDraft` | MTC lookup hints |
 | `TrueTrim` / `ObservedTrim` | Trim values |
 | `ListMeters` / `ListDegrees` | List values |
 | `Deflection` | Hogging/sagging in cm |
@@ -453,6 +490,18 @@ func CalcSurvey(s types.Survey) types.SurveyResult
 | `CargoOnBoard` | Final - Initial net displacement |
 | `CargoDiffDeclared` | CargoOnBoard - CargoDeclared |
 
+### 6.3 CalcBwTankVolume
+
+```go
+func CalcBwTankVolume(trim, listDegrees float64, tank types.Tank) (float64, error)
+```
+
+The third public entry point — independent of `CalcDraft`/`CalcSurvey`. Computes
+a single tank's volume from its calibration table (see [§5](#5-tank-volume-calibration)),
+dispatching to the Type 1/2/3 workflow per `tank.Correction.TableType`. Returns
+an error if the tank has no sounding entered or its calibration data is
+incomplete (`tank.Correction.IsValid()`).
+
 ---
 
 ## 7. Types Reference
@@ -466,7 +515,7 @@ func CalcSurvey(s types.Survey) types.SurveyResult
 | `Tank` | BWT or FWT with optional calibration data |
 | `VolumeCalibrationData` | Calibration table (Type 1/2/3, trim/list/volume rows) |
 | `CalibrationRow` | 2D row: Sounding, VolumeLow, VolumeUp |
-| `SoundingVolume` | 1D row: TableSounding, TableVolume |
+| `CorrectionRows` | 1D row: TableSounding, TableVolume |
 | `DraftResult` | Complete single-draft calculation output |
 | `SurveyResult` | Complete multi-draft survey output |
 
@@ -482,7 +531,7 @@ func CalcSurvey(s types.Survey) types.SurveyResult
 | `calculation_test.go` | DSGear reference (LBP=182m) | Unit tests full chain |
 | `tank_volume_test.go` | — | Type 1/2/3 volume calibration |
 
-**Coverage:** >80% for `internal/calculation/`
+**Coverage:** ~74% for `internal/calculation/` (`go test ./internal/calculation/... -cover`) — plus 7 end-to-end integration tests across 5 real vessels (`internal/integration/`, `-tags=integration`) exercising the full handler→service→calculation chain against DSGear reference figures.
 
 ---
 
@@ -491,8 +540,9 @@ func CalcSurvey(s types.Survey) types.SurveyResult
 | Item | UNECE | Implementation | Reason |
 |------|-------|----------------|--------|
 | LCF auto-detection | Not specified | k3=0.045 coefficient | DSGear UX extension |
-| List correction V2 | Not specified | Summer TPC interpolation | When hydrostatic TPC rows are equal |
+| List correction — not in UNECE at all | UNECE 1992 has no list correction formula | V1 (direct TPC-port/TPC-stbd formula) and V2 (Summer TPC interpolation, used when hydrostatic TPC rows are equal) | Industry-standard addition, app-specific (see [§4.13](#413-list-correction)) |
 | Intermediate rounding | Not specified | round3 on all Form C fields | Mirrors physical paper survey |
+| MTC row auto-fill | Not specified | Pre-fills `Draft.MTCRows` from hydrostatic rows ± bounded 0.5m offset, in the service layer, not `internal/calculation/` | Surveyor convenience — always overridable (see [§4.7](#47-quarter-mean-mmc)) |
 
 ---
 

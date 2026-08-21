@@ -36,6 +36,10 @@
 
 /* #region 2. STATS ══════════════════════════════════════════════ */
 
+.stat-wrap {
+  margin-bottom: var(--space-sm);
+}
+
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -209,6 +213,15 @@
   padding: 6px 10px;
 }
 
+.survey-search__btn--filtered {
+  background: var(--accent);
+  color: #fff;
+}
+
+.survey-search__btn--filtered:hover {
+  background: var(--accent-dark);
+}
+
 .survey-search__btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -223,8 +236,9 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  overflow-y: auto;
+  overflow-y: scroll;
   min-height: 300px;
+  max-height: 55vh;
   box-shadow: var(--shadow-sm);
 }
 
@@ -444,7 +458,7 @@
 /* #region 6. LOAD MORE ═══════════════════════════════════════════ */
 
 .survey-load-more {
-  height: 20px;
+  height: 4px;
   grid-column: 1 / -1;
 }
 

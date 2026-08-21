@@ -1,73 +1,86 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
+	"net/http"
+	"strconv"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
-	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
-	"github.com/AVZotov/draft-survey/internal/types/dto"
-	validationDTO "github.com/AVZotov/draft-survey/internal/validation/playground/dto"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/web"
-	"github.com/AVZotov/draft-survey/web/components"
 	"github.com/AVZotov/draft-survey/web/templates/pages"
-	"github.com/gofiber/fiber/v2"
+	"github.com/AVZotov/draft-survey/web/widgets/results"
+	"github.com/a-h/templ"
+	"github.com/go-chi/chi/v5"
 )
 
-func (h *Handler) results(c *fiber.Ctx) error {
-	id := c.Params("id")
+func (h *Handler) getResults(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.getResults"
 
-	user, err := h.userRepository.Get()
+	id := chi.URLParam(r, "id")
+
+	data, err := h.services.Survey.GetPageData(id)
 	if err != nil {
-		return err
+		h.logger.Error(op, err)
+		h.respondPageError(w, r, routes.SurveyList())
+		return
 	}
 
-	survey, err := h.surveyRepository.Get(id)
-	if err != nil {
-		return err
+	if data.Outcome != nil && data.Outcome.Redirect != "" {
+		return
 	}
 
-	surveyResults := calculation.CalcSurvey(*survey)
+	// CalcSurvey guarantees DraftTotals length == len(survey.Drafts)
+	// Direct call is correct here: initial page load is read-only, no save occurs.
+	sr := calculation.CalcSurvey(*data.Survey)
 
-	alpineData := dto.AlpineDTO{
-		Survey:        *survey,
-		SurveyResults: surveyResults,
+	lp := web.ResultsLayoutProps(data.User, h.appVersion)
+	rp := web.ResultsPageProps(*data.Survey, sr, 0, len(sr.DraftTotals)-1)
+
+	if err = pages.Results(lp, rp).Render(r.Context(), w); err != nil {
+		h.logger.Error(op, err)
 	}
-
-	alpineJSON, err := json.Marshal(alpineData)
-	if err != nil {
-		return err
-	}
-
-	props := components.ResultProps{
-		Survey:    *survey,
-		Alpine:    string(alpineJSON),
-		Lastindex: len(surveyResults.DraftTotals) - 1,
-	}
-
-	lp := web.ResultsLayoutProps(user, h.appVersion)
-
-	return tadaptor.Render(c, pages.Results(lp, props))
 }
 
-func (h *Handler) validate(c *fiber.Ctx) error {
-	id := c.Params("id")
+// getResultsDraft renders a single comparison column (Block) for the
+// draft selector's hx-get — used to swap either the "first" or "last"
+// column without reloading the page.
+func (h *Handler) getResultsDraft(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.getResultsDraft"
 
-	survey, err := h.surveyRepository.Get(id)
+	id := chi.URLParam(r, "id")
+
+	index, err := strconv.Atoi(r.URL.Query().Get("index"))
 	if err != nil {
-		return err
+		h.logger.Error(op, err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	vDTO := validationDTO.NewSurveyDTO(survey)
-	if fieldErrors := h.validator.Validate(vDTO); fieldErrors != nil {
-		c.Set("HX-Retarget", "#app-toast-content")
-		c.Set("HX-Reswap", "innerHTML")
-		c.Set("HX-Trigger", "showtoast")
-		return tadaptor.Render(
-			c, components.ValidateModal(
-				"Test Header", mapValidationErrors(fieldErrors)))
+	position := r.URL.Query().Get("position")
+	if position != "first" && position != "last" {
+		h.logger.Error(op, fmt.Errorf("invalid position %q", position))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	isFirst := position == "first"
+
+	data, err := h.services.Survey.GetPageData(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	c.Set("HX-Redirect", fmt.Sprintf("/survey/%s/results", id))
-	return c.SendStatus(204)
+	if index < 0 || index >= len(data.Survey.Drafts) {
+		h.logger.Error(op, fmt.Errorf("draft index %d out of range", index))
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	sr := calculation.CalcSurvey(*data.Survey)
+
+	rp := web.ResultsPageProps(*data.Survey, sr, index, index)
+
+	templ.Handler(results.Block(rp, index, isFirst)).ServeHTTP(w, r)
 }

@@ -1,0 +1,192 @@
+package tanks
+
+import (
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/internal/types"
+)
+
+// BWTanksBodyID and FWTanksBodyID name the tbody elements whose full contents
+// are refreshed by EventTankCalc after any mutation that can reorder or
+// resize the tank list (add, delete, move up/down) — the JS listener in
+// tanks.js replaces DOM nodes by id, so re-rendering the whole body here is
+// what keeps isFirst/isLast (and therefore the move-button disabled state)
+// correct after the underlying slice changes.
+const BWTanksBodyID = "bw-tanks-items"
+const FWTanksBodyID = "fw-tanks-items"
+
+templ TankItem(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool, isFirst bool, isLast bool) {
+	if isOOB {
+		<template>
+			@tankItemInner(surveyID, draftIndex, tank, isBW, true, isFirst, isLast)
+		</template>
+	} else {
+		@tankItemInner(surveyID, draftIndex, tank, isBW, false, isFirst, isLast)
+	}
+}
+
+// TankRows renders the full tbody for one tank list (BW or FW), computing
+// isFirst/isLast per row from position. Used both for the initial page
+// render (Block) and for the EventTankCalc full-refresh fragment
+// (publishTankCalc), so the move up/down buttons are always consistent with
+// the current list order.
+templ TankRows(surveyID string, draftIndex int, list []types.Tank, isBW bool, isOOB bool) {
+	{{
+		id := FWTanksBodyID
+		if isBW {
+			id = BWTanksBodyID
+		}
+	}}
+	<tbody
+		id={ id }
+		class="t-row"
+		if isOOB {
+			hx-swap-oob="true"
+		}
+	>
+		for i, tank := range list {
+			@tankItemInner(surveyID, draftIndex, tank, isBW, false, i == 0, i == len(list)-1)
+		}
+	</tbody>
+}
+
+templ tankItemInner(surveyID string, draftIndex int, tank types.Tank, isBW bool, isOOB bool, isFirst bool, isLast bool) {
+	{{
+		updateURL := routes.APITankFWUpdate(surveyID, draftIndex, tank.ID)
+		if isBW {
+			updateURL = routes.APITankBWUpdate(surveyID, draftIndex, tank.ID)
+		}
+	}}
+	<tr
+		x-data
+		id={ fields.WithTankID("tank-row", tank.ID) }
+		if isOOB {
+			hx-swap-oob="morph"
+		}
+		hx-swap="morph"
+		hx-include="this"
+		hx-trigger="change changed target:input delay:500ms"
+		hx-sync="this:replace"
+		hx-put={ updateURL }
+	>
+		<td class="td-act">
+			if isBW {
+				<button
+					hx-get={ routes.APITankBWCorrections(surveyID, draftIndex, tank.ID) }
+					hx-target="#app-modal-content"
+					hx-on::after-request="document.getElementById('app-modal').showModal()"
+					class="rbtn calc"
+					type="button"
+					title="Calculate volume"
+				>
+					<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+						<line x1="8" y1="8" x2="16" y2="8"></line>
+						<line x1="8" y1="12" x2="16" y2="12"></line>
+						<line x1="8" y1="16" x2="12" y2="16"></line>
+					</svg>
+				</button>
+			}
+		</td>
+		<td class="td-name">
+			<span class="t-name-label">{ tank.Type } { tank.Name }</span>
+		</td>
+		<td class="td-div"></td>
+		<td>
+			<input
+				id={ fields.WithTankID(fields.FieldTankSounding, tank.ID) }
+				class="ti"
+				x-data
+				x-mask:dynamic="$money($input, '.', ' ', 3)"
+				type="text"
+				name={ fields.WithTankID(fields.FieldTankSounding, tank.ID) }
+				value={ format.FloatOrEmpty(tank.Sounding) }
+				placeholder="0.000"
+			/>
+		</td>
+		<td>
+			<input
+				id={ fields.WithTankID(fields.FieldTankVolume, tank.ID) }
+				class="ti"
+				x-data
+				x-mask:dynamic="$money($input, '.', ' ', 3)"
+				type="text"
+				name={ fields.WithTankID(fields.FieldTankVolume, tank.ID) }
+				value={ format.FloatOrEmpty(tank.Volume) }
+				placeholder="Calculated"
+			/>
+		</td>
+		<td>
+			if tank.IsFWTTank {
+				<input class="ti" type="text" readonly value="1.000"/>
+			} else {
+				<input
+					id={ fields.WithTankID(fields.FieldTankDensity, tank.ID) }
+					class="ti"
+					x-data
+					x-mask:dynamic="$money($input, '.', ' ', 3)"
+					type="text"
+					name={ fields.WithTankID(fields.FieldTankDensity, tank.ID) }
+					value={ format.FloatOrEmpty(tank.Density) }
+					placeholder="0.000"
+				/>
+			}
+		</td>
+		<td>
+			<input id={ fields.WithTankID("tank_weight", tank.ID) } class="ti" type="text" readonly value={ format.WeightFormatted(tank.CalcWeight()) } placeholder="Calculated"/>
+		</td>
+		<td class="td-div"></td>
+		<td class="td-act">
+			<div class="row-act-grp">
+				<button
+					hx-put={ moveUpURL(surveyID, draftIndex, tank.ID, isBW) }
+					hx-swap="none"
+					hx-trigger="click"
+					class="rbtn move"
+					type="button"
+					title="Move up"
+					disabled?={ isFirst }
+				>▲</button>
+				<button
+					hx-put={ moveDownURL(surveyID, draftIndex, tank.ID, isBW) }
+					hx-swap="none"
+					hx-trigger="click"
+					class="rbtn move"
+					type="button"
+					title="Move down"
+					disabled?={ isLast }
+				>▼</button>
+				<button
+					x-on:click="delTankConfirm($event)"
+					data-delete-url={ tankDeleteURL(surveyID, draftIndex, tank.ID, isBW) }
+					data-tank-id={ tank.ID }
+					class="rbtn remove"
+					type="button"
+					title="Remove"
+				>-</button>
+			</div>
+		</td>
+	</tr>
+}
+
+func moveUpURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	if isBW {
+		return routes.APITankBWMoveUp(surveyID, draftIndex, tankID)
+	}
+	return routes.APITankFWMoveUp(surveyID, draftIndex, tankID)
+}
+
+func moveDownURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	if isBW {
+		return routes.APITankBWMoveDown(surveyID, draftIndex, tankID)
+	}
+	return routes.APITankFWMoveDown(surveyID, draftIndex, tankID)
+}
+
+func tankDeleteURL(surveyID string, draftIndex int, tankID string, isBW bool) string {
+	if isBW {
+		return routes.APITankBWDelete(surveyID, draftIndex, tankID)
+	}
+	return routes.APITankFWDelete(surveyID, draftIndex, tankID)
+}

@@ -1,75 +1,108 @@
 package handler
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 
-	"github.com/AVZotov/draft-survey/internal/constants"
-	"github.com/AVZotov/draft-survey/internal/handler/tadaptor"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
-	"github.com/gofiber/fiber/v2"
+	"github.com/a-h/templ"
+	"github.com/go-chi/chi/v5"
 )
 
-func (h *Handler) seaOptions(c *fiber.Ctx) error {
-	seaCtx := c.Get(constants.HXSeaType)
-	if seaCtx == "" {
-		return ErrUndefinedHXContext
+func (h *Handler) GetSurveyCargoSelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSurveyCargoSelect"
+
+	id := chi.URLParam(r, "id")
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldCargo)).ServeHTTP(w, r)
+		return
 	}
 
-	draftIndexStr := c.Get(constants.HXDraftIndex)
-	var draftIndex int
-	var err error
+	types, err := h.services.Dictionary.GetCargoTypes()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldCargo)).ServeHTTP(w, r)
+		return
+	}
+
+	selected := ""
+	if survey != nil {
+		selected = survey.CargoOperation.Cargo
+	}
+
+	templ.Handler(components.StringSelect(types, selected, fields.FieldCargo)).ServeHTTP(w, r)
+}
+
+func (h *Handler) GetSurveyPackingSelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSurveyPackingSelect"
+
+	id := chi.URLParam(r, "id")
+	survey, err := h.services.Survey.Get(id)
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldPacking)).ServeHTTP(w, r)
+		return
+	}
+
+	items, err := h.services.Dictionary.GetPacking()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldPacking)).ServeHTTP(w, r)
+		return
+	}
+
+	selected := ""
+	if survey != nil {
+		selected = survey.CargoOperation.Packing
+	}
+
+	templ.Handler(components.StringSelect(items, selected, fields.FieldPacking)).ServeHTTP(w, r)
+}
+
+func (h *Handler) GetCargoTypesSelect(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetCargoTypesSelect"
+
+	types, err := h.services.Dictionary.GetCargoTypes()
+	if err != nil {
+		h.logger.Error(op, err)
+		templ.Handler(components.StringSelect(nil, "", fields.FieldCargo)).ServeHTTP(w, r)
+		return
+	}
+
+	templ.Handler(components.StringSelect(types, "", fields.FieldCargo)).ServeHTTP(w, r)
+}
+
+func (h *Handler) GetSeaOptions(w http.ResponseWriter, r *http.Request) {
+	const op = "Handler.GetSeaOptions"
+
+	seaType := r.URL.Query().Get("type")
+
 	var scp components.SeaConditionProps
-
-	if draftIndexStr != "" {
-		draftIndex, err = strconv.Atoi(draftIndexStr)
+	if indexStr := r.URL.Query().Get("index"); indexStr != "" {
+		index, err := strconv.Atoi(indexStr)
 		if err != nil {
-			return err
+			h.logger.Error(op, err)
+			h.respondError(w, http.StatusBadRequest, err)
+			return
 		}
-		scp.DraftIndex = &draftIndex
+		scp.DraftIndex = &index
 	}
 
-	switch seaCtx {
-	case string(types.SeaConditionTypeWave):
+	switch types.SeaConditionType(seaType) {
+	case types.SeaConditionTypeWave:
 		scp.SeaCondition.Type = types.SeaConditionTypeWave
-		return tadaptor.Render(c, components.SeaSelect(scp))
-	case string(types.SeaConditionTypeIce):
+	case types.SeaConditionTypeIce:
 		scp.SeaCondition.Type = types.SeaConditionTypeIce
-		return tadaptor.Render(c, components.SeaSelect(scp))
 	default:
-		return ErrEmptyField
-	}
-}
-
-func (h *Handler) countries(c *fiber.Ctx) error {
-	countries, err := h.dictionariesRepository.GetCountries()
-	if err != nil {
-		return err
-	}
-	return tadaptor.Render(c, components.CountrySelect(components.CountrySelectProps{
-		Countries: *countries,
-	}))
-}
-
-func (h *Handler) ports(c *fiber.Ctx) error {
-	countryCode := c.Query("country")
-	if countryCode == "" {
-		return c.SendStatus(fiber.StatusBadRequest)
+		h.logger.Error(op, fmt.Errorf("invalid sea type %q", seaType))
+		h.respondError(w, http.StatusBadRequest, fmt.Errorf("invalid sea type %q", seaType))
+		return
 	}
 
-	ports, err := h.dictionariesRepository.GetPorts()
-	if err != nil {
-		return err
-	}
-
-	filtered := make([]types.Port, 0)
-	for _, p := range *ports {
-		if p.CountryCode == countryCode {
-			filtered = append(filtered, p)
-		}
-	}
-
-	return tadaptor.Render(c, components.PortSelect(components.PortSelectProps{
-		Ports: filtered,
-	}))
+	templ.Handler(components.SeaSelect(scp)).ServeHTTP(w, r)
 }

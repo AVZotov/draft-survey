@@ -2,10 +2,12 @@ package drafts
 
 import (
 	"fmt"
-	"github.com/AVZotov/draft-survey/internal/constants"
 	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/ids"
 )
 
 templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftResult) {
@@ -15,7 +17,7 @@ templ Deductibles(dp components.DraftPageProps, draftIndex int, dr types.DraftRe
 		@DeductiblesGrid(dp.Survey, draftIndex, dr)
 		<a
 			class="btn btn-ghost--ini"
-			href={ fmt.Sprintf("/survey/%s/tanks/%d", dp.Survey.ID, draftIndex) }
+			href={ routes.Tanks(dp.Survey.ID, draftIndex) }
 		>
 			<svg viewBox="0 0 24 24">
 				<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -30,13 +32,11 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 	{{ draft := survey.Drafts[draftIndex] }}
 	<div
 		class="deduct-grid"
-		id={ fmt.Sprintf("%s-%d", constants.Deductibles, draftIndex) }
-		hx-headers={ fmt.Sprintf(`{"%s": "%s"}`, constants.HXDraftBlock, constants.DeductiblesBlock) }
-		hx-put={ fmt.Sprintf("/api/v1/survey/%s/draft/%d", survey.ID, draftIndex) }
+		id={ fmt.Sprintf("%s-%d", ids.Deductibles, draftIndex) }
+		hx-put={ routes.APIDraftUpdate(survey.ID, draftIndex) }
 		hx-trigger="change changed delay:500ms"
 		hx-include="this"
-		hx-target="this"
-		hx-swap="morph"
+		hx-swap="none"
 	>
 		<div class="df">
 			<label>Tbl Density</label>
@@ -44,39 +44,39 @@ templ DeductiblesGrid(survey types.Survey, draftIndex int, dr types.DraftResult)
 		</div>
 		<div class="df">
 			<label>Ballast Water, MT</label>
-			<input readonly value={ dr.TotalBwTanksWeight } placeholder="0.000" step="any" type="number"/>
+			<input readonly value={ format.Weight(dr.TotalBwTanksWeight) } placeholder="0.000" step="any" type="number"/>
 		</div>
 		<div class="df">
 			<label>MDO, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.MDO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.MDO) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldMDO, draftIndex), draft.Deductibles.MDO)
 		</div>
 		<div class="df">
 			<label>Lube Oil, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.LubOil, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.LubOil) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldLubOil, draftIndex), draft.Deductibles.LubOil)
 		</div>
 		<div class="df">
 			<label>Bilge Water, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.BilgeWater, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.BilgeWater) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldBilgeWater, draftIndex), draft.Deductibles.BilgeWater)
 		</div>
 		<div class="df">
 			<label>DockW Density</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.DockwaterDensity, draftIndex) } value={ format.FloatOrEmpty(draft.Density) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldDockwaterDensity, draftIndex), draft.Density)
 		</div>
 		<div class="df">
 			<label>Fresh Water, MT</label>
-			<input readonly value={ dr.TotalFwTanksWeight } placeholder="0.000" step="any" type="number"/>
+			<input readonly value={ format.Weight(dr.TotalFwTanksWeight) } placeholder="0.000" step="any" type="number"/>
 		</div>
 		<div class="df">
 			<label>HFO, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.HFO, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.HFO) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldHFO, draftIndex), draft.Deductibles.HFO)
 		</div>
 		<div class="df">
 			<label>Others, MT</label>
-			<input name={ fmt.Sprintf("%s-%d", constants.Others, draftIndex) } value={ format.FloatOrEmpty(draft.Deductibles.Others) } type="number" placeholder="0.000" step="any"/>
+			@components.XInput(fmt.Sprintf("%s-%d", fields.FieldOthers, draftIndex), draft.Deductibles.Others)
 		</div>
 		<div class="df">
 			<label>Total Deduct, MT</label>
-			<input readonly value={ dr.TotalDeductibles } type="number" placeholder="0.000" step="any"/>
+			<input readonly value={ format.Weight(dr.TotalDeductibles) } type="number" placeholder="0.000" step="any"/>
 		</div>
 	</div>
 }

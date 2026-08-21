@@ -1,0 +1,66 @@
+package drafts
+
+import (
+	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/fields"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ PPKeel(dp components.DraftPageProps, draftIndex int) {
+	{{ draft := dp.Survey.Drafts[draftIndex] }}
+	<div
+		class="pp-keel-bar"
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+		hx-put={ routes.APIDraftUpdate(dp.Survey.ID, draftIndex) }
+		hx-swap="none"
+		hx-sync="this:replace"
+	>
+		<div class="pp-group">
+			<div class="pp-group-title">Fwd — distances &amp; keel</div>
+			<div class="pp-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldDFwd, draftIndex), draft.DistancePPFwd)
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", fields.FieldDFwdDir, draftIndex) }>
+					<option selected?={ draft.PPFwdDirection == "A" }>A</option>
+					<option selected?={ draft.PPFwdDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldKeelFwd, draftIndex), draft.KeelFwd)
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+		<div class="pp-group">
+			<div class="pp-group-title">Mid — distances &amp; keel</div>
+			<div class="pp-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldDMid, draftIndex), draft.DistancePPMid)
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", fields.FieldDMidDir, draftIndex) }>
+					<option selected?={ draft.PPMidDirection == "A" }>A</option>
+					<option selected?={ draft.PPMidDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldKeelMid, draftIndex), draft.KeelMid)
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+		<div class="pp-group">
+			<div class="pp-group-title">Aft — distances &amp; keel</div>
+			<div class="pp-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldDAft, draftIndex), draft.DistancePPAft)
+				<select class="dir-sel" name={ fmt.Sprintf("%s-%d", fields.FieldDAftDir, draftIndex) }>
+					<option selected?={ draft.PPAftDirection == "A" }>A</option>
+					<option selected?={ draft.PPAftDirection == "F" }>F</option>
+				</select>
+				<span class="pp-unit">A/F</span>
+			</div>
+			<div class="keel-fields">
+				@components.XInput(fmt.Sprintf("%s-%d", fields.FieldKeelAft, draftIndex), draft.KeelAft)
+				<span class="pp-unit">mm keel</span>
+			</div>
+		</div>
+	</div>
+}

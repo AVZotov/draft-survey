@@ -550,6 +550,21 @@ input.ti::placeholder {
   border-color: var(--fin-accent, #15803D);
 }
 
+.row-act-grp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rbtn.move {
+  font-size: 10px;
+}
+
+.rbtn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
 /* Footer total row */
 tfoot.ttbl-foot tr td {
   border-top: 2px solid var(--border) !important;
@@ -743,4 +758,9 @@ tr.htmx-swapping td {
   background: var(--fw-light);
   border: 1px solid var(--fw-border);
   color: var(--fw-accent);
+}
+
+/* Copy tanks from previous draft */
+.copy-tanks-btn {
+  margin: var(--space-sm) 0;
 }

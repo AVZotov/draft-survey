@@ -1,0 +1,16 @@
+package pages
+
+import (
+	"github.com/AVZotov/draft-survey/web/components"
+	"github.com/AVZotov/draft-survey/web/layouts"
+	"github.com/AVZotov/draft-survey/web/widgets"
+	surveylist "github.com/AVZotov/draft-survey/web/widgets/survey_list"
+)
+
+templ SurveyList(lp components.LayoutProps) {
+	@layouts.Layout(lp) {
+		@widgets.HeaderUser(lp.User)
+		@surveylist.Form(lp)
+		@widgets.Footer(lp.AppVersion)
+	}
+}

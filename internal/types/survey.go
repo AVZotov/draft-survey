@@ -4,6 +4,16 @@ import (
 	"time"
 )
 
+// SurveyFilter used as domain search struct
+type SurveyFilter struct {
+	Query     string
+	Status    string
+	Operation string
+	Cargo     string
+	From      time.Time
+	To        time.Time
+}
+
 type MeanDraft struct {
 	DraftFwdMean float64 `json:"draft_fwd_mean"`
 	DraftMidMean float64 `json:"draft_mid_mean"`
@@ -24,8 +34,8 @@ type DraftsWKeel struct {
 
 type Job struct {
 	JobNumber string `json:"job_number"`
-	DSNumber  int    `json:"ds_number"`
-	Principal string `json:"principal"`
+	DSNumber  *int   `json:"ds_number"`
+	Principal string `json:"client"`
 }
 
 // PortInfo holds full port data — country, port from UN/LOCODE dict,
@@ -47,10 +57,18 @@ func (p PortInfo) DisplayName() string {
 	return ""
 }
 
+type Operation string
+
+const (
+	OperationLoading   Operation = "loading"
+	OperationDischarge Operation = "discharge"
+)
+
 type CargoOperation struct {
-	Operation string `json:"operation"`
-	Cargo     string `json:"cargo"`
-	Packing   string `json:"packing"`
+	Operation   Operation `json:"cargo_operation"`
+	Cargo       string    `json:"cargo"`
+	Description string    `json:"description"`
+	Packing     string    `json:"packing"`
 }
 
 type SurveyStatus string
@@ -77,6 +95,13 @@ const (
 	DraftStatusComplete DraftStatus = "complete"
 )
 
+// Draft holds one draft-survey reading's surveyor-entered inputs — marks,
+// PP/keel corrections, hydrostatic and MTC table rows, tanks, deductibles,
+// and lifecycle metadata (Type, Status, timestamps). Its *float64/*int
+// fields are surveyor-entered (nil = not entered, 0 is valid data); the
+// calculated results derived from a Draft live in DraftResult, never here.
+// A Draft's index within Survey.Drafts is never stored on the struct itself —
+// it exists only in the URL/request context.
 type Draft struct {
 	Surveyor          User             `json:"surveyor"`
 	Type              DraftType        `json:"type"`
@@ -90,7 +115,7 @@ type Draft struct {
 	MTCRows           []MTCRow         `json:"mtc_rows"`
 	HydrostaticRows   []HydrostaticRow `json:"hydrostatic_rows"`
 	TPCListPort       *float64         `json:"tpc_list_port"`
-	TPCListStarboard  *float64         `json:"tpc_list_starboard"`
+	TPCListStarboard  *float64         `json:"tpc_list_stbd"`
 	DistancePPFwd     *float64         `json:"distance_pp_fwd"`
 	PPFwdDirection    string           `json:"pp_fwd_direction"`
 	DistancePPMid     *float64         `json:"distance_pp_mid"`
@@ -103,12 +128,17 @@ type Draft struct {
 	StartedAt         time.Time        `json:"started_at"`
 	FinishedAt        time.Time        `json:"finished_at"`
 	LoadingCommenced  time.Time        `json:"loading_commenced"`
-	LoadPort          Port             `json:"loading_port"`
+	LoadPort          Port             `json:"load_port"`
 	DischargePort     Port             `json:"discharge_port"`
 	ProductGrade      string           `json:"product_grade"`
 	HoldsActive       []int            `json:"holds_active"`
 }
 
+// Survey is the top-level, persisted aggregate for one draft survey job: the
+// vessel and cargo operation being surveyed, the surveyor's declared figures,
+// and every Draft reading taken during the survey. Calculated results
+// (DraftResult, SurveyResult) are never part of this struct or persisted —
+// they are always recomputed on the fly via calculation.CalcSurvey.
 type Survey struct {
 	Surveyor         User           `json:"surveyor"`
 	Status           SurveyStatus   `json:"status"`
@@ -118,11 +148,10 @@ type Survey struct {
 	Job              Job            `json:"job"`
 	CargoOperation   CargoOperation `json:"cargo_operation"`
 	CargoDeclared    *float64       `json:"cargo_declared"`
-	ConstantDeclared *float64       `json:"constant_declared"`
+	ConstantDeclared *float64       `json:"const_declared"`
 	VesselData       VesselData     `json:"vessel_data"`
-	SeaCondition     SeaCondition   `json:"sea_condition"`
 	Remarks          string         `json:"remarks"`
 	Country          Country        `json:"country"`
-	Audit            AuditEvent     `json:"audit"`
+	Audit            []AuditEvent   `json:"audit"`
 	MetaData         MetaData       `json:"metadata"`
 }

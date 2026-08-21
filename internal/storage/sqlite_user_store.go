@@ -31,9 +31,9 @@ func (s *SQLiteUserStore) Save(user *types.User) error {
 	return err
 }
 
-func (s *SQLiteUserStore) SaveSignature(data []byte, ext string) error {
-	//TODO implement me
-	panic("implement me")
+func (s *SQLiteUserStore) SaveSignature(data []byte) error {
+	_, err := s.db.Exec(`UPDATE users SET signature = ? WHERE id = 1`, data)
+	return err
 }
 
 func (s *SQLiteUserStore) Get() (*types.User, error) {

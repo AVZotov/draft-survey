@@ -1,0 +1,22 @@
+package components
+
+import "github.com/AVZotov/draft-survey/internal/types"
+
+templ CountrySelect(countries []types.Country, selected string, fieldName string) {
+	<div class="select-wrap">
+		<select
+			name={ fieldName }
+			id={ fieldName }
+		>
+			<option value="">Select country…</option>
+			for _, c := range countries {
+				<option
+					value={ c.CountryCode }
+					selected?={ c.CountryCode == selected }
+				>
+					{ c.Name }
+				</option>
+			}
+		</select>
+	</div>
+}

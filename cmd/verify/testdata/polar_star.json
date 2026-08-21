@@ -1,0 +1,100 @@
+{
+  "vessel_data": {
+    "vessel_name": "POLAR STAR",
+    "imo": "9471666",
+    "lbp": 183,
+    "breadth": 28.5,
+    "depth": 15.1,
+    "summer_draft": 10.4,
+    "summer_dwt": 37390.4,
+    "summer_tpc": 50.0,
+    "summer_freeboard": 4.7,
+    "vessel_type": "marine",
+    "corr_method": "Full LBP",
+    "is_lcf_detection_manual": false,
+    "table_density": 1.025,
+    "lightship": 9522.3
+  },
+  "cargo_declared": 21626,
+  "const_declared": 342,
+  "drafts": [
+    {
+      "marks": {
+        "fwd_port": { "value": 3.39, "method": "direct" },
+        "fwd_stbd": { "value": 3.36, "method": "direct" },
+        "mid_port": { "value": 4.64, "method": "direct" },
+        "mid_stbd": { "value": 4.54, "method": "direct" },
+        "aft_port": { "value": 6.12, "method": "direct" },
+        "aft_stbd": { "value": 6.12, "method": "direct" }
+      },
+      "hydrostatic_rows": [
+        { "draft": 4.567, "displacement": 18956.7, "tpc": 45.2, "lcf": 98.509, "lcf_direction": "F" },
+        { "draft": 4.617, "displacement": 19182.7, "tpc": 45.2, "lcf": 98.457, "lcf_direction": "F" }
+      ],
+      "mtc_rows": [
+        { "draft": 5.1, "mtc": 525.7 },
+        { "draft": 4.1, "mtc": 498.8 }
+      ],
+      "density": 1.017,
+      "deductibles": { "hfo": 49.16, "mdo": 87.3, "lub_oil": 34.767, "bilge_water": 0, "sewage_water": 0, "others": 0 },
+      "ballast_water_tanks": [
+        { "tank_type": "BW-TOTAL", "tank_volume": 8266.233, "tank_density": 1.0 }
+      ],
+      "fresh_water_tanks": [
+        { "is_fresh_water_tank": true, "tank_type": "FW-TOTAL", "tank_volume": 287.8 }
+      ],
+      "distance_pp_fwd": 4.8,
+      "pp_fwd_direction": "A",
+      "distance_pp_mid": 0.5,
+      "pp_mid_direction": "A",
+      "distance_pp_aft": 1.2,
+      "pp_aft_direction": "A",
+      "keel_fwd": 0,
+      "keel_mid": 0,
+      "keel_aft": 0,
+      "tpc_list_port": 45.212,
+      "tpc_list_stbd": 45.129,
+      "type": "initial",
+      "status": "complete"
+    },
+    {
+      "marks": {
+        "fwd_port": { "value": 7.54, "method": "direct" },
+        "fwd_stbd": { "value": 7.53, "method": "direct" },
+        "mid_port": { "value": 7.75, "method": "direct" },
+        "mid_stbd": { "value": 7.68, "method": "direct" },
+        "aft_port": { "value": 8.01, "method": "direct" },
+        "aft_stbd": { "value": 7.91, "method": "direct" }
+      },
+      "hydrostatic_rows": [
+        { "draft": 7.717, "displacement": 33642.2, "tpc": 48.0, "lcf": 93.421, "lcf_direction": "F" },
+        { "draft": 7.767, "displacement": 33882.3, "tpc": 48.0, "lcf": 93.334, "lcf_direction": "F" }
+      ],
+      "mtc_rows": [
+        { "draft": 8.2, "mtc": 622.7 },
+        { "draft": 7.2, "mtc": 590.5 }
+      ],
+      "density": 1.021,
+      "deductibles": { "hfo": 44.49, "mdo": 83.47, "lub_oil": 34.767, "bilge_water": 0, "sewage_water": 0, "others": 0 },
+      "ballast_water_tanks": [
+        { "tank_type": "BW-TOTAL", "tank_volume": 1589.092, "tank_density": 1.0 }
+      ],
+      "fresh_water_tanks": [
+        { "is_fresh_water_tank": true, "tank_type": "FW-TOTAL", "tank_volume": 280.7 }
+      ],
+      "distance_pp_fwd": 4.8,
+      "pp_fwd_direction": "A",
+      "distance_pp_mid": 0.5,
+      "pp_mid_direction": "A",
+      "distance_pp_aft": 9.4,
+      "pp_aft_direction": "F",
+      "keel_fwd": 0,
+      "keel_mid": 0,
+      "keel_aft": 0,
+      "tpc_list_port": 48.0,
+      "tpc_list_stbd": 48.0,
+      "type": "final",
+      "status": "complete"
+    }
+  ]
+}

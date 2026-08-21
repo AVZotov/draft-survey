@@ -1,0 +1,180 @@
+package settings
+
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
+
+templ SettingsForm() {
+	<main class="page-main">
+		<div class="settings-layout">
+			<!-- Sidebar -->
+			<nav class="settings-nav">
+				<p class="sidebar-nav-label">Settings</p>
+				<ul class="sidebar-nav-list">
+					<li class="sidebar-nav-item is-active">
+						<a href="#profile">
+							<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+							Profile
+						</a>
+					</li>
+					<li class="sidebar-nav-item">
+						<a href="#language">
+							<svg viewBox="0 0 24 24"><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><circle cx="12" cy="12" r="10"></circle></svg>
+							Language
+						</a>
+					</li>
+					<li class="sidebar-nav-item">
+						<a href="#about">
+							<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+							About
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<!-- Content -->
+			<div class="settings-content">
+				<a href={ routes.Home() } class="back-link">
+					<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+					Back to Dashboard
+				</a>
+				<h1 class="page-title">Settings</h1>
+				<!-- ── Profile ─────────────────────────────────────────── -->
+				<div class="form-card" id="profile">
+					<div class="form-section">
+						<p class="form-section-title">Personal Information</p>
+						<div class="field-row">
+							<div class="field">
+								<label for="first-name">First Name <span class="required">*</span></label>
+								<input type="text" id="first-name" value="Alexey"/>
+							</div>
+							<div class="field">
+								<label for="last-name">Last Name <span class="required">*</span></label>
+								<input type="text" id="last-name" value="Zotov"/>
+							</div>
+						</div>
+						<div class="field">
+							<label for="position">Position / Title <span class="optional">(optional)</span></label>
+							<input type="text" id="position" value="Senior Marine Surveyor"/>
+						</div>
+						<div class="field">
+							<label for="email">Email <span class="optional">(optional)</span></label>
+							<input type="email" id="email" value="surveyor@example.com"/>
+							<p class="field-hint">Stored locally, never transmitted to any server.</p>
+						</div>
+					</div>
+					<div class="form-section">
+						<p class="form-section-title">Company & Certification</p>
+						<div class="field">
+							<label for="company">Company Name <span class="optional">(optional)</span></label>
+							<input type="text" id="company" value="Marine Survey Services Ltd."/>
+						</div>
+						<div class="field-row">
+							<div class="field">
+								<label for="license-no">Licence / Certificate No. <span class="optional">(optional)</span></label>
+								<input type="text" id="license-no" value="CRS-00421"/>
+							</div>
+							<div class="field">
+								<label for="country">Country <span class="optional">(optional)</span></label>
+								<div class="select-wrap">
+									<select id="country">
+										<option>Russia</option>
+										<option selected>Netherlands</option>
+										<option>Singapore</option>
+										<option>United Kingdom</option>
+										<option>Germany</option>
+										<option>Switzerland</option>
+										<option>Other</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-section">
+						<p class="form-section-title">Signature for Reports <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional)</span></p>
+						<label for="signature-file" class="signature-upload">
+							<input type="file" id="signature-file" accept="image/png,image/jpeg"/>
+							<svg class="signature-upload-icon" viewBox="0 0 24 24">
+								<path d="M12 15V3M7 8l5-5 5 5"></path>
+								<path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"></path>
+							</svg>
+							<p class="signature-upload-text">Click to replace signature image</p>
+							<p class="signature-upload-hint">PNG with transparent background recommended · max 2 MB</p>
+						</label>
+					</div>
+					<div class="form-footer">
+						<span class="form-footer-hint">Fields marked <span style="color:var(--accent)">*</span> are required</span>
+						<button class="btn btn-primary" onclick="showToast()">
+							<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
+							Save Changes
+						</button>
+					</div>
+				</div>
+				<!-- ── Language ────────────────────────────────────────── -->
+				<div class="form-card" id="language">
+					<div class="form-section">
+						<p class="form-section-title">Interface Language</p>
+						<div class="field">
+							<div class="lang-options">
+								<label class="lang-option is-active">
+									<input type="radio" name="lang" value="en" checked/>
+									<span class="lang-flag">🇬🇧</span>
+									<span class="lang-label">English</span>
+								</label>
+								<label class="lang-option">
+									<input type="radio" name="lang" value="ru"/>
+									<span class="lang-flag">🇷🇺</span>
+									<span class="lang-label">Русский</span>
+								</label>
+							</div>
+							<p class="field-hint" style="margin-top: var(--space-sm)">Language change takes effect immediately.</p>
+						</div>
+					</div>
+				</div>
+				<!-- ── About ───────────────────────────────────────────── -->
+				<div class="form-card" id="about">
+					<div class="form-section">
+						<p class="form-section-title">About</p>
+						<div class="about-row">
+							<span class="about-row-label">Application</span>
+							<span class="about-row-value">Draft Survey</span>
+						</div>
+						<div class="about-row">
+							<span class="about-row-label">Version</span>
+							<span class="about-row-value">v0.1.0</span>
+						</div>
+						<div class="about-row">
+							<span class="about-row-label">Standard</span>
+							<span class="about-row-value">UNECE 1992 Draught Survey Code</span>
+						</div>
+						<div class="about-row">
+							<span class="about-row-label">License</span>
+							<span class="about-row-value">MIT License</span>
+						</div>
+						<div class="about-row">
+							<span class="about-row-label">Source Code</span>
+							<a
+								href="https://github.com/AVZotov/draft-survey"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="about-row-link"
+							>
+								github.com/AVZotov/draft-survey
+								<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6M10 14L21 3"></path></svg>
+							</a>
+						</div>
+						<div class="about-row">
+							<span class="about-row-label">Report an Issue</span>
+							<a
+								href="https://github.com/AVZotov/draft-survey/issues/new/choose"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="about-row-link"
+							>
+								GitHub Issues
+								<svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6M10 14L21 3"></path></svg>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div><!-- /settings-content -->
+		</div><!-- /settings-layout -->
+	</main>
+}

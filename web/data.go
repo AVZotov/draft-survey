@@ -54,10 +54,9 @@ func SurveyLayoutProps(user *types.User, version string) components.LayoutProps 
 	}
 }
 
-func SurveyPageProps(survey types.Survey, countries []types.Country) components.SurveyPageProps {
+func SurveyPageProps(survey types.Survey) components.SurveyPageProps {
 	return components.SurveyPageProps{
-		Survey:    survey,
-		Countries: countries,
+		Survey: survey,
 	}
 }
 
@@ -71,13 +70,21 @@ func SurveyListLayoutProps(user *types.User, version string) components.LayoutPr
 	}
 }
 
+func ResultsPageProps(survey types.Survey, sr types.SurveyResult, firstIndex, lastIndex int) components.ResultProps {
+	return components.ResultProps{
+		Survey:       survey,
+		SurveyResult: sr,
+		FirstIndex:   firstIndex,
+		LastIndex:    lastIndex,
+	}
+}
+
 func ResultsLayoutProps(user *types.User, version string) components.LayoutProps {
 	return components.LayoutProps{
 		Title:           "Survey Results",
 		MetaDescription: "Cummulative information about finilized survey",
 		User:            user,
 		ExtraCSS:        []string{"/static/css/results.css"},
-		ExtraJS:         []string{"/static/js/results.js"},
 		AppVersion:      version,
 	}
 }
@@ -96,6 +103,7 @@ func ProfileLayoutProps(user *types.User, version string) components.LayoutProps
 	return components.LayoutProps{
 		Title:           "Surveyor Profile",
 		MetaDescription: "Surveyor profile setup page",
+		ExtraCSS:        []string{"/static/css/profile.css"},
 		User:            user,
 		AppVersion:      version,
 	}

@@ -1,0 +1,27 @@
+package surveylist
+
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
+
+templ Surveys() {
+	<div class="survey-grid" id="survey-grid">
+		<div class="survey-grid--header">
+			<div class="survey-cell survey-cell--header">Vessel</div>
+			<div class="survey-cell survey-cell--header">Date</div>
+			<div class="survey-cell survey-cell--header">Port</div>
+			<div class="survey-cell survey-cell--header">Destination</div>
+			<div class="survey-cell survey-cell--header">Operation</div>
+			<div class="survey-cell survey-cell--header">Cargo, MT</div>
+			<div class="survey-cell survey-cell--header">Status</div>
+			<div class="survey-cell survey-cell--header"></div>
+		</div>
+		<div
+			id="survey-results"
+			class="survey-scroll"
+			hx-get={ routes.SurveyListPage(0, fields.SurveyListLimit) }
+			hx-trigger="load"
+			hx-swap="innerHTML"
+			hx-indicator="#global-spinner"
+		></div>
+	</div>
+}

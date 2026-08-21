@@ -2,7 +2,6 @@ package components
 
 import (
 	"github.com/AVZotov/draft-survey/internal/types"
-	"github.com/AVZotov/draft-survey/internal/types/dto"
 )
 
 type LayoutProps struct {
@@ -33,16 +32,7 @@ type SeaConditionProps struct {
 }
 
 type SurveyPageProps struct {
-	Survey    types.Survey
-	Countries []types.Country
-}
-
-type CountrySelectProps struct {
-	Countries     []types.Country
-	SelectedCode  string
-	SelectedName  string
-	CountryCodeID string
-	CountryNameID string
+	Survey types.Survey
 }
 
 type PortSelectProps struct {
@@ -50,19 +40,9 @@ type PortSelectProps struct {
 	Selected string
 	Name     string
 }
-
-type SurveyListProps struct {
-	Total      int
-	Complete   int
-	InProgress int
-	Draft      int
-	AllDTO     []dto.SurveyDTO
-	WeekDTO    []dto.SurveyDTO
-	MonthDTO   []dto.SurveyDTO
-}
-
 type ResultProps struct {
-	Survey    types.Survey
-	Alpine    string
-	Lastindex int
+	Survey       types.Survey
+	SurveyResult types.SurveyResult
+	FirstIndex   int
+	LastIndex    int
 }

@@ -1,7 +1,7 @@
 package drafts
 
 import (
-	"fmt"
+	"github.com/AVZotov/draft-survey/internal/handler/routes"
 	"github.com/AVZotov/draft-survey/internal/types"
 	"github.com/AVZotov/draft-survey/web/components"
 )
@@ -11,7 +11,7 @@ templ DraftForm(dp components.DraftPageProps, sr types.SurveyResult) {
 		<div class="page-wrap page-wrap--drafts">
 			<div class="page-top">
 				<a
-					href={ fmt.Sprintf("/survey/%s", dp.Survey.ID) }
+					href={ routes.Survey(dp.Survey.ID) }
 					class="back-link"
 				>
 					<svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
@@ -29,15 +29,4 @@ templ DraftForm(dp components.DraftPageProps, sr types.SurveyResult) {
 			</div>
 		</div>
 	</main>
-}
-
-// Deprecated and will be removed
-func draftPrefix(i, total int) string {
-	if i == 0 {
-		return "i"
-	}
-	if i == total-1 {
-		return "f"
-	}
-	return fmt.Sprintf("m%d", i)
 }

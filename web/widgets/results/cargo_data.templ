@@ -1,0 +1,71 @@
+package results
+
+import (
+	"github.com/AVZotov/draft-survey/internal/format"
+	"github.com/AVZotov/draft-survey/web/components"
+)
+
+templ CargoData(rp components.ResultProps) {
+	{{
+		sr := rp.SurveyResult
+		firstResult := sr.DraftTotals[rp.FirstIndex].DraftResult
+		lastResult := sr.DraftTotals[rp.LastIndex].DraftResult
+		cargoDeclared := format.FloatOrEmpty(rp.Survey.CargoDeclared)
+		discrepancy := ""
+		if rp.Survey.CargoDeclared != nil {
+			discrepancy = format.WeightFormatted(sr.CargoOnBoard - *rp.Survey.CargoDeclared)
+		}
+	}}
+	<div class="cargo-data">
+		<div class="cargo-hero">
+			<div>
+				<div class="cargo-op-label">Cargo On Board</div>
+				<div>
+					<span class="cargo-weight">{ format.WeightFormatted(sr.CargoOnBoard) }</span>
+					<span class="cargo-weight-unit">MT</span>
+				</div>
+			</div>
+			<div class="cargo-disc">
+				Discrepancy from S/P:
+				<span>
+					if cargoDeclared == "" {
+						—
+					} else {
+						{ discrepancy }
+					}
+				</span>
+				<span class="result-row__unit">MT</span>
+			</div>
+		</div>
+		<div class="cargo-top">
+			<div class="cargo-cell">
+				<div class="cargo-cell-label">Initial Draft</div>
+				@CargoCellRow("Net Displacement", format.WeightFormatted(firstResult.NetDisplacement), "MT")
+				@CargoCellRow("Current DWT", format.WeightFormatted(firstResult.CurrentDWT), "MT")
+				@CargoCellRow("MMC", format.WeightFormatted(firstResult.MMC), "m")
+			</div>
+			<div class="cargo-cell">
+				<div class="cargo-cell-label">Final Draft</div>
+				@CargoCellRow("Net Displacement", format.WeightFormatted(lastResult.NetDisplacement), "MT")
+				@CargoCellRow("Current DWT", format.WeightFormatted(lastResult.CurrentDWT), "MT")
+				@CargoCellRow("MMC", format.WeightFormatted(lastResult.MMC), "m")
+			</div>
+			<div class="cargo-cell">
+				<div class="cargo-cell-label">Declared</div>
+			</div>
+			<div class="cargo-cell">
+				<div class="cargo-cell-label">Constants</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ CargoCellRow(label string, value string, unit string) {
+	<div class="cargo-cell-row">
+		<span class="cargo-cell-name">{ label }</span>
+		<span class="cargo-cell-val">{ value }</span>
+		if unit != "" {
+			<span class="cargo-cell-unit">{ unit }</span>
+		}
+	</div>
+}

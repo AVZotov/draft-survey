@@ -1,0 +1,70 @@
+package components
+
+import "fmt"
+import "github.com/AVZotov/draft-survey/internal/handler/fields"
+import "github.com/AVZotov/draft-survey/internal/handler/routes"
+import "github.com/AVZotov/draft-survey/internal/types"
+import "github.com/AVZotov/draft-survey/data/dictionaries"
+import "github.com/AVZotov/draft-survey/internal/format"
+
+templ SeaCondition(scp SeaConditionProps) {
+	<div
+		class="sea-bar"
+		hx-trigger="change changed delay:500ms"
+		hx-include="this"
+		hx-sync="this:replace"
+		hx-put={ routes.APIDraftUpdate(scp.SurveyID, *scp.DraftIndex) }
+	>
+		<label class="sea-option">
+			<input
+				hx-get={ routes.APIDictionarySeaOptions() + "?type=wave&index=" + format.IntOrEmpty(scp.DraftIndex) }
+				hx-target="next select"
+				hx-swap="outerHTML"
+				hx-trigger="change"
+				type="radio"
+				name={ fmt.Sprintf("%s-%s", fields.FieldSeaType, format.IntOrEmpty(scp.DraftIndex)) }
+				value={ types.SeaConditionTypeWave }
+				checked?={ scp.SeaCondition.Type == types.SeaConditionTypeWave }
+			/>
+			Wave
+		</label>
+		<div class="sea-select-wrap">
+			@SeaSelect(scp)
+		</div>
+		<label class="sea-option">
+			<input
+				hx-get={ routes.APIDictionarySeaOptions() + "?type=ice&index=" + format.IntOrEmpty(scp.DraftIndex) }
+				hx-target="previous select"
+				hx-swap="outerHTML"
+				hx-trigger="change"
+				type="radio"
+				name={ fmt.Sprintf("%s-%s", fields.FieldSeaType, format.IntOrEmpty(scp.DraftIndex)) }
+				value={ types.SeaConditionTypeIce }
+				checked?={ scp.SeaCondition.Type == types.SeaConditionTypeIce }
+			/>
+			Ice
+		</label>
+	</div>
+}
+
+templ SeaSelect(scp SeaConditionProps) {
+	{{
+		conditions := make([]string, 0)
+		if scp.SeaCondition.Type == types.SeaConditionTypeWave {
+			conditions = dictionaries.WaveConditions
+		}
+		if scp.SeaCondition.Type == types.SeaConditionTypeIce {
+			conditions = dictionaries.IceConditions
+		}
+	}}
+	<select name={ fmt.Sprintf("%s-%s", fields.FieldSeaCondition, format.IntOrEmpty(scp.DraftIndex)) }>
+		if len(conditions) == 0 {
+			<option value="">-       </option>
+		} else {
+			<option value="">select condition</option>
+			for _, condition := range conditions {
+				<option value={ condition } selected?={ condition == string(scp.SeaCondition.Wave) || condition == string(scp.SeaCondition.Ice) }>{ condition }</option>
+			}
+		}
+	</select>
+}

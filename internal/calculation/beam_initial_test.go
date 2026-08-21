@@ -187,13 +187,13 @@ func getBeamInitialDraft() types.Draft {
 
 func getBeamVessel() types.VesselData {
 	return types.VesselData{
-		LBP:                  beamLBP,
-		Breadth:              beamBreadth,
-		Lightship:            beamLightship,
+		LBP:                  ptr64(beamLBP),
+		Breadth:              ptr64(beamBreadth),
+		Lightship:            ptr64(beamLightship),
 		TableDensity:         ptr64(beamTableDensity),
-		SummerDraft:          beamSummerDraft,
-		SummerDWT:            beamSummerDWT,
-		SummerTPC:            beamSummerTPC,
+		SummerDraft:          ptr64(beamSummerDraft),
+		SummerDWT:            ptr64(beamSummerDWT),
+		SummerTPC:            ptr64(beamSummerTPC),
 		VesselType:           types.VesselTypeMarine,
 		CorrectionMethod:     types.CorrectionMethodFullLBP,
 		IsLcfDetectionManual: true, // UNECE standard: trust entered LCF direction
