@@ -46,12 +46,14 @@ func (h *Handler) getTanks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Trim/list are informational only — nil is acceptable if the draft has no marks yet.
-	var trim, list *float64
-	var trimDir, listDir string
-	if draftIndex < len(data.Survey.Drafts) {
-		trim, list, trimDir, listDir = tankTrimList(data.Survey.Drafts[draftIndex], data.Survey.VesselData)
+	if draftIndex < 0 || draftIndex >= len(data.Survey.Drafts) {
+		h.logger.Error(op, fmt.Errorf("draft index %d out of range", draftIndex))
+		h.respondPageError(w, r, routes.SurveyList())
+		return
 	}
+
+	// Trim/list are informational only — nil is acceptable if the draft has no marks yet.
+	trim, list, trimDir, listDir := tankTrimList(data.Survey.Drafts[draftIndex], data.Survey.VesselData)
 
 	lp := web.TanksLayoutProps(data.User, h.appVersion)
 	tp := web.TanksPageProps(*data.Survey, draftIndex, trim, list, trimDir, listDir)

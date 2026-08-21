@@ -11,6 +11,7 @@ import (
 )
 
 func SetupRoutesChi(r chi.Router, h *Handler) error {
+	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(h.requestLogger)
 

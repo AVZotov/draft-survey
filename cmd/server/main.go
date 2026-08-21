@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -10,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	draftsurvey "github.com/AVZotov/draft-survey"
 	"github.com/AVZotov/draft-survey/internal/config"
@@ -80,19 +82,33 @@ func main() {
 		log.Fatal(err)
 	}
 
+	addr := findFreePort(cfg.Port)
+	server := &http.Server{
+		Addr:    addr,
+		Handler: r,
+	}
+
 	go func() {
-		addr := findFreePort(cfg.Port)
 		log.Printf("Server starting on %s", addr)
-		log.Fatal(http.ListenAndServe(addr, r))
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("server error", err)
+			os.Exit(1)
+		}
 	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	log.Println("Shutting down...")
-	if err = db.Close(); err != nil {
-		log.Printf("Error closing database: %v", err)
+	slog.Info("shutting down server")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		slog.Error("forced shutdown", err)
 	}
-	log.Println("Server exiting")
+
+	if err = db.Close(); err != nil {
+		slog.Error("error closing database", err)
+	}
+	slog.Info("server stopped")
 }

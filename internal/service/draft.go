@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/AVZotov/draft-survey/internal/calculation"
@@ -60,6 +61,10 @@ func (s *draftService) Add(survey *types.Survey) (*Outcome, error) {
 func (s *draftService) Start(survey *types.Survey, index int) (*Outcome, error) {
 	const op = "DraftService.Start"
 
+	if index < 0 || index >= len(survey.Drafts) {
+		return nil, fmt.Errorf("draft index %d out of range", index)
+	}
+
 	user, err := s.usersRepo.Get()
 	if err != nil {
 		s.logger.Error(op, err)
@@ -82,6 +87,10 @@ func (s *draftService) Start(survey *types.Survey, index int) (*Outcome, error) 
 
 func (s *draftService) Finish(survey *types.Survey, index int) (*Outcome, error) {
 	const op = "DraftService.Finish"
+
+	if index < 0 || index >= len(survey.Drafts) {
+		return nil, fmt.Errorf("draft index %d out of range", index)
+	}
 
 	survey.Drafts[index].Status = types.DraftStatusComplete
 	survey.Drafts[index].FinishedAt = time.Now()
