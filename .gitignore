@@ -33,6 +33,9 @@
 # Allow dictionaries
 !data/dictionaries/*.json
 
+# Allow verify-tool test data (raw/ stays ignored — see "Always ignore" below)
+!cmd/verify/testdata/*.json
+
 # Allow GitHub Actions
 !.github/workflows/*.yml
 
@@ -65,3 +68,4 @@ UI design/
 users/
 htmx-cheatsheet.md
 htmx-ref.md
+cmd/verify/testdata/raw/

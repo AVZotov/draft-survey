@@ -1,0 +1,118 @@
+{
+  "vessel_data": {
+    "vessel_name": "AGGELOS B",
+    "imo": "9577434",
+    "built_year": 0,
+    "lbp": 189,
+    "breadth": 32.26,
+    "depth": 18.6,
+    "summer_draft": 13.02,
+    "summer_dwt": 58479.8,
+    "summer_tpc": 59,
+    "summer_freeboard": 5.621,
+    "vessel_type": "marine",
+    "corr_method": "Full LBP",
+    "is_lcf_detection_manual": true,
+    "table_density": 1.025,
+    "lightship": 11440,
+    "holds_total": 5
+  },
+  "cargo_declared": 53000,
+  "const_declared": 350,
+  "drafts": [
+    {
+      "marks": {
+        "fwd_port": { "value": 3.38, "method": "direct" },
+        "fwd_stbd": { "value": 3.39, "method": "direct" },
+        "mid_port": { "value": 4.48, "method": "direct" },
+        "mid_stbd": { "value": 4.53, "method": "direct" },
+        "aft_port": { "value": 5.53, "method": "direct" },
+        "aft_stbd": { "value": 5.53, "method": "direct" }
+      },
+      "hydrostatic_rows": [
+        { "draft": 4.5, "displacement": 22341.3, "tpc": 52.4, "lcf": 7.954, "lcf_direction": "F" },
+        { "draft": 4.6, "displacement": 22865.8, "tpc": 52.5, "lcf": 7.896, "lcf_direction": "F" }
+      ],
+      "mtc_rows": [
+        { "draft": 5, "mtc": 616.9 },
+        { "draft": 4, "mtc": 597.6 }
+      ],
+      "density": 1.024,
+      "deductibles": { "hfo": 657.17, "mdo": 28.7 },
+      "ballast_water_tanks": [
+        { "tank_type": "FPT", "tank_name": "", "tank_sounding": 11.2, "tank_volume": 1374.73, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "1P", "tank_sounding": 2.23, "tank_volume": 646.81, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "1S", "tank_sounding": 2.15, "tank_volume": 639.31, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "2P", "tank_sounding": 2.08, "tank_volume": 826.55, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "2S", "tank_sounding": 2.1, "tank_volume": 829.23, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "3P", "tank_sounding": 2.15, "tank_volume": 837.34, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "3S", "tank_sounding": 2.1, "tank_volume": 831.45, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "4P", "tank_sounding": 2.25, "tank_volume": 847.82, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "4S", "tank_sounding": 2.18, "tank_volume": 839.51, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "5P", "tank_sounding": 2.15, "tank_volume": 671.22, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "5S", "tank_sounding": 2.13, "tank_volume": 668.21, "tank_density": 1.025 },
+        { "tank_type": "APT", "tank_name": "", "tank_sounding": 0, "tank_volume": 0.3, "tank_density": 1.025 }
+      ],
+      "fresh_water_tanks": [
+        { "is_fresh_water_tank": true, "tank_type": "FPT", "tank_name": "FWT P", "tank_volume": 73 },
+        { "is_fresh_water_tank": true, "tank_type": "FPT", "tank_name": "FWT S", "tank_volume": 77 }
+      ],
+      "distance_pp_fwd": 2.2,
+      "pp_fwd_direction": "A",
+      "pp_mid_direction": "A",
+      "distance_pp_aft": 8.5,
+      "pp_aft_direction": "F",
+      "tpc_list_port": 52.2,
+      "tpc_list_stbd": 52.6,
+      "sea_condition": { "type": "wave", "wave": "under 0.1m" },
+      "type": "initial",
+      "status": "complete"
+    },
+    {
+      "marks": {
+        "fwd_port": { "value": 12.12, "method": "direct" },
+        "fwd_stbd": { "value": 12.12, "method": "direct" },
+        "mid_port": { "value": 12.34, "method": "direct" },
+        "mid_stbd": { "value": 12.4, "method": "direct" },
+        "aft_port": { "value": 12.39, "method": "direct" },
+        "aft_stbd": { "value": 12.41, "method": "direct" }
+      },
+      "hydrostatic_rows": [
+        { "draft": 12.3, "displacement": 65685.2, "tpc": 58.6, "lcf": 1.42, "lcf_direction": "A" },
+        { "draft": 12.4, "displacement": 66271.8, "tpc": 58.7, "lcf": 1.47, "lcf_direction": "A" }
+      ],
+      "mtc_rows": [
+        { "draft": 12.8, "mtc": 840.6 },
+        { "draft": 11.8, "mtc": 820.6 }
+      ],
+      "density": 1.024,
+      "deductibles": { "hfo": 652.09, "mdo": 28.67 },
+      "ballast_water_tanks": [
+        { "tank_type": "FPT", "tank_name": "", "tank_sounding": 0.29, "tank_volume": 11.66, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "1P", "tank_sounding": 0.09, "tank_volume": 22.46, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "1S", "tank_sounding": 0, "tank_volume": 0, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "2P", "tank_sounding": 0.2, "tank_volume": 81.42, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "2S", "tank_sounding": 0, "tank_volume": 0, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "3P", "tank_sounding": 0.09, "tank_volume": 32.151, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "3S", "tank_sounding": 0, "tank_volume": 0, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "4P", "tank_sounding": 0.08, "tank_volume": 28.26, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "4S", "tank_sounding": 0.06, "tank_volume": 22.6, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "5P", "tank_sounding": 0.18, "tank_volume": 63.47, "tank_density": 1.025 },
+        { "tank_type": "WBT", "tank_name": "5S", "tank_sounding": 0.03, "tank_volume": 15.46, "tank_density": 1.025 },
+        { "tank_type": "APT", "tank_name": "", "tank_sounding": 0, "tank_volume": 0.23, "tank_density": 1.025 }
+      ],
+      "fresh_water_tanks": [
+        { "is_fresh_water_tank": true, "tank_type": "FPT", "tank_name": "FWT P", "tank_volume": 70 },
+        { "is_fresh_water_tank": true, "tank_type": "FPT", "tank_name": "FWT S", "tank_volume": 70 }
+      ],
+      "distance_pp_fwd": 2.2,
+      "pp_fwd_direction": "A",
+      "pp_mid_direction": "A",
+      "distance_pp_aft": 8.5,
+      "pp_aft_direction": "F",
+      "sea_condition": { "type": "wave", "wave": "0.1-0.5m" },
+      "type": "final",
+      "status": "complete"
+    }
+  ]
+}

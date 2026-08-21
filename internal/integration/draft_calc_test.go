@@ -532,3 +532,390 @@ func newsunVisionFixture() vesselFixture {
 func TestNewsunVisionDraftCalc(t *testing.T) {
 	runDraftCalcTest(t, newsunVisionFixture())
 }
+
+// --- POLAR STAR ----------------------------------------------------------
+//
+// Data source: cmd/verify/testdata/polar_star.json, built and verified
+// against DSGear (independent commercial draft-survey software) in the raw
+// data audit — see the verification report. Covers two gaps that fixture
+// exposed: DSGear's own hydrostatic table rows for this vessel give LCF as
+// distance-from-AP (~98.5m, far larger than LBP/2=91.5m allows for a
+// from-midship value) rather than from-midship, so this is the first
+// fixture to exercise CalcHydrostatics' k3 auto-detection/from-AP branch
+// (IsLcfDetectionManual=false — every existing fixture uses "manual" and
+// direction-labelled, from-midship LCF data). It also has a nonzero List
+// Correction on its initial draft (0.05), unlike every existing fixture's
+// draft0/draft1 pairs which never isolated that specific value for
+// assertion.
+//
+// polarStarFixture() reuses vesselFixture/tankFixture/draftExpected so its
+// data can be driven with the same helpers as the other three vessels, but
+// TestPolarStarDraftCalc does not call the shared runDraftCalcTest: that
+// harness's draftExpected only covers MMC/LBM/TrueTrim/NetDisplacement/
+// TotalDeductibles/CargoOnBoard, not the FirstTrimCorrection/
+// SecondTrimCorrection/ListCorrection/TrueConstant breakdown this fixture
+// needs to assert — extending the shared struct would require backfilling
+// those fields for AggelosB/HuaYou2/NewsunVision too, well beyond this
+// task's scope. Driving the HTTP flow a second time through runDraftCalcTest
+// just to get the base fields would also mean standing up two separate
+// in-memory servers for one vessel; instead this asserts the full superset
+// in a single pass, reusing the same testServer helpers and totals.templ
+// label lookups (extractByDivID + extractTotalsCellValue) already used by
+// extractNetDisplacement/extractCargoOnBoard.
+func polarStarFixture() vesselFixture {
+	vessel := map[string]string{
+		fields.FieldVesselName:      "POLAR STAR",
+		fields.FieldIMO:             "9471666",
+		fields.FieldLBP:             "183",
+		fields.FieldBreadth:         "28.5",
+		fields.FieldDepth:           "15.1",
+		fields.FieldSummerDraft:     "10.4",
+		fields.FieldSummerDWT:       "37390.4",
+		fields.FieldSummerFreeboard: "4.7",
+		fields.FieldSummerTPC:       "50",
+		fields.FieldLightship:       "9522.3",
+		fields.FieldTableDensity:    "1.025",
+		fields.FieldMMCMethod:       "marine",
+		fields.FieldCorrMethod:      "Full LBP",
+		fields.FieldLCFDetection:    "auto",
+	}
+	job := map[string]string{
+		fields.FieldJobNumber:     "345333_033",
+		fields.FieldDSNumber:      "1",
+		fields.FieldClient:        "Our principal",
+		fields.FieldCargoDeclared: "21626",
+		fields.FieldConstDeclared: "342",
+	}
+
+	draft0 := map[string]string{
+		fields.FieldFwdPort: "3.39", fields.FieldFwdPortMethod: "direct",
+		fields.FieldFwdStbd: "3.36", fields.FieldFwdStbdMethod: "direct",
+		fields.FieldMidPort: "4.64", fields.FieldMidPortMethod: "direct",
+		fields.FieldMidStbd: "4.54", fields.FieldMidStbdMethod: "direct",
+		fields.FieldAftPort: "6.12", fields.FieldAftPortMethod: "direct",
+		fields.FieldAftStbd: "6.12", fields.FieldAftStbdMethod: "direct",
+
+		fields.FieldDFwd: "4.8", fields.FieldDFwdDir: "A",
+		fields.FieldDMid: "0.5", fields.FieldDMidDir: "A",
+		fields.FieldDAft: "1.2", fields.FieldDAftDir: "A",
+
+		// LCF given from AP (~98.5m) — see the doc comment above. Direction
+		// "F" here is DSGear's raw label on the from-AP value, not a
+		// from-midship forward/aft flag; CalcHydrostatics' k3 branch
+		// re-derives the true from-midship sign via LBP/2 - LCF.
+		fields.FieldUDraft: "4.567", fields.FieldUDisp: "18956.7", fields.FieldUTPC: "45.2", fields.FieldULCF: "98.509", fields.FieldULCFDir: "F",
+		fields.FieldLDraft: "4.617", fields.FieldLDisp: "19182.7", fields.FieldLTPC: "45.2", fields.FieldLLCF: "98.457", fields.FieldLLCFDir: "F",
+
+		fields.FieldPMTCDraft: "5.1", fields.FieldPMTC: "525.7",
+		fields.FieldNMTCDraft: "4.1", fields.FieldNMTC: "498.8",
+
+		fields.FieldDockwaterDensity: "1.017",
+		fields.FieldTPCListPort:      "45.212", fields.FieldTPCListStbd: "45.129",
+
+		fields.FieldSeaType: "wave", fields.FieldSeaCondition: "under 0.1m",
+
+		fields.FieldHFO: "49.16", fields.FieldMDO: "87.3", fields.FieldLubOil: "34.767",
+	}
+	draft0BW := []tankFixture{
+		{Type: "BW-TOTAL", Volume: "8266.233", Density: "1"},
+	}
+	draft0FW := []tankFixture{
+		{Type: "FW-TOTAL", Volume: "287.8"},
+	}
+	draft0Want := draftExpected{MMC: 4.612, LBM: 179.4, TrueTrim: 2.800, NetDisplacement: 9864.797, TotalDeductibles: 8725.26}
+
+	draft1 := map[string]string{
+		fields.FieldFwdPort: "7.54", fields.FieldFwdPortMethod: "direct",
+		fields.FieldFwdStbd: "7.53", fields.FieldFwdStbdMethod: "direct",
+		fields.FieldMidPort: "7.75", fields.FieldMidPortMethod: "direct",
+		fields.FieldMidStbd: "7.68", fields.FieldMidStbdMethod: "direct",
+		fields.FieldAftPort: "8.01", fields.FieldAftPortMethod: "direct",
+		fields.FieldAftStbd: "7.91", fields.FieldAftStbdMethod: "direct",
+
+		fields.FieldDFwd: "4.8", fields.FieldDFwdDir: "A",
+		fields.FieldDMid: "0.5", fields.FieldDMidDir: "A",
+		fields.FieldDAft: "9.4", fields.FieldDAftDir: "F",
+
+		fields.FieldUDraft: "7.717", fields.FieldUDisp: "33642.2", fields.FieldUTPC: "48", fields.FieldULCF: "93.421", fields.FieldULCFDir: "F",
+		fields.FieldLDraft: "7.767", fields.FieldLDisp: "33882.3", fields.FieldLTPC: "48", fields.FieldLLCF: "93.334", fields.FieldLLCFDir: "F",
+
+		fields.FieldPMTCDraft: "8.2", fields.FieldPMTC: "622.7",
+		fields.FieldNMTCDraft: "7.2", fields.FieldNMTC: "590.5",
+
+		fields.FieldDockwaterDensity: "1.021",
+		fields.FieldTPCListPort:      "48", fields.FieldTPCListStbd: "48",
+
+		fields.FieldSeaType: "wave", fields.FieldSeaCondition: "under 0.1m",
+
+		fields.FieldHFO: "44.49", fields.FieldMDO: "83.47", fields.FieldLubOil: "34.767",
+	}
+	draft1BW := []tankFixture{
+		{Type: "BW-TOTAL", Volume: "1589.092", Density: "1"},
+	}
+	draft1FW := []tankFixture{
+		{Type: "FW-TOTAL", Volume: "280.7"},
+	}
+	draft1Want := draftExpected{MMC: 7.724, LBM: 168.8, TrueTrim: 0.461, NetDisplacement: 31490.747, TotalDeductibles: 2032.519}
+
+	return vesselFixture{
+		name:         "PolarStar",
+		vessel:       vessel,
+		job:          job,
+		draft0:       draft0,
+		draft0BW:     draft0BW,
+		draft0FW:     draft0FW,
+		draft0Want:   draft0Want,
+		draft1:       draft1,
+		draft1BW:     draft1BW,
+		draft1FW:     draft1FW,
+		draft1Want:   draft1Want,
+		cargoOnBoard: 21625.950,
+	}
+}
+
+func TestPolarStarDraftCalc(t *testing.T) {
+	vf := polarStarFixture()
+	ts := newTestServer(t)
+
+	id := ts.createSurvey(t)
+	ts.putSurvey(t, id, mergeMaps(vf.vessel, vf.job))
+
+	ts.startDraft(t, id, 0)
+	ts.putDraft(t, id, 0, vf.draft0)
+	for _, tf := range vf.draft0BW {
+		ts.addBWTank(t, id, 0, tf)
+	}
+	for _, tf := range vf.draft0FW {
+		ts.addFWTank(t, id, 0, tf)
+	}
+
+	ts.addDraft(t, id)
+	ts.startDraft(t, id, 1)
+	ts.putDraft(t, id, 1, vf.draft1)
+	for _, tf := range vf.draft1BW {
+		ts.addBWTank(t, id, 1, tf)
+	}
+	for _, tf := range vf.draft1FW {
+		ts.addFWTank(t, id, 1, tf)
+	}
+
+	sseData := ts.captureSSEEvent(t, sse.EventDraftCalc, 5*time.Second, func() {
+		ts.putDraft(t, id, 1, map[string]string{fields.FieldDockwaterDensity: vf.draft1[fields.FieldDockwaterDensity]})
+	})
+
+	assertNear(t, "PolarStar draft0 MMC", extractMMC(t, sseData, 0), vf.draft0Want.MMC)
+	assertNear(t, "PolarStar draft0 LBM", extractLBM(t, sseData, 0), vf.draft0Want.LBM)
+	assertNear(t, "PolarStar draft0 TrueTrim", extractTrueTrim(t, sseData, 0), vf.draft0Want.TrueTrim)
+	assertNear(t, "PolarStar draft0 NetDisplacement", extractNetDisplacement(t, sseData, 0), vf.draft0Want.NetDisplacement)
+
+	assertNear(t, "PolarStar draft1 MMC", extractMMC(t, sseData, 1), vf.draft1Want.MMC)
+	assertNear(t, "PolarStar draft1 LBM", extractLBM(t, sseData, 1), vf.draft1Want.LBM)
+	assertNear(t, "PolarStar draft1 TrueTrim", extractTrueTrim(t, sseData, 1), vf.draft1Want.TrueTrim)
+	assertNear(t, "PolarStar draft1 NetDisplacement", extractNetDisplacement(t, sseData, 1), vf.draft1Want.NetDisplacement)
+
+	assertNear(t, "PolarStar CargoOnBoard (== draft1 CargoFromPrev)", extractCargoOnBoard(t, sseData, 1), vf.cargoOnBoard)
+
+	// Trim/list/constant breakdown — not covered by draftExpected, asserted
+	// directly against totals.templ's labelled cells via the same
+	// extractByDivID + extractTotalsCellValue helpers extractNetDisplacement
+	// and extractCargoOnBoard already use.
+	totals0 := extractByDivID(t, sseData, "draft-total-0")
+	assertNear(t, "PolarStar draft0 FirstTrimCorrection", extractTotalsCellValue(t, totals0, "1st Trim Corr."), -481.481)
+	assertNear(t, "PolarStar draft0 SecondTrimCorrection", extractTotalsCellValue(t, totals0, "2nd Trim Corr."), 57.622)
+	assertNear(t, "PolarStar draft0 ListCorrection", extractTotalsCellValue(t, totals0, "List Corr."), 0.05)
+	assertNear(t, "PolarStar draft0 TrueConstant", extractTotalsCellValue(t, totals0, "Const Calculated"), 342.497)
+
+	totals1 := extractByDivID(t, sseData, "draft-total-1")
+	assertNear(t, "PolarStar draft1 FirstTrimCorrection", extractTotalsCellValue(t, totals1, "1st Trim Corr."), -23.083)
+	assertNear(t, "PolarStar draft1 SecondTrimCorrection", extractTotalsCellValue(t, totals1, "2nd Trim Corr."), 1.87)
+	assertNear(t, "PolarStar draft1 ListCorrection", extractTotalsCellValue(t, totals1, "List Corr."), 0.0)
+	assertNear(t, "PolarStar draft1 TrueConstant", extractTotalsCellValue(t, totals1, "Const Calculated"), 342.497)
+
+	// TotalDeductibles is not in the SSE payload — read off the full Draft
+	// Readings page, same as runDraftCalcTest.
+	pageHTML := ts.getDraftPage(t, id)
+	assertNear(t, "PolarStar draft0 TotalDeductibles", extractTotalDeductibles(t, pageHTML, 0), vf.draft0Want.TotalDeductibles)
+	assertNear(t, "PolarStar draft1 TotalDeductibles", extractTotalDeductibles(t, pageHTML, 1), vf.draft1Want.TotalDeductibles)
+}
+
+// --- BEAM ------------------------------------------------------------------
+//
+// Data source: cmd/verify/testdata/beam.json, built and verified against
+// DSGear in the same raw data audit. Covers two more gaps: Port and
+// Starboard list-TPC are equal on both drafts (112.7/112.7, 121.8/121.8),
+// which forces List Correction to exactly 0 via calcListCorrectionV1's
+// |tpcPort-tpcStbd| term — no existing fixture (all three have distinct
+// Port/Stbd TPC) exercises that path. Deductibles.Others is 17000, two
+// orders of magnitude larger than the largest existing fixture value (170,
+// NewsunVision).
+//
+// Uses "manual" LCF detection (unlike PolarStarFixture): BEAM's hydrostatic
+// LCF values (~10.6m, ~0.5m) are already from-midship and well under the k3
+// threshold, so auto vs manual detection is not the scenario this fixture
+// targets — keeping it on "manual" isolates PolarStar as the sole test of
+// the auto-detection branch.
+func beamFixture() vesselFixture {
+	vessel := map[string]string{
+		fields.FieldVesselName:      "BEAM",
+		fields.FieldIMO:             "9591741",
+		fields.FieldLBP:             "283.5",
+		fields.FieldBreadth:         "45.0",
+		fields.FieldDepth:           "24.8",
+		fields.FieldSummerDraft:     "18.322",
+		fields.FieldSummerDWT:       "179100.3",
+		fields.FieldSummerFreeboard: "6.478",
+		fields.FieldSummerTPC:       "122.4",
+		fields.FieldLightship:       "26328.0",
+		fields.FieldTableDensity:    "1.025",
+		fields.FieldMMCMethod:       "marine",
+		fields.FieldCorrMethod:      "Full LBP",
+		fields.FieldLCFDetection:    "manual",
+	}
+	job := map[string]string{
+		fields.FieldJobNumber:     "444572_001",
+		fields.FieldDSNumber:      "1",
+		fields.FieldClient:        "Our principal",
+		fields.FieldCargoDeclared: "146700",
+		fields.FieldConstDeclared: "500",
+	}
+
+	draft0 := map[string]string{
+		fields.FieldFwdPort: "9.35", fields.FieldFwdPortMethod: "direct",
+		fields.FieldFwdStbd: "9.25", fields.FieldFwdStbdMethod: "direct",
+		fields.FieldMidPort: "9.45", fields.FieldMidPortMethod: "direct",
+		fields.FieldMidStbd: "9.08", fields.FieldMidStbdMethod: "direct",
+		fields.FieldAftPort: "9.52", fields.FieldAftPortMethod: "direct",
+		fields.FieldAftStbd: "9.47", fields.FieldAftStbdMethod: "direct",
+
+		fields.FieldDFwd: "3.42", fields.FieldDFwdDir: "A",
+		fields.FieldDMid: "0.83", fields.FieldDMidDir: "A",
+		fields.FieldDAft: "15.4", fields.FieldDAftDir: "F",
+
+		fields.FieldUDraft: "9.25", fields.FieldUDisp: "98258.2", fields.FieldUTPC: "112.7", fields.FieldULCF: "10.669", fields.FieldULCFDir: "F",
+		fields.FieldLDraft: "9.3", fields.FieldLDisp: "98821.8", fields.FieldLTPC: "112.7", fields.FieldLLCF: "10.618", fields.FieldLLCFDir: "F",
+
+		fields.FieldPMTCDraft: "9.798", fields.FieldPMTC: "2076.1",
+		fields.FieldNMTCDraft: "8.798", fields.FieldNMTC: "2023.1",
+
+		fields.FieldDockwaterDensity: "1.02",
+		fields.FieldTPCListPort:      "112.7", fields.FieldTPCListStbd: "112.7",
+
+		fields.FieldSeaType: "ice", fields.FieldSeaCondition: "under 0.05m around",
+
+		fields.FieldHFO: "863.38", fields.FieldMDO: "204.93", fields.FieldLubOil: "62.1", fields.FieldOthers: "17000",
+	}
+	draft0BW := []tankFixture{
+		{Type: "BW-TOTAL", Volume: "53099.551", Density: "1"},
+	}
+	draft0FW := []tankFixture{
+		{Type: "FW-TOTAL", Volume: "179.93"},
+	}
+	draft0Want := draftExpected{MMC: 9.298, LBM: 264.68, TrueTrim: 0.209, NetDisplacement: 26820.019, TotalDeductibles: 71409.891}
+
+	draft1 := map[string]string{
+		fields.FieldFwdPort: "17.1", fields.FieldFwdPortMethod: "direct",
+		fields.FieldFwdStbd: "17.1", fields.FieldFwdStbdMethod: "direct",
+		fields.FieldMidPort: "17.3", fields.FieldMidPortMethod: "direct",
+		fields.FieldMidStbd: "17.3", fields.FieldMidStbdMethod: "direct",
+		fields.FieldAftPort: "17.22", fields.FieldAftPortMethod: "direct",
+		fields.FieldAftStbd: "17.22", fields.FieldAftStbdMethod: "direct",
+
+		fields.FieldDFwd: "3.42", fields.FieldDFwdDir: "A",
+		fields.FieldDMid: "0.83", fields.FieldDMidDir: "A",
+		fields.FieldDAft: "15.4", fields.FieldDAftDir: "F",
+
+		fields.FieldUDraft: "17.25", fields.FieldUDisp: "192341.0", fields.FieldUTPC: "121.7", fields.FieldULCF: "0.518", fields.FieldULCFDir: "A",
+		fields.FieldLDraft: "17.3", fields.FieldLDisp: "192949.8", fields.FieldLTPC: "121.8", fields.FieldLLCF: "0.551", fields.FieldLLCFDir: "A",
+
+		fields.FieldPMTCDraft: "17.75", fields.FieldPMTC: "2572.3",
+		fields.FieldNMTCDraft: "16.75", fields.FieldNMTC: "2533.7",
+
+		fields.FieldDockwaterDensity: "1.023",
+		fields.FieldTPCListPort:      "121.8", fields.FieldTPCListStbd: "121.8",
+
+		fields.FieldSeaType: "ice", fields.FieldSeaCondition: "under 0.05m around",
+
+		fields.FieldHFO: "856.55", fields.FieldMDO: "204.93", fields.FieldLubOil: "62.1", fields.FieldOthers: "17000",
+	}
+	draft1BW := []tankFixture{
+		{Type: "BW-TOTAL", Volume: "330.234", Density: "1"},
+	}
+	draft1FW := []tankFixture{
+		{Type: "FW-TOTAL", Volume: "177.37"},
+	}
+	draft1Want := draftExpected{MMC: 17.266, LBM: 264.68, TrueTrim: 0.129, NetDisplacement: 173531.989, TotalDeductibles: 18631.184}
+
+	return vesselFixture{
+		name:         "Beam",
+		vessel:       vessel,
+		job:          job,
+		draft0:       draft0,
+		draft0BW:     draft0BW,
+		draft0FW:     draft0FW,
+		draft0Want:   draft0Want,
+		draft1:       draft1,
+		draft1BW:     draft1BW,
+		draft1FW:     draft1FW,
+		draft1Want:   draft1Want,
+		cargoOnBoard: 146711.970,
+	}
+}
+
+func TestBeamDraftCalc(t *testing.T) {
+	vf := beamFixture()
+	ts := newTestServer(t)
+
+	id := ts.createSurvey(t)
+	ts.putSurvey(t, id, mergeMaps(vf.vessel, vf.job))
+
+	ts.startDraft(t, id, 0)
+	ts.putDraft(t, id, 0, vf.draft0)
+	for _, tf := range vf.draft0BW {
+		ts.addBWTank(t, id, 0, tf)
+	}
+	for _, tf := range vf.draft0FW {
+		ts.addFWTank(t, id, 0, tf)
+	}
+
+	ts.addDraft(t, id)
+	ts.startDraft(t, id, 1)
+	ts.putDraft(t, id, 1, vf.draft1)
+	for _, tf := range vf.draft1BW {
+		ts.addBWTank(t, id, 1, tf)
+	}
+	for _, tf := range vf.draft1FW {
+		ts.addFWTank(t, id, 1, tf)
+	}
+
+	sseData := ts.captureSSEEvent(t, sse.EventDraftCalc, 5*time.Second, func() {
+		ts.putDraft(t, id, 1, map[string]string{fields.FieldDockwaterDensity: vf.draft1[fields.FieldDockwaterDensity]})
+	})
+
+	assertNear(t, "Beam draft0 MMC", extractMMC(t, sseData, 0), vf.draft0Want.MMC)
+	assertNear(t, "Beam draft0 LBM", extractLBM(t, sseData, 0), vf.draft0Want.LBM)
+	assertNear(t, "Beam draft0 TrueTrim", extractTrueTrim(t, sseData, 0), vf.draft0Want.TrueTrim)
+	assertNear(t, "Beam draft0 NetDisplacement", extractNetDisplacement(t, sseData, 0), vf.draft0Want.NetDisplacement)
+
+	assertNear(t, "Beam draft1 MMC", extractMMC(t, sseData, 1), vf.draft1Want.MMC)
+	assertNear(t, "Beam draft1 LBM", extractLBM(t, sseData, 1), vf.draft1Want.LBM)
+	assertNear(t, "Beam draft1 TrueTrim", extractTrueTrim(t, sseData, 1), vf.draft1Want.TrueTrim)
+	assertNear(t, "Beam draft1 NetDisplacement", extractNetDisplacement(t, sseData, 1), vf.draft1Want.NetDisplacement)
+
+	assertNear(t, "Beam CargoOnBoard (== draft1 CargoFromPrev)", extractCargoOnBoard(t, sseData, 1), vf.cargoOnBoard)
+
+	totals0 := extractByDivID(t, sseData, "draft-total-0")
+	assertNear(t, "Beam draft0 FirstTrimCorrection", extractTotalsCellValue(t, totals0, "1st Trim Corr."), -88.235)
+	assertNear(t, "Beam draft0 SecondTrimCorrection", extractTotalsCellValue(t, totals0, "2nd Trim Corr."), 0.408)
+	assertNear(t, "Beam draft0 ListCorrection", extractTotalsCellValue(t, totals0, "List Corr."), 0.0)
+	assertNear(t, "Beam draft0 TrueConstant", extractTotalsCellValue(t, totals0, "Const Calculated"), 492.019)
+
+	totals1 := extractByDivID(t, sseData, "draft-total-1")
+	assertNear(t, "Beam draft1 FirstTrimCorrection", extractTotalsCellValue(t, totals1, "1st Trim Corr."), 2.93)
+	assertNear(t, "Beam draft1 SecondTrimCorrection", extractTotalsCellValue(t, totals1, "2nd Trim Corr."), 0.113)
+	assertNear(t, "Beam draft1 ListCorrection", extractTotalsCellValue(t, totals1, "List Corr."), 0.0)
+	assertNear(t, "Beam draft1 TrueConstant", extractTotalsCellValue(t, totals1, "Const Calculated"), 492.019)
+
+	pageHTML := ts.getDraftPage(t, id)
+	assertNear(t, "Beam draft0 TotalDeductibles", extractTotalDeductibles(t, pageHTML, 0), vf.draft0Want.TotalDeductibles)
+	assertNear(t, "Beam draft1 TotalDeductibles", extractTotalDeductibles(t, pageHTML, 1), vf.draft1Want.TotalDeductibles)
+}
