@@ -365,7 +365,7 @@ List Correction = 6 × |Mid Port - Mid Starboard| × |TPC Port - TPC Starboard|
 
 **Formula:**
 ```
-Displacement corrected to density = (Displacement + all trim corrections) × (actual density - table density) / table density
+Displacement corrected to density = (Displacement + 1st Trim + 2nd Trim + List correction) × (actual density - table density) / table density
 ```
 
 **Why it matters:** Fresh river water (1.000) vs salt sea water (1.025) is a 2.5% difference — on a large vessel this can be hundreds or even thousands of tonnes. Ignoring this would make the survey completely wrong.
@@ -454,7 +454,7 @@ Weight = Volume × 1.000
 
 **Formula:**
 ```
-Net Displacement = Displacement + 1st Trim + 2nd Trim + List correction + Density correction
+Net Displacement = Displacement + 1st Trim + 2nd Trim + List correction + Density correction - Total Deductibles
 ```
 
 **Why it matters:** This is the base from which cargo weight is calculated.
@@ -466,8 +466,9 @@ Net Displacement = Displacement + 1st Trim + 2nd Trim + List correction + Densit
 
 **Formula:**
 ```
-Constant = Net Displacement - Lightship - Total Deductibles
+Constant = Net Displacement - Lightship
 ```
+(Net Displacement already has Total Deductibles subtracted out — see the Net Displacement formula above. Subtracting deductibles a second time here is a common mistake.)
 
 **Why it matters:** One of the most important numbers in draft surveying. A stable, reasonable constant confirms the survey is correct. A constant that differs significantly from the declared value raises questions about data accuracy or honesty.
 
@@ -485,8 +486,10 @@ Constant = Net Displacement - Lightship - Total Deductibles
 
 **Formula:**
 ```
-Cargo = |Final Net Displacement - Initial Net Displacement|
+Cargo = Final Net Displacement - Initial Net Displacement
 ```
+
+The app does not force this to a positive number: for a loading operation it comes out positive (cargo added), and for a discharge operation it comes out negative (cargo removed) — the sign itself tells you the direction of the operation.
 
 **Why it matters:** This is the ultimate purpose of the draft survey — to determine how much cargo changed hands. It is used for billing, customs declarations, and cargo claims.
 
