@@ -95,6 +95,13 @@ const (
 	DraftStatusComplete DraftStatus = "complete"
 )
 
+// Draft holds one draft-survey reading's surveyor-entered inputs — marks,
+// PP/keel corrections, hydrostatic and MTC table rows, tanks, deductibles,
+// and lifecycle metadata (Type, Status, timestamps). Its *float64/*int
+// fields are surveyor-entered (nil = not entered, 0 is valid data); the
+// calculated results derived from a Draft live in DraftResult, never here.
+// A Draft's index within Survey.Drafts is never stored on the struct itself —
+// it exists only in the URL/request context.
 type Draft struct {
 	Surveyor          User             `json:"surveyor"`
 	Type              DraftType        `json:"type"`
@@ -127,6 +134,11 @@ type Draft struct {
 	HoldsActive       []int            `json:"holds_active"`
 }
 
+// Survey is the top-level, persisted aggregate for one draft survey job: the
+// vessel and cargo operation being surveyed, the surveyor's declared figures,
+// and every Draft reading taken during the survey. Calculated results
+// (DraftResult, SurveyResult) are never part of this struct or persisted —
+// they are always recomputed on the fly via calculation.CalcSurvey.
 type Survey struct {
 	Surveyor         User           `json:"surveyor"`
 	Status           SurveyStatus   `json:"status"`

@@ -7,6 +7,8 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+// TotalTanksWeight sums the calculated weight (via Tank.CalcWeight) of every
+// tank in the slice, rounding each tank's weight to 3 decimals before summing.
 func TotalTanksWeight(tanks []types.Tank) float64 {
 	var total float64
 	for _, t := range tanks {
@@ -39,6 +41,8 @@ func vesselTypeOrDefault(v types.VesselType) types.VesselType {
 	return v
 }
 
+// MeanDrafts averages each pair of port/starboard draft marks (forward,
+// midship, aft) into a MeanDraft. A nil mark reads as 0.
 func MeanDrafts(m types.Marks) types.MeanDraft {
 	return types.MeanDraft{
 		DraftFwdMean: round3((markVal(m.FwdPort.Value) + markVal(m.FwdStarboard.Value)) / 2),
@@ -47,6 +51,9 @@ func MeanDrafts(m types.Marks) types.MeanDraft {
 	}
 }
 
+// CalcFullLBPLBM computes the length between marks (LBM) for the full-LBP
+// correction method: LBP adjusted by the forward and aft perpendicular
+// distances, each signed by its recorded direction ("A" = aft, negated).
 func CalcFullLBPLBM(draft types.Draft, lbp float64) float64 {
 	var dFwdDir, dAftDir float64
 
@@ -60,6 +67,9 @@ func CalcFullLBPLBM(draft types.Draft, lbp float64) float64 {
 	return round3(lbp - dAftDir + dFwdDir)
 }
 
+// CalcHalfLBPLBM computes the two half-length spans (aft-to-midship and
+// midship-to-forward) used by the half-LBP correction method, each derived
+// from half of LBP adjusted by the relevant perpendicular distances.
 func CalcHalfLBPLBM(draft types.Draft, lbp float64) (lbmAftMid float64, lbmMidFwd float64) {
 	var dFwdDir, dMidDir, dAftDir float64
 
@@ -79,6 +89,9 @@ func CalcHalfLBPLBM(draft types.Draft, lbp float64) (lbmAftMid float64, lbmMidFw
 	return lbmAftMid, lbmMidFwd
 }
 
+// CalcFullLBPPPCorrections computes the forward/midship/aft perpendicular-
+// point corrections for the full-LBP method, proportional to the observed
+// trim (aft mean minus forward mean) and each mark's distance from LBM.
 func CalcFullLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64) types.PPCorrections {
 	trim := m.DraftAftMean - m.DraftFwdMean
 	var dFwdDir, dMidDir, dAftDir float64
@@ -100,6 +113,11 @@ func CalcFullLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64)
 	}
 }
 
+// CalcHalfLBPPPCorrections computes the forward/midship/aft perpendicular-
+// point corrections for the half-LBP method. Unlike CalcFullLBPPPCorrections,
+// the aft correction depends on the midship correction already applied
+// (midship-with-keel is computed first), since the method treats the vessel
+// as two independent half-lengths rather than one full span.
 func CalcHalfLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64) types.PPCorrections {
 	var dFwdDir, dMidDir, dAftDir float64
 
@@ -128,6 +146,9 @@ func CalcHalfLBPPPCorrections(m types.MeanDraft, draft types.Draft, lbp float64)
 	}
 }
 
+// CalcDraftsWKeel applies the PP corrections and keel corrections (keel
+// readings in mm, negated and converted to metres) to each mean draft,
+// producing the forward/midship/aft drafts with keel.
 func CalcDraftsWKeel(
 	meanDraft types.MeanDraft, ppCorrections types.PPCorrections, draft types.Draft) types.DraftsWKeel {
 	keelCorrectionFwd := -1 * markVal(draft.KeelFwd) / 1000
@@ -141,6 +162,11 @@ func CalcDraftsWKeel(
 	}
 }
 
+// CalcMMC computes the Mean of Mean Constant draft from the forward/midship/
+// aft drafts-with-keel, using the weighting formula for the vessel's type
+// (marine: 1-6-1/8, river: 1-4-1/6, barge: 3-14-3/20). An unset VesselType
+// is treated as marine (see vesselTypeOrDefault); an unrecognized type
+// returns 0.
 func CalcMMC(draftsWKeel types.DraftsWKeel, v types.VesselData) float64 {
 	switch vesselTypeOrDefault(v.VesselType) {
 	case types.VesselTypeMarine:
@@ -154,6 +180,9 @@ func CalcMMC(draftsWKeel types.DraftsWKeel, v types.VesselData) float64 {
 	}
 }
 
+// Interpolate performs linear interpolation of a value at fact between the
+// (lowerDraft, lowerValue) and (upperDraft, upperValue) reference points.
+// Returns 0 if the two reference drafts are equal (would divide by zero).
 func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) float64 {
 	if upperDraft == lowerDraft {
 		return 0
@@ -163,6 +192,11 @@ func Interpolate(fact, lowerDraft, lowerValue, upperDraft, upperValue float64) f
 	return result
 }
 
+// CalcHydrostatics interpolates displacement, TPC, and LCF at MMC between the
+// two entered hydrostatic table rows (order-independent — rows are sorted by
+// draft internally). LCF direction is either trusted as entered by the
+// surveyor (UNECE manual mode) or auto-detected from AP by magnitude against
+// LBP*0.045 (DSGear k3 auto mode), per v.IsLcfDetectionManual.
 func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v types.VesselData) types.Hydrostatics {
 	var lower, upper types.HydrostaticRow
 	if markVal(hr[0].Draft) < markVal(hr[1].Draft) {
@@ -203,6 +237,9 @@ func CalcHydrostatics(mmc float64, hr []types.HydrostaticRow, v types.VesselData
 	}
 }
 
+// CalcFirstTrimCorrection computes the first (layer) trim correction from
+// true trim, hydrostatic TPC, and LCF at MMC, applying the UNECE sign rule:
+// negative when trim and LCF point the same direction, positive otherwise.
 func CalcFirstTrimCorrection(dwk types.DraftsWKeel, tpc float64, lcf float64, lbp float64) float64 {
 	trueTrim := dwk.AftDraftWKeel - dwk.FwdDraftWKeel
 	var firstTrimCorrection float64
@@ -230,6 +267,9 @@ func CalcDeltaMTC(mtcRows []types.MTCRow) float64 {
 	return round3(markVal(upperMtcRow.MTC) - markVal(lowerMtcRow.MTC))
 }
 
+// CalcSecondTrimCorrection computes the second (Nemoto's) trim correction
+// from true trim and the delta MTC between the two entered MTC rows
+// (order-independent — rows are sorted by draft internally).
 func CalcSecondTrimCorrection(dwk types.DraftsWKeel, mtcRows []types.MTCRow, lbp float64) float64 {
 	var lowerMtcRow, upperMtcRow types.MTCRow
 	if markVal(mtcRows[0].Draft) < markVal(mtcRows[1].Draft) {
@@ -305,11 +345,18 @@ func calcListCorrectionV2(marks types.Marks, mmc float64, hydroTPC float64, v ty
 	return round3(6 * math.Abs(midPort-midStbd) * math.Abs(tpcPort-tpcStbd))
 }
 
+// CalcDensityCorrection corrects the trim/list-adjusted displacement for the
+// difference between actual dockwater density and the hydrostatic table's
+// reference density, proportional to that displacement.
 func CalcDensityCorrection(displacement float64, firstTrim float64, secondTrim float64, listCorrection float64, dockwaterDensity float64, tableDensity float64) float64 {
 	displacementCorrected := round3(displacement + firstTrim + secondTrim + listCorrection)
 	return round3(displacementCorrected * (dockwaterDensity - tableDensity) / tableDensity)
 }
 
+// CalcTotalDeductibles sums everything subtracted from displacement to reach
+// net cargo-relevant displacement: total ballast and fresh water tank weight
+// plus the surveyor-entered deductible weights (fuel, lube oil, bilge/sewage
+// water, other).
 func CalcTotalDeductibles(bwt []types.Tank, fwt []types.Tank, d types.Deductibles) float64 {
 	tbw := TotalTanksWeight(bwt)
 	tfw := TotalTanksWeight(fwt)
@@ -317,19 +364,28 @@ func CalcTotalDeductibles(bwt []types.Tank, fwt []types.Tank, d types.Deductible
 	return round3(tbw + tfw + markVal(d.HFO) + markVal(d.MDO) + markVal(d.LubOil) + markVal(d.BilgeWater) + markVal(d.SewageWater) + markVal(d.Others))
 }
 
+// CalcNetDisplacement applies all corrections (trim, list, density) to the
+// hydrostatic displacement, then subtracts total deductibles to yield the
+// net displacement used for cargo and constant calculations.
 func CalcNetDisplacement(displacement, firstTrim, secondTrim, listCorrection, densityCorrection, totalDeductibles float64) float64 {
 	displCorrToDensity := round3(displacement + firstTrim + secondTrim + listCorrection + densityCorrection)
 	return round3(displCorrToDensity - totalDeductibles)
 }
 
+// CalcCargoWeight returns the absolute difference in net displacement
+// between the initial and final draft readings.
 func CalcCargoWeight(netDisplacementIni, netDisplacementFin float64) float64 {
 	return round3(math.Abs(netDisplacementFin - netDisplacementIni))
 }
 
+// CalcConstant returns the survey constant: net displacement minus lightship
+// weight.
 func CalcConstant(netDisplacement float64, lightship float64) float64 {
 	return round3(netDisplacement - lightship)
 }
 
+// CalcCurrentDWT returns the current deadweight: trim/list/density-corrected
+// displacement minus lightship weight.
 func CalcCurrentDWT(displCorrToDensity float64, lightship float64) float64 {
 	return round3(displCorrToDensity - lightship)
 }
@@ -502,7 +558,10 @@ func calcVolumeType3(sounding, trim, list float64, data types.VolumeCalibrationD
 	return round3(baseVolume + trimCorr + listCorr)
 }
 
-// Wrapper on true volume caclulations
+// CalcBwTankVolume computes a ballast water tank's volume at the given trim
+// and list from its calibration table, dispatching to the Type 1/2/3
+// calibration-table workflow per tank.Correction.TableType. Returns an error
+// if the tank has no sounding entered or its calibration data is incomplete.
 func CalcBwTankVolume(trim, listDegrees float64, tank types.Tank) (float64, error) {
 	if tank.Sounding == nil {
 		return 0, errors.New("no sounding in measurements")

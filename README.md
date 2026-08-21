@@ -176,6 +176,7 @@ web/
   layouts/          — page shell, HTMX/Alpine script includes
   widgets/          — reusable UI components
   components/       — shared UI elements
+  ids/              — DOM id constants for OOB swaps and hx-include targeting
   static/           — CSS, JS, fonts
 embed.go            — go:embed directives (self-contained build)
 ```

@@ -101,17 +101,17 @@
 ### 1.5 Chi Migration (v0.5.0) ✅ COMPLETE
 **Location:** `internal/handler/`, `internal/sse/`, `internal/service/`
 
-Full architectural rewrite, not just a router swap — see `docs/V050_MIGRATION_CONTRACT_EN.md` for the complete contract.
+Full architectural rewrite, not just a router swap — see `docs/ARCHITECTURE.md` for the full design record.
 
 - [x] Chi replaces Fiber entirely (Fiber fully removed from go.mod)
 - [x] Single unified SSE broker for every server→client notification (Toast/Alert/live calc-panel updates) — no `HX-Trigger` headers, no parallel mechanisms
 - [x] Handler/Service/Repository layering enforced project-wide — handler as "low-paid secretary," zero business logic outside the service layer
-- [x] `internal/handler/fields/` — form field constants (replaces `internal/constants/`)
+- [x] `internal/handler/fields/` — form field constants; `web/ids/` — DOM id constants for OOB swaps/hx-include (both replace `internal/constants/`, now deleted)
 - [x] `internal/handler/routes/` — URL builder functions (no inline `fmt.Sprintf`)
 - [x] `internal/handler/parse/` — hand-written Decoder for true partial-update autosave (not `go-playground/form`, not `gorilla/schema`)
 - [x] `Outcome` DTO — every service method returns `(*Outcome, error)`, including Update/Delete
 - [x] Draft Readings, Tanks, Results pages — all wired and working
-- [x] `internal/validation/playground/`, `internal/types/dto/`, `internal/constants/` — pending deletion once verified zero references (see migration contract Wave 4)
+- [x] `internal/validation/playground/`, `internal/types/dto/` — still pending deletion once verified zero references (see `docs/ARCHITECTURE.md` Wave 4)
 
 ---
 

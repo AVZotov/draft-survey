@@ -6,6 +6,11 @@ import (
 	"github.com/AVZotov/draft-survey/internal/types"
 )
 
+// CalcDraft computes a complete DraftResult for a single draft reading.
+// It implements the UNECE 1992 Draught Survey Code calculation chain:
+// marks → mean drafts → PP corrections → keel corrections → MMC →
+// hydrostatic interpolation → trim/list/density corrections → net displacement.
+// All inputs are read-only; no side effects.
 func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 	var lbm float64
 	var lbmAftMid float64

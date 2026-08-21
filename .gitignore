@@ -23,6 +23,7 @@
 !**/*.woff2
 
 # Allow documentation
+!docs/ARCHITECTURE.md
 !docs/CALCULATION.md
 !docs/glossary_en.md
 !docs/glossary_ru.md
