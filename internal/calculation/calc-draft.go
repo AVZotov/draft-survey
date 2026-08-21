@@ -46,10 +46,11 @@ func CalcDraft(draft types.Draft, v types.VesselData) types.DraftResult {
 		lbmAftMid, lbmMidFwd = CalcHalfLBPLBM(draft, markVal(v.LBP))
 	}
 	meanDraft = MeanDrafts(draft.Marks)
-	if v.CorrectionMethod == types.CorrectionMethodFullLBP && v.LBP != nil && *v.LBP > 0 {
+	correctionMethod := correctionMethodOrDefault(v.CorrectionMethod)
+	if correctionMethod == types.CorrectionMethodFullLBP && v.LBP != nil && *v.LBP > 0 {
 		ppCorrections = CalcFullLBPPPCorrections(meanDraft, draft, *v.LBP)
 	}
-	if v.CorrectionMethod == types.CorrectionMethodHalfLBP && v.LBP != nil && *v.LBP > 0 {
+	if correctionMethod == types.CorrectionMethodHalfLBP && v.LBP != nil && *v.LBP > 0 {
 		ppCorrections = CalcHalfLBPPPCorrections(meanDraft, draft, *v.LBP)
 	}
 	draftsWKeel = CalcDraftsWKeel(meanDraft, ppCorrections, draft)

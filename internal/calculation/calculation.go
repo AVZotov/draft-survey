@@ -41,6 +41,22 @@ func vesselTypeOrDefault(v types.VesselType) types.VesselType {
 	return v
 }
 
+// correctionMethodOrDefault treats an unset CorrectionMethod as Full LBP —
+// the same fallback web/widgets/survey/form.templ's method radio group
+// already displays (`checked?={ CorrectionMethod != "Half LBP" }` pre-selects
+// "Full LBP" for the Go zero value too). A radio that's already visually
+// checked on page load never fires htmx's change trigger unless the
+// surveyor picks a different option, so CorrectionMethod can reach here as
+// "" on a fully-entered survey. Without this, CalcDraft's two exact-match
+// CorrectionMethod checks both fail and PPCorrections is silently left at
+// its zero value — same class of bug as vesselTypeOrDefault above.
+func correctionMethodOrDefault(v types.CorrectionMethod) types.CorrectionMethod {
+	if v == types.CorrectionMethodHalfLBP {
+		return types.CorrectionMethodHalfLBP
+	}
+	return types.CorrectionMethodFullLBP
+}
+
 // MeanDrafts averages each pair of port/starboard draft marks (forward,
 // midship, aft) into a MeanDraft. A nil mark reads as 0.
 func MeanDrafts(m types.Marks) types.MeanDraft {

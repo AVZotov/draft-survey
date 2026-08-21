@@ -52,6 +52,12 @@ func (s *surveyService) Create() (*types.Survey, error) {
 			// see calculation.vesselTypeOrDefault for the calc-layer half
 			// of this fix (covers surveys created before this change).
 			VesselType: types.VesselTypeMarine,
+			// Matches the method radio group's own default: form.templ
+			// pre-checks "Full LBP" whenever CorrectionMethod isn't
+			// "Half LBP" — see calculation.correctionMethodOrDefault for the
+			// calc-layer half of this fix (covers surveys created before
+			// this change, where CorrectionMethod persisted as "").
+			CorrectionMethod: types.CorrectionMethodFullLBP,
 		},
 		Drafts: []types.Draft{initialDraft},
 	}
