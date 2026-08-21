@@ -15,6 +15,7 @@
 8. [Deductibles](#8-deductibles)
 9. [Final Results](#9-final-results)
 10. [Tank Volume Calculations](#10-tank-volume-calculations)
+11. [Application Concepts (v0.5.0)](#11-application-concepts-v050)
 
 ---
 
@@ -83,8 +84,8 @@ Where `dAft` and `dFwd` are signed distances from the marks to the perpendicular
 
 ---
 
-### Mark Read (Direct / By Waterline)
-**What it is:** How the draft was read. "Direct" means the surveyor read the mark directly from a boat or ladder. "By Waterline" means read from the vessel's side using the waterline level.
+### Mark Read (Direct / Camera)
+**What it is:** How the draft was read. "Direct" means the surveyor read the mark directly from a boat or ladder. "Camera" means the mark was photographed and read from the image.
 
 **Why it matters:** Recorded in the survey report to document method used. Affects credibility of the survey in disputed cases.
 
@@ -228,14 +229,14 @@ Mean F&A = (FWD wKeel + AFT wKeel) / 2
 ---
 
 ### MM (Mean of Means)
-**What it is:** The average of the midship corrected draft and Mean F&A.
+**What it is:** The average of the midship corrected draft and Mean F&A — a textbook intermediate step on the way to MMC.
 
 **Formula:**
 ```
 MM = (MID wKeel + Mean F&A) / 2
 ```
 
-**Why it matters:** Intermediate step toward MMC. Provides a quick estimate of the vessel's average draft.
+**Why it matters:** Conceptually useful as a quick estimate of the vessel's average draft. **Note:** this implementation does not compute MM as a separate value anywhere — `CalcMMC` (`internal/calculation/calculation.go`) derives MMC directly from the forward/midship/aft drafts-with-keel using the weighted quarter-mean formula, without ever passing through this simple average. Kept here for surveyor reference only.
 
 ---
 
@@ -365,8 +366,9 @@ List Correction = 6 × |Mid Port - Mid Starboard| × |TPC Port - TPC Starboard|
 
 **Formula:**
 ```
-Displacement corrected to density = (Displacement + 1st Trim + 2nd Trim + List correction) × (actual density - table density) / table density
+Density Correction = (Displacement + 1st Trim + 2nd Trim + List correction) × (actual density - table density) / table density
 ```
+This is the correction amount itself — adding it to `Displacement + 1st Trim + 2nd Trim + List correction` gives the displacement corrected to density (`CurrentDWT`'s basis), it is not that total by itself.
 
 **Why it matters:** Fresh river water (1.000) vs salt sea water (1.025) is a 2.5% difference — on a large vessel this can be hundreds or even thousands of tonnes. Ignoring this would make the survey completely wrong.
 
@@ -389,7 +391,7 @@ Displacement corrected to density = (Displacement + 1st Trim + 2nd Trim + List c
 FWA = Summer DWT / (4 × Summer TPC)  [mm]
 ```
 
-**Why it matters:** Used to calculate DWA and as a quick reference for how sensitive this vessel is to density changes.
+**Why it matters:** Used to calculate DWA and as a quick reference for how sensitive this vessel is to density changes. **Note:** not implemented anywhere in `internal/calculation/` or `internal/types/` at the moment — no `FWA`/`FreshWaterAllowance` field or function exists in the codebase. Kept here as maritime-domain reference only.
 
 ---
 
@@ -401,7 +403,7 @@ FWA = Summer DWT / (4 × Summer TPC)  [mm]
 DWA = FWA × (table density - actual density) / (table density - 1.000)  [mm]
 ```
 
-**Why it matters:** Tells the surveyor and captain how much the vessel can be loaded beyond or below the summer mark given the actual water density.
+**Why it matters:** Tells the surveyor and captain how much the vessel can be loaded beyond or below the summer mark given the actual water density. **Note:** like FWA above, not implemented anywhere in the codebase — reference only.
 
 ---
 
@@ -576,4 +578,50 @@ Current DWT = Displacement corrected to density - Lightship
 
 ---
 
-*Last updated: 2026 | Draft Survey Tool — github.com/AVZotov/draft-survey*
+## 11. Application Concepts (v0.5.0)
+
+*Software-layer terms introduced in the v0.5.0 architecture rewrite — not physical/maritime concepts, but useful when reading the code or the other v0.5.0 docs (`internal/CLAUDE.md`, `docs/ARCHITECTURE.md`).*
+
+### VolumeCalc
+**What it is:** The `Tank.VolumeCalc *float64` field — the tank volume as computed from calibration table interpolation (`calculation.CalcBwTankVolume`), stored back onto the tank by `TankService` whenever calibration inputs change.
+
+**Why it matters:** Distinct from `Tank.Volume`, which is the surveyor's manual override. See `EffectiveVolume` below for how the two combine.
+
+---
+
+### EffectiveVolume
+**What it is:** `Tank.EffectiveVolume()` — returns the surveyor's manual `Volume` override when present, otherwise falls back to the calibration-calculated `VolumeCalc`. This is the value actually used by `Tank.CalcWeight()` for deductible weight.
+
+**Why it matters:** Lets a surveyor override a calibration table result (e.g. a known-bad table) without losing the calculated value underneath.
+
+---
+
+### DraftValidator
+**What it is:** The `internal/validation.DraftValidator` interface — `Validate(draft, result) []AuditEvent`, called from `DraftService.Update` after each autosave to check a draft's readings/results for anything worth flagging (e.g. excessive list).
+
+**Why it matters — currently a no-op:** the only implementation wired up (`NewDraftValidator()`) is `NoopDraftValidator`, which always returns `nil`. No validation rules are implemented yet — thresholds like "list ≥ 0.5° recommends a Letter of Protest" (see [List](#6-trim--list-corrections) above) are documented survey practice, not something this build currently checks or alerts on. The Results page's `CargoAlerts` component is a matching stub (`web/widgets/results/cargo_alerts.templ`), waiting on this validator to produce real events.
+
+---
+
+### AuditEvent
+**What it is:** `types.AuditEvent{Timestamp, EventType, Message, UserID}` — a record appended to `Survey.Audit` by a `DraftValidator` result (once implemented) or other flagged conditions, with `EventType` one of `"warning"`, `"override"`, `"error"`.
+
+**Why it matters:** The persisted trail of anything a validator (or, currently, nothing — see `DraftValidator` above) flagged during the survey, for later review.
+
+---
+
+### EventDraftCalc / EventTankCalc
+**What they are:** SSE event types (`internal/sse/event.go`) published after an autosave on the Draft Readings or Tanks page respectively. Each carries a pre-rendered HTML blob (calc panels, totals, tank rows) that the page's JS listener splices into the DOM by element id — not routed through the normal htmx swap mechanism.
+
+**Why it matters:** This is how a draft/tank edit's downstream effects (e.g. a changed sounding shifting every later draft's cumulative cargo) reach the page live, without a full page reload.
+
+---
+
+### DraftService / TankService
+**What they are:** The service-layer interfaces (`internal/service/service.go`) owning draft lifecycle (add/start/finish/delete/update-with-recalculation) and tank management (add/update/delete/reorder/density/copy-from-previous) respectively. Both return `(*types.SurveyResult, *Outcome, error)` from their mutating methods so the handler can render the matching `EventDraftCalc`/`EventTankCalc` SSE payload without the service layer touching HTML/templ itself.
+
+**Why it matters:** This is where `autoPopulateMTCDrafts` and the tank calibration recalculation live — see [§4.7](../docs/CALCULATION.md#47-quarter-mean-mmc) in `CALCULATION.md` for the MTC row auto-fill behavior specifically.
+
+---
+
+*Last updated: 2026-08-21 | Draft Survey Tool — github.com/AVZotov/draft-survey*
