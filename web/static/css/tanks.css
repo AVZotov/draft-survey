@@ -134,13 +134,13 @@
 }
 
 .dg--ini .dg-lbl {
-  background: var(--ini-l, #EFF6FF);
-  color: var(--ini, #2563EB);
+  background: var(--ini-light, #EFF6FF);
+  color: var(--ini-accent, #2563EB);
 }
 
 .dg--fin .dg-lbl {
-  background: var(--fin-l, #F0FDF4);
-  color: var(--fin, #15803D);
+  background: var(--fin-light, #F0FDF4);
+  color: var(--fin-accent, #15803D);
 }
 
 input.den-in {
@@ -359,13 +359,13 @@ table.ttbl {
 }
 
 .ttbl thead tr.tr-grp .th-ini {
-  background: var(--ini-l, #EFF6FF);
-  color: var(--ini, #2563EB);
+  background: var(--ini-light, #EFF6FF);
+  color: var(--ini-accent, #2563EB);
 }
 
 .ttbl thead tr.tr-grp .th-fin {
-  background: var(--fin-l, #F0FDF4);
-  color: var(--fin, #15803D);
+  background: var(--fin-light, #F0FDF4);
+  color: var(--fin-accent, #15803D);
 }
 
 .ttbl thead tr.tr-grp .th-ph {
@@ -377,11 +377,11 @@ table.ttbl {
 }
 
 .ttbl thead tr.tr-sub .ts-ini {
-  background: color-mix(in srgb, var(--ini-l, #EFF6FF) 35%, var(--bg));
+  background: color-mix(in srgb, var(--ini-light, #EFF6FF) 35%, var(--bg));
 }
 
 .ttbl thead tr.tr-sub .ts-fin {
-  background: color-mix(in srgb, var(--fin-l, #F0FDF4) 35%, var(--bg));
+  background: color-mix(in srgb, var(--fin-light, #F0FDF4) 35%, var(--bg));
 }
 
 .th-name {
@@ -518,25 +518,25 @@ input.ti::placeholder {
 }
 
 .rbtn.add {
-  color: var(--ini, #2563EB);
-  border-color: var(--ini-b, #BFDBFE);
-  background: var(--ini-l, #EFF6FF);
+  color: var(--ini-accent, #2563EB);
+  border-color: var(--ini-border, #BFDBFE);
+  background: var(--ini-light, #EFF6FF);
 }
 
 .rbtn.add:hover {
   background: #DBEAFE;
-  border-color: var(--ini, #2563EB);
+  border-color: var(--ini-accent, #2563EB);
 }
 
 .rbtn.remove {
-  color: var(--danger, #DC2626);
-  border-color: #FECACA;
-  background: #FEF2F2;
+  color: var(--danger-accent, #DC2626);
+  border-color: var(--danger-border, #FECACA);
+  background: var(--danger-light, #FEF2F2);
 }
 
 .rbtn.remove:hover {
   background: #FEE2E2;
-  border-color: var(--danger, #DC2626);
+  border-color: var(--danger-accent, #DC2626);
 }
 
 .rbtn.calc {
